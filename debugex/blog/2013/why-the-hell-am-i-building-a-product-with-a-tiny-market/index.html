@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="RegexApp">
+
+<!-- Mirrored from www.debuggex.com/blog/2013/why-the-hell-am-i-building-a-product-with-a-tiny-market/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 16:00:16 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+				<link type="text/css" href="../../../static/css/main.css" rel="stylesheet"/>
+ 
+				<script type="text/javascript" src="../../../static/js/main.js"></script>
+  
+    
+  
+    <meta charset="utf-8">
+    <title>
+     Why the hell am I building a product with a tiny market?
+</title>
+
+    
+    <meta name="keywords" content="javascript,regex,regular expression,visual,nfa,dfa,state,debugger,helper,tester,match,random match">
+    <meta name="author" content="Sergiu Toarca">
+
+    <link href="../../../static/img/favicon.ico" rel="shortcut icon"/>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38496676-1']);
+      _gaq.push(['_trackPageview']);
+
+      var _track = function(action) {
+        _gaq.push(['_trackEvent', 'Engagement', action]);
+      };
+
+      (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+
+        ga.src = ('https:' == document.location.protocol ?
+            'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  
+
+    <link href="../../../sitemap.html" type="application/xml" rel="sitemap" title="Sitemap">
+  <link href="../../index.html" rel="home start" />
+  <link href="../../atom/index.html" type="application/atom+xml" rel="alternate" title="Atom Feed" />
+  <link href="../../rss/index.html" type="application/rss+xml" rel="alternate" title="RSS Feed" />
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script type="text/javascript">
+    setInterval(function() {
+      _gaq.push(['_trackEvent', 'Engagement', 'Still reading']);
+    }, 60000);
+  </script>
+  <script type="text/javascript" src="../../../static/js/ext/jquery.js"></script>
+  <script type="text/javascript" src="../../../static/js/ext/jquerycookie.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      $.cookie('blog-date', new Date(), {path: '/', expires: 365});
+      console.log($.cookie('blog-date'));
+    };
+  </script>
+
+      <meta name="description" content="Two months ago, I launched a [regex tester](/).
+
+W..." />
+      <meta name="keywords" content="" />
+
+</head>
+<body>
+  <div id="page">
+    <div id="content">
+      <div class="navbar navbar-static-top navbar-default dbx-navbar" role="navigation">
+        <div class="width-restricted">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="../../../index.html"><img src="../../../static/img/logo.png" alt="Debuggex Beta"/></a>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              
+  <li><a href="../../index.html" rel="home start">Blog</a></li>
+  <li><a href="../../articles/index.html" rel="contents">All articles</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div ng-controller="GlobalsCtrl">
+        
+          
+            <div class="navbar navbar-static-top navbar-default dbx-subnavbar" role="navigation">
+              <div class="width-restricted">
+                <div class="sidepadded">
+                  <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                      
+  <li><a href="../../atom/index.html" rel="alternate">Atom</a></li>
+  <li><a href="../../rss/index.html" rel="alternate">RSS</a></li>
+
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          <div class="width-restricted">
+            <div class="sidepadded">
+              
+
+<div id="blog">
+  
+
+
+
+
+
+
+
+
+        
+<article>
+    <header>
+        <time datetime="2013-04-27">27.04.2013, 11:02</time>
+        <h1>
+            <a href="index.html" rel="bookmark canonical">Why the hell am I building a product with a tiny market?</a>
+        </h1>
+    </header>
+    <p>Two months ago, I launched a <a href="../../../index.html">regex tester</a>.</p>
+<p>Why would I ever build a product around helping people with their regular ex&shy;pres&shy;sions? The market is tiny. There are dozens of free al&shy;ter&shy;na&shy;tives, and only a small percentage of people I've asked said they would pay for my product.</p>
+<p>There are a few big advantages to be had competing in a smaller market.</p>
+<ol>
+<li>
+<p><strong>In a smaller market, everything happens on a smaller scale.</strong> Successes and failures are smaller in magnitude and take less time to pan out. Less effort is required to build a com&shy;pet&shy;i&shy;tive product, since the existing ones are not as well-developed. The result is a tighter feedback loop for your learning. Debuggex is my first product, so I want to optimize for learning and profit rather than just profit.</p>
+<p>To date, I've spent less than a month of full-time effort on Debuggex, and it's already a very com&shy;pet&shy;i&shy;tive product. If it turns out to not make any money, I've only lost a month of effort.</p>
+<p>Twice, my site went down for a few minutes. It was not an enormous problem - there were less than 10 users on at the time. However, I've learned valuable lessons in automating recovery.</p>
+<p>At launch, there was a bug in my sub&shy;scrip&shy;tion code. It was a blunder, but I didn't sweat it. I only lost 30 emails, and I've learned to prioritize what gets tested earlier.</p>
+</li>
+<li>
+<p><strong>In a smaller market, you can demon&shy;strate expertise.</strong> When you opt for a smaller market, you have a wider choice for a domain that you're skilled in. Coupled with the small scale, this lets you aim at being the <em>absolute best</em> in the market. You have a chance to wow your users and make them loyal to you, even as you move to new ventures.</p>
+<p>Debuggex already (while still in beta) blows all of its online com&shy;peti&shy;tors out of the water. It was designed to answer the question "Why isn't my regex doing what I intend it to?" I've found that question to be by far the most frus&shy;trat&shy;ing and time-consuming issue with developers I've talked to, and competing products just can't give you the answer.</p>
+<p>The way Debuggex answers this question is by allowing you to walk through an automaton step-by-step. Because it's visual, it taps into your innate spatial sense. It also offers hints as to where something may be wrong. You can inspect any portion of your string or regex and see exactly <em>why</em> and <em>how</em> that portion is (or is not) matching.</p>
+<p>For&shy;tu&shy;nate&shy;ly, people have noticed. I've gotten hundreds of tweets, many of them filled with emotion (yes, emotion <em>about regexes</em>!). Several people have also emailed me about part&shy;ner&shy;ships, and a few even wrote articles about it!</p>
+</li>
+<li>
+<p><strong>In a smaller market, you can iterate faster on non-pro&shy;gram&shy;ming skills.</strong> Since the product is small enough that I'm building it alone, I don't just program, I do <em>everything</em>. There is no option to pass work off to somebody else.</p>
+<p>I wrote this article. I built a tutorial video when I found out users didn't know how to use one of the key features. I respond to every tweet, send every email, and configure everything on the server.</p>
+<p>Con&shy;se&shy;quent&shy;ly, my thoughts have become more coherent. I can speak more clearly. I know how to avoid audible breathing and swallowing on a microphone (much harder than it seems). I've even made new friends and re&shy;con&shy;nect&shy;ed with old ones.</p>
+<p>I am learning to sell, apologize, stroke egos, manage ex&shy;pec&shy;ta&shy;tions, talk to the media, and build a company.</p>
+</li>
+</ol>
+<p>But it's not just about the in&shy;tan&shy;gi&shy;bles. To date, <a href="../../../index.html">Debuggex</a> has 120,000 pageviews. A returning user spends an average of 45 minutes(!) every time they visit, and there have been more than 800 people that have visited at least 8 times. Those 800 people have each spent a whopping 6 hours on the site in just two months! If you are one of those 800 people, it's you that I built Debuggex for. Thanks for giving me the op&shy;por&shy;tu&shy;ni&shy;ty to create something awesome!</p>
+<p>What are your thoughts? Should your first product be aimed at a small market?</p>
+<p>Discuss on <a href="https://news.ycombinator.com/item?id=5618409">Hacker News</a>.</p>
+<p>If you liked this article, you should follow Debuggex on <a href="http://www.twitter.com/debuggex">Twitter</a> and <a href="http://www.facebook.com/debuggex">Facebook</a>.</p>
+    <footer>
+    </footer>
+    <div class="comments">
+    </div>
+</article>
+
+        <a href="../ab-using-crowdfunding-to-validate-your-market/index.html" class="page floatleft">
+        &laquo; (Ab)using crowdfunding to validate your market
+        </a>
+
+
+<footer>
+  
+    
+  <p>written by <a href="http://www.twitter.com/stoarca">Serge Toarca</a></p>
+  
+
+</footer>
+
+</div>
+
+            </div>
+          </div>
+        
+      </div>
+    </div>
+    <div class="footer-container">
+      <div class="footer">
+        <div class="sidepadded">
+          <div class="copyright lfloat">
+            Copyright © 2013 www.debuggex.com
+          </div>
+          <div class="links rfloat">
+            <a href="../../index.html">Blog</a>
+            |
+            <a href="../../../libraries.html">Libraries</a>
+            |
+            <a href="mailto:serge@debuggex.com">Contact</a>
+            |
+            <a href="../../../privacy.html">Privacy</a>
+            |
+            <a href="../../../terms.html">Terms</a>
+            |
+            <a href="http://www.twitter.com/debuggex">Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- Mirrored from www.debuggex.com/blog/2013/why-the-hell-am-i-building-a-product-with-a-tiny-market/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 16:00:16 GMT -->
+</html>

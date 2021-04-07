@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="RegexApp">
+
+<!-- Mirrored from www.debuggex.com/blog/2013/ab-using-crowdfunding-to-validate-your-market/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 16:00:16 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+				<link type="text/css" href="../../../static/css/main.css" rel="stylesheet"/>
+ 
+				<script type="text/javascript" src="../../../static/js/main.js"></script>
+  
+    
+  
+    <meta charset="utf-8">
+    <title>
+     (Ab)using crowdfunding to validate your market
+</title>
+
+    
+    <meta name="keywords" content="javascript,regex,regular expression,visual,nfa,dfa,state,debugger,helper,tester,match,random match">
+    <meta name="author" content="Sergiu Toarca">
+
+    <link href="../../../static/img/favicon.ico" rel="shortcut icon"/>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38496676-1']);
+      _gaq.push(['_trackPageview']);
+
+      var _track = function(action) {
+        _gaq.push(['_trackEvent', 'Engagement', action]);
+      };
+
+      (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+
+        ga.src = ('https:' == document.location.protocol ?
+            'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  
+
+    <link href="../../../sitemap.html" type="application/xml" rel="sitemap" title="Sitemap">
+  <link href="../../index.html" rel="home start" />
+  <link href="../../atom/index.html" type="application/atom+xml" rel="alternate" title="Atom Feed" />
+  <link href="../../rss/index.html" type="application/rss+xml" rel="alternate" title="RSS Feed" />
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script type="text/javascript">
+    setInterval(function() {
+      _gaq.push(['_trackEvent', 'Engagement', 'Still reading']);
+    }, 60000);
+  </script>
+  <script type="text/javascript" src="../../../static/js/ext/jquery.js"></script>
+  <script type="text/javascript" src="../../../static/js/ext/jquerycookie.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      $.cookie('blog-date', new Date(), {path: '/', expires: 365});
+      console.log($.cookie('blog-date'));
+    };
+  </script>
+
+      <meta name="description" content="Today, I am announcing the launch of a [crowdfundi..." />
+      <meta name="keywords" content="" />
+
+</head>
+<body>
+  <div id="page">
+    <div id="content">
+      <div class="navbar navbar-static-top navbar-default dbx-navbar" role="navigation">
+        <div class="width-restricted">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="../../../index.html"><img src="../../../static/img/logo.png" alt="Debuggex Beta"/></a>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              
+  <li><a href="../../index.html" rel="home start">Blog</a></li>
+  <li><a href="../../articles/index.html" rel="contents">All articles</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div ng-controller="GlobalsCtrl">
+        
+          
+            <div class="navbar navbar-static-top navbar-default dbx-subnavbar" role="navigation">
+              <div class="width-restricted">
+                <div class="sidepadded">
+                  <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                      
+  <li><a href="../../atom/index.html" rel="alternate">Atom</a></li>
+  <li><a href="../../rss/index.html" rel="alternate">RSS</a></li>
+
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          <div class="width-restricted">
+            <div class="sidepadded">
+              
+
+<div id="blog">
+  
+
+
+
+
+
+
+
+
+        
+<article>
+    <header>
+        <time datetime="2013-05-22">22.05.2013, 10:59</time>
+        <h1>
+            <a href="index.html" rel="bookmark canonical">(Ab)using crowdfunding to validate your market</a>
+        </h1>
+    </header>
+    <p>Today, I am announcing the launch of a <a href="http://igg.me/at/debuggex">crowd&shy;fund&shy;ing campaign</a> for <a href="../../../index.html">Debuggex</a>, but there's a twist.</p>
+<p>While most campaigns are built to raise enough funds to make a project possible, that's not the goal for Debuggex. Instead, <strong>the primary goal is to validate the market</strong>.</p>
+<p>Debuggex is still in beta. However, for all but the simplest regular ex&shy;pres&shy;sions, users say it already provides a 3x decrease (against their previously preferred tool) in estimated total lifetime de&shy;vel&shy;op&shy;ment cost. For longer ex&shy;pres&shy;sions, users estimated even larger gains.</p>
+<p>So value is already being created. But this is just the beginning. While Debuggex is a great tool for working with individual regular ex&shy;pres&shy;sions, that's only part of the problem. There is lots of innovation left in this space.</p>
+<p>I see Debuggex growing into a platform to manage everything about your regular ex&shy;pres&shy;sions. It will have built-in unit testing, multiple flavors, and a composable library of common ex&shy;pres&shy;sions. Most im&shy;por&shy;tant&shy;ly, it will be deeply integrated into your working en&shy;vi&shy;ron&shy;ment.</p>
+<p>I want to stress that last point again. Deep in&shy;te&shy;gra&shy;tion means <em>never having to look at a raw regular expression</em>. Ultimately, this saves you a ton of de&shy;vel&shy;op&shy;ment and main&shy;te&shy;nance, even if you use regexes only a few times per year. You can learn more about the planned features on the <a href="http://igg.me/at/debuggex">funding page</a>.</p>
+<p>Nev&shy;er&shy;the&shy;less, a product must capture some of the value it's creating in order to be sus&shy;tain&shy;able in the long term. This campaign has a very specific goal: <strong>20 backers in 20 days</strong>. If 20 people value the product enough to pay actual cash for access to future features, I'm confident that I can grow the business. Otherwise, it's back to the drawing board to figure out a different way to monetize.</p>
+<p>So, why did I choose crowd&shy;fund&shy;ing instead of hacking up a preorder page?</p>
+<p>First of all, the risk that any individual backer takes is sig&shy;nif&shy;i&shy;cant&shy;ly reduced. If the funding goes through, the business model is proven. That's a strong incentive to keep building awesome stuff. If it doesn't go through, then nobody has lost any money. Contrast this to being the first customer to pre-order. The business model has not yet been validated, and if there are no other customers, the founder can walk away to chase other ventures.</p>
+<p>Secondly, crowd&shy;fund&shy;ing tends to generate more buzz. I think this happens because the format for crowd&shy;fund&shy;ing is geared towards showing off creativity and innovation in the best light. There are lots of visuals and a focus on sharing and col&shy;lab&shy;o&shy;ra&shy;tion. Potential backers can even see how many other backers there are. Plus, the crowd&shy;fund&shy;ing platform has an indirect interest in generating buzz for you, since it gets a cut of the funding.</p>
+<p>Finally, I think people are more likely to spend money when they're on a platform which is, at its core, about funding projects and businesses. In addition, since this money comes from future customers rather than from investors, all of the funding results in sus&shy;tain&shy;able expansion of the business. To that end, there are several stretch goals explaining how Debuggex will expand.</p>
+<p>Help me keep on innovating. If you find value in Debuggex and want to get even more, please consider being a <a href="http://igg.me/at/debuggex">backer</a>. If you don't find value in it, but think others would, please share this article with your friends and coworkers.</p>
+<p>Discuss on <a href="https://news.ycombinator.com/item?id=5751314">Hacker News</a></p>
+    <footer>
+    </footer>
+    <div class="comments">
+    </div>
+</article>
+
+        <a href="../why-the-hell-am-i-building-a-product-with-a-tiny-market/index.html" class="page floatright">
+        Why the hell am I building a product with a tiny market? &raquo;
+        </a>
+        <a href="../persona-is-the-only-way-to-login/index.html" class="page floatleft">
+        &laquo; Persona is the only way to login
+        </a>
+
+
+<footer>
+  
+    
+  <p>written by <a href="http://www.twitter.com/stoarca">Serge Toarca</a></p>
+  
+
+</footer>
+
+</div>
+
+            </div>
+          </div>
+        
+      </div>
+    </div>
+    <div class="footer-container">
+      <div class="footer">
+        <div class="sidepadded">
+          <div class="copyright lfloat">
+            Copyright © 2013 www.debuggex.com
+          </div>
+          <div class="links rfloat">
+            <a href="../../index.html">Blog</a>
+            |
+            <a href="../../../libraries.html">Libraries</a>
+            |
+            <a href="mailto:serge@debuggex.com">Contact</a>
+            |
+            <a href="../../../privacy.html">Privacy</a>
+            |
+            <a href="../../../terms.html">Terms</a>
+            |
+            <a href="http://www.twitter.com/debuggex">Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- Mirrored from www.debuggex.com/blog/2013/ab-using-crowdfunding-to-validate-your-market/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 16:00:16 GMT -->
+</html>

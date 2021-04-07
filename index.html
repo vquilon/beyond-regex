@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Regulex：JavaScript Regular Expression Visualizer</title>
+        <link rel="stylesheet" href="libs/highlight.min.css"></style>
+        <link rel="stylesheet" href="style-json.css"></style>
+        <link rel="stylesheet" href="styles.css"></style>
+    </head>
+    <body>
+        <h1>
+            Regulex <em>JavaScript Regular Expression Visualizer.</em>
+        </h1>
+        <div id="inputCt">
+            <div class="re code">
+                <table>
+                    <tr>
+                        <td style="width:1em">/</td>
+                        <td style="width:auto">
+                            <input id="input" class="input" value="^(abc)(?P<test>a|(group (?:other))|(a|b))*?[a-cdhm-z]$"/>
+                        </td>
+                        <td style="width:1em">/</td>
+                        <td style="width:3em" id="flagBox"></td>
+                    </tr>
+                </table>
+            </div>
+            <button class="button-panel" id="parseClick">Parse!</button>
+            <button class="button-panel" id="visualizeClick">Visualize</button>
+            <button class="button-panel" id="exportIt">Export Image</button>
+            <button class="button-panel" id="embedIt">Embed On My Site!</button>
+            <label>
+                <input type="checkbox" name="flag" value="i"/>IgnoreCase
+            </label>
+            <label>
+                <input type="checkbox" name="flag" value="m"/>Multiline
+            </label>
+            <label>
+                <input type="checkbox" name="flag" value="g"/>GlobalMatch
+            </label>
+        </div>
+        <p id="errorBox" class="code">Error Message</p>
+        <div id="graphCt" class="code"></div>
+        <pre><code class="json" id="treeRegex"></code></pre>
+        <pre><code class="json" id="jsonRegex"></code></pre>
+        <footer>
+            <div class="normal">
+                Created by <a href="https://jex.im/" target="_blank">Jex</a>
+                .
+            </div>
+            <div class="embed">
+                <a id="embedFooterLink" href="https://jex.im/regulex/" target="_blank">By Regulex</a>
+            </div>
+        </footer>
+        <a id="github" href="https://github.com/CJex/regulex" target="_blank" style="display:inline-block;width:149px;height:149px;position: absolute; top: 0; right: 0; border: 0;">
+            <img style="width:149px;height:149px;position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+        </a>
+        <script src="libs/raphael.js"></script>
+        <script src="libs/raphael-group-plugin.js"></script>
+        <script src="libs/highlight-10.4.1.min.js"></script>
+        <script src="groups_elements.js"></script>
+        <script src="parse_json.js"></script>
+        <script src="parse_regex.js"></script>
+        
+    </body>
+</html>

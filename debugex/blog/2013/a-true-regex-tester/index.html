@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="RegexApp">
+
+<!-- Mirrored from www.debuggex.com/blog/2013/a-true-regex-tester/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 15:59:36 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+				<link type="text/css" href="../../../static/css/main.css" rel="stylesheet"/>
+ 
+				<script type="text/javascript" src="../../../static/js/main.js"></script>
+  
+    
+  
+    <meta charset="utf-8">
+    <title>
+     A true regex tester
+</title>
+
+    
+    <meta name="keywords" content="javascript,regex,regular expression,visual,nfa,dfa,state,debugger,helper,tester,match,random match">
+    <meta name="author" content="Sergiu Toarca">
+
+    <link href="../../../static/img/favicon.ico" rel="shortcut icon"/>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38496676-1']);
+      _gaq.push(['_trackPageview']);
+
+      var _track = function(action) {
+        _gaq.push(['_trackEvent', 'Engagement', action]);
+      };
+
+      (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+
+        ga.src = ('https:' == document.location.protocol ?
+            'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  
+
+    <link href="../../../sitemap.html" type="application/xml" rel="sitemap" title="Sitemap">
+  <link href="../../index.html" rel="home start" />
+  <link href="../../atom/index.html" type="application/atom+xml" rel="alternate" title="Atom Feed" />
+  <link href="../../rss/index.html" type="application/rss+xml" rel="alternate" title="RSS Feed" />
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script type="text/javascript">
+    setInterval(function() {
+      _gaq.push(['_trackEvent', 'Engagement', 'Still reading']);
+    }, 60000);
+  </script>
+  <script type="text/javascript" src="../../../static/js/ext/jquery.js"></script>
+  <script type="text/javascript" src="../../../static/js/ext/jquerycookie.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      $.cookie('blog-date', new Date(), {path: '/', expires: 365});
+      console.log($.cookie('blog-date'));
+    };
+  </script>
+
+      <meta name="description" content="How often have you been bitten by a regex? 
+Here's..." />
+      <meta name="keywords" content="" />
+
+</head>
+<body>
+  <div id="page">
+    <div id="content">
+      <div class="navbar navbar-static-top navbar-default dbx-navbar" role="navigation">
+        <div class="width-restricted">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="../../../index.html"><img src="../../../static/img/logo.png" alt="Debuggex Beta"/></a>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              
+  <li><a href="../../index.html" rel="home start">Blog</a></li>
+  <li><a href="../../articles/index.html" rel="contents">All articles</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div ng-controller="GlobalsCtrl">
+        
+          
+            <div class="navbar navbar-static-top navbar-default dbx-subnavbar" role="navigation">
+              <div class="width-restricted">
+                <div class="sidepadded">
+                  <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                      
+  <li><a href="../../atom/index.html" rel="alternate">Atom</a></li>
+  <li><a href="../../rss/index.html" rel="alternate">RSS</a></li>
+
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          <div class="width-restricted">
+            <div class="sidepadded">
+              
+
+<div id="blog">
+  
+
+
+
+
+
+
+
+
+        
+<article>
+    <header>
+        <time datetime="2013-10-01">01.10.2013, 13:30</time>
+        <h1>
+            <a href="index.html" rel="bookmark canonical">A true regex tester</a>
+        </h1>
+    </header>
+    <p>How often have you been bitten by a regex? 
+Here's how the story usually goes.</p>
+<p>Two months ago, you spent 20 minutes crafting a regex.
+Today, you realize it has a bug and begin fixing it.
+Except that it now reminds you more of hi&shy;ero&shy;glyph&shy;ics:</p>
+<div class="highlight"><pre><span class="o">&lt;</span><span class="sr">/?\w+((\s+\w+(\s*=\s*(?:&quot;&quot;.*?&quot;&quot;|&#39;.*?&#39;|[^&#39;&quot;&quot;&gt;\s]+))?)+\s*|\s*)/</span><span class="o">?&gt;</span>
+</pre></div>
+
+
+<p>And there aren't any unit tests, because you were nearing a deadline, and
+writing <em>good</em> unit tests for regular ex&shy;pres&shy;sions is more tedious than
+most unit tests.
+Now you have to spend another 20 minutes figuring out what the regex does before
+fixing it.
+You finally fix it and push it to production, only to realize that there was a
+case that used to work and it doesn't anymore.
+Sound familiar?</p>
+<p>Enter Debuggex unit tests. We tried to make it as effortless as possible to add
+strong unit tests for your ex&shy;pres&shy;sions. Here's how they work:</p>
+<ol>
+<li>
+<p>Click "Add a unit test". Enter a string that you are testing a regex against.
+If you're lazy,
+you can click 'Suggest' and Debuggex will come up with a test case for you.</p>
+</li>
+<li>
+<p>Hover over the matches in the unit test. If all the matches and subgroups
+look like what you want to extract, click "This looks right". Otherwise click
+"This looks wrong".</p>
+</li>
+</ol>
+<p>That's it! Whenever you change your regex,
+all unit tests will be run to make sure they still pass.
+For a "right" test, Debuggex will make sure all the matches and
+subgroups are the same.
+For a "wrong" test, Debuggex will make sure at least
+one of the matches or subgroups differs.
+This keeps your regex backwards-compatible with previous versions,
+so you don't introduce new bugs as you fix old ones.
+The unit tests also serve as examples for when you return to your regex
+and have no idea what it does.</p>
+<p>Debuggex is a regex tester in the very literal sense. We
+hope this helps you build a good workflow around working with regular ex&shy;pres&shy;sions.</p>
+<p>As always, we love feedback!</p>
+    <footer>
+    </footer>
+    <div class="comments">
+    </div>
+</article>
+
+        <a href="../a-composable-regex-repository/index.html" class="page floatright">
+        A composable regex repository &raquo;
+        </a>
+
+
+<footer>
+  
+    
+  <p>written by <a href="http://www.twitter.com/stoarca">Serge Toarca</a></p>
+  
+
+</footer>
+
+</div>
+
+            </div>
+          </div>
+        
+      </div>
+    </div>
+    <div class="footer-container">
+      <div class="footer">
+        <div class="sidepadded">
+          <div class="copyright lfloat">
+            Copyright © 2013 www.debuggex.com
+          </div>
+          <div class="links rfloat">
+            <a href="../../index.html">Blog</a>
+            |
+            <a href="../../../libraries.html">Libraries</a>
+            |
+            <a href="mailto:serge@debuggex.com">Contact</a>
+            |
+            <a href="../../../privacy.html">Privacy</a>
+            |
+            <a href="../../../terms.html">Terms</a>
+            |
+            <a href="http://www.twitter.com/debuggex">Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- Mirrored from www.debuggex.com/blog/2013/a-true-regex-tester/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 15:59:36 GMT -->
+</html>

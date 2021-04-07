@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="RegexApp">
+
+<!-- Mirrored from www.debuggex.com/blog/2013/persona-is-the-only-way-to-login/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 16:00:16 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+				<link type="text/css" href="../../../static/css/main.css" rel="stylesheet"/>
+ 
+				<script type="text/javascript" src="../../../static/js/main.js"></script>
+  
+    
+  
+    <meta charset="utf-8">
+    <title>
+     Persona is the only way to login
+</title>
+
+    
+    <meta name="keywords" content="javascript,regex,regular expression,visual,nfa,dfa,state,debugger,helper,tester,match,random match">
+    <meta name="author" content="Sergiu Toarca">
+
+    <link href="../../../static/img/favicon.ico" rel="shortcut icon"/>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38496676-1']);
+      _gaq.push(['_trackPageview']);
+
+      var _track = function(action) {
+        _gaq.push(['_trackEvent', 'Engagement', action]);
+      };
+
+      (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+
+        ga.src = ('https:' == document.location.protocol ?
+            'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  
+
+    <link href="../../../sitemap.html" type="application/xml" rel="sitemap" title="Sitemap">
+  <link href="../../index.html" rel="home start" />
+  <link href="../../atom/index.html" type="application/atom+xml" rel="alternate" title="Atom Feed" />
+  <link href="../../rss/index.html" type="application/rss+xml" rel="alternate" title="RSS Feed" />
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script type="text/javascript">
+    setInterval(function() {
+      _gaq.push(['_trackEvent', 'Engagement', 'Still reading']);
+    }, 60000);
+  </script>
+  <script type="text/javascript" src="../../../static/js/ext/jquery.js"></script>
+  <script type="text/javascript" src="../../../static/js/ext/jquerycookie.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      $.cookie('blog-date', new Date(), {path: '/', expires: 365});
+      console.log($.cookie('blog-date'));
+    };
+  </script>
+
+      <meta name="description" content="A couple of weeks ago, [Debuggex](/) gave you the..." />
+      <meta name="keywords" content="" />
+
+</head>
+<body>
+  <div id="page">
+    <div id="content">
+      <div class="navbar navbar-static-top navbar-default dbx-navbar" role="navigation">
+        <div class="width-restricted">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="../../../index.html"><img src="../../../static/img/logo.png" alt="Debuggex Beta"/></a>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              
+  <li><a href="../../index.html" rel="home start">Blog</a></li>
+  <li><a href="../../articles/index.html" rel="contents">All articles</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div ng-controller="GlobalsCtrl">
+        
+          
+            <div class="navbar navbar-static-top navbar-default dbx-subnavbar" role="navigation">
+              <div class="width-restricted">
+                <div class="sidepadded">
+                  <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                      
+  <li><a href="../../atom/index.html" rel="alternate">Atom</a></li>
+  <li><a href="../../rss/index.html" rel="alternate">RSS</a></li>
+
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          <div class="width-restricted">
+            <div class="sidepadded">
+              
+
+<div id="blog">
+  
+
+
+
+
+
+
+
+
+        
+<article>
+    <header>
+        <time datetime="2013-05-27">27.05.2013, 20:09</time>
+        <h1>
+            <a href="index.html" rel="bookmark canonical">Persona is the only way to login</a>
+        </h1>
+    </header>
+    <p>A couple of weeks ago, <a href="../../../index.html">Debuggex</a> gave you the ability to create an account and save regular ex&shy;pres&shy;sions to the account.</p>
+<p>Au&shy;then&shy;ti&shy;ca&shy;tion for your account is provided ex&shy;clu&shy;sive&shy;ly through <a href="https://login.persona.org/about">Mozilla Persona</a>, and I'd like to explain why that decision was made.</p>
+<ol>
+<li>
+<p>Debuggex is still a one-man team. Resources are very con&shy;strained, and time has to be properly managed. <strong>I want to focus on building a kick-ass platform for your regular ex&shy;pres&shy;sions</strong>. Mozilla is building a kick-ass identity provider/protocol, and using Persona costs me sub&shy;stan&shy;tial&shy;ly less effort than rolling out my own.</p>
+</li>
+<li>
+<p>I don't want to manage your password. Countless mistakes have been made with storing and managing passwords. While I probably wouldn't make any <a href="http://thenextweb.com/socialmedia/2012/06/06/bad-day-for-linkedin-6-5-million-hashed-passwords-reportedly-leaked-change-yours-now/">extremely terrible mistakes</a>, the risk that I would is enough to keep me up at night. The team at Mozilla is much better suited to handle this.</p>
+<p>There is an important corollary. Several (awesome) features are in de&shy;vel&shy;op&shy;ment that inherently require au&shy;then&shy;ti&shy;ca&shy;tion, so <strong>the barrier to creating an account needs to be as small as possible</strong>. Since I am not managing your password, you can trust that creating an account on Debuggex is very low-risk. You need to trust only your identity provider. </p>
+</li>
+<li>
+<p>Persona gives huge im&shy;prove&shy;ments in user privacy versus other identity providers. When you login with Facebook, Google, or even OpenID, you are providing in&shy;for&shy;ma&shy;tion about when and what websites you're logging into. This in&shy;for&shy;ma&shy;tion can be used to track what you do on the web.</p>
+<p>With Persona, the identity provider gives your browser a cer&shy;tifi&shy;cate that proves ownership of your email. Your browser then <strong>allows you to login to a website without talking to the identity provider</strong>. You can read a <a href="http://identity.mozilla.com/post/7899984443/privacy-and-browserid">better de&shy;scrip&shy;tion</a> or get into the <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Persona/Protocol_Overview?redirectlocale=en-US&amp;redirectslug=Persona%2FProtocol_Overview">nitty-gritty</a></p>
+</li>
+</ol>
+<p>Using Persona <em>ex&shy;clu&shy;sive&shy;ly</em> is a very strong vote of confidence. It is currently the best way to do au&shy;then&shy;ti&shy;ca&shy;tion. Despite Debuggex being small, a public vote of confidence encourages the Persona team to continue building awesome stuff. It also encourages other websites to use Persona, and that makes au&shy;then&shy;ti&shy;ca&shy;tion better for everybody. </p>
+<p>In addition, ex&shy;clu&shy;siv&shy;i&shy;ty means I am very sensitive to bugs or other problems. I can point the team to the things that have the highest impact for Debuggex users, so that Persona gets even better. In fact, one of the Persona developers has already made a personal commitment to support Debuggex' needs.</p>
+<p>If you have any feedback on the login flow for Debuggex, or any thoughts on this article, please don't hesitate to email me.</p>
+    <footer>
+    </footer>
+    <div class="comments">
+    </div>
+</article>
+
+        <a href="../ab-using-crowdfunding-to-validate-your-market/index.html" class="page floatright">
+        (Ab)using crowdfunding to validate your market &raquo;
+        </a>
+        <a href="../how-my-crowdfunding-turned-into-singlefunding/index.html" class="page floatleft">
+        &laquo; How my crowdfunding turned into singlefunding
+        </a>
+
+
+<footer>
+  
+    
+  <p>written by <a href="http://www.twitter.com/stoarca">Serge Toarca</a></p>
+  
+
+</footer>
+
+</div>
+
+            </div>
+          </div>
+        
+      </div>
+    </div>
+    <div class="footer-container">
+      <div class="footer">
+        <div class="sidepadded">
+          <div class="copyright lfloat">
+            Copyright © 2013 www.debuggex.com
+          </div>
+          <div class="links rfloat">
+            <a href="../../index.html">Blog</a>
+            |
+            <a href="../../../libraries.html">Libraries</a>
+            |
+            <a href="mailto:serge@debuggex.com">Contact</a>
+            |
+            <a href="../../../privacy.html">Privacy</a>
+            |
+            <a href="../../../terms.html">Terms</a>
+            |
+            <a href="http://www.twitter.com/debuggex">Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- Mirrored from www.debuggex.com/blog/2013/persona-is-the-only-way-to-login/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 16:00:16 GMT -->
+</html>

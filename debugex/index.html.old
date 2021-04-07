@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="RegexApp">
+
+<!-- Mirrored from www.debuggex.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 15:59:14 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+				<link type="text/css" href="static/css/main.css" rel="stylesheet"/>
+ 
+				<script type="text/javascript" src="static/js/main.js"></script>
+  
+  
+    <meta charset="utf-8">
+    <title>
+  Debuggex: Online visual regex tester. JavaScript, Python, and PCRE.
+</title>
+
+    
+  <meta name="description" content="Test your regex by visualizing it with a live editor. JavaScript, Python, and PCRE.">
+
+    <meta name="keywords" content="javascript,regex,regular expression,visual,nfa,dfa,state,debugger,helper,tester,match,random match">
+    <meta name="author" content="Sergiu Toarca">
+
+    <link href="static/img/favicon.ico" rel="shortcut icon"/>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38496676-1']);
+      _gaq.push(['_trackPageview']);
+
+      var _track = function(action) {
+        _gaq.push(['_trackEvent', 'Engagement', action]);
+      };
+
+      (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+
+        ga.src = ('https:' == document.location.protocol ?
+            'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  
+
+
+  <script type="text/javascript" src="static/js/include_new.orig.js"></script>
+  <script type="text/javascript">$(function() {
+    $('#signin').click(function() { navigator.id.request({}); return false;});
+
+    $('#signout').click(function() { navigator.id.logout(); return false;});
+
+    var currentUser = null;
+
+    navigator.id.watch({
+        loggedInUser: currentUser,
+        onlogin: function(assertion) {
+	    $.ajax({
+		type: 'POST',
+		url: '/login',
+		data: {
+		    assertion: assertion,
+		    came_from: 'https://www.debuggex.com/',
+		    csrf_token: 'c65de7c33c19c8a28700acf60fd930f9efcd96d1'
+		},
+		dataType: 'json',
+		success: function(res, status, xhr) {
+		    if(!res['success'])
+			navigator.id.logout();
+		    window.location = res['redirect'];
+		},
+		error: function(xhr, status, err) {
+		    navigator.id.logout();
+		    alert("Login failure: " + err);
+		}
+            });
+	},
+	onlogout: function() {
+	    $.ajax({
+		type: 'POST',
+		url: '/logout',
+		data:{
+		    came_from: 'https://www.debuggex.com/',
+		    csrf_token: 'c65de7c33c19c8a28700acf60fd930f9efcd96d1'
+		},
+		dataType: 'json',
+		success: function(res, status, xhr) { window.location = res['redirect']; },
+		error: function(xhr, status, err) { alert("Logout failure: " + err); }
+	    });
+        }
+    });
+});
+</script>
+
+
+
+  <script type="text/javascript">pyramid_globals = {"tier": "", "email": ""};</script>
+
+
+</head>
+<body>
+  <div id="page">
+    <div id="content">
+      <div class="navbar navbar-static-top navbar-default dbx-navbar" role="navigation">
+        <div class="width-restricted">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="index.html"><img src="static/img/logo.png" alt="Debuggex Beta"/></a>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              
+  <li><a onClick="_track('Pricing');" href="pricing.html">Pricing</a></li>
+  <li><a onClick="_track('Blog');" href="blog/index.html">Blog</a></li>
+  <li><a target="_blank" onClick="_track('Tutorial');" href="http://www.youtube.com/watch?v=xyp7ASl5ss4">Tutorial</a></li>
+    <li><a id="signin" onClick="_track('Top nav login');" href="login.html">Login/Signup</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div ng-controller="GlobalsCtrl">
+        
+<div ng-controller="UiDirectorCtrl" ng-init="referenceModel.show=false">
+    <div ng-controller="LightRegexMetaCtrl">
+    <div ng-controller="LightRegexCtrl">
+    <div ng-controller="LightNFACtrl">
+    <div ng-controller="LightTestStringCtrl">
+    <div ng-controller="UnitTestCtrl">
+    <div ng-controller="RegexApiCtrl">
+    <div ng-controller="GenCtrl">
+      <div ng-controller="RegexInitCtrl">
+      <div ng-controller="RegexInitGETCtrl">
+      <div ng-controller="RegexInitGlobalCtrl">
+      <div ng-controller="RegexInitHistoryCtrl">
+      </div>
+      </div>
+      </div>
+      </div>
+      
+          
+            <div class="navbar navbar-static-top navbar-default dbx-subnavbar" role="navigation">
+              <div class="width-restricted">
+                <div class="sidepadded">
+                  <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                      
+  <li><a href="#" onClick="_track('Share')" ng-click="shareRegex()"><i class="icon-share-sign subnav-icon" style="padding-right: 5px"></i>Share</a></li>
+  <li><a href="#" onClick="_track('Generate Snippet')" data-toggle="modal" data-target="#dbx-gen" ng-click="genSnippet()"><i class="icon-code subnav-icon"></i>Code Snippet</a></li>
+
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          <div class="width-restricted">
+            <div class="sidepadded">
+              
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="alert alert-success">
+  Using regexes for extracting data from web pages? Check out
+  <a href="https://www.parsehub.com/" class="alert-link" style="text-decoration:underline;">ParseHub</a>,
+  a visual web scraping tool built by the team behind Debuggex.
+</div>
+
+<div ng-controller="HiliteRegexCtrl">
+<div ng-controller="MarkerRegexCtrl" ng-init="reTrigger()">
+  <div class="main-outline">
+    <div>
+      <div class="meta-regex debug-section-header">
+        <span ng-hide="editing"
+            title="Click to edit"
+            ng-click="editing=true"
+            style="cursor:pointer;">
+          <span class="title">{{reMetaModel.title}}</span>
+          <span class="description"
+              title="{{reMetaModel.description}}">
+            {{reMetaModel.description}}
+          </span>
+        </span>
+        <span ng-show="editing" style="position:relative;top:-5px;">
+          <span class="title">
+            <input type="text" ng-model="reMetaModel.title"/>
+          </span>
+          <span class="description">
+            <input type="text" ng-model="reMetaModel.description"/>
+          </span>
+          <span class="confirm">
+            <button ng-click="editing=false">Done Editing</button>
+          </span>
+        </span>
+        <span class="extra">
+          <i class="icon-spinner icon-spin" ng-if="apiModel.loadingEmbed"></i>
+          <a href="#" ng-click="embed()" onclick="_track('embed');">Embed on StackOverflow</a>
+        </span>
+      </div>
+    </div>
+    <div class="nfadiagram nfamarkerdiagram" style="min-height:200px" ng-hide="isTextMode"
+        title="Regular expression visualization"
+        dbx-nfa="nfaModel.val"
+        dbx-dir="dbxDirModel"
+        dbx-markers="mReModel">
+    </div>
+    <div class="nfatextdiagram" style="min-height:207px" ng-show="isTextMode"
+        title="Regular expression textualization"
+        dbx-nfa="nfaModel.val">
+    </div>
+    <div>
+      <div style="margin-bottom:8px;position:relative;z-index:1;" class="clearfix">
+        <div class="lfloat">
+          <select class="flavorselect"></select>
+          <a href="#cheatsheet" style="margin-left:5px" ng-click="referenceModel.show=true">View Cheatsheet</a>
+          <span style="display:none"><div class="mode-button mode-button-{{!isTextMode}}" onClick="_track('VisualMode')" ng-click="isTextMode=false">Visual Mode</div><div class="mode-button mode-button-{{isTextMode}}" onClick="_track('TextMode')" ng-click="isTextMode=true">Text Mode</div></span>
+        </div>
+        <div class="rfloat">
+          <select class="flagselect" multiple="multiple"></select>
+        </div>
+      </div>
+      <div class="sa-message clearfix;">
+        <span class="center-align error">
+          <span ng-show="nfaModel.error.msg">{{nfaModel.error.msg}}</span>
+          <span ng-hide="nfaModel.error.msg">&nbsp;</span>
+        </span>
+      </div>
+      <div class="modelarea markerarea"
+          ng-init="mReModel.cls=dbxDirModel.reColor"
+          title="Regular Expression editor"
+          min-lines="4"
+          dbx-model-val="reModel.val"
+          dbx-model-pos="mReModel.pos"
+          dbx-model-init="reModel.init"
+          dbx-dir="dbxDirModel"
+          dbx-trigger-func="reTrigger()"
+          dbx-hilites="hReModel.hilites"
+          dbx-markers="mReModel"
+          dbx-placeholder="My regular expression"
+          show-gutter="true">
+      </div>
+    </div>
+    <div ng-controller="HiliteTestStringCtrl" style="margin-top:30px; padding-bottom: 20px;">
+    <div ng-controller="StateInfoTestStringCtrl">
+    <div ng-controller="MarkerTestStringCtrl">
+      <div>
+      <div class="sa-message clearfix">
+        <span class="left-align">
+          <strong>Result:</strong>
+          <span ng-show="hTestStringModel.positions[testStringModel.startAt]">
+            <span class="antierror">Matches</span>
+          </span>
+          <span ng-hide="hTestStringModel.positions[testStringModel.startAt]">
+            <span class="error">Does not match</span>
+          </span>
+          starting at the black triangle slider
+        </span>
+      </div>
+      </div>
+      <div class="slidearea"
+          ng-init="mTestStringModel.cls=dbxDirModel.colors[0]"
+          title="Test String Editor"
+          min-lines="4"
+          dbx-model-val="testStringModel.val"
+          dbx-model-pos="mTestStringModel.pos"
+          dbx-model-init="testStringModel.init"
+          dbx-model-start-at="testStringModel.startAt"
+          dbx-dir="dbxDirModel"
+          dbx-trigger-func="testStrTrigger()"
+          dbx-hilites="hTestStringModel.hilites"
+          dbx-markers="mTestStringModel"
+          dbx-placeholder="My test data"
+          show-gutter="true">
+      </div>
+    </div>
+    </div>
+    </div>
+  </div>
+  <div class="debug-section-header emphasized-header unit-tests-header">
+  <i class="icon-caret-down icons downShift" ng-hide="hideTests" ng-click="hideTests=true"></i>
+  <i class="icon-caret-right icons downShift" ng-show="hideTests" ng-click="hideTests=false"></i>
+  <span class="title downShift">
+    Unit Tests
+  </span>
+  <span class="lightText" style="vertical-align: -1px">(<a class="clickable" ng-show="hideTests" ng-click="hideTests=false">show</a><a class="clickable" ng-hide="hideTests" ng-click="hideTests=true">hide</a>)</span>
+  <a href="blog/2013/a-true-regex-tester/index.html" style="vertical-align: -2px;">Help</a>
+  <span class="add-test">
+    <button class="unit-test-button blue"
+        ng-show="pyramid_globals.email"
+        href="#"
+        ng-click="addTest(); hideTests=false"
+        onClick="_track('Add unit test')">
+      <i class="icon-plus-sign"></i> Add new unit test
+    </button>
+    <button class="unit-test-button blue"
+        ng-hide="pyramid_globals.email"
+        href="#" 
+        onClick="_track('Unittest account');$('#signin').click();">
+      Login to add unit tests
+    </button>
+  </span>
+  <span class="extra">
+    <span ng-show="unitTestModel.tests.length==0" class="notests">
+      You haven't added any unit tests yet
+    </span>
+    <span ng-hide="unitTestModel.tests.length==0">
+      {{unitTestModel.tests.length}} Total Tests:
+      <span class="passing">
+        Passing ({{unitTestModel.tests.length}});
+      </span>
+      <span ng-hide="unitTestModel.failing.length==0" class="failing">
+        Failing ({{unitTestModel.failing.length}})
+      </span>
+    </span>
+  </span>
+</div>
+
+<div style="margin-top:5px" ng-hide="hideTests">
+  <div ng-hide="editedTestIndex==-1||unitTestModel.tests.length" class="centered-text">
+    No unit tests added.
+  </div>
+  <table class="unit-tests">
+    <tr ng-show="editedTestIndex==-1||unitTestModel.tests.length>0">
+      <th style="width:50%">Expected Matches (hover over highlights for details)</th>
+      <th style="width:50%">Actual Matches</th>
+      <th class="smallcell">&nbsp;Edit&nbsp;</th>
+      <th class="smallcell">&nbsp;Passing&nbsp;</th>
+    </tr>
+    <tbody class="unit-tests-body">
+      <tr ng-repeat="test in unitTestModel.tests"
+          class="unit-test"
+          ng-attr-title="{{passFailText(test)}}"
+          ng-class="{editing:$index==editedTestIndex}">
+        <td ng-if="$index==editedTestIndex" colspan="5">
+          Enter a string to be tested. If all highlighted matches and subgroups
+          look correct, click "This is right".
+          <div class="modelarea hilitearea"
+            dbx-model-val="editedTest.string"
+            dbx-hilites="editedTest.expectedHilites">
+          </div>
+          <div class="command-row">
+            <button class="unit-test-button green" ng-click="doneEditing(true)">This is right</button>
+            <button class="unit-test-button red" ng-click="doneEditing(false)">This is wrong</button>
+            <a href="#" ng-click="randomTest()">Suggest</a>
+            <a href="#" ng-click="revertEditing()">Cancel</a>
+            <a href="#" ng-click="removeTest($index)">Delete</a>
+          </div>
+        </td>
+        <td ng-if="$index!=editedTestIndex">
+          <div class="modelarea hilitearea ro"
+            ng-class="{'strike': !test.assert}"
+            min-lines="1"
+            dbx-model-val="test.string"
+            dbx-hilites="test.expectedHilites">
+          </div>
+        </td>
+        <td ng-if="$index!=editedTestIndex">
+          <div class="modelarea hilitearea ro"
+            min-lines="1"
+            dbx-model-val="test.string"
+            dbx-hilites="test.actualHilites">
+          </div>
+        </td>
+        <td class="centered-text" ng-if="$index!=editedTestIndex">
+          <span ng-show="pyramid_globals.email">
+            <a href="#" ng-click="editTest($index)"><i class="icon-edit"></i></a>
+          </span>
+          <span ng-hide="pyramid_globals.email" style="color:#bbbbbb">
+            <i class="icon-edit" title="Login to modify unit tests"></i>
+          </span>
+        </td>
+        <td class="centered-text" ng-if="$index!=editedTestIndex">
+          <i ng-show="test.passing" class="icon-ok" style="color:#00bb00"></i>
+          <i ng-hide="test.passing" class="icon-remove" style="color:#bb0000"></i>
+        </td>
+      </tr>
+      <tr ng-if="editedTestIndex==-1" class="unit-test editing">
+        <td colspan="5">
+          Enter a string to be tested. If all highlighted matches and subgroups
+          look correct, click "This is right".
+          <div class="modelarea hilitearea"
+            dbx-model-val="editedTest.string"
+            dbx-hilites="editedTest.expectedHilites">
+          </div>
+          <div class="command-row">
+            <button class="unit-test-button green" ng-click="doneEditing(true)">This is right</button>
+            <button class="unit-test-button red" ng-click="doneEditing(false)" style="margin-left: 2px">This is wrong</button>
+            <a href="#" ng-click="randomTest()">Suggest</a>
+            <a href="#" ng-click="revertEditing()">Cancel</a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+  <div ng-controller="LibraryCtrl">
+  <div class="debug-section-header emphasized-header">
+    <i class="icon-caret-down icons" ng-hide="hideLibrary" ng-click="hideLibrary=true"></i>
+    <i class="icon-caret-right icons" ng-show="hideLibrary" ng-click="hideLibrary=false"></i>
+    <span class="title">
+      Library
+    </span>
+    <span class="lightText" style="vertical-align: 2px">(<a class="clickable" ng-show="hideLibrary" ng-click="hideLibrary=false">show</a><a class="clickable" ng-hide="hideLibrary" ng-click="hideLibrary=true">hide</a>)</span>
+    <a href="blog/2013/a-composable-regex-repository/index.html" style="vertical-align: 1px">Help</a>
+    <span class="extra">
+      <input type="text"
+          placeholder="search"
+          ng-model="libraryModel.filter"
+          style="font-size:12px;padding-left:2px"/>
+    </span>
+  </div>
+  <div class="library" ng-hide="hideLibrary">
+    <div class="lpanel">
+      <div class="content">
+        <div ng-repeat="dep in (libraryModel.val | filter:libraryModel.filter)" title="{{dep.description}}">
+          <a class="title" href="#" ng-click="select(dep)">{{dep.title}}</a>
+        </div>
+      </div>
+    </div>
+    <div class="rpanel">
+      <div class="content">
+          <a href="#" onClick="_track('Library account');$('#signin').click();">
+            Login to view details of this regex
+          </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+<div>
+  <div ng-controller="RegexFlavorCtrl" id="cheatsheet" style="margin-top:50px;text-align:center;">
+  <a href="#" ng-hide="referenceModel.show" ng-click="referenceModel.show=true">
+    Show cheatsheet
+  </a>
+  <div ng-show="referenceModel.show" style="display:inline-block">
+    <span style="font-weight:700">
+      {{flavors[reModel.flavor].external}} regex quick reference (<a href="#" ng-click="referenceModel.show=false">hide</a>):
+    </span>
+    <br/>
+    <table style="display:inline-block;vertical-align:top;margin-left:10px;text-align:left">
+      <tbody>
+        <tr>
+          <td><span class="code">[abx-z]</span></td>
+          <td>One character of: a, b, or the range x-z</td>
+        </tr>
+        <tr>
+          <td><span class="code">[^abx-z]</span></td>
+          <td>One character except: a, b, or the range x-z</td>
+        </tr>
+        <tr>
+          <td><span class="code">a|b</span></td>
+          <td>a or b</td>
+        </tr>
+        <tr>
+          <td><span class="code">a?</span></td>
+          <td>Zero or one a's (greedy)</td>
+        </tr>
+        <tr>
+          <td><span class="code">a??</span></td>
+          <td>Zero or one a's (lazy)</td>
+        </tr>
+        <tr>
+          <td><span class="code">a*</span></td>
+          <td>Zero or more a's (greedy)</td>
+        </tr>
+        <tr>
+          <td><span class="code">a*?</span></td>
+          <td>Zero or more a's (lazy)</td>
+        </tr>
+        <tr>
+          <td><span class="code">a+</span></td>
+          <td>One or more a's (greedy)</td>
+        </tr>
+        <tr>
+          <td><span class="code">a+?</span></td>
+          <td>One or more a's (lazy)</td>
+        </tr>
+        <tr>
+          <td><span class="code">a{4}</span></td>
+          <td>Exactly 4 a's</td>
+        </tr>
+        <tr>
+          <td><span class="code">a{4,8}</span></td>
+          <td>Between (inclusive) 4 and 8 a's</td>
+        </tr>
+        <tr>
+          <td><span class="code">a{9,}</span></td>
+          <td>9 or more a's</td>
+        </tr>
+        <tr ng-show="reModel.flavor=='pcre'">
+          <td><span class="code">(?>...)</span></td>
+          <td>An atomic group</td>
+        </tr>
+        <tr>
+          <td><span class="code">(?=...)</span></td>
+          <td>A positive lookahead</td>
+        </tr>
+        <tr>
+          <td><span class="code">(?!...)</span></td>
+          <td>A negative lookahead</td>
+        </tr>
+        <tr ng-show="reModel.flavor=='pcre' || reModel.flavor=='python'">
+          <td><span class="code">(?&lt;=...)</span></td>
+          <td>A positive lookbehind</td>
+        </tr>
+        <tr ng-show="reModel.flavor=='pcre' || reModel.flavor=='python'">
+          <td><span class="code">(?&lt;!...)</span></td>
+          <td>A negative lookbehind</td>
+        </tr>
+        <tr>
+          <td><span class="code">(?:...)</span></td>
+          <td>A non-capturing group</td>
+        </tr>
+        <tr>
+          <td><span class="code">(...)</span></td>
+          <td>A capturing group</td>
+        </tr>
+        <tr ng-show="reModel.flavor=='pcre' || reModel.flavor=='python'">
+          <td><span class="code">(?P&lt;n>...)</span></td>
+          <td>A capturing group named n</td>
+        </tr>
+      </tbody>
+    </table>
+    <table style="display:inline-block;vertical-align:top;margin-left:10px;text-align:left;">
+      <tbody>
+        <tr>
+          <td><span class="code code-escaped">^</span></td>
+          <td>Beginning of the string</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">$</span></td>
+          <td>End of the string</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">\d</span></td>
+          <td>A digit (same as <span class="code">[0-9]</span>)</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">\D</span></td>
+          <td>A non-digit (same as <span class="code">[^0-9]</span>)</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">\w</span></td>
+          <td>A word character (same as <span class="code">[_a-zA-Z0-9]</span>)</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">\W</span></td>
+          <td>
+            A non-word character (same as <span class="code">[^_a-zA-Z0-9]</span>)
+          </td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">\s</span></td>
+          <td>A whitespace character</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">\S</span></td>
+          <td>A non-whitespace character</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">\b</span></td>
+          <td>A word boundary</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">\B</span></td>
+          <td>A non-word boundary</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">\n</span></td>
+          <td>A newline</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">\t</span></td>
+          <td>A tab</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">\cY</span></td>
+          <td>The control character with the hex code Y</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">\xYY</span></td>
+          <td>The character with the hex code YY</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">\uYYYY</span></td>
+          <td>The character with the hex code YYYY</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">.</span></td>
+          <td>Any character</td>
+        </tr>
+        <tr>
+          <td><span class="code code-escaped">\Y</span></td>
+          <td>The Y'th captured group</td>
+        </tr>
+        <tr ng-show="reModel.flavor=='pcre'">
+          <td><span class="code">(?1)</span></td>
+          <td>Recurse into numbered group 1</td>
+        </tr>
+        <tr ng-show="reModel.flavor=='pcre'">
+          <td><span class="code">(?&x)</span></td>
+          <td>Recurse into named group x</td>
+        </tr>
+        <tr ng-show="reModel.flavor=='pcre' || reModel.flavor=='python'">
+          <td><span class="code">(?P=n)</span></td>
+          <td>The captured group named 'n'</td>
+        </tr>
+        <tr ng-show="reModel.flavor=='pcre' || reModel.flavor=='python'">
+          <td><span class="code">(?#...)</span></td>
+          <td>A comment</td>
+        </tr>
+      </tbody>
+    </table>
+    <br/>
+    <a href="cheatsheet/regex/%7b%7breModel.html" target="_blank">
+      Full {{flavors[reModel.flavor].external}} regex cheatsheet
+    </a>
+  </div>
+</div>
+
+</div>
+
+<div id="dbx-share-regex" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Sharing Expression</h4>
+      </div>
+      <div class="modal-body">
+        Share this link to get back to exactly this page:
+        <div style="font-weight: bold" class="dbx-share-link">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="dbx-embed-so" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Embed Expression</h4>
+      </div>
+      <div class="modal-body">
+        Paste this code into a StackOverflow answer to embed an image with a link
+        to this exact page:
+        <div>
+          <textarea class="embed-code" rows="6" style="width:100%" readonly></textarea>
+        </div>
+        <br/>
+        Preview:
+        <div style="margin:10px;padding:10px;border:1px dashed black;border-radius:4px;">
+        <div style="background:#eee;font-family:'courier new';padding:4px;font-size:14px;">
+        <pre style="border:none;padding:0;margin:0;background-color:transparent;" class="regex"></pre>
+        </div>
+        <br/>
+        <div class="img"></div>
+        <br/>
+        <a class="link">Debuggex Demo</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="dbx-gen" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Generate Code Snippet</h4>
+      </div>
+      <div class="modal-body">
+        <div ng-show="genModel.error">
+          The free tier doesn't support code snippets using expressions from
+          the library. <a href="pricing.html" target="_blank">Upgrade my account</a>.
+        </div>
+        <div ng-hide="genModel.error">
+          Copy and paste this snippet directly into your code:
+          <br/>
+          <pre>{{genModel.val}}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+            </div>
+          </div>
+        
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+  </div>
+
+      </div>
+    </div>
+    <div class="footer-container">
+      <div class="footer">
+        <div class="sidepadded">
+          <div class="copyright lfloat">
+            Copyright © 2013 www.debuggex.com
+          </div>
+          <div class="links rfloat">
+            <a href="blog/index.html">Blog</a>
+            |
+            <a href="libraries.html">Libraries</a>
+            |
+            <a href="mailto:serge@debuggex.com">Contact</a>
+            |
+            <a href="privacy.html">Privacy</a>
+            |
+            <a href="terms.html">Terms</a>
+            |
+            <a href="http://www.twitter.com/debuggex">Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- Mirrored from www.debuggex.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 15:59:26 GMT -->
+</html>

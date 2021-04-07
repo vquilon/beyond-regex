@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="RegexApp">
+
+<!-- Mirrored from www.debuggex.com/blog/2013/a-composable-regex-repository/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 16:00:10 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+				<link type="text/css" href="../../../static/css/main.css" rel="stylesheet"/>
+ 
+				<script type="text/javascript" src="../../../static/js/main.js"></script>
+  
+    
+  
+    <meta charset="utf-8">
+    <title>
+     A composable regex repository
+</title>
+
+    
+    <meta name="keywords" content="javascript,regex,regular expression,visual,nfa,dfa,state,debugger,helper,tester,match,random match">
+    <meta name="author" content="Sergiu Toarca">
+
+    <link href="../../../static/img/favicon.ico" rel="shortcut icon"/>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38496676-1']);
+      _gaq.push(['_trackPageview']);
+
+      var _track = function(action) {
+        _gaq.push(['_trackEvent', 'Engagement', action]);
+      };
+
+      (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+
+        ga.src = ('https:' == document.location.protocol ?
+            'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  
+
+    <link href="../../../sitemap.html" type="application/xml" rel="sitemap" title="Sitemap">
+  <link href="../../index.html" rel="home start" />
+  <link href="../../atom/index.html" type="application/atom+xml" rel="alternate" title="Atom Feed" />
+  <link href="../../rss/index.html" type="application/rss+xml" rel="alternate" title="RSS Feed" />
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script type="text/javascript">
+    setInterval(function() {
+      _gaq.push(['_trackEvent', 'Engagement', 'Still reading']);
+    }, 60000);
+  </script>
+  <script type="text/javascript" src="../../../static/js/ext/jquery.js"></script>
+  <script type="text/javascript" src="../../../static/js/ext/jquerycookie.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      $.cookie('blog-date', new Date(), {path: '/', expires: 365});
+      console.log($.cookie('blog-date'));
+    };
+  </script>
+
+      <meta name="description" content="Debuggex has launched a regex repository! Starting..." />
+      <meta name="keywords" content="" />
+
+</head>
+<body>
+  <div id="page">
+    <div id="content">
+      <div class="navbar navbar-static-top navbar-default dbx-navbar" role="navigation">
+        <div class="width-restricted">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="../../../index.html"><img src="../../../static/img/logo.png" alt="Debuggex Beta"/></a>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              
+  <li><a href="../../index.html" rel="home start">Blog</a></li>
+  <li><a href="../../articles/index.html" rel="contents">All articles</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div ng-controller="GlobalsCtrl">
+        
+          
+            <div class="navbar navbar-static-top navbar-default dbx-subnavbar" role="navigation">
+              <div class="width-restricted">
+                <div class="sidepadded">
+                  <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                      
+  <li><a href="../../atom/index.html" rel="alternate">Atom</a></li>
+  <li><a href="../../rss/index.html" rel="alternate">RSS</a></li>
+
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          <div class="width-restricted">
+            <div class="sidepadded">
+              
+
+<div id="blog">
+  
+
+
+
+
+
+
+
+
+        
+<article>
+    <header>
+        <time datetime="2013-09-17">17.09.2013, 11:00</time>
+        <h1>
+            <a href="index.html" rel="bookmark canonical">A composable regex repository</a>
+        </h1>
+    </header>
+    <p>Debuggex has launched a regex repository! Starting today, this is how you
+can match an IPv4 address on <a href="../../../index.html">our site</a>:</p>
+<div class="highlight"><pre><span class="p">(</span>?<span class="o">&amp;</span><span class="p">.</span><span class="n">ipv4</span><span class="p">)</span>
+</pre></div>
+
+
+<p>(The <code>(?&amp;</code> syntax is borrowed from PCRE's
+<a href="http://www.autoitscript.com/autoit3/pcrepattern.html#SEC23">regex sub&shy;rou&shy;tines</a>.)</p>
+<p>The concept is really simple - Debuggex has a list of pre-built ex&shy;pres&shy;sions
+that you can use instead of wasting your time figuring them out by yourself.
+We've already got a list of almost a hundred ex&shy;pres&shy;sions,
+and we are constantly adding more.</p>
+<p>There are a few key features that make our im&shy;ple&shy;men&shy;ta&shy;tion sig&shy;nif&shy;i&shy;cant&shy;ly
+better than what you may have seen in other places.</p>
+<h2>Unit Tests</h2>
+<p>Debuggex was designed from the start with unit-testing and
+backwards com&shy;pat&shy;i&shy;bil&shy;i&shy;ty in mind.
+Each regex in the repository has a suite of tests that make it bul&shy;let&shy;proof.</p>
+<p>The unit tests also serve as <strong>working examples</strong> for how to use a regex.
+Ultimately, you spend less time fiddling around,
+and more time focusing on the things that matter to you.</p>
+<h2>Com&shy;pos&shy;abil&shy;i&shy;ty</h2>
+<p>Regular ex&shy;pres&shy;sions tend to be at a very low ab&shy;strac&shy;tion level.
+If you want to find something in a log file, you should be thinking in
+terms of ip addresses and urls - not dots, digits, and slashes.
+Working at such a low level quickly gets very com&shy;pli&shy;cat&shy;ed.</p>
+<p>Com&shy;pos&shy;abil&shy;i&shy;ty makes ab&shy;strac&shy;tion way easier.
+Suppose you have a log file with entries consisting of an IP address
+(either IPv4 or IPv6) followed by a quoted referrer url.
+Here's how you would match that:</p>
+<div class="highlight"><pre><span class="p">((</span>?<span class="o">&amp;</span><span class="p">.</span><span class="n">ipv4</span><span class="p">)</span><span class="o">|</span><span class="p">(</span>?<span class="o">&amp;</span><span class="p">.</span><span class="n">ipv6</span><span class="p">))</span> <span class="p">(</span>?<span class="o">&amp;</span><span class="p">.</span><span class="n">quotStr</span><span class="p">)</span>
+</pre></div>
+
+
+<p>That's it!
+<strong>Ar&shy;bi&shy;trar&shy;i&shy;ly complex ex&shy;pres&shy;sions are hidden behind a simple variable name</strong>.
+You can use these just like any other piece of a regex. To turn this
+into an expression that your language will understand, just click "Code Snippet".
+Debuggex will compile the expression and give you:</p>
+<div class="highlight"><pre><span class="n">var</span> <span class="n">regex</span> <span class="p">=</span> <span class="n">new</span> <span class="n">RegExp</span><span class="p">(</span>&quot;<span class="p">((</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:</span>25<span class="p">[</span>0<span class="o">-</span>5<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>2<span class="p">[</span>0<span class="o">-</span>4<span class="p">][</span>0<span class="o">-</span>9<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>1<span class="p">[</span>0<span class="o">-</span>9<span class="p">]{</span>2<span class="p">,</span>2<span class="p">})</span><span class="o">|</span><span class="p">(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="p">]{</span>1<span class="p">,</span>2<span class="p">}))</span><span class="o">\\</span><span class="p">.){</span>3<span class="p">,</span>3<span class="p">}(</span>?<span class="p">:(</span>?<span class="p">:</span>25<span class="p">[</span>0<span class="o">-</span>5<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>2<span class="p">[</span>0<span class="o">-</span>4<span class="p">][</span>0<span class="o">-</span>9<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>1<span class="p">[</span>0<span class="o">-</span>9<span class="p">]{</span>2<span class="p">,</span>2<span class="p">})</span><span class="o">|</span><span class="p">(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="p">]{</span>1<span class="p">,</span>2<span class="p">})))</span><span class="o">|</span><span class="p">(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>7<span class="p">,</span>7<span class="p">}(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}))</span><span class="o">|</span><span class="p">(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>6<span class="p">,</span>6<span class="p">}:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}))</span><span class="o">|</span><span class="p">(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>5<span class="p">,</span>5<span class="p">}:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>0<span class="p">,</span>1<span class="p">}(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}))</span><span class="o">|</span><span class="p">(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>4<span class="p">,</span>4<span class="p">}:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>0<span class="p">,</span>2<span class="p">}(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}))</span><span class="o">|</span><span class="p">(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>3<span class="p">,</span>3<span class="p">}:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>0<span class="p">,</span>3<span class="p">}(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}))</span><span class="o">|</span><span class="p">(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>2<span class="p">,</span>2<span class="p">}:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>0<span class="p">,</span>4<span class="p">}(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}))</span><span class="o">|</span><span class="p">(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>6<span class="p">,</span>6<span class="p">}(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:</span>25<span class="p">[</span>0<span class="o">-</span>5<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>2<span class="p">[</span>0<span class="o">-</span>4<span class="p">][</span>0<span class="o">-</span>9<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>1<span class="p">[</span>0<span class="o">-</span>9<span class="p">]{</span>2<span class="p">,</span>2<span class="p">})</span><span class="o">|</span><span class="p">(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="p">]{</span>1<span class="p">,</span>2<span class="p">}))</span><span class="o">\\</span><span class="p">.){</span>3<span class="p">,</span>3<span class="p">}(</span>?<span class="p">:(</span>?<span class="p">:</span>25<span class="p">[</span>0<span class="o">-</span>5<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>2<span class="p">[</span>0<span class="o">-</span>4<span class="p">][</span>0<span class="o">-</span>9<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>1<span class="p">[</span>0<span class="o">-</span>9<span class="p">]{</span>2<span class="p">,</span>2<span class="p">})</span><span class="o">|</span><span class="p">(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="p">]{</span>1<span class="p">,</span>2<span class="p">})))</span><span class="o">|</span><span class="p">(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>0<span class="p">,</span>5<span class="p">}:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:</span>25<span class="p">[</span>0<span class="o">-</span>5<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>2<span class="p">[</span>0<span class="o">-</span>4<span class="p">][</span>0<span class="o">-</span>9<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>1<span class="p">[</span>0<span class="o">-</span>9<span class="p">]{</span>2<span class="p">,</span>2<span class="p">})</span><span class="o">|</span><span class="p">(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="p">]{</span>1<span class="p">,</span>2<span class="p">}))</span><span class="o">\\</span><span class="p">.){</span>3<span class="p">,</span>3<span class="p">}(</span>?<span class="p">:(</span>?<span class="p">:</span>25<span class="p">[</span>0<span class="o">-</span>5<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>2<span class="p">[</span>0<span class="o">-</span>4<span class="p">][</span>0<span class="o">-</span>9<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>1<span class="p">[</span>0<span class="o">-</span>9<span class="p">]{</span>2<span class="p">,</span>2<span class="p">})</span><span class="o">|</span><span class="p">(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="p">]{</span>1<span class="p">,</span>2<span class="p">})))</span><span class="o">|</span><span class="p">(</span>?<span class="p">:::(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>0<span class="p">,</span>5<span class="p">}(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:</span>25<span class="p">[</span>0<span class="o">-</span>5<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>2<span class="p">[</span>0<span class="o">-</span>4<span class="p">][</span>0<span class="o">-</span>9<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>1<span class="p">[</span>0<span class="o">-</span>9<span class="p">]{</span>2<span class="p">,</span>2<span class="p">})</span><span class="o">|</span><span class="p">(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="p">]{</span>1<span class="p">,</span>2<span class="p">}))</span><span class="o">\\</span><span class="p">.){</span>3<span class="p">,</span>3<span class="p">}(</span>?<span class="p">:(</span>?<span class="p">:</span>25<span class="p">[</span>0<span class="o">-</span>5<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>2<span class="p">[</span>0<span class="o">-</span>4<span class="p">][</span>0<span class="o">-</span>9<span class="p">])</span><span class="o">|</span><span class="p">(</span>?<span class="p">:</span>1<span class="p">[</span>0<span class="o">-</span>9<span class="p">]{</span>2<span class="p">,</span>2<span class="p">})</span><span class="o">|</span><span class="p">(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="p">]{</span>1<span class="p">,</span>2<span class="p">})))</span><span class="o">|</span><span class="p">(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">})::(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>0<span class="p">,</span>5<span class="p">}(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}))</span><span class="o">|</span><span class="p">(</span>?<span class="p">:::(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>0<span class="p">,</span>6<span class="p">}(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}))</span><span class="o">|</span><span class="p">(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:(</span>?<span class="p">:[</span>0<span class="o">-</span>9<span class="n">A</span><span class="o">-</span><span class="n">Fa</span><span class="o">-</span><span class="n">f</span><span class="p">]){</span>0<span class="p">,</span>4<span class="p">}):){</span>1<span class="p">,</span>7<span class="p">}:))))</span><span class="o">\\</span> <span class="p">(</span>?<span class="p">:</span><span class="o">\</span>&quot;<span class="p">((</span>?<span class="p">:</span><span class="o">\\\\</span><span class="p">.</span><span class="o">|</span><span class="p">[</span>^<span class="o">\</span>&quot;<span class="o">\\\\</span><span class="p">]){</span>0<span class="p">,})</span><span class="o">\</span>&quot;<span class="p">)</span>&quot;<span class="p">,</span> &quot;<span class="n">g</span>&quot;<span class="p">);</span>
+</pre></div>
+
+
+<p>(<a href="../../../r/bu2Dp3xPsBPtB0Eh.html">live demo</a>)</p>
+<p>How long would it have taken to come up with that expression yourself? Keep in
+mind that the IP is ensured to be correctly formatted, and any
+escaped quotes in the referrer url will be correctly matched.</p>
+<h2>Conclusion</h2>
+<p>We think you'll find this repository incredibly useful, and hope it'll save
+you a ton of time.</p>
+<p>We love feedback! If you have some, <a href="http://www.twitter.com/debuggex">get in touch</a>.</p>
+<p>p.s. If you'd like to compose using your own named ex&shy;pres&shy;sions, that will
+be launching very soon!</p>
+    <footer>
+    </footer>
+    <div class="comments">
+    </div>
+</article>
+
+        <a href="../sneak-preview-of-pcre-support-in-debuggex/index.html" class="page floatright">
+        Sneak Preview of PCRE Support in Debuggex &raquo;
+        </a>
+        <a href="../a-true-regex-tester/index.html" class="page floatleft">
+        &laquo; A true regex tester
+        </a>
+
+
+<footer>
+  
+    
+  <p>written by <a href="http://www.twitter.com/stoarca">Serge Toarca</a></p>
+  
+
+</footer>
+
+</div>
+
+            </div>
+          </div>
+        
+      </div>
+    </div>
+    <div class="footer-container">
+      <div class="footer">
+        <div class="sidepadded">
+          <div class="copyright lfloat">
+            Copyright © 2013 www.debuggex.com
+          </div>
+          <div class="links rfloat">
+            <a href="../../index.html">Blog</a>
+            |
+            <a href="../../../libraries.html">Libraries</a>
+            |
+            <a href="mailto:serge@debuggex.com">Contact</a>
+            |
+            <a href="../../../privacy.html">Privacy</a>
+            |
+            <a href="../../../terms.html">Terms</a>
+            |
+            <a href="http://www.twitter.com/debuggex">Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- Mirrored from www.debuggex.com/blog/2013/a-composable-regex-repository/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 16:00:13 GMT -->
+</html>

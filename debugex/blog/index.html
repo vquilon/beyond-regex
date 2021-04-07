@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="RegexApp">
+
+<!-- Mirrored from www.debuggex.com/blog/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 15:59:34 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+				<link type="text/css" href="../static/css/main.css" rel="stylesheet"/>
+ 
+				<script type="text/javascript" src="../static/js/main.js"></script>
+  
+    
+  
+    <meta charset="utf-8">
+    <title>
+     Debuggex Blog
+</title>
+
+    
+    <meta name="keywords" content="javascript,regex,regular expression,visual,nfa,dfa,state,debugger,helper,tester,match,random match">
+    <meta name="author" content="Sergiu Toarca">
+
+    <link href="../static/img/favicon.ico" rel="shortcut icon"/>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38496676-1']);
+      _gaq.push(['_trackPageview']);
+
+      var _track = function(action) {
+        _gaq.push(['_trackEvent', 'Engagement', action]);
+      };
+
+      (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+
+        ga.src = ('https:' == document.location.protocol ?
+            'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  
+
+    <link href="../sitemap.html" type="application/xml" rel="sitemap" title="Sitemap">
+  <link href="index.html" rel="home start" />
+  <link href="atom/index.html" type="application/atom+xml" rel="alternate" title="Atom Feed" />
+  <link href="rss/index.html" type="application/rss+xml" rel="alternate" title="RSS Feed" />
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script type="text/javascript">
+    setInterval(function() {
+      _gaq.push(['_trackEvent', 'Engagement', 'Still reading']);
+    }, 60000);
+  </script>
+  <script type="text/javascript" src="../static/js/ext/jquery.js"></script>
+  <script type="text/javascript" src="../static/js/ext/jquerycookie.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      $.cookie('blog-date', new Date(), {path: '/', expires: 365});
+      console.log($.cookie('blog-date'));
+    };
+  </script>
+
+
+</head>
+<body>
+  <div id="page">
+    <div id="content">
+      <div class="navbar navbar-static-top navbar-default dbx-navbar" role="navigation">
+        <div class="width-restricted">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="../index.html"><img src="../static/img/logo.png" alt="Debuggex Beta"/></a>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              
+  <li><a href="index.html" rel="home start">Blog</a></li>
+  <li><a href="articles/index.html" rel="contents">All articles</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div ng-controller="GlobalsCtrl">
+        
+          
+            <div class="navbar navbar-static-top navbar-default dbx-subnavbar" role="navigation">
+              <div class="width-restricted">
+                <div class="sidepadded">
+                  <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                      
+  <li><a href="atom/index.html" rel="alternate">Atom</a></li>
+  <li><a href="rss/index.html" rel="alternate">RSS</a></li>
+
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          <div class="width-restricted">
+            <div class="sidepadded">
+              
+
+<div id="blog">
+  
+
+
+
+
+
+
+
+
+        
+<article>
+    <header>
+        <time datetime="2013-10-01">01.10.2013, 13:30</time>
+        <h1>
+            <a href="2013/a-true-regex-tester/index.html" rel="bookmark canonical">A true regex tester</a>
+        </h1>
+    </header>
+    <p>How often have you been bitten by a regex? 
+Here's how the story usually goes.</p>
+<p>Two months ago, you spent 20 minutes crafting a regex.
+Today, you realize it has a bug and begin fixing it.
+Except that it now reminds you more of hi&shy;ero&shy;glyph&shy;ics:</p>
+<div class="highlight"><pre><span class="o">&lt;</span><span class="sr">/?\w+((\s+\w+(\s*=\s*(?:&quot;&quot;.*?&quot;&quot;|&#39;.*?&#39;|[^&#39;&quot;&quot;&gt;\s]+))?)+\s*|\s*)/</span><span class="o">?&gt;</span>
+</pre></div>
+
+
+<p>And there aren't any unit tests, because you were nearing a deadline, and
+writing <em>good</em> unit tests for regular ex&shy;pres&shy;sions is more tedious than
+most unit tests.
+Now you have to spend another 20 minutes figuring out what the regex does before
+fixing it.
+You finally fix it and push it to production, only to realize that there was a
+case that used to work <span>&#8230;<a href="2013/a-true-regex-tester/index.html" class="continue">continue</a>.</span></p>
+    <footer>
+    </footer>
+    <div class="comments">
+    </div>
+</article>
+
+        
+<article>
+    <header>
+        <time datetime="2013-09-17">17.09.2013, 11:00</time>
+        <h1>
+            <a href="2013/a-composable-regex-repository/index.html" rel="bookmark canonical">A composable regex repository</a>
+        </h1>
+    </header>
+    <p>Debuggex has launched a regex repository! Starting today, this is how you
+can match an IPv4 address on <a href="../index.html">our site</a>:</p>
+<div class="highlight"><pre><span class="p">(</span>?<span class="o">&amp;</span><span class="p">.</span><span class="n">ipv4</span><span class="p">)</span>
+</pre></div>
+
+
+<p>(The <code>(?&amp;</code> syntax is borrowed from PCRE's
+<a href="http://www.autoitscript.com/autoit3/pcrepattern.html#SEC23">regex sub&shy;rou&shy;tines</a>.)</p>
+<p>The concept is really simple - Debuggex has a list of pre-built ex&shy;pres&shy;sions
+that you can use instead of wasting your time figuring them out by yourself.
+We've already got a list of almost a hundred ex&shy;pres&shy;sions,
+and we are constantly adding more.</p>
+<p>There are a few key features that make our im&shy;ple&shy;men&shy;ta&shy;tion sig&shy;nif&shy;i&shy;cant&shy;ly
+better than what you may have seen in other places.</p>
+<h2>Unit Tests</h2>
+<p>Debuggex was designed from the start with unit-testing and
+backwards com&shy;pat&shy;i&shy;bil&shy;i&shy;ty in mind.
+Each regex in the repository <span>&#8230;<a href="2013/a-composable-regex-repository/index.html" class="continue">continue</a>.</span></p>
+    <footer>
+    </footer>
+    <div class="comments">
+    </div>
+</article>
+
+        
+<article>
+    <header>
+        <time datetime="2013-07-04">04.07.2013, 14:01</time>
+        <h1>
+            <a href="2013/sneak-preview-of-pcre-support-in-debuggex/index.html" rel="bookmark canonical">Sneak Preview of PCRE Support in Debuggex</a>
+        </h1>
+    </header>
+    <p>I'm happy to announce that, starting on Saturday, Debuggex will have
+support for PCRE regular ex&shy;pres&shy;sions!</p>
+<p><strong>Everybody will have free access</strong> until August 1st
+(tell your friends!). This will be
+extended until August 15th for those that login with their Persona account.</p>
+<p>While I'm putting on the finishing touches, here's a preview:</p>
+<ul>
+<li>
+<p><strong>Look&shy;be&shy;hinds</strong>
+    Debuggex shows you a backwards-facing sub-diagram to match your intuition
+about how a <a href="http://www.autoitscript.com/autoit3/pcrepattern.html#lookbehind">lookbehind</a> works.</p>
+<p><code>(?&lt;!fire)truck</code>
+</p>
+</li>
+<li>
+<p><strong>More Flags</strong>
+    PCRE supports <a href="http://www.autoitscript.com/autoit3/pcrepattern.html#SEC11">more flags</a> than JavaScript, and Debuggex now supports them as well.
+On top of that, Debuggex makes your life
+easier by showing you you exactly what your inline flags are acting upon.</p>
+<p><code>foo(?i)bar(?x)baz </code><span>&#8230;<a href="2013/sneak-preview-of-pcre-support-in-debuggex/index.html" class="continue">continue</a>.</span></p></li></ul>
+    <footer>
+    </footer>
+    <div class="comments">
+    </div>
+</article>
+
+        
+<article>
+    <header>
+        <time datetime="2013-06-15">15.06.2013, 17:58</time>
+        <h1>
+            <a href="2013/how-my-crowdfunding-turned-into-singlefunding/index.html" rel="bookmark canonical">How my crowdfunding turned into singlefunding</a>
+        </h1>
+    </header>
+    <p>The
+<a href="http://www.igg.me/at/debuggex"><s>crowd&shy;fund&shy;ing</s> market validation campaign</a>
+for <a href="../index.html">Debuggex</a> (a visual regex tester) ended 4 days ago.
+I had the very specific goal of getting
+<a href="2013/ab-using-crowdfunding-to-validate-your-market/index.html">20 paying customers in 20 days</a>.
+Un&shy;for&shy;tu&shy;nate&shy;ly, I didn't succeed. However, I did reach my funding goal of $960.
+Debuggex received a total of $4374 in preorders, almost all of it from a single
+customer.</p>
+<p>To provide some context, the campaign launched 4 weeks ago and was heavily
+aimed at single user sub&shy;scrip&shy;tions. There were basic ($48) and pro ($140) tiers
+with varying levels of features, and a cheaper perk to get a Debuggex themed
+poster ($25) for those that wanted  to support the product but weren't <span>&#8230;<a href="2013/how-my-crowdfunding-turned-into-singlefunding/index.html" class="continue">continue</a>.</span></p>
+    <footer>
+    </footer>
+    <div class="comments">
+    </div>
+</article>
+
+        
+<article>
+    <header>
+        <time datetime="2013-05-27">27.05.2013, 20:09</time>
+        <h1>
+            <a href="2013/persona-is-the-only-way-to-login/index.html" rel="bookmark canonical">Persona is the only way to login</a>
+        </h1>
+    </header>
+    <p>A couple of weeks ago, <a href="../index.html">Debuggex</a> gave you the ability to create an account and save regular ex&shy;pres&shy;sions to the account.</p>
+<p>Au&shy;then&shy;ti&shy;ca&shy;tion for your account is provided ex&shy;clu&shy;sive&shy;ly through <a href="https://login.persona.org/about">Mozilla Persona</a>, and I'd like to explain why that decision was made.</p>
+<ol>
+<li>
+<p>Debuggex is still a one-man team. Resources are very con&shy;strained, and time has to be properly managed. <strong>I want to focus on building a kick-ass platform for your regular ex&shy;pres&shy;sions</strong>. Mozilla is building a kick-ass identity provider/protocol, and using Persona costs me sub&shy;stan&shy;tial&shy;ly less effort than rolling out my own.</p>
+</li>
+<li>
+<p>I don't want to manage your password. Countless mistakes have been made <span>&#8230;<a href="2013/persona-is-the-only-way-to-login/index.html" class="continue">continue</a>.</span></p></li></ol>
+    <footer>
+    </footer>
+    <div class="comments">
+    </div>
+</article>
+
+        
+<article>
+    <header>
+        <time datetime="2013-05-22">22.05.2013, 10:59</time>
+        <h1>
+            <a href="2013/ab-using-crowdfunding-to-validate-your-market/index.html" rel="bookmark canonical">(Ab)using crowdfunding to validate your market</a>
+        </h1>
+    </header>
+    <p>Today, I am announcing the launch of a <a href="http://igg.me/at/debuggex">crowd&shy;fund&shy;ing campaign</a> for <a href="../index.html">Debuggex</a>, but there's a twist.</p>
+<p>While most campaigns are built to raise enough funds to make a project possible, that's not the goal for Debuggex. Instead, <strong>the primary goal is to validate the market</strong>.</p>
+<p>Debuggex is still in beta. However, for all but the simplest regular ex&shy;pres&shy;sions, users say it already provides a 3x decrease (against their previously preferred tool) in estimated total lifetime de&shy;vel&shy;op&shy;ment cost. For longer ex&shy;pres&shy;sions, users estimated even larger gains.</p>
+<p>So value is already being created. But this is just the beginning. While Debuggex is a great tool <span>&#8230;<a href="2013/ab-using-crowdfunding-to-validate-your-market/index.html" class="continue">continue</a>.</span></p>
+    <footer>
+    </footer>
+    <div class="comments">
+    </div>
+</article>
+
+        
+<article>
+    <header>
+        <time datetime="2013-04-27">27.04.2013, 11:02</time>
+        <h1>
+            <a href="2013/why-the-hell-am-i-building-a-product-with-a-tiny-market/index.html" rel="bookmark canonical">Why the hell am I building a product with a tiny market?</a>
+        </h1>
+    </header>
+    <p>Two months ago, I launched a <a href="../index.html">regex tester</a>.</p>
+<p>Why would I ever build a product around helping people with their regular ex&shy;pres&shy;sions? The market is tiny. There are dozens of free al&shy;ter&shy;na&shy;tives, and only a small percentage of people I've asked said they would pay for my product.</p>
+<p>There are a few big advantages to be had competing in a smaller market.</p>
+<ol>
+<li>
+<p><strong>In a smaller market, everything happens on a smaller scale.</strong> Successes and failures are smaller in magnitude and take less time to pan out. Less effort is required to build a com&shy;pet&shy;i&shy;tive product, since the existing ones are not as well-developed. <span>&#8230;<a href="2013/why-the-hell-am-i-building-a-product-with-a-tiny-market/index.html" class="continue">continue</a>.</span></p></li></ol>
+    <footer>
+    </footer>
+    <div class="comments">
+    </div>
+</article>
+
+
+
+<footer>
+  
+    
+  <p>written by <a href="http://www.twitter.com/stoarca">Serge Toarca</a></p>
+  
+
+</footer>
+
+</div>
+
+            </div>
+          </div>
+        
+      </div>
+    </div>
+    <div class="footer-container">
+      <div class="footer">
+        <div class="sidepadded">
+          <div class="copyright lfloat">
+            Copyright © 2013 www.debuggex.com
+          </div>
+          <div class="links rfloat">
+            <a href="index.html">Blog</a>
+            |
+            <a href="../libraries.html">Libraries</a>
+            |
+            <a href="mailto:serge@debuggex.com">Contact</a>
+            |
+            <a href="../privacy.html">Privacy</a>
+            |
+            <a href="../terms.html">Terms</a>
+            |
+            <a href="http://www.twitter.com/debuggex">Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- Mirrored from www.debuggex.com/blog/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 15:59:35 GMT -->
+</html>

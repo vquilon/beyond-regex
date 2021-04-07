@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="RegexApp">
+
+<!-- Mirrored from www.debuggex.com/blog/2013/how-my-crowdfunding-turned-into-singlefunding/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 16:00:15 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+				<link type="text/css" href="../../../static/css/main.css" rel="stylesheet"/>
+ 
+				<script type="text/javascript" src="../../../static/js/main.js"></script>
+  
+    
+  
+    <meta charset="utf-8">
+    <title>
+     How my crowdfunding turned into singlefunding
+</title>
+
+    
+    <meta name="keywords" content="javascript,regex,regular expression,visual,nfa,dfa,state,debugger,helper,tester,match,random match">
+    <meta name="author" content="Sergiu Toarca">
+
+    <link href="../../../static/img/favicon.ico" rel="shortcut icon"/>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38496676-1']);
+      _gaq.push(['_trackPageview']);
+
+      var _track = function(action) {
+        _gaq.push(['_trackEvent', 'Engagement', action]);
+      };
+
+      (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+
+        ga.src = ('https:' == document.location.protocol ?
+            'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  
+
+    <link href="../../../sitemap.html" type="application/xml" rel="sitemap" title="Sitemap">
+  <link href="../../index.html" rel="home start" />
+  <link href="../../atom/index.html" type="application/atom+xml" rel="alternate" title="Atom Feed" />
+  <link href="../../rss/index.html" type="application/rss+xml" rel="alternate" title="RSS Feed" />
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script type="text/javascript">
+    setInterval(function() {
+      _gaq.push(['_trackEvent', 'Engagement', 'Still reading']);
+    }, 60000);
+  </script>
+  <script type="text/javascript" src="../../../static/js/ext/jquery.js"></script>
+  <script type="text/javascript" src="../../../static/js/ext/jquerycookie.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      $.cookie('blog-date', new Date(), {path: '/', expires: 365});
+      console.log($.cookie('blog-date'));
+    };
+  </script>
+
+      <meta name="description" content="The
+[<s>crowdfunding</s> market validation campaig..." />
+      <meta name="keywords" content="" />
+
+</head>
+<body>
+  <div id="page">
+    <div id="content">
+      <div class="navbar navbar-static-top navbar-default dbx-navbar" role="navigation">
+        <div class="width-restricted">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="../../../index.html"><img src="../../../static/img/logo.png" alt="Debuggex Beta"/></a>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              
+  <li><a href="../../index.html" rel="home start">Blog</a></li>
+  <li><a href="../../articles/index.html" rel="contents">All articles</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div ng-controller="GlobalsCtrl">
+        
+          
+            <div class="navbar navbar-static-top navbar-default dbx-subnavbar" role="navigation">
+              <div class="width-restricted">
+                <div class="sidepadded">
+                  <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                      
+  <li><a href="../../atom/index.html" rel="alternate">Atom</a></li>
+  <li><a href="../../rss/index.html" rel="alternate">RSS</a></li>
+
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          <div class="width-restricted">
+            <div class="sidepadded">
+              
+
+<div id="blog">
+  
+
+
+
+
+
+
+
+
+        
+<article>
+    <header>
+        <time datetime="2013-06-15">15.06.2013, 17:58</time>
+        <h1>
+            <a href="index.html" rel="bookmark canonical">How my crowdfunding turned into singlefunding</a>
+        </h1>
+    </header>
+    <p>The
+<a href="http://www.igg.me/at/debuggex"><s>crowd&shy;fund&shy;ing</s> market validation campaign</a>
+for <a href="../../../index.html">Debuggex</a> (a visual regex tester) ended 4 days ago.
+I had the very specific goal of getting
+<a href="../ab-using-crowdfunding-to-validate-your-market/index.html">20 paying customers in 20 days</a>.
+Un&shy;for&shy;tu&shy;nate&shy;ly, I didn't succeed. However, I did reach my funding goal of $960.
+Debuggex received a total of $4374 in preorders, almost all of it from a single
+customer.</p>
+<p>To provide some context, the campaign launched 4 weeks ago and was heavily
+aimed at single user sub&shy;scrip&shy;tions. There were basic ($48) and pro ($140) tiers
+with varying levels of features, and a cheaper perk to get a Debuggex themed
+poster ($25) for those that wanted  to support the product but weren't willing
+to commit to a sub&shy;scrip&shy;tion.</p>
+<p>In total, the campaign had 16 backers. Four backers purchased the $25 poster.
+Six backers donated $5. That leaves only 6 legitimate customers, of which
+nobody purchased the pro tier.</p>
+<p><em>Aside: Debuggex needs paying users more than it needs paying nonusers. To
+thank you for your continued support (and risk-taking spirit), all backers of
+the poster and basic tier will be upgraded to the basic and pro tier,
+re&shy;spec&shy;tive&shy;ly.</em></p>
+<p><strong>91% of all revenue came from a single enterprise customer</strong>.
+95% of all revenue was from customers intending to use Debuggex
+in a work en&shy;vi&shy;ron&shy;ment.
+That goes up to 98% if poster sales are excluded.</p>
+<p>Despite the small sample size,
+these numbers are a strong indication for where to aim my sales efforts.</p>
+<p>Here are a few of the things I did wrong:</p>
+<ul>
+<li>
+<p><strong>20 days was too short of a period</strong>. Most people are used to 30-day funding
+periods, and for them, seeing a project 25% funded with 14 days left is
+dis&shy;heart&shy;en&shy;ing. 14 of the 16 backers con&shy;tributed before day 13 of 20.</p>
+<p>In fact, prior to starting the campaign,
+I should've asked potential customers to contribute on the first day in order
+to exploit the
+<a href="http://en.wikipedia.org/wiki/Herd_mentality">public-vote-of-confidence effect</a>
+for the full duration of the campaign.</p>
+</li>
+<li>
+<p><strong>I sent personal emails to only 41 people</strong>.
+I chose to notify those who had already showed sig&shy;nif&shy;i&shy;cant interest in
+purchasing.  14 of them became backers, for a conversion rate of 34%.
+In&shy;ci&shy;den&shy;tal&shy;ly, all 14 learned of the campaign only because of my email.</p>
+<p>In hindsight, this was a big mistake. I should have gotten the word out even to
+those that had not previously shown direct interest.</p>
+</li>
+<li>
+<p><strong>I should've gotten more feedback on my video before launching the campaign</strong>.
+If you can't pay attention to what I'm saying
+because you are distracted by the quality of the video or audio,
+then I've failed at com&shy;muncat&shy;ing.</p>
+<p>Given how important it is for a startup to com&shy;mu&shy;ni&shy;cate with its users,
+I've invested in equipment and software to make sure that never happens again.</p>
+<p>Un&shy;for&shy;tu&shy;nate&shy;ly, I don't have any data about how effective the content
+of the video was.</p>
+</li>
+<li>
+<p>During the campaign, there was a link from the Debuggex home page to the campaign page. <strong>The click-through rate of that link was
+an abysmal 2%</strong>. <a href="http://en.wikipedia.org/wiki/A/B_testing">A/B testing</a>
+could have improved this sig&shy;nif&shy;i&shy;cant&shy;ly.</p>
+<p><a href="../../../static/img/lowctr.png"><img alt="What the link looked like" src="../../../static/img/lowctr_small.png"/></a></p>
+</li>
+</ul>
+<p>Debuggex will continue to get better. Based on the outcome of this campaign,
+there will be a lot more focus on the needs of corporate users. If you're part
+of a company (or government) that uses regular ex&shy;pres&shy;sions in
+mission-critical portions of your code or workflow,
+I'd love to discuss how Debuggex can help solve your problems.</p>
+<p>I will also keep exploring sus&shy;tain&shy;able ways of getting Debuggex into the
+hands of single users.</p>
+<p>If you'd like to give me <a href="mailto:debuggex@toarca.com">feedback</a> on
+how to improve any aspect of my com&shy;mu&shy;ni&shy;ca&shy;tion, I'd love to hear it.
+Compare <a href="http://www.youtube.com/watch?v=9i_phvq2nXU">attempt 0</a> and
+<a href="http://www.youtube.com/watch?v=yvUi1LxDZGc">attempt 1</a>
+(re-edited but not refilmed).</p>
+<p>p.s. There haven't been any public updates for a while, but I promise
+that something awesome is in the pipeline, and will be released <em>very</em> soon.</p>
+    <footer>
+    </footer>
+    <div class="comments">
+    </div>
+</article>
+
+        <a href="../persona-is-the-only-way-to-login/index.html" class="page floatright">
+        Persona is the only way to login &raquo;
+        </a>
+        <a href="../sneak-preview-of-pcre-support-in-debuggex/index.html" class="page floatleft">
+        &laquo; Sneak Preview of PCRE Support in Debuggex
+        </a>
+
+
+<footer>
+  
+    
+  <p>written by <a href="http://www.twitter.com/stoarca">Serge Toarca</a></p>
+  
+
+</footer>
+
+</div>
+
+            </div>
+          </div>
+        
+      </div>
+    </div>
+    <div class="footer-container">
+      <div class="footer">
+        <div class="sidepadded">
+          <div class="copyright lfloat">
+            Copyright © 2013 www.debuggex.com
+          </div>
+          <div class="links rfloat">
+            <a href="../../index.html">Blog</a>
+            |
+            <a href="../../../libraries.html">Libraries</a>
+            |
+            <a href="mailto:serge@debuggex.com">Contact</a>
+            |
+            <a href="../../../privacy.html">Privacy</a>
+            |
+            <a href="../../../terms.html">Terms</a>
+            |
+            <a href="http://www.twitter.com/debuggex">Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- Mirrored from www.debuggex.com/blog/2013/how-my-crowdfunding-turned-into-singlefunding/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 16:00:16 GMT -->
+</html>

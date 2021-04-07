@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Debuggex Blog</title>
+        <link>http://www.debuggex.com/blog/</link>
+        <language>en</language>
+        <pubDate>Tue, 01 Oct 2013 13:30:00 GMT</pubDate>
+        <docs>http://www.debuggex.com/blog/rss/</docs>
+        <generator>acrylamid 0.7.3</generator>
+            <atom:link href="../atom/index.html" rel="self" type="application/rss+xml" />
+            
+    <item>
+        <title>A true regex tester</title>
+        <link>http://www.debuggex.com/blog/2013/a-true-regex-tester/</link>
+        <description>&lt;p&gt;How often have you been bitten by a regex? 
+Here&#39;s how the story usually goes.&lt;/p&gt;
+&lt;p&gt;Two months ago, you spent 20 minutes crafting a regex.
+Today, you realize it has a bug and begin fixing it.
+Except that it now reminds you more of hieroglyphics:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;sr&#34;&gt;/?\w+((\s+\w+(\s*=\s*(?:&amp;quot;&amp;quot;.*?&amp;quot;&amp;quot;|&amp;#39;.*?&amp;#39;|[^&amp;#39;&amp;quot;&amp;quot;&amp;gt;\s]+))?)+\s*|\s*)/&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;And there aren&#39;t any unit tests, because you were nearing a deadline, and
+writing &lt;em&gt;good&lt;/em&gt; unit tests for regular expressions is more tedious than
+most unit tests.
+Now you have to spend another 20 minutes figuring out what the regex does before
+fixing it.
+You finally fix it and push it to production, only to realize that there was a
+case that used to work and it doesn&#39;t anymore.
+Sound familiar?&lt;/p&gt;
+&lt;p&gt;Enter Debuggex unit tests. We tried to make it as effortless as possible to add
+strong unit tests for your expressions. Here&#39;s how they work:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Click &#34;Add a unit test&#34;. Enter a string that you are testing a regex against.
+If you&#39;re lazy,
+you can click &#39;Suggest&#39; and Debuggex will come up with a test case for you.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Hover over the matches in the unit test. If all the matches and subgroups
+look like what you want to extract, click &#34;This looks right&#34;. Otherwise click
+&#34;This looks wrong&#34;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;That&#39;s it! Whenever you change your regex,
+all unit tests will be run to make sure they still pass.
+For a &#34;right&#34; test, Debuggex will make sure all the matches and
+subgroups are the same.
+For a &#34;wrong&#34; test, Debuggex will make sure at least
+one of the matches or subgroups differs.
+This keeps your regex backwards-compatible with previous versions,
+so you don&#39;t introduce new bugs as you fix old ones.
+The unit tests also serve as examples for when you return to your regex
+and have no idea what it does.&lt;/p&gt;
+&lt;p&gt;Debuggex is a regex tester in the very literal sense. We
+hope this helps you build a good workflow around working with regular expressions.&lt;/p&gt;
+&lt;p&gt;As always, we love feedback!&lt;/p&gt;</description>
+        <pubDate>Tue, 01 Oct 2013 13:30:00 GMT</pubDate>
+        <guid isPermaLink="false">tag:www.debuggex.com/blog,2013-10-01:/2013/a-true-regex-tester</guid>
+    </item>
+
+            
+    <item>
+        <title>A composable regex repository</title>
+        <link>http://www.debuggex.com/blog/2013/a-composable-regex-repository/</link>
+        <description>&lt;p&gt;Debuggex has launched a regex repository! Starting today, this is how you
+can match an IPv4 address on &lt;a href=&#34;http://www.debuggex.com/blog/&#34;&gt;our site&lt;/a&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ipv4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;(The &lt;code&gt;(?&amp;amp;&lt;/code&gt; syntax is borrowed from PCRE&#39;s
+&lt;a href=&#34;http://www.autoitscript.com/autoit3/pcrepattern.html#SEC23&#34;&gt;regex subroutines&lt;/a&gt;.)&lt;/p&gt;
+&lt;p&gt;The concept is really simple - Debuggex has a list of pre-built expressions
+that you can use instead of wasting your time figuring them out by yourself.
+We&#39;ve already got a list of almost a hundred expressions,
+and we are constantly adding more.&lt;/p&gt;
+&lt;p&gt;There are a few key features that make our implementation significantly
+better than what you may have seen in other places.&lt;/p&gt;
+&lt;h3&gt;Unit Tests&lt;/h3&gt;
+&lt;p&gt;Debuggex was designed from the start with unit-testing and
+backwards compatibility in mind.
+Each regex in the repository has a suite of tests that make it bulletproof.&lt;/p&gt;
+&lt;p&gt;The unit tests also serve as &lt;strong&gt;working examples&lt;/strong&gt; for how to use a regex.
+Ultimately, you spend less time fiddling around,
+and more time focusing on the things that matter to you.&lt;/p&gt;
+&lt;h3&gt;Composability&lt;/h3&gt;
+&lt;p&gt;Regular expressions tend to be at a very low abstraction level.
+If you want to find something in a log file, you should be thinking in
+terms of ip addresses and urls - not dots, digits, and slashes.
+Working at such a low level quickly gets very complicated.&lt;/p&gt;
+&lt;p&gt;Composability makes abstraction way easier.
+Suppose you have a log file with entries consisting of an IP address
+(either IPv4 or IPv6) followed by a quoted referrer url.
+Here&#39;s how you would match that:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;?&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ipv4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ipv6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;quotStr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;That&#39;s it!
+&lt;strong&gt;Arbitrarily complex expressions are hidden behind a simple variable name&lt;/strong&gt;.
+You can use these just like any other piece of a regex. To turn this
+into an expression that your language will understand, just click &#34;Code Snippet&#34;.
+Debuggex will compile the expression and give you:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;span class=&#34;n&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;regex&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RegExp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&amp;quot;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;25&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;5&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;][&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;})&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;}))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;\\&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.){&lt;/span&gt;3&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;3&lt;span class=&#34;p&#34;&gt;}(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;25&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;5&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;][&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;})&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;})))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;7&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;7&lt;span class=&#34;p&#34;&gt;}(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;6&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;6&lt;span class=&#34;p&#34;&gt;}:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;5&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;5&lt;span class=&#34;p&#34;&gt;}:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;}(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;}(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;3&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;3&lt;span class=&#34;p&#34;&gt;}:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;3&lt;span class=&#34;p&#34;&gt;}(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;}:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;6&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;6&lt;span class=&#34;p&#34;&gt;}(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;25&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;5&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;][&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;})&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;}))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;\\&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.){&lt;/span&gt;3&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;3&lt;span class=&#34;p&#34;&gt;}(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;25&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;5&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;][&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;})&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;})))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;5&lt;span class=&#34;p&#34;&gt;}:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;25&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;5&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;][&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;})&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;}))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;\\&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.){&lt;/span&gt;3&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;3&lt;span class=&#34;p&#34;&gt;}(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;25&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;5&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;][&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;})&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;})))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:::(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;5&lt;span class=&#34;p&#34;&gt;}(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;25&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;5&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;][&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;})&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;}))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;\\&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.){&lt;/span&gt;3&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;3&lt;span class=&#34;p&#34;&gt;}(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;25&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;5&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;][&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;})&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;p&#34;&gt;]{&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;2&lt;span class=&#34;p&#34;&gt;})))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;})::(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;5&lt;span class=&#34;p&#34;&gt;}(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:::(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;6&lt;span class=&#34;p&#34;&gt;}(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:[&lt;/span&gt;0&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;9&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;4&lt;span class=&#34;p&#34;&gt;}):){&lt;/span&gt;1&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;7&lt;span class=&#34;p&#34;&gt;}:))))&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;\\&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;\&lt;/span&gt;&amp;quot;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;?&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;\\\\&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;^&lt;span class=&#34;o&#34;&gt;\&lt;/span&gt;&amp;quot;&lt;span class=&#34;o&#34;&gt;\\\\&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]){&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;,})&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;\&lt;/span&gt;&amp;quot;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&amp;quot;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &amp;quot;&lt;span class=&#34;n&#34;&gt;g&lt;/span&gt;&amp;quot;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;(&lt;a href=&#34;http://www.debuggex.com/r/bu2Dp3xPsBPtB0Eh&#34;&gt;live demo&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;How long would it have taken to come up with that expression yourself? Keep in
+mind that the IP is ensured to be correctly formatted, and any
+escaped quotes in the referrer url will be correctly matched.&lt;/p&gt;
+&lt;h3&gt;Conclusion&lt;/h3&gt;
+&lt;p&gt;We think you&#39;ll find this repository incredibly useful, and hope it&#39;ll save
+you a ton of time.&lt;/p&gt;
+&lt;p&gt;We love feedback! If you have some, &lt;a href=&#34;http://www.twitter.com/debuggex&#34;&gt;get in touch&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;p.s. If you&#39;d like to compose using your own named expressions, that will
+be launching very soon!&lt;/p&gt;</description>
+        <pubDate>Tue, 17 Sep 2013 11:00:00 GMT</pubDate>
+        <guid isPermaLink="false">tag:www.debuggex.com/blog,2013-09-17:/2013/a-composable-regex-repository</guid>
+    </item>
+
+            
+    <item>
+        <title>Sneak Preview of PCRE Support in Debuggex</title>
+        <link>http://www.debuggex.com/blog/2013/sneak-preview-of-pcre-support-in-debuggex/</link>
+        <description>&lt;p&gt;I&#39;m happy to announce that, starting on Saturday, Debuggex will have
+support for PCRE regular expressions!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Everybody will have free access&lt;/strong&gt; until August 1st
+(tell your friends!). This will be
+extended until August 15th for those that login with their Persona account.&lt;/p&gt;
+&lt;p&gt;While I&#39;m putting on the finishing touches, here&#39;s a preview:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Lookbehinds&lt;/strong&gt;
+    Debuggex shows you a backwards-facing sub-diagram to match your intuition
+about how a &lt;a href=&#34;http://www.autoitscript.com/autoit3/pcrepattern.html#lookbehind&#34;&gt;lookbehind&lt;/a&gt; works.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;(?&amp;lt;!fire)truck&lt;/code&gt;
+&lt;img src=&#34;http://www.debuggex.com/blog/static/img/preview_lookbehind.png&#34; alt=&#34;PCRE Lookbehind preview&#34; class=&#34;centered&#34;/&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;More Flags&lt;/strong&gt;
+    PCRE supports &lt;a href=&#34;http://www.autoitscript.com/autoit3/pcrepattern.html#SEC11&#34;&gt;more flags&lt;/a&gt; than JavaScript, and Debuggex now supports them as well.
+On top of that, Debuggex makes your life
+easier by showing you you exactly what your inline flags are acting upon.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;foo(?i)bar(?x)baz #comment&lt;/code&gt;
+&lt;img src=&#34;http://www.debuggex.com/blog/static/img/preview_flags.png&#34; alt=&#34;PCRE flags preview&#34; class=&#34;centered&#34;/&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Named Groups&lt;/strong&gt;
+    Debuggex now supports &lt;a href=&#34;http://www.autoitscript.com/autoit3/pcrepattern.html#SEC14&#34;&gt;named groups&lt;/a&gt;, so your expressions can be more
+readable.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;(?&amp;lt;haha&amp;gt;a+)&lt;/code&gt;
+&lt;img src=&#34;http://www.debuggex.com/blog/static/img/preview_namedgroup.png&#34; alt=&#34;PCRE named group preview&#34; class=&#34;centered&#34;/&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Recursion&lt;/strong&gt;
+    &lt;a href=&#34;http://www.autoitscript.com/autoit3/pcrepattern.html#SEC21&#34;&gt;Recursion&lt;/a&gt; allows your regex to match any context-free grammar.
+With Debuggex, you can dive down through the recursion to see exactly
+what&#39;s going on. Here&#39;s an example that matches properly balanced parentheses.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;^((?:\((?1)?\))+)$&lt;/code&gt;
+&lt;img src=&#34;http://www.debuggex.com/blog/static/img/preview_recursion.png&#34; alt=&#34;PCRE recursion preview&#34; class=&#34;centered&#34;/&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Atomic Groups&lt;/strong&gt;
+    &lt;a href=&#34;http://www.autoitscript.com/autoit3/pcrepattern.html#SEC16&#34;&gt;Atomic groups&lt;/a&gt;
+are used to improve the performance of your regex with
+certain engines. Debuggex gives you an indication that part of your
+expression is atomic.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;a*+&lt;/code&gt;
+&lt;img src=&#34;http://www.debuggex.com/blog/static/img/preview_atomic.png&#34; alt=&#34;PCRE atomic group preview&#34; class=&#34;centered&#34;/&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There&#39;s a bunch more PCRE features in this release, as well as several
+JavaScript bugfixes.
+The renderer has been rewritten, so you should have a much more consistent
+experience across different expressions.&lt;/p&gt;
+&lt;p&gt;On Saturday, there&#39;ll be announcements on Hacker News and Reddit.
+If you&#39;re feeling generous, &lt;em&gt;upvotes will be greatly appreciated&lt;/em&gt; :)&lt;/p&gt;</description>
+        <pubDate>Thu, 04 Jul 2013 14:01:00 GMT</pubDate>
+        <guid isPermaLink="false">tag:www.debuggex.com/blog,2013-07-04:/2013/sneak-preview-of-pcre-support-in-debuggex</guid>
+    </item>
+
+            
+    <item>
+        <title>How my crowdfunding turned into singlefunding</title>
+        <link>http://www.debuggex.com/blog/2013/how-my-crowdfunding-turned-into-singlefunding/</link>
+        <description>&lt;p&gt;The
+&lt;a href=&#34;http://www.igg.me/at/debuggex&#34;&gt;&lt;s&gt;crowdfunding&lt;/s&gt; market validation campaign&lt;/a&gt;
+for &lt;a href=&#34;http://www.debuggex.com/blog/&#34;&gt;Debuggex&lt;/a&gt; (a visual regex tester) ended 4 days ago.
+I had the very specific goal of getting
+&lt;a href=&#34;http://www.debuggex.com/blog/blog/2013/ab-using-crowdfunding-to-validate-your-market/&#34;&gt;20 paying customers in 20 days&lt;/a&gt;.
+Unfortunately, I didn&#39;t succeed. However, I did reach my funding goal of $960.
+Debuggex received a total of $4374 in preorders, almost all of it from a single
+customer.&lt;/p&gt;
+&lt;p&gt;To provide some context, the campaign launched 4 weeks ago and was heavily
+aimed at single user subscriptions. There were basic ($48) and pro ($140) tiers
+with varying levels of features, and a cheaper perk to get a Debuggex themed
+poster ($25) for those that wanted  to support the product but weren&#39;t willing
+to commit to a subscription.&lt;/p&gt;
+&lt;p&gt;In total, the campaign had 16 backers. Four backers purchased the $25 poster.
+Six backers donated $5. That leaves only 6 legitimate customers, of which
+nobody purchased the pro tier.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Aside: Debuggex needs paying users more than it needs paying nonusers. To
+thank you for your continued support (and risk-taking spirit), all backers of
+the poster and basic tier will be upgraded to the basic and pro tier,
+respectively.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;91% of all revenue came from a single enterprise customer&lt;/strong&gt;.
+95% of all revenue was from customers intending to use Debuggex
+in a work environment.
+That goes up to 98% if poster sales are excluded.&lt;/p&gt;
+&lt;p&gt;Despite the small sample size,
+these numbers are a strong indication for where to aim my sales efforts.&lt;/p&gt;
+&lt;p&gt;Here are a few of the things I did wrong:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;20 days was too short of a period&lt;/strong&gt;. Most people are used to 30-day funding
+periods, and for them, seeing a project 25% funded with 14 days left is
+disheartening. 14 of the 16 backers contributed before day 13 of 20.&lt;/p&gt;
+&lt;p&gt;In fact, prior to starting the campaign,
+I should&#39;ve asked potential customers to contribute on the first day in order
+to exploit the
+&lt;a href=&#34;http://en.wikipedia.org/wiki/Herd_mentality&#34;&gt;public-vote-of-confidence effect&lt;/a&gt;
+for the full duration of the campaign.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;I sent personal emails to only 41 people&lt;/strong&gt;.
+I chose to notify those who had already showed significant interest in
+purchasing.  14 of them became backers, for a conversion rate of 34%.
+Incidentally, all 14 learned of the campaign only because of my email.&lt;/p&gt;
+&lt;p&gt;In hindsight, this was a big mistake. I should have gotten the word out even to
+those that had not previously shown direct interest.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;I should&#39;ve gotten more feedback on my video before launching the campaign&lt;/strong&gt;.
+If you can&#39;t pay attention to what I&#39;m saying
+because you are distracted by the quality of the video or audio,
+then I&#39;ve failed at communcating.&lt;/p&gt;
+&lt;p&gt;Given how important it is for a startup to communicate with its users,
+I&#39;ve invested in equipment and software to make sure that never happens again.&lt;/p&gt;
+&lt;p&gt;Unfortunately, I don&#39;t have any data about how effective the content
+of the video was.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;During the campaign, there was a link from the Debuggex home page to the campaign page. &lt;strong&gt;The click-through rate of that link was
+an abysmal 2%&lt;/strong&gt;. &lt;a href=&#34;http://en.wikipedia.org/wiki/A/B_testing&#34;&gt;A/B testing&lt;/a&gt;
+could have improved this significantly.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.debuggex.com/blog/static/img/lowctr.png&#34;&gt;&lt;img alt=&#34;What the link looked like&#34; src=&#34;http://www.debuggex.com/blog/static/img/lowctr_small.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Debuggex will continue to get better. Based on the outcome of this campaign,
+there will be a lot more focus on the needs of corporate users. If you&#39;re part
+of a company (or government) that uses regular expressions in
+mission-critical portions of your code or workflow,
+I&#39;d love to discuss how Debuggex can help solve your problems.&lt;/p&gt;
+&lt;p&gt;I will also keep exploring sustainable ways of getting Debuggex into the
+hands of single users.&lt;/p&gt;
+&lt;p&gt;If you&#39;d like to give me &lt;a href=&#34;http://www.debuggex.com/blog/2013/how-my-crowdfunding-turned-into-singlefunding/mailto:debuggex@toarca.com&#34;&gt;feedback&lt;/a&gt; on
+how to improve any aspect of my communication, I&#39;d love to hear it.
+Compare &lt;a href=&#34;http://www.youtube.com/watch?v=9i_phvq2nXU&#34;&gt;attempt 0&lt;/a&gt; and
+&lt;a href=&#34;http://www.youtube.com/watch?v=yvUi1LxDZGc&#34;&gt;attempt 1&lt;/a&gt;
+(re-edited but not refilmed).&lt;/p&gt;
+&lt;p&gt;p.s. There haven&#39;t been any public updates for a while, but I promise
+that something awesome is in the pipeline, and will be released &lt;em&gt;very&lt;/em&gt; soon.&lt;/p&gt;</description>
+        <pubDate>Sat, 15 Jun 2013 17:58:00 GMT</pubDate>
+        <guid isPermaLink="false">tag:www.debuggex.com/blog,2013-06-15:/2013/how-my-crowdfunding-turned-into-singlefunding</guid>
+    </item>
+
+            
+    <item>
+        <title>Persona is the only way to login</title>
+        <link>http://www.debuggex.com/blog/2013/persona-is-the-only-way-to-login/</link>
+        <description>&lt;p&gt;A couple of weeks ago, &lt;a href=&#34;http://www.debuggex.com/blog/&#34;&gt;Debuggex&lt;/a&gt; gave you the ability to create an account and save regular expressions to the account.&lt;/p&gt;
+&lt;p&gt;Authentication for your account is provided exclusively through &lt;a href=&#34;https://login.persona.org/about&#34;&gt;Mozilla Persona&lt;/a&gt;, and I&#39;d like to explain why that decision was made.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Debuggex is still a one-man team. Resources are very constrained, and time has to be properly managed. &lt;strong&gt;I want to focus on building a kick-ass platform for your regular expressions&lt;/strong&gt;. Mozilla is building a kick-ass identity provider/protocol, and using Persona costs me substantially less effort than rolling out my own.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;I don&#39;t want to manage your password. Countless mistakes have been made with storing and managing passwords. While I probably wouldn&#39;t make any &lt;a href=&#34;http://thenextweb.com/socialmedia/2012/06/06/bad-day-for-linkedin-6-5-million-hashed-passwords-reportedly-leaked-change-yours-now/&#34;&gt;extremely terrible mistakes&lt;/a&gt;, the risk that I would is enough to keep me up at night. The team at Mozilla is much better suited to handle this.&lt;/p&gt;
+&lt;p&gt;There is an important corollary. Several (awesome) features are in development that inherently require authentication, so &lt;strong&gt;the barrier to creating an account needs to be as small as possible&lt;/strong&gt;. Since I am not managing your password, you can trust that creating an account on Debuggex is very low-risk. You need to trust only your identity provider. &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Persona gives huge improvements in user privacy versus other identity providers. When you login with Facebook, Google, or even OpenID, you are providing information about when and what websites you&#39;re logging into. This information can be used to track what you do on the web.&lt;/p&gt;
+&lt;p&gt;With Persona, the identity provider gives your browser a certificate that proves ownership of your email. Your browser then &lt;strong&gt;allows you to login to a website without talking to the identity provider&lt;/strong&gt;. You can read a &lt;a href=&#34;http://identity.mozilla.com/post/7899984443/privacy-and-browserid&#34;&gt;better description&lt;/a&gt; or get into the &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Mozilla/Persona/Protocol_Overview?redirectlocale=en-US&amp;amp;redirectslug=Persona%2FProtocol_Overview&#34;&gt;nitty-gritty&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Using Persona &lt;em&gt;exclusively&lt;/em&gt; is a very strong vote of confidence. It is currently the best way to do authentication. Despite Debuggex being small, a public vote of confidence encourages the Persona team to continue building awesome stuff. It also encourages other websites to use Persona, and that makes authentication better for everybody. &lt;/p&gt;
+&lt;p&gt;In addition, exclusivity means I am very sensitive to bugs or other problems. I can point the team to the things that have the highest impact for Debuggex users, so that Persona gets even better. In fact, one of the Persona developers has already made a personal commitment to support Debuggex&#39; needs.&lt;/p&gt;
+&lt;p&gt;If you have any feedback on the login flow for Debuggex, or any thoughts on this article, please don&#39;t hesitate to email me.&lt;/p&gt;</description>
+        <pubDate>Mon, 27 May 2013 20:09:00 GMT</pubDate>
+        <guid isPermaLink="false">tag:www.debuggex.com/blog,2013-05-27:/2013/persona-is-the-only-way-to-login</guid>
+    </item>
+
+            
+    <item>
+        <title>(Ab)using crowdfunding to validate your market</title>
+        <link>http://www.debuggex.com/blog/2013/ab-using-crowdfunding-to-validate-your-market/</link>
+        <description>&lt;p&gt;Today, I am announcing the launch of a &lt;a href=&#34;http://igg.me/at/debuggex&#34;&gt;crowdfunding campaign&lt;/a&gt; for &lt;a href=&#34;http://www.debuggex.com&#34;&gt;Debuggex&lt;/a&gt;, but there&#39;s a twist.&lt;/p&gt;
+&lt;p&gt;While most campaigns are built to raise enough funds to make a project possible, that&#39;s not the goal for Debuggex. Instead, &lt;strong&gt;the primary goal is to validate the market&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Debuggex is still in beta. However, for all but the simplest regular expressions, users say it already provides a 3x decrease (against their previously preferred tool) in estimated total lifetime development cost. For longer expressions, users estimated even larger gains.&lt;/p&gt;
+&lt;p&gt;So value is already being created. But this is just the beginning. While Debuggex is a great tool for working with individual regular expressions, that&#39;s only part of the problem. There is lots of innovation left in this space.&lt;/p&gt;
+&lt;p&gt;I see Debuggex growing into a platform to manage everything about your regular expressions. It will have built-in unit testing, multiple flavors, and a composable library of common expressions. Most importantly, it will be deeply integrated into your working environment.&lt;/p&gt;
+&lt;p&gt;I want to stress that last point again. Deep integration means &lt;em&gt;never having to look at a raw regular expression&lt;/em&gt;. Ultimately, this saves you a ton of development and maintenance, even if you use regexes only a few times per year. You can learn more about the planned features on the &lt;a href=&#34;http://igg.me/at/debuggex&#34;&gt;funding page&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Nevertheless, a product must capture some of the value it&#39;s creating in order to be sustainable in the long term. This campaign has a very specific goal: &lt;strong&gt;20 backers in 20 days&lt;/strong&gt;. If 20 people value the product enough to pay actual cash for access to future features, I&#39;m confident that I can grow the business. Otherwise, it&#39;s back to the drawing board to figure out a different way to monetize.&lt;/p&gt;
+&lt;p&gt;So, why did I choose crowdfunding instead of hacking up a preorder page?&lt;/p&gt;
+&lt;p&gt;First of all, the risk that any individual backer takes is significantly reduced. If the funding goes through, the business model is proven. That&#39;s a strong incentive to keep building awesome stuff. If it doesn&#39;t go through, then nobody has lost any money. Contrast this to being the first customer to pre-order. The business model has not yet been validated, and if there are no other customers, the founder can walk away to chase other ventures.&lt;/p&gt;
+&lt;p&gt;Secondly, crowdfunding tends to generate more buzz. I think this happens because the format for crowdfunding is geared towards showing off creativity and innovation in the best light. There are lots of visuals and a focus on sharing and collaboration. Potential backers can even see how many other backers there are. Plus, the crowdfunding platform has an indirect interest in generating buzz for you, since it gets a cut of the funding.&lt;/p&gt;
+&lt;p&gt;Finally, I think people are more likely to spend money when they&#39;re on a platform which is, at its core, about funding projects and businesses. In addition, since this money comes from future customers rather than from investors, all of the funding results in sustainable expansion of the business. To that end, there are several stretch goals explaining how Debuggex will expand.&lt;/p&gt;
+&lt;p&gt;Help me keep on innovating. If you find value in Debuggex and want to get even more, please consider being a &lt;a href=&#34;http://igg.me/at/debuggex&#34;&gt;backer&lt;/a&gt;. If you don&#39;t find value in it, but think others would, please share this article with your friends and coworkers.&lt;/p&gt;
+&lt;p&gt;Discuss on &lt;a href=&#34;https://news.ycombinator.com/item?id=5751314&#34;&gt;Hacker News&lt;/a&gt;&lt;/p&gt;</description>
+        <pubDate>Wed, 22 May 2013 10:59:00 GMT</pubDate>
+        <guid isPermaLink="false">tag:www.debuggex.com/blog,2013-05-22:/2013/ab-using-crowdfunding-to-validate-your-market</guid>
+    </item>
+
+            
+    <item>
+        <title>Why the hell am I building a product with a tiny market?</title>
+        <link>http://www.debuggex.com/blog/2013/why-the-hell-am-i-building-a-product-with-a-tiny-market/</link>
+        <description>&lt;p&gt;Two months ago, I launched a &lt;a href=&#34;http://www.debuggex.com/blog/&#34;&gt;regex tester&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Why would I ever build a product around helping people with their regular expressions? The market is tiny. There are dozens of free alternatives, and only a small percentage of people I&#39;ve asked said they would pay for my product.&lt;/p&gt;
+&lt;p&gt;There are a few big advantages to be had competing in a smaller market.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;In a smaller market, everything happens on a smaller scale.&lt;/strong&gt; Successes and failures are smaller in magnitude and take less time to pan out. Less effort is required to build a competitive product, since the existing ones are not as well-developed. The result is a tighter feedback loop for your learning. Debuggex is my first product, so I want to optimize for learning and profit rather than just profit.&lt;/p&gt;
+&lt;p&gt;To date, I&#39;ve spent less than a month of full-time effort on Debuggex, and it&#39;s already a very competitive product. If it turns out to not make any money, I&#39;ve only lost a month of effort.&lt;/p&gt;
+&lt;p&gt;Twice, my site went down for a few minutes. It was not an enormous problem - there were less than 10 users on at the time. However, I&#39;ve learned valuable lessons in automating recovery.&lt;/p&gt;
+&lt;p&gt;At launch, there was a bug in my subscription code. It was a blunder, but I didn&#39;t sweat it. I only lost 30 emails, and I&#39;ve learned to prioritize what gets tested earlier.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;In a smaller market, you can demonstrate expertise.&lt;/strong&gt; When you opt for a smaller market, you have a wider choice for a domain that you&#39;re skilled in. Coupled with the small scale, this lets you aim at being the &lt;em&gt;absolute best&lt;/em&gt; in the market. You have a chance to wow your users and make them loyal to you, even as you move to new ventures.&lt;/p&gt;
+&lt;p&gt;Debuggex already (while still in beta) blows all of its online competitors out of the water. It was designed to answer the question &#34;Why isn&#39;t my regex doing what I intend it to?&#34; I&#39;ve found that question to be by far the most frustrating and time-consuming issue with developers I&#39;ve talked to, and competing products just can&#39;t give you the answer.&lt;/p&gt;
+&lt;p&gt;The way Debuggex answers this question is by allowing you to walk through an automaton step-by-step. Because it&#39;s visual, it taps into your innate spatial sense. It also offers hints as to where something may be wrong. You can inspect any portion of your string or regex and see exactly &lt;em&gt;why&lt;/em&gt; and &lt;em&gt;how&lt;/em&gt; that portion is (or is not) matching.&lt;/p&gt;
+&lt;p&gt;Fortunately, people have noticed. I&#39;ve gotten hundreds of tweets, many of them filled with emotion (yes, emotion &lt;em&gt;about regexes&lt;/em&gt;!). Several people have also emailed me about partnerships, and a few even wrote articles about it!&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;In a smaller market, you can iterate faster on non-programming skills.&lt;/strong&gt; Since the product is small enough that I&#39;m building it alone, I don&#39;t just program, I do &lt;em&gt;everything&lt;/em&gt;. There is no option to pass work off to somebody else.&lt;/p&gt;
+&lt;p&gt;I wrote this article. I built a tutorial video when I found out users didn&#39;t know how to use one of the key features. I respond to every tweet, send every email, and configure everything on the server.&lt;/p&gt;
+&lt;p&gt;Consequently, my thoughts have become more coherent. I can speak more clearly. I know how to avoid audible breathing and swallowing on a microphone (much harder than it seems). I&#39;ve even made new friends and reconnected with old ones.&lt;/p&gt;
+&lt;p&gt;I am learning to sell, apologize, stroke egos, manage expectations, talk to the media, and build a company.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;But it&#39;s not just about the intangibles. To date, &lt;a href=&#34;http://www.debuggex.com/blog/&#34;&gt;Debuggex&lt;/a&gt; has 120,000 pageviews. A returning user spends an average of 45 minutes(!) every time they visit, and there have been more than 800 people that have visited at least 8 times. Those 800 people have each spent a whopping 6 hours on the site in just two months! If you are one of those 800 people, it&#39;s you that I built Debuggex for. Thanks for giving me the opportunity to create something awesome!&lt;/p&gt;
+&lt;p&gt;What are your thoughts? Should your first product be aimed at a small market?&lt;/p&gt;
+&lt;p&gt;Discuss on &lt;a href=&#34;https://news.ycombinator.com/item?id=5618409&#34;&gt;Hacker News&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;If you liked this article, you should follow Debuggex on &lt;a href=&#34;http://www.twitter.com/debuggex&#34;&gt;Twitter&lt;/a&gt; and &lt;a href=&#34;http://www.facebook.com/debuggex&#34;&gt;Facebook&lt;/a&gt;.&lt;/p&gt;</description>
+        <pubDate>Sat, 27 Apr 2013 11:02:00 GMT</pubDate>
+        <guid isPermaLink="false">tag:www.debuggex.com/blog,2013-04-27:/2013/why-the-hell-am-i-building-a-product-with-a-tiny-market</guid>
+    </item>
+
+    </channel>
+</rss>

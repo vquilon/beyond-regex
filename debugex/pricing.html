@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="RegexApp">
+
+<!-- Mirrored from www.debuggex.com/pricing by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 15:59:30 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+				<link type="text/css" href="static/css/main.css" rel="stylesheet"/>
+ 
+				<script type="text/javascript" src="static/js/main.js"></script>
+  
+  
+  
+    <meta charset="utf-8">
+    <title>
+  Pricing - Debuggex
+</title>
+
+    
+  <meta name="description" content="Debuggex is a regex visualizer that makes
+  it easy to write bulletproof regular expressions.">
+
+    <meta name="keywords" content="javascript,regex,regular expression,visual,nfa,dfa,state,debugger,helper,tester,match,random match">
+    <meta name="author" content="Sergiu Toarca">
+
+    <link href="static/img/favicon.ico" rel="shortcut icon"/>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38496676-1']);
+      _gaq.push(['_trackPageview']);
+
+      var _track = function(action) {
+        _gaq.push(['_trackEvent', 'Engagement', action]);
+      };
+
+      (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+
+        ga.src = ('https:' == document.location.protocol ?
+            'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  
+
+
+  <script type="text/javascript" src="../login.persona.org/include.js"></script>
+  <script type="text/javascript">$(function() {
+    $('#signin').click(function() { navigator.id.request({}); return false;});
+
+    $('#signout').click(function() { navigator.id.logout(); return false;});
+
+    var currentUser = null;
+
+    navigator.id.watch({
+        loggedInUser: currentUser,
+        onlogin: function(assertion) {
+	    $.ajax({
+		type: 'POST',
+		url: '/login',
+		data: {
+		    assertion: assertion,
+		    came_from: 'https://www.debuggex.com/pricing',
+		    csrf_token: 'c65de7c33c19c8a28700acf60fd930f9efcd96d1'
+		},
+		dataType: 'json',
+		success: function(res, status, xhr) {
+		    if(!res['success'])
+			navigator.id.logout();
+		    window.location = res['redirect'];
+		},
+		error: function(xhr, status, err) {
+		    navigator.id.logout();
+		    alert("Login failure: " + err);
+		}
+            });
+	},
+	onlogout: function() {
+	    $.ajax({
+		type: 'POST',
+		url: '/logout',
+		data:{
+		    came_from: 'https://www.debuggex.com/pricing',
+		    csrf_token: 'c65de7c33c19c8a28700acf60fd930f9efcd96d1'
+		},
+		dataType: 'json',
+		success: function(res, status, xhr) { window.location = res['redirect']; },
+		error: function(xhr, status, err) { alert("Logout failure: " + err); }
+	    });
+        }
+    });
+});
+</script>
+
+
+
+  <script type="text/javascript">pyramid_globals = {"tier": "", "email": ""};</script>
+
+
+  <script src="../checkout.stripe.com/v2/checkout.js"></script>
+
+</head>
+<body>
+  <div id="page">
+    <div id="content">
+      <div class="navbar navbar-static-top navbar-default dbx-navbar" role="navigation">
+        <div class="width-restricted">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="index.html"><img src="static/img/logo.png" alt="Debuggex Beta"/></a>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              
+  <li><a onClick="_track('Pricing');" href="pricing.html">Pricing</a></li>
+  <li><a onClick="_track('Blog');" href="blog/index.html">Blog</a></li>
+  <li><a target="_blank" onClick="_track('Tutorial');" href="http://www.youtube.com/watch?v=xyp7ASl5ss4">Tutorial</a></li>
+    <li><a id="signin" onClick="_track('Top nav login');" href="login.html">Login/Signup</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div ng-controller="GlobalsCtrl">
+        
+  <div class="tagline">
+    <h1>
+    Create bulletproof regexes. Easily.
+    </h1>
+    <div class="tagline-description">
+      Don't spend time and frustration fiddling with regular expressions. 
+      <br/>
+      Debuggex saves you a ton of time, and your expressions will cause fewer bugs.
+    </div>
+  </div>
+
+  <div class="callouts">
+    <div class="width-restricted">
+      <div class="sidepadded centered-text">
+        <div class="callout">
+          <span class="callout-pic">
+            <i class="icon-lock"></i>
+          </span>
+          <h2>Bulletproof</h2>
+          Testing is built-in by design, so you can trust that the expressions
+          you create are robust.
+        </div>
+        <div class="callout-divider"></div>
+        <div class="callout">
+          <span class="callout-pic">
+            <i class="icon-eye-open"></i>
+          </span>
+          <h2>Visual</h2>
+          Humans are better at working with pictures than words.
+          Everything that can be made visual is.
+        </div>
+        <div class="callout-divider"></div>
+        <div class="callout">
+          <span class="callout-pic">
+            <i class="icon-time"></i>
+          </span>
+          <h2>Real-time</h2>
+          Designed to perform in real-time, because tight feedback loops are
+          important.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-controller="PaymentsCtrl">
+    
+          
+
+          <div class="width-restricted">
+            <div class="sidepadded">
+              
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="pricing-header">
+  <span class="pricing-header-title">
+    Pricing plans
+  </span>
+</div>
+
+<div class="centered-text">
+  <table class="pricing-column">
+    <tr><td class="pricing-column-header">
+      <div class="pricing-column-title">Free</div>
+      <div>
+        <span class="pricing-column-dollar"></span>
+        <span class="pricing-column-price">0</span>
+      </div>
+      <div class="pricing-column-per-month">per month</div>
+      <button ng-show="pyramid_globals.tier" class="pricing-column-sign-up" ng-click="cancelSub()">Downgrade</button>
+      <button ng-show="!pyramid_globals.email" class="pricing-column-sign-up" onClick="$('#signin').click()">Sign Up</button>
+      <button ng-hide="pyramid_globals.tier || !pyramid_globals.email" class="pricing-column-sign-up" disabled>Your plan</button>
+    </td></tr>
+    <tr><td title="Real-time visualization of your expression">Regex Visualizer</td></tr>
+    <tr><td title="Powerful sliders that enable you to walk through your test string and find exactly where that nasty bug is.">Regex Debugger</td></tr>
+    <tr><td title="Enables Debuggex to work with JavaScript's RegExp">JavaScript Engine</td></tr>
+    <tr><td title="Enables Debuggex to work with Python's re">Python Engine<br/><span class="notyet">free while in beta</span></td></tr>
+    <tr><td title="Enables Debuggex to work with PHP's preg_match">PCRE Engine<br/><span class="notyet">free while in beta</span></td></tr>
+    <tr><td title="Automatically generates fully-escaped code that you can paste into your project">Code Snippets</td></tr>
+    <tr><td title="Our powerful unit tests make your expression bulletproof and backwards-compatible">Save <span class="hilite">2</span> Unit Tests per Regex</td></tr>
+    <tr><td title="Public expressions can be viewed by anybody with the link. They may also be surfaced on our site.">Save <span class="hilite">10</span> Public Expressions</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+  </table>
+
+  <table class="pricing-column">
+    <tr><td class="pricing-column-header">
+      <div class="pricing-column-title">Basic</div>
+      <div>
+        <span class="pricing-column-dollar"></span>
+        <span class="pricing-column-price">5</span>
+      </div>
+      <div class="pricing-column-per-month">per month</div>
+      <button ng-hide="pyramid_globals.tier=='basic'" class="pricing-column-sign-up" ng-click="openPayment('basic')">{{pyramid_globals.email ? (pyramid_globals.tier ? 'Downgrade' : 'Upgrade') : 'Sign Up'}}</button>
+      <button ng-show="pyramid_globals.tier=='basic'" class="pricing-column-sign-up" disabled>Your plan</button>
+    </td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td title="Our powerful unit tests make your expression bulletproof and backwards-compatible">Save <span class="hilite">5</span> Unit Tests per Regex</td></tr>
+    <tr><td title="Public expressions can be viewed by anybody with the link. They may also be surfaced on our site.">Save <span class="hilite">Unlimited</span> Public Expressions</td></tr>
+    <tr><td title="Private expressions can only be viewed by you." class="notyet">Save <span class="hilite">20</span> Private Expressions</td></tr>
+    <tr><td title="In addition to the diagram, Debuggex gives you a plain-english
+    explanation of what the regex does." class="notyet">Plain-English Regex Explanation</td></tr>
+    <tr><td title="Debuggex emables you to work with expressions that replace text" class="notyet">Regex Replace</td></tr>
+    <tr><td title="Debuggex gives you access to its powerful repository of pre-built common epxressions. Never look up how to match an IP address, URL, or properly-escaped quoted string again.">Unit-Tested Regex Repository</td></tr>
+    <tr><td title="Debuggex lets you use any regex in our repository within your own expression">Composability Using <span class="hilite">Repository</span></td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+  </table>
+
+  <table class="pricing-column">
+    <tr><td class="pricing-column-header">
+      <div class="pricing-column-title">Pro</div>
+      <div>
+        <span class="pricing-column-dollar"></span>
+        <span class="pricing-column-price">15</span>
+      </div>
+      <div class="pricing-column-per-month">per month</div>
+      <button ng-hide="pyramid_globals.tier=='pro'" class="pricing-column-sign-up" ng-click="openPayment('pro')">{{pyramid_globals.email ? (pyramid_globals.tier=='enterprise' ? 'Downgrade' : 'Upgrade') : 'Sign Up'}}</button>
+      <button ng-show="pyramid_globals.tier=='pro'" class="pricing-column-sign-up" disabled>Your plan</button>
+    </td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td title="Our powerful unit tests make your expression bulletproof and backwards-compatible">Save <span class="hilite">Unlimited</span> Unit Tests per Regex</td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td title="Private expressions can only be viewed by you." class="notyet">Save <span class="hilite">Unlimited</span> Private Expressions</td></tr>
+    <tr><td class="notyet"><i class="same icon-ok"></i></td></tr>
+    <tr><td class="notyet"><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td title="Debuggex lets you use any regex you create within other expressions." class="notyet">Composability Using <span class="hilite">Any Expressions</span></td></tr>
+    <tr><td title="Debuggex lets you debug the runtime of an expression, as well as correctness." class="notyet">Performance Debugging</td></tr>
+    <tr><td title="Debuggex shows you which part of your expression is well tested, and which is not, making your regex even more bulletproof." class="notyet">Unit Test Coverage</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+    <tr><td>-</td></tr>
+  </table>
+
+  <table class="pricing-column">
+    <tr><td class="pricing-column-header">
+      <div class="pricing-column-title">Enterprise</div>
+      <div>
+        <span class="pricing-column-contact-price">
+          CONTACT FOR DETAILS
+        </span>
+      </div>
+      <div class="pricing-column-per-month">sales@debuggex.com</div>
+      <button ng-hide="pyramid_globals.tier=='enterprise'" class="pricing-column-sign-up" onClick="window.location.href='mailto:sales@debuggex.com';">Contact</button>
+      <button ng-show="pyramid_globals.tier=='enterprise'" class="pricing-column-sign-up" disabled>Your plan</button>
+    </td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td class="notyet"><i class="same icon-ok"></i></td></tr>
+    <tr><td class="notyet"><i class="same icon-ok"></i></td></tr>
+    <tr><td class="notyet"><i class="same icon-ok"></i></td></tr>
+    <tr><td><i class="same icon-ok"></i></td></tr>
+    <tr><td class="notyet"><i class="same icon-ok"></i></td></tr>
+    <tr><td class="notyet"><i class="same icon-ok"></i></td></tr>
+    <tr><td class="notyet"><i class="same icon-ok"></i></td></tr>
+    <tr><td title="Some regular expressions can be used as attack vectors to take down your service (ReDoS). Debuggex can help you detect and fix these expressions." class="notyet">Denial-of-Service Prevention</td></tr>
+    <tr><td title="We can offer a custom plan that suits the number of users you have.">Flexible Number of Users</td></tr>
+    <tr><td title="You can deploy a Debuggex instance behind your own firewall.">Optional Private Server Deployment</td></tr>
+    <tr><td title="You can integrate the Debuggex regex tester in your own product to provide value for your customers.">Optional OEM License</td></tr>
+    <tr><td title="A member of our team will fly out to help you get up and running.">Optional On-site Training</td></tr>
+  </table>
+  <div>
+    Greyed out rows are features that are coming soon.
+  </div>
+</div>
+
+
+<div class="pricing-header">
+  <span class="pricing-header-title">
+    Testimonials
+  </span>
+</div>
+
+<div class="testimonial-quote">
+  <div class="lquote"></div>
+  <div class="actual-quote">This must be the RegExp visualizer that I was searching for my entire life</div>
+  <div class="rquote"></div>
+  <div class="testimonial-author">
+    <strong>Igor Minar</strong>, Lead Developer of <strong>AngularJS</strong>
+  </div>
+</div>
+
+<div class="testimonial-quote">
+  <div class="lquote"></div>
+  <div class="actual-quote">good god i love it</div>
+  <div class="rquote"></div>
+  <div class="testimonial-author">
+    <strong>Paul Irish</strong>, Head of Developer Relations at <strong>Google</strong>
+  </div>
+</div>
+
+<div class="testimonial-quote">
+  <div class="lquote"></div>
+  <div class="actual-quote">I love Debuggex! :-) Well done, Sir!</div>
+  <div class="rquote"></div>
+  <div class="testimonial-author">
+    <strong>Vitaly Friedman</strong>, Chief Editor of <strong>Smashing Magazine</strong>
+  </div>
+</div>
+
+
+
+            </div>
+          </div>
+        
+  </div>
+
+      </div>
+    </div>
+    <div class="footer-container">
+      <div class="footer">
+        <div class="sidepadded">
+          <div class="copyright lfloat">
+            Copyright © 2013 www.debuggex.com
+          </div>
+          <div class="links rfloat">
+            <a href="blog/index.html">Blog</a>
+            |
+            <a href="libraries.html">Libraries</a>
+            |
+            <a href="mailto:serge@debuggex.com">Contact</a>
+            |
+            <a href="privacy.html">Privacy</a>
+            |
+            <a href="terms.html">Terms</a>
+            |
+            <a href="http://www.twitter.com/debuggex">Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- Mirrored from www.debuggex.com/pricing by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 15:59:30 GMT -->
+</html>

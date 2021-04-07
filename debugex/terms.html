@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="RegexApp">
+
+<!-- Mirrored from www.debuggex.com/terms by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 16:00:13 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+				<link type="text/css" href="static/css/main.css" rel="stylesheet"/>
+ 
+				<script type="text/javascript" src="static/js/main.js"></script>
+  
+  
+    <meta charset="utf-8">
+    <title>
+  Debuggex Terms of Agreement
+</title>
+
+    
+  <meta name="description" content="Debuggex Terms of Agreement"/>
+
+    <meta name="keywords" content="javascript,regex,regular expression,visual,nfa,dfa,state,debugger,helper,tester,match,random match">
+    <meta name="author" content="Sergiu Toarca">
+
+    <link href="static/img/favicon.ico" rel="shortcut icon"/>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38496676-1']);
+      _gaq.push(['_trackPageview']);
+
+      var _track = function(action) {
+        _gaq.push(['_trackEvent', 'Engagement', action]);
+      };
+
+      (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+
+        ga.src = ('https:' == document.location.protocol ?
+            'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  
+
+
+  <script type="text/javascript" src="../login.persona.org/include.js"></script>
+  <script type="text/javascript">$(function() {
+    $('#signin').click(function() { navigator.id.request({}); return false;});
+
+    $('#signout').click(function() { navigator.id.logout(); return false;});
+
+    var currentUser = null;
+
+    navigator.id.watch({
+        loggedInUser: currentUser,
+        onlogin: function(assertion) {
+	    $.ajax({
+		type: 'POST',
+		url: '/login',
+		data: {
+		    assertion: assertion,
+		    came_from: 'https://www.debuggex.com/terms',
+		    csrf_token: 'c65de7c33c19c8a28700acf60fd930f9efcd96d1'
+		},
+		dataType: 'json',
+		success: function(res, status, xhr) {
+		    if(!res['success'])
+			navigator.id.logout();
+		    window.location = res['redirect'];
+		},
+		error: function(xhr, status, err) {
+		    navigator.id.logout();
+		    alert("Login failure: " + err);
+		}
+            });
+	},
+	onlogout: function() {
+	    $.ajax({
+		type: 'POST',
+		url: '/logout',
+		data:{
+		    came_from: 'https://www.debuggex.com/terms',
+		    csrf_token: 'c65de7c33c19c8a28700acf60fd930f9efcd96d1'
+		},
+		dataType: 'json',
+		success: function(res, status, xhr) { window.location = res['redirect']; },
+		error: function(xhr, status, err) { alert("Logout failure: " + err); }
+	    });
+        }
+    });
+});
+</script>
+
+
+
+  <script type="text/javascript">pyramid_globals = {"tier": "", "email": ""};</script>
+
+
+</head>
+<body>
+  <div id="page">
+    <div id="content">
+      <div class="navbar navbar-static-top navbar-default dbx-navbar" role="navigation">
+        <div class="width-restricted">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="index.html"><img src="static/img/logo.png" alt="Debuggex Beta"/></a>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              
+  <li><a onClick="_track('Pricing');" href="pricing.html">Pricing</a></li>
+  <li><a onClick="_track('Blog');" href="blog/index.html">Blog</a></li>
+  <li><a target="_blank" onClick="_track('Tutorial');" href="http://www.youtube.com/watch?v=xyp7ASl5ss4">Tutorial</a></li>
+    <li><a id="signin" onClick="_track('Top nav login');" href="login.html">Login/Signup</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div ng-controller="GlobalsCtrl">
+        
+          
+            <div class="navbar navbar-static-top navbar-default dbx-subnavbar" role="navigation">
+              <div class="width-restricted">
+                <div class="sidepadded">
+                  <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                      
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          <div class="width-restricted">
+            <div class="sidepadded">
+              
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="width-restricted">
+<div class="sidepadded">
+  <h2>Terms of Agreement</h2>
+  This Debuggex.com Terms of Agreement ("Agreement") is a legal contract between you and
+  Debuggex.com.
+
+  The Agreement governs your use of services offered on Debuggex.com
+  (each a "Service"). By using any Service, you agree to be bound by all
+  the terms and conditions of this Agreement, as well as any additional terms
+  specific to the particular Services for which you register.
+
+  <h3>Privacy</h3>
+  We take your privacy very seriously. We encourage you to read our <a href="privacy.html">Privacy Policy</a>
+
+  <h3>Saving Data on Debuggex</h3>
+  You own all of the information that you save on Debuggex.com. In addition:
+  <ol>
+    <li>
+      For content that is covered by intellectual property rights (IP content),
+      you give us a non-exclusive, transferable,
+      sub-licensable, royalty-free,
+      worlwide license to use any content that you save or share on Debuggex.com.
+      This license ends when you delete your IP content, unless other users have
+      forked your content, and they have not deleted it.
+    </li>
+    <li>
+      When you delete IP content, it may persist in backup copies for a reasonable
+      period of time (but will not be available to others).
+    </li>
+    <li>
+      All content saved is public. This means you are allowing anybody with
+      access to the link to use that information, including saving and
+      modifying their own copy (forking).
+    </li>
+  </ol>
+
+  <h3>In exchange for receiving any Services from Debuggex.com, you promise,
+  represent, and warrant the follwing:</h3>
+  <ol>
+    <li>All information that you provide to Debuggex.com is true, complete, and
+    accurate, and you will notify Debuggex.com of any changes to your registration
+    data during the term of this Agreement.</li>
+    <li>
+      You may not submit content to Debuggex.com that contains any of the following:
+      <ul>
+        <li>
+          Material that violates or infringes in any way upon the statutory,
+          common law, or proprietary rights of others,
+          including but not limited to copyrights, trademark rights, patents,
+          or any other third party intellectual property, contract, privacy,
+          or publicity rights;
+        </li>
+        <li>
+          Material that violates and local, state, or national law or regulation;
+        </li>
+        <li>
+          Other material that Debuggex.net, in its sole discretion,
+          deems inappropriate;
+        </li>
+      </ul>
+    </li>
+    <li>
+      You will safeguard your password by not discolisng your password to any
+      third party, and you will assume responsibility for any and all harm or
+      liability attributable to you or any other person accessing your
+      account or any Services with your user name and password;
+    </li>
+    <li>
+      You will not copy, sell, redistribute, license, sublicense, or otherwise
+      transfer your account, or any materials provided to you in connection
+      with the Services, to any third party without Debuggex.com's written
+      consent;
+    </li>
+    <li>
+      You will comply with all federal lawas and regulations governing your
+      actions under this Agreement; and
+    </li>
+    <li>
+      You have full power and authority to enter into this Agreement and to
+      perform your obligations hereunder.
+    </li>
+  </ol>
+  Without limiting its other remedies, Debuggex.com may refuse or cancel your
+  account or Services at any time for violation of the foregoing promises.
+
+  <h3>Payment</h3>
+  You agree to pay Debuggex.com any set-up and recurring subscription fees
+  listed on Debuggex.com's website for the service you select. Completion and
+  submission of any Service activation form authorizes Debuggex.com to charge
+  the credit card specified in your registration for all such fees and any
+  related taxes corresponding to the selected Service.
+  Such charges will be amde on a one-time, monthly, or yearly basis. In order
+  to avoid the full fee for any new subscription period, you must cancel
+  the Service before the new period begins. Any failure to pay the amounts due
+  under this Agreement will be a material breach of your obligations under this
+  Agreement. Without limiting any other remedies available to Debuggex.com, you
+  agree to fully reimburse Debuggex.com for any costs and expenses that
+  Debuggex.com may incur in connection with collecting or attempting to collect
+  any such unpaid amounts.
+
+  <h3>Pricing and Agreement Changes</h3>
+  Debuggex.com may change its Service fees, or any other terms of this Agreement,
+  at any time by updating the applicable pricing information or terms posted on
+  Debuggex.com's website. New pricing terms will become effective beginning
+  with the first full billing cycle after Debuggex.net posts such changes to
+  its website. Changes to terms not related to pricing will become effective
+  thirty (30) days after notification. If you do not agree to any changes
+  posted by Debuggex.com in accordance with this Section, you must cancel your
+  account or the affected Service as provided herein before the given changes
+  become effective; otherwise you will be deemed to have accepted and agreed
+  to the changes.
+  <p/>
+  No failure by Debuggex.com to enforce any term of this Agreement shall be
+  construed as a waiver thereof, nor shall it affect your obligations or
+  Debuggex.com's rights and remedies hereunder.
+
+  <h3>Duration and Cancellation of Services</h3>
+  Unless stated otherwise on Debuggex.com's web pages applicable to a given
+  Service, each Service will be provided and billed on a monthly or yearly
+  subscription basis, measured from the day of payment-activation and
+  continuing in like intervals; monthly or yearly. Subscriptions will activate
+  regular payments with monthly or annual periods, as applicable, until
+  cancelled in accordance with this section. At any time after activation of a
+  Service, either you or Debuggex.com may cancel that Service by directly
+  cancelling the subscription agreement through Stripe or the relevant payment
+  processor, in which case the Service will terminate at the end of the current
+  monthly or yearly billing period.
+
+  <h3>Refunds</h3>
+  If you cancel any Service, you will be issued a pro-rated refund.
+
+  <h3>Disclaimer of Warranties</h3>
+  YOUR USE OF THE SERVICES AND THE SERVICE CONTENT IS AT YOUR SOLE RISK. THE SERVICES AND THE SERVICE CONTENT EACH ARE PROVIDED ON AN “AS IS” AND “AS AVAILABLE” BASIS. WE AND OUR SUPPLIERS AND LICENSORS EXPRESSLY DISCLAIM ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT. WE DO NOT GUARANTEE THE ACCURACY, COMPLETENESS, OR USEFULNESS OF THE SERVICES OR ANY SERVICE CONTENT, AND YOU RELY ON THE SERVICES AND SERVICE CONTENT AT YOUR OWN RISK. ANY MATERIAL THAT YOU ACCESS OR OBTAIN THROUGH OUR SERVICES IS DONE AT YOUR OWN DISCRETION AND RISK AND YOU WILL BE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER OR LOSS OF DATA THAT RESULTS FROM THE DOWNLOAD OF ANY MATERIAL THROUGH OUR SERVICES. NO ADVICE OR INFORMATION, WHETHER ORAL OR WRITTEN, OBTAINED BY YOU FROM US OR THROUGH OR FROM OUR SERVICES WILL CREATE ANY WARRANTY NOT EXPRESSLY STATED IN THIS AGREEMENT. SOME STATES MAY PROHIBIT A DISCLAIMER OF WARRANTIES AND YOU MAY HAVE OTHER RIGHTS THAT VARY FROM STATE TO STATE.
+
+  <h3>Limitation of Liabilities</h3>
+  WE AND OUR SUPPLIERS AND LICENSORS WILL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR EXEMPLARY DAMAGES, INCLUDING BUT NOT LIMITED TO, DAMAGES FOR LOSS OF PROFITS, GOODWILL, USE, DATA, OR OTHER INTANGIBLE LOSSES (EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF THESE DAMAGES), RESULTING FROM YOUR USE OF OUR SERVICES AND SERVICE CONTENT. UNDER NO CIRCUMSTANCES WILL THE TOTAL LIABILITY OF US AND OUR SUPPLIERS AND LICENSORS OF ALL KINDS ARISING OUT OF OR RELATED TO YOUR USE OF THE SERVICES AND SERVICE CONTENT (INCLUDING BUT NOT LIMITED TO WARRANTY CLAIMS), REGARDLESS OF THE FORUM AND REGARDLESS OF WHETHER ANY ACTION OR CLAIM IS BASED ON CONTRACT, TORT, OR OTHERWISE, EXCEED THE AMOUNTS, IF ANY, THAT YOU HAVE PAID TO US FOR YOUR USE OF THE SERVICES AND SERVICE CONTENT. BECAUSE SOME STATES DO NOT ALLOW THE EXCLUSION OR LIMITATION OF LIABILITY FOR CONSEQUENTIAL OR INCIDENTAL DAMAGES, THE ABOVE LIMITATION MAY NOT APPLY TO YOU.
+
+  <h3>Indemnity</h3>
+  You will indemnify and hold us, our suppliers and licensors, and our respective subsidiaries, affiliates, officers, agents, employees, representatives, and assigns harmless from any costs, damages, expenses, and liability caused by your use of the Services and Service Content, your violation of these Terms, or your violation of any rights of a third party through use of the Services.
+
+  <h3>Choice of Law and Forum</h3>
+  The Agreement and the relationship between you and Debuggex.com shall be
+  governed by the laws of the Province of Ontario without regard to its conflict
+  of law provisions. You and Debuggex.com agree to submit to the personal and
+  exclusive jurisdiction of the courts located within Ontario.
+
+</div>
+</div>
+
+
+            </div>
+          </div>
+        
+      </div>
+    </div>
+    <div class="footer-container">
+      <div class="footer">
+        <div class="sidepadded">
+          <div class="copyright lfloat">
+            Copyright © 2013 www.debuggex.com
+          </div>
+          <div class="links rfloat">
+            <a href="blog/index.html">Blog</a>
+            |
+            <a href="libraries.html">Libraries</a>
+            |
+            <a href="mailto:serge@debuggex.com">Contact</a>
+            |
+            <a href="privacy.html">Privacy</a>
+            |
+            <a href="terms.html">Terms</a>
+            |
+            <a href="http://www.twitter.com/debuggex">Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- Mirrored from www.debuggex.com/terms by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 16:00:13 GMT -->
+</html>

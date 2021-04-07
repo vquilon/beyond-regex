@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="RegexApp">
+
+<!-- Mirrored from www.debuggex.com/libraries by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 16:00:13 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+				<link type="text/css" href="static/css/main.css" rel="stylesheet"/>
+ 
+				<script type="text/javascript" src="static/js/main.js"></script>
+  
+  
+    <meta charset="utf-8">
+    <title>
+  List of libraries used by Debuggex
+</title>
+
+    
+  <meta name="description" content="An alphabetical list of libraries and frameworks that are used by the Debuggex regex tester.">
+
+    <meta name="keywords" content="javascript,regex,regular expression,visual,nfa,dfa,state,debugger,helper,tester,match,random match">
+    <meta name="author" content="Sergiu Toarca">
+
+    <link href="static/img/favicon.ico" rel="shortcut icon"/>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38496676-1']);
+      _gaq.push(['_trackPageview']);
+
+      var _track = function(action) {
+        _gaq.push(['_trackEvent', 'Engagement', action]);
+      };
+
+      (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+
+        ga.src = ('https:' == document.location.protocol ?
+            'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  
+
+
+  <script type="text/javascript" src="../login.persona.org/include.js"></script>
+  <script type="text/javascript">$(function() {
+    $('#signin').click(function() { navigator.id.request({}); return false;});
+
+    $('#signout').click(function() { navigator.id.logout(); return false;});
+
+    var currentUser = null;
+
+    navigator.id.watch({
+        loggedInUser: currentUser,
+        onlogin: function(assertion) {
+	    $.ajax({
+		type: 'POST',
+		url: '/login',
+		data: {
+		    assertion: assertion,
+		    came_from: 'https://www.debuggex.com/libraries',
+		    csrf_token: 'c65de7c33c19c8a28700acf60fd930f9efcd96d1'
+		},
+		dataType: 'json',
+		success: function(res, status, xhr) {
+		    if(!res['success'])
+			navigator.id.logout();
+		    window.location = res['redirect'];
+		},
+		error: function(xhr, status, err) {
+		    navigator.id.logout();
+		    alert("Login failure: " + err);
+		}
+            });
+	},
+	onlogout: function() {
+	    $.ajax({
+		type: 'POST',
+		url: '/logout',
+		data:{
+		    came_from: 'https://www.debuggex.com/libraries',
+		    csrf_token: 'c65de7c33c19c8a28700acf60fd930f9efcd96d1'
+		},
+		dataType: 'json',
+		success: function(res, status, xhr) { window.location = res['redirect']; },
+		error: function(xhr, status, err) { alert("Logout failure: " + err); }
+	    });
+        }
+    });
+});
+</script>
+
+
+
+  <script type="text/javascript">pyramid_globals = {"tier": "", "email": ""};</script>
+
+
+</head>
+<body>
+  <div id="page">
+    <div id="content">
+      <div class="navbar navbar-static-top navbar-default dbx-navbar" role="navigation">
+        <div class="width-restricted">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="index.html"><img src="static/img/logo.png" alt="Debuggex Beta"/></a>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              
+  <li><a onClick="_track('Pricing');" href="pricing.html">Pricing</a></li>
+  <li><a onClick="_track('Blog');" href="blog/index.html">Blog</a></li>
+  <li><a target="_blank" onClick="_track('Tutorial');" href="http://www.youtube.com/watch?v=xyp7ASl5ss4">Tutorial</a></li>
+    <li><a id="signin" onClick="_track('Top nav login');" href="login.html">Login/Signup</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div ng-controller="GlobalsCtrl">
+        
+          
+            <div class="navbar navbar-static-top navbar-default dbx-subnavbar" role="navigation">
+              <div class="width-restricted">
+                <div class="sidepadded">
+                  <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                      
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          <div class="width-restricted">
+            <div class="sidepadded">
+              
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div style="margin-top:20px;max-width:600px;margin-left:auto;margin-right:auto;text-align:center;">
+  <span style="font-size:16px">
+    Debuggex is not open-source.
+    <br/>However, we rely on some awesome open-source software!
+    <br/>Here's an alphabetical list:
+  </span>
+  <br/>
+  <br/><a href="http://ace.ajax.org/">Ace.js</a>
+  <br/><a href="https://github.com/posativ/acrylamid/">Acrylamid</a>
+  <br/><a href="http://angularjs.org/">AngularJS</a>
+  <br/><a href="http://docs.busterjs.org/en/latest/">Buster JS</a>
+  <br/><a href="http://d3js.org/">D3.js</a>
+  <br/><a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a>
+  <br/><a href="http://www.jquery.com/">jQuery</a>
+  <br/><a href="https://github.com/carhartl/jquery-cookie">jquery.cookie</a>
+  <br/><a href="http://www.jqueryui.com/">jQuery UI</a>
+  <br/><a href="http://www.erichynds.com/blog/jquery-ui-multiselect-widget">jQuery UI MultiSelect</a>
+  <br/><a href="http://touchpunch.furf.com/">jQuery UI Touch Punch</a>
+  <br/><a href="http://www.timdown.co.uk/jshashtable/">jshashtable</a>
+  <br/><a href="http://lesscss.org/">LESS CSS</a>
+  <br/><a href="http://nodejs.org/">Node.js</a>
+  <br/><a href="https://github.com/mscdex/node-pcre">node-pcre</a>
+  <br/><a href="http://www.pcre.org/">PCRE</a>
+  <br/><a href="http://phantomjs.org/">PhantomJS</a>
+  <br/><a href="http://www.pylonsproject.org/">Pyramid</a>
+  <br/><a href="http://underscorejs.org/">Underscore.js</a>
+  <br/><a href="https://github.com/mishoo/UglifyJS2">UglifyJS2</a>
+  <br/><a href="http://medialize.github.com/URI.js/">URI.js</a>
+  <br/><br/>
+</div>
+
+
+            </div>
+          </div>
+        
+      </div>
+    </div>
+    <div class="footer-container">
+      <div class="footer">
+        <div class="sidepadded">
+          <div class="copyright lfloat">
+            Copyright © 2013 www.debuggex.com
+          </div>
+          <div class="links rfloat">
+            <a href="blog/index.html">Blog</a>
+            |
+            <a href="libraries.html">Libraries</a>
+            |
+            <a href="mailto:serge@debuggex.com">Contact</a>
+            |
+            <a href="privacy.html">Privacy</a>
+            |
+            <a href="terms.html">Terms</a>
+            |
+            <a href="http://www.twitter.com/debuggex">Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- Mirrored from www.debuggex.com/libraries by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 May 2020 16:00:13 GMT -->
+</html>
