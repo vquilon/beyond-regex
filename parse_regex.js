@@ -1491,7 +1491,7 @@ window.onload = function() {
       , itemsPosY = offsetHeight
       , _actualHeight = offsetHeight;
       if (!regexJSONInfo.length)
-        return A.empty(null, itemsPosX, offsetHeight);
+        return A.empty(regexJSONInfo, itemsPosX, offsetHeight);
       regexJSONInfo.forEach(function(t) {
         var elementSVGRaphael;
         elementSVGRaphael = t.repeat ? A.repeat(t, o, offsetHeight) : A[t.type](t, o, offsetHeight);
@@ -1593,9 +1593,10 @@ window.onload = function() {
       if (_toItem !== null){
         idInfo = `${idInfo}::${_toItem.items.map(item => item.class)/*.filter(x => x)*/.join('_')}::`;
       }
-      if(regexJSONInfo.hasOwnProperty('indices')){
-        idInfo = `curve:${regexJSONInfo.indices.join(';')}`;
-      }
+      
+        if(regexJSONInfo.hasOwnProperty('indices')){
+          idInfo = `curve:${regexJSONInfo.indices.join(';')}`;
+        }
       return {
         type: "path",
         class: `path:${idInfo}`,
@@ -1820,12 +1821,12 @@ window.onload = function() {
             r[28] += e
         }
         if (checkRegexJSONInfo(regexJSONInfo))
-          return A.empty(null, offsetX, offsetY);
+          return A.empty(regexJSONInfo, offsetX, offsetY);
         var a = regexJSONInfo.repeat
         , o = ""
         , c = [];
         if (a.min === a.max && 0 === a.min)
-          return A.empty(null, offsetX, offsetY);
+          return A.empty(regexJSONInfo, offsetX, offsetY);
         var u = A[regexJSONInfo.type](regexJSONInfo, offsetX, offsetY)
         , l = u.width
         , f = u.height;
@@ -1896,7 +1897,7 @@ window.onload = function() {
       },
       choice: function(regexJSONInfo, offsetX, offsetY) {
         if (checkRegexJSONInfo(regexJSONInfo))
-          return A.empty(null, offsetX, offsetY);
+          return A.empty(regexJSONInfo, offsetX, offsetY);
         var n = 0
         , i = 0
         , a = regexJSONInfo.branches.map(function(regexBranch) {
@@ -2057,7 +2058,7 @@ window.onload = function() {
       },
       group: function(regexJSONInfo, offsetX, offsetY) {
         if (checkRegexJSONInfo(regexJSONInfo))
-          return A.empty(null, offsetX, offsetY);
+          return A.empty(regexJSONInfo, offsetX, offsetY);
         var n = processRaphaelRegexJSON(regexJSONInfo.sub, offsetX, offsetY);
         if (regexJSONInfo.num) {
           addsOffset(n.items, 10, 0);
