@@ -3,6 +3,16 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>Regulex：JavaScript Regular Expression Visualizer</title>
+        <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <script src="https://kit.fontawesome.com/f0601b0fb2.js" crossorigin="anonymous"></script>
+        <script type='module' src='https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js'></script>
+        <script nomodule='' src='https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js'></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">            
+
         <link rel="stylesheet" href="libs/highlight.min.css"></style>
         <link rel="stylesheet" href="style-json.css"></style>
         <link rel="stylesheet" href="styles.css"></style>
@@ -24,19 +34,22 @@
                     </tr>
                 </table>
             </div>
-            <button class="button-panel" id="parseClick">Parse!</button>
-            <button class="button-panel" id="visualizeClick">Visualize</button>
-            <button class="button-panel" id="exportIt">Export Image</button>
-            <button class="button-panel" id="embedIt">Embed On My Site!</button>
-            <label>
-                <input type="checkbox" name="flag" value="i"/>IgnoreCase
-            </label>
-            <label>
-                <input type="checkbox" name="flag" value="m"/>Multiline
-            </label>
-            <label>
-                <input type="checkbox" name="flag" value="g"/>GlobalMatch
-            </label>
+            <button class="btn btn__primary button-panel" id="parseClick">Parse!</button>
+            <button class="btn btn__primary button-panel" id="visualizeClick">Visualize</button>
+            <button class="btn btn__primary button-panel" id="exportIt">Export Image</button>
+            <button class="btn btn__primary button-panel" id="embedIt">Embed On My Site!</button>
+            <div class="checkbox checkbox__1">
+                <input id="checkbox-ignorecase" type="checkbox" name="flag" value="i">
+                <label for="checkbox-ignorecase"><i>i</i></label>
+            </div>
+            <div class="checkbox checkbox__1">
+                <input id="checkbox-multiline" type="checkbox" name="flag" value="m">
+                <label for="checkbox-multiline"><i>m</i></label>
+            </div>
+            <div class="checkbox checkbox__1">
+                <input id="checkbox-globalmatch" type="checkbox" name="flag" value="g">
+                <label for="checkbox-globalmatch"><i>g</i></label>
+            </div>
         </div>
         <p id="errorBox" class="code">Error Message</p>
         <div id="graphCt" class="code"></div>
