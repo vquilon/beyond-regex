@@ -41,7 +41,11 @@ h1 em {
    height: 110px; 
 }
 
+#inputCt div.re * {
+    font-size: 24px;
+}
 #inputCt div.re {
+    font-size: 24px;
     background: #EEE;
     /* font-size: 1.2em; */
     line-height: 1.4em;
@@ -377,7 +381,6 @@ body.embed #graphCt {
 }
 .code, .code * {
     font-family: "DejaVu Sans Mono",monospace;
-    font-size: 24px;
 }
 
 
