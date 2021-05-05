@@ -94,7 +94,6 @@
         <p id="errorBox" class="code">Error Message</p>
         <div id="graphCt" class="code"></div>
         <pre><code class="json" id="treeRegex"></code></pre>
-        <pre><code class="json" id="jsonRegex"></code></pre>
         <footer>
             <div class="normal">
                 Created by <a href="https://vquilon.github.io/" target="_blank">Victor QuilonR.</a>
@@ -103,13 +102,23 @@
                 <a id="embedFooterLink" href="https://jex.im/regulex/" target="_blank">By Regulex</a>
             </div>
         </footer>
-
+        
+        <!-- Libreria Raphael que pinta el SVG -->
         <script src="libs/raphael.js"></script>
+        <!-- Plugin de Raphael que permite la creacion del tag `g` englobando a otros elementos SVG -->
         <script src="libs/raphael-group-plugin.js"></script>
+
         <script src="libs/highlight-10.4.1.min.js"></script>
-        <script src="groups_elements.js"></script>
         <script src="parse_json.js"></script>
-        <script src="parse_regex.js"></script>
+
+        <!-- Librerias para visualizacion de regex -->
+        <!-- <script src="groups_elements.js"></script> -->
+        <script src="auxiliar_functions.js"></script>
+        <script src="NFA_parser.js"></script>
+        <script src="paint_regex.js"></script>
+
+        <!-- Event Listeners y funciones principales -->
+        <script src="main.js"></script>
         
     </body>
 </html>
