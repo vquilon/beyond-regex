@@ -465,27 +465,27 @@
         }
         function auxAddWithGroup(paperproto, json) {
             var res = paperproto.set();
-            var subs;
+            var children;
             var j, i = 0, ii = json.length;
             for (; i < ii; i++) {
                 j = json[i] || {};
                 var g;
                 if (j.type === "group") {
                     // Agregar el id y clase y ocultar
-                    var res, subs = auxAddWithGroup(paperproto, j.subs);
-                    // Eliminar j.subs para limpiar los atributos
-                    g = paperproto[j.type](subs).attr(j);
-                    appendChildrenToNode(g[0], subs.items);
+                    var res, children = auxAddWithGroup(paperproto, j.children);
+                    // Eliminar j.children para limpiar los atributos
+                    g = paperproto[j.type](children).attr(j);
+                    appendChildrenToNode(g[0], children.items);
                 } else {
-                    var subs = elements[has](j.type) && res.push(paperproto[j.type]().attr(j));
+                    var children = elements[has](j.type) && res.push(paperproto[j.type]().attr(j));
                 }
 
             }
-            return res, subs;
+            return res, children;
         }
 
         if (Raphael.is(json, "array")) {
-            var res, subs = auxAddWithGroup(this, json);
+            var res, children = auxAddWithGroup(this, json);
         }
         return res;
     };
