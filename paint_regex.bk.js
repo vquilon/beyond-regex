@@ -1452,27 +1452,27 @@
                 }
                 // Puede que haya que quitar los offset, y agregarlos al grupo g
                 // var item_subgroup = processRaphaelRegexJSON(regexJSONInfo.sub, offsetX, offsetY);
-                var item_subgroup = processRegexJSONToRaphaelSVG(regexJSONInfo.sub, 0, 0);
+                var element_subgroup = processRegexJSONToRaphaelSVG(regexJSONInfo.sub, 0, 0);
                 var container_group = {
                     type: "group",
-                    class: `g:${regexJSONInfo.type}:${[regexJSONInfo.indices[0] + 1, regexJSONInfo.indices[1] - 1].join(';')}:t${item_subgroup.x},${item_subgroup.y}`,
-                    subs: item_subgroup.items,
-                    transform: `t${item_subgroup.x},${item_subgroup.y}`,
-                    x: item_subgroup.x,
-                    y: item_subgroup.y,
-                    width: item_subgroup.width,
-                    height: item_subgroup.height
+                    class: `g:${regexJSONInfo.type}:${[regexJSONInfo.indices[0] + 1, regexJSONInfo.indices[1] - 1].join(';')}:t${element_subgroup.x},${element_subgroup.y}`,
+                    subs: element_subgroup.items,
+                    transform: `t${element_subgroup.x},${element_subgroup.y}`,
+                    x: element_subgroup.x,
+                    y: element_subgroup.y,
+                    width: element_subgroup.width,
+                    height: element_subgroup.height
                 };
                 if (regexJSONInfo.num) {
                     // Agrega un offset a la izquierda para mover todos los items a la derecha y que se centre el dashed group que lo engloba
-                    addsOffset(item_subgroup.items, 10, 0);
-                    var rect_width = item_subgroup.width + 20;
-                    var rect_height = item_subgroup.height + 20;
+                    addsOffset(element_subgroup.items, 10, 0);
+                    var rect_width = element_subgroup.width + 20;
+                    var rect_height = element_subgroup.height + 20;
                     var item_rect = {
                         type: "rect",
                         class: `rect:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
                         x: offsetX,
-                        y: item_subgroup.y - 10,
+                        y: element_subgroup.y - 10,
                         r: 6,
                         width: rect_width,
                         height: rect_height,
@@ -1495,7 +1495,7 @@
                         height: rect_height + item_text.height + 4
                     };
 
-                    var all_items = item_subgroup.items.concat([item_rect, item_text.label]);
+                    var all_items = element_subgroup.items.concat([item_rect, item_text.label]);
                     offset_x_width && addsOffset(all_items, offset_x_width, 0);
 
                     return {
@@ -1504,8 +1504,8 @@
                         height: container_item.height,
                         x: offsetX + offset_x_width,
                         y: offsetY,
-                        lineInX: offset_x_width + item_subgroup.lineInX + 10,
-                        lineOutX: offset_x_width + item_subgroup.lineOutX + 10
+                        lineInX: offset_x_width + element_subgroup.lineInX + 10,
+                        lineOutX: offset_x_width + element_subgroup.lineOutX + 10
                     }
                 }
                 // Llega aqui si es grupo un non-capturing
@@ -1514,10 +1514,10 @@
                     items: [container_group],
                     width: container_group.width,
                     height: container_group.height,
-                    x: item_subgroup.x,
-                    y: item_subgroup.y,
-                    lineInX: item_subgroup.lineInX,
-                    lineOutX: item_subgroup.lineOutX
+                    x: element_subgroup.x,
+                    y: element_subgroup.y,
+                    lineInX: element_subgroup.lineInX,
+                    lineOutX: element_subgroup.lineOutX
                 }; // items_subgroup
             },
             assert: function (regexJSONInfo, offsetX, offsetY) {

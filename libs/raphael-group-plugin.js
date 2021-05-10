@@ -476,6 +476,7 @@
                     // Eliminar j.children para limpiar los atributos
                     g = paperproto[j.type](children).attr(j);
                     appendChildrenToNode(g[0], children.items);
+                    children = res.push(g);
                 } else {
                     var children = elements[has](j.type) && res.push(paperproto[j.type]().attr(j));
                 }
