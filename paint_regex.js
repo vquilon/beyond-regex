@@ -3,7 +3,7 @@
 // var { NFA }  = require("./NFA_parser");
 
 // if (define("parse", ["./NFA", "./Kit"], function(t, e) {
-    function parse(tp, ep) {
+    function parse() {
         var auxKit = Kit();
         var nodeType = {};
         function r() {
@@ -20,14 +20,17 @@
             this.tree = _regexObject.tree;
             this.groupCount = _regexObject.groupCount;
         }
-        function init_object(t, e) {
+        function init_object(raw_regex_input, e, language) {
             d = e;
-            var r, i, error_lastState, p = load_NFA_Parser();
-            r = p.input(t, 0, e),
-                i = r.stack,
-                i = elementsCallback.endChoice(i),
-                error_lastState = r.lastState;
-            var g = r.acceptable && r.lastIndex === t.length - 1;
+            var r, i;
+            var error_lastState;
+            var NFA_instance = load_NFA_Parser(language=language);
+            r = NFA_instance.input(raw_regex_input, 0, e);
+            i = r.stack;
+            i = elementsCallback.endChoice(i);
+            error_lastState = r.lastState;
+            
+            var g = r.acceptable && r.lastIndex === raw_regex_input.length - 1;
             if (!g) {
                 var x;
                 switch (error_lastState) {
@@ -65,7 +68,7 @@
                         0 === error_lastState.indexOf("charset") ? x = {
                             type: "UnclosedCharset",
                             message: "Unterminated character class!"
-                        } : ")" === t[r.lastIndex] ? x = {
+                        } : ")" === raw_regex_input[r.lastIndex] ? x = {
                             type: "UnmatchedParen",
                             message: "Unmatched end parenthesis!"
                         } : (x = {
@@ -91,10 +94,10 @@
             if (g) {
                 var y = i.groupCounter ? i.groupCounter.i : 0;
                 delete i.groupCounter,
-                    h(i, t, t.length),
+                    h(i, raw_regex_input, raw_regex_input.length),
                     i = o(i);
                 var m = new create_regexObject({
-                    raw: t,
+                    raw: raw_regex_input,
                     groupCount: y,
                     tree: i
                 });
@@ -105,8 +108,9 @@
                     m
             }
         }
-        function load_NFA_Parser() {
-            return NFAparser || (NFAparser = new NFA(validStructs)), NFAparser
+        function load_NFA_Parser(language="javascript") {
+            var selected_language_validStructs = validStructs[language];
+            return NFAparser || (NFAparser = new NFA(selected_language_validStructs)), NFAparser
         }
         function s(t, e, r) {
             Object.defineProperty(t, e, {
@@ -192,16 +196,16 @@
             }))
         }
         function define_regexError(t) {
-            this.name = "RegexSyntaxError",
-                this.type = t.type,
-                this.lastIndex = t.lastIndex,
-                this.lastState = t.lastState,
-                this.lastStack = t.lastStack,
-                this.message = t.message,
-                Object.defineProperty(this, "stack", {
-                    value: new Error(t.message).stack,
-                    enumerable: !1
-                })
+            this.name = "RegexSyntaxError";
+            this.type = t.type;
+            this.lastIndex = t.lastIndex;
+            this.lastState = t.lastState;
+            this.lastStack = t.lastStack;
+            this.message = t.message;
+            Object.defineProperty(this, "stack", {
+                value: new Error(t.message).stack,
+                enumerable: !1
+            })
         }
         nodeType = {
             EXACT_NODE: "exact",
@@ -671,7 +675,7 @@
         var names_unicodeEscape = "unicodeEscape1,unicodeEscape2,unicodeEscape3,unicodeEscape4"
         var names_charsetUnicodeEscape = "charsetUnicodeEscape1,charsetUnicodeEscape2,charsetUnicodeEscape3,charsetUnicodeEscape4,charsetHexEscape1,charsetHexEscape2"
         // Estas estructuras componen el arbol de posibilidades que puede tener cada caracter
-        var validStructs = {
+        var base_validStructs = {
             compact: !0,
             accepts: "start,begin,end,repeat0,repeat1,exact,repeatn,repeat01,repeatNonGreedy,choice," + names_repeat + ",nullChar,digitBackref," + names_unicodeEscape + "," + names_hexEscape,
             trans: [
@@ -768,13 +772,29 @@
                 ["charsetRangeEndUnicodeEscape1,charsetRangeEndHexEscape1>charsetContent", "^\\]0-9a-fA-F", elementsCallback.charsetContent],
                 ["charsetRangeEndUnicodeEscape2,charsetRangeEndUnicodeEscape3,charsetRangeEndUnicodeEscape4,charsetRangeEndHexEscape2>charsetRangeStart", "-", elementsCallback.charsetContent],
                 [names_charsetUnicodeEscape + ",charsetRangeEndUnicodeEscape1,charsetRangeEndHexEscape1,charsetRangeEndUnicodeEscape2,charsetRangeEndUnicodeEscape3,charsetRangeEndUnicodeEscape4,charsetRangeEndHexEscape2,charsetNullChar,charsetRangeStart,charsetContent,charsetClass,charsetExclude,charsetRangeEnd>exact", "]"],
-                // Nuevas ramas para que acepte python
+            ]
+        }
+        var javascript_validStructs = {
+            compact: !0,
+            accepts: base_validStructs.accepts,
+            trans: base_validStructs.trans.concat([
+
+            ])
+        }
+        var python_validStricts = {
+            compact: !0,
+            accepts: base_validStructs.accepts,
+            trans: base_validStructs.trans.concat([
                 ["groupQualify>groupNamedDefined", "P"],
                 ["groupNamedDefined>groupNamedStart", "<"],
                 ["groupNamedStart,groupNamedContent>groupNamedContent", "0-9a-zA-Z_", elementsCallback.groupNamedContent],
                 ["groupNamedContent>groupNamedEnd", "0-9a-zA-Z_", elementsCallback.groupNamedContent],
                 ["groupNamedEnd,groupNamedContent>groupQualifiedStart", ">"],
-            ]
+            ])
+        }
+        var validStructs = {
+            javascript: javascript_validStructs,
+            python: python_validStricts
         };
     
         return init_object

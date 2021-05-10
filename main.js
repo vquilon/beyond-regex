@@ -194,7 +194,7 @@ window.onload = function () {
         var regEXSON = null;
         try {
             var init_parse = parse();
-            regEXSON = init_parse(regExpresion);
+            regEXSON = init_parse(regExpresion, null, "python");
         } catch (e) {
             if (e instanceof init_parse.RegexSyntaxError) {
                 if (!skipError) {
