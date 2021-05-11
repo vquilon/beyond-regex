@@ -14,7 +14,7 @@ window.onload = function () {
     var flags = document.getElementsByName('flag');
     var flagBox = document.getElementById('flagBox');
 
-
+    var languageRegex = document.getElementById('languageRegex');
 
     const inputRegex = document.querySelector('#input');
 
@@ -194,7 +194,8 @@ window.onload = function () {
         var regEXSON = null;
         try {
             var init_parse = parse();
-            regEXSON = init_parse(regExpresion, null, "python");
+            var language_selected = languageRegex.value
+            regEXSON = init_parse(regExpresion, null, language_selected);
         } catch (e) {
             if (e instanceof init_parse.RegexSyntaxError) {
                 if (!skipError) {

@@ -36,18 +36,20 @@ h1 em {
 
 #inputCt,#errorBox {
     margin: 8px 16px;
-}
-#inputCt {
-   height: 110px; 
+    display: grid;
+    grid-column-gap: 10px;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    align-items: center;
 }
 
 #inputCt div.re * {
     font-size: 24px;
 }
 #inputCt div.re {
+    grid-row: 1/2;
+
     font-size: 24px;
     background: #EEE;
-    /* font-size: 1.2em; */
     line-height: 1.4em;
     color: #333;
     border: 1px solid black;
@@ -106,6 +108,14 @@ h1 em {
     width: 100%;
 }
 
+#inputCt #actionButtons {
+    grid-row: 2/2;
+    display: grid;
+    grid-column-gap: 10px;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: repeat(1, minmax(0, 1fr));
+    align-items: center;
+}
 
 #errorBox {
     background: #EEE;
@@ -189,7 +199,7 @@ h1 em {
     padding: 12px;
     padding-bottom: 10px;
     cursor: pointer;
-    width: 200px;
+    width: 140px;
     height: 40px;
     /* background: #40B0EF; */
     /* background-image: #274d7e; */
@@ -385,6 +395,84 @@ body.embed #graphCt {
 
 
 
+/* LANGUAGE SELECTOR */
+.square {
+    width: .7em;
+    height: .7em;
+    margin: .5em;
+    display: inline-block;
+  }
+  
+  /* Custom dropdown */
+  .custom-dropdown {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 10px; /* demo only */
+  }
+  
+  .custom-dropdown select {
+    background-color: #353535;
+    color: #fff;
+    font-size: inherit;
+    padding: .5em;
+    padding-right: 2.5em;
+    border: 0;
+    margin: 0;
+    border-radius: 3px;
+    text-indent: 0.01px;
+    text-overflow: '';
+    box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
+    border: 1px solid;
+    border-top-color: #373737;
+    border-left-color: #373737;
+    border-bottom-color: #3b3b3b;
+    border-right-color: #3b3b3b;
+    -webkit-appearance: button;  /* hide default arrow in chrome OSX */
+  }
+  
+  /* .custom-dropdown::before,
+  .custom-dropdown::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  } */
+
+  /*  Custom dropdown arrow */
+  /* .custom-dropdown::after { 
+    content: "\25BC";
+    height: 1em;
+    font-size: .625em;
+    line-height: 1;
+    right: 1.2em;
+    top: 50%;
+    margin-top: -.5em;
+  } */
+  
+  /*  Custom dropdown arrow cover */
+  /* .custom-dropdown::before {
+    width: 2em;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 0 3px 3px 0;
+  } */
+  
+  .custom-dropdown select[disabled] {
+    color: rgba(0,0,0,.3);
+  }
+  
+  /* .custom-dropdown select[disabled]::after {
+    color: rgba(0,0,0,.1);
+  }
+  
+  .custom-dropdown::before {
+    background-color: rgba(0,0,0,.15);
+  }
+  
+  .custom-dropdown::after {
+    color: rgba(0,0,0,.4);
+  } */
 
 /* Demo */
 /* body {
