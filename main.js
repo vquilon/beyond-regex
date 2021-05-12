@@ -6,10 +6,10 @@ window.onload = function () {
     var input = document.getElementById('input');
     var inputCt = document.getElementById('inputCt');
     // var visualBtn = document.getElementById('visualIt');
-    var parseBtn = document.getElementById('parseClick');
+    // var parseBtn = document.getElementById('parseClick');
     var visualBtn = document.getElementById('visualizeClick');
     var embedBtn = document.getElementById('embedIt');
-    var exportBtn = document.getElementById('exportIt');
+    // var exportBtn = document.getElementById('exportIt');
     var errorBox = document.getElementById('errorBox');
     var flags = document.getElementsByName('flag');
     var flagBox = document.getElementById('flagBox');
@@ -161,9 +161,9 @@ window.onload = function () {
         }
         setInnerText(flagBox, fg);
     }
-    flags.forEach(flag => flag.addEventListener('change', (event) => {
-        setInnerText(flagBox, getFlags());
-    }));
+    // flags.forEach(flag => flag.addEventListener('change', (event) => {
+    //     setInnerText(flagBox, getFlags());
+    // }));
 
 
     var _updateREGEXSON = function (_regexTree) {
@@ -235,7 +235,7 @@ window.onload = function () {
             _parseVisualizeRegex();
             // groupRaphItems();
         };
-        parseBtn.addEventListener("click", parseEvent);
+        // parseBtn.addEventListener("click", parseEvent);
         visualBtn.addEventListener("click", parseVisualizeEvent);
     }
     initMainEventsListener();
@@ -305,12 +305,12 @@ window.onload = function () {
             window.prompt("Copy the html code:", html);
         });
 
-        exportBtn.addEventListener('click', function () {
-            var newParams = Object.assign({}, params);
-            newParams.cmd = 'export';
-            var hash = serializeHash(newParams);
-            window.open(location.href.split('#!')[0] + hash, "_blank");
-        });
+        // exportBtn.addEventListener('click', function () {
+        //     var newParams = Object.assign({}, params);
+        //     newParams.cmd = 'export';
+        //     var hash = serializeHash(newParams);
+        //     window.open(location.href.split('#!')[0] + hash, "_blank");
+        // });
     }
 
     if (params.flags) {
