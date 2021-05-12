@@ -3,10 +3,12 @@
 }
 
 .json-container {
+    margin: 20px;
     font-family: 'Open Sans';
     font-size: 16px;
-    background-color: #fff;
-    color: #808080;
+    border: 1px groove white;
+    /* background-color: #fff; */
+    color: #e4e4e4;
     box-sizing: border-box; 
 }
 .json-container .line {
@@ -27,9 +29,13 @@
     margin-left: 4px; 
 }
 .json-container .json-key {
-    color: #444;
+    /* color: #444; */
+    color: #ff6cf8;
     margin-right: 4px;
     margin-left: 4px; 
+}
+.json-container .json-separator {
+    color: #ff6169
 }
 .json-container .json-index {
     margin-right: 4px;
@@ -39,7 +45,7 @@
 .json-container .json-number {
     color: #f9ae58; }
 .json-container .json-boolean {
-    color: #ec5f66; }
+    color: #fff664; }
 .json-container .json-string {
     color: #86b25c; }
 .json-container .json-size {
@@ -51,7 +57,8 @@
     display: inline-block;
     width: 0;
     height: 0;
-    border-style: solid; }
+    /* border-style: solid;  */
+}
 .json-container .fa-caret-down {
     border-width: 6px 5px 0 5px;
     border-color: #808080 transparent; }
