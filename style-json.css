@@ -6,10 +6,11 @@
     margin: 20px;
     font-family: 'Open Sans';
     font-size: 16px;
+    height: 200px;
     border: 1px groove white;
-    /* background-color: #fff; */
     color: #e4e4e4;
-    box-sizing: border-box; 
+    overflow: auto;
+    box-sizing: border-box;
 }
 .json-container .line {
     margin: 4px 0;
