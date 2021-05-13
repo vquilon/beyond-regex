@@ -33,12 +33,18 @@ h1 em {
     display: inline-block;
 }
 
+#inputCt {
+    display: flex;
+    margin: 20px 10px;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
 #inputCt, #errorBox {
     margin: 8px 16px;
-    display: grid;
-    grid-column-gap: 10px;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    align-items: center;
 }
 
 #inputCt div.re * {
@@ -109,13 +115,13 @@ h1 em {
 }
 
 #inputCt #actionButtons {
-    display: inline-flex;
-    /* display: grid; */
-
-    grid-row: 2/2;
+    display: flex;
     grid-column-gap: 10px;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    grid-template-rows: repeat(1, minmax(0, 1fr));
+    margin: 20px 10px;
+    grid-gap: 20px;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
     align-items: center;
 }
 
@@ -230,24 +236,6 @@ h1 em {
 #parseClick:active, #visualizeClick:active, #embedIt:active, #exportIt:active {
     font-size: 90%;
 }
-
-/*  CHECKBOX  */
-
-/* .checkbox {
-    grid-column: 1 / 2;
-    display: grid;
-    grid-template-columns: repeat(2, 6rem);
-    grid-gap: 3rem;
-    justify-content: center;
-} */
-
-/* #inputCt label {
-    cursor: pointer;
-} */
-
-/* #inputCt label input {
-    margin-right: 4px;
-} */
 
 .checkbox input {
     display: none;
@@ -578,14 +566,14 @@ select::-ms-expand {
 /* Social Icons */
 
 .heading {
-    display: inline-flex;
-
     margin: 50px 20px;
-    display: grid;
+    grid-gap: 20px;
     grid-column-gap: 10px;
-    /* grid-template-columns: repeat(2, minmax(0, 1fr)); */
-    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
     align-items: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
 }
 
 .heading h1 {
@@ -595,11 +583,11 @@ select::-ms-expand {
 
 .social-icons {
     display: flex;
-    margin: auto;
-    /* grid-column: 3;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: repeat(1, minmax(0, 1fr)); */
+    grid-gap: 10px;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .social-icon {
