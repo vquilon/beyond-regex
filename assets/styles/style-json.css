@@ -3,11 +3,10 @@
 }
 
 .json-container {
-    margin: 20px;
-    font-family: 'Open Sans';
+    margin: 20px 0;
     font-size: 16px;
     max-height: 200px;
-    border: 1px groove white;
+    border: 1px groove #e2e2e2;
     color: #e4e4e4;
     overflow: auto;
     box-sizing: border-box;

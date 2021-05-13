@@ -290,7 +290,7 @@ window.onload = function () {
     }
     if (params.embed || params.cmd === "export") {
         var embedFooterLink = document.getElementById("embedFooterLink");
-        embedFooterLink.href = "https://jex.im/regulex/" + location.hash.replace(/\bembed=true\b/ig, "").replace(/\bcmd=export\b/ig, '');
+        embedFooterLink.href = `${document.location.origin}${document.location.pathname}` + location.hash.replace(/\bembed=true\b/ig, "").replace(/\bcmd=export\b/ig, '');
     }
     function initEventsListener() {
         embedBtn.addEventListener('click', function () {

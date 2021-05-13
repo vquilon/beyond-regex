@@ -1192,7 +1192,7 @@
         var actual_element;
         var font_family = "DejaVu Sans Mono,monospace";
         var graph_fontsize = 16, regex_fontsize = 14, gap_lines_items = 16;
-        var stroke_color = "#EEE", have_multiline_flag = !1, margin_items = 10, map_font_style = {};
+        var stroke_color = "#e2e2e2", have_multiline_flag = !1, margin_items = 10, map_font_style = {};
         var generator_Raph_map = {
             startPoint: function (regexJSONInfo, offset_x, offset_y) {
                 return createCircleItem({ type: "startPoint", indices: [-1, -1] }, offset_x, offset_y, "r(0.5,0.5)#EFE-green")

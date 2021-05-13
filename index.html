@@ -16,14 +16,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="libs/highlight/highlight.min.css">
-    </style>
     <link rel="stylesheet" href="assets/styles/style-json.css">
-    </style>
     <link rel="stylesheet" href="assets/styles/main.css">
-    </style>
+    <link rel="stylesheet" href="assets/styles/scrollbars.css">
 </head>
 
 <body>
+    <div id="main">
     <div class="heading">
         <h1>
             Beyond Regex <em>Born to Be a RegEx editor or Beyond</em>
@@ -60,70 +59,73 @@
                 <div class="tooltip">Facebook</div>
             </a> -->
         </div>
-    </div>
-    
-    <div id="inputCt">
-        <div class="re code">
-            <table>
-                <tr>
-                    <td style="width:1em; padding-left: 5px;">/</td>
-                    <td style="width:auto">
-                        <input id="input" class="input"
-                            value="^(abc)(?P<test>a|(group (?:other))|(a|b))*?[a-cdhm-z]$" />
-                    </td>
-                    <td style="width:1em; padding-left: 10px;">/</td>
-                    <!-- <td id="flagBox">
-                    </td> -->
-                    <td style="width: 160px;">
-                        <div id="checkflags">
-                            <div class="checkbox checkbox__1">
-                                <input id="checkbox-ignorecase" type="checkbox" name="flag" value="i">
-                                <label for="checkbox-ignorecase"><i>i</i></label>
-                            </div>
-                            <div class="checkbox checkbox__1">
-                                <input id="checkbox-multiline" type="checkbox" name="flag" value="m">
-                                <label for="checkbox-multiline"><i>m</i></label>
-                            </div>
-                            <div class="checkbox checkbox__1">
-                                <input id="checkbox-globalmatch" type="checkbox" name="flag" value="g">
-                                <label for="checkbox-globalmatch"><i>g</i></label>
-                            </div>
-                        </div>
-                    </td>
-
-                </tr>
-            </table>
         </div>
+        <div id="inputCt">
+            <div class="re code">
+                <table>
+                    <tr>
+                        <td style="width:1em; padding-left: 5px;">/</td>
+                        <td style="width:auto">
+                            <input id="input" class="input"
+                                value="^(abc)(?P<test>a|(group (?:other))|(a|b))*?[a-cdhm-z]$" />
+                        </td>
+                        <td style="width:1em; padding-left: 10px;">/</td>
+                        <!-- <td id="flagBox">
+                        </td> -->
+                        <td style="width: 100px;">
+                            <div id="checkflags">
+                                <div class="checkbox checkbox__1">
+                                    <input id="checkbox-ignorecase" type="checkbox" name="flag" value="i">
+                                    <label for="checkbox-ignorecase"><i>i</i></label>
+                                </div>
+                                <div class="checkbox checkbox__1">
+                                    <input id="checkbox-multiline" type="checkbox" name="flag" value="m">
+                                    <label for="checkbox-multiline"><i>m</i></label>
+                                </div>
+                                <div class="checkbox checkbox__1">
+                                    <input id="checkbox-globalmatch" type="checkbox" name="flag" value="g">
+                                    <label for="checkbox-globalmatch"><i>g</i></label>
+                                </div>
+                            </div>
+                        </td>
 
-        <div id="actionButtons">
-            <!-- <button class="btn btn__primary button-panel" id="parseClick">Parse!</button> -->
-            <button class="btn btn__primary button-panel" id="visualizeClick">Visualize</button>
-            <!-- <button class="btn btn__primary button-panel" id="exportIt">Export Image</button> -->
+                    </tr>
+                </table>
+            </div>
+
+            <div id="actionButtons">
+                <!-- <button class="btn btn__primary button-panel" id="parseClick">Parse!</button> -->
+                <button class="btn btn__primary button-panel" id="visualizeClick">Visualize</button>
+                <!-- <button class="btn btn__primary button-panel" id="exportIt">Export Image</button> -->
                 <button class="btn btn__primary button-panel" id="embedIt">Link!</button>
-            
 
-            
-            <div class="custom-dropdown">
-                <select name="languageRegex" id="languageRegex">
-                    <option selected value="python">Python</option>
-                    <option value="javascript">Javascript</option>
-                </select>
-            </span>
+
+
+                <div class="custom-dropdown">
+                    <select name="languageRegex" id="languageRegex">
+                        <option selected value="python">Python</option>
+                        <option value="javascript">Javascript</option>
+                    </select>
+                    </span>
+                </div>
+            </div>
+            <p id="errorBox" class="code">Error Message</p>
+            <div id="graphCt" class="code"></div>
+            <pre><code class="json" id="treeRegex"></code></pre>
         </div>
+        <footer>
+
+            <div class="normal">
+                Created by <a href="https://vquilon.github.io/" target="_blank">Victor QuilonR.</a>
+                Forked from <a href="https://jex.im/" target="_blank">Jex</a>
+            </div>
+            <div class="embed">
+                <a id="embedFooterLink" href="https://vquilon.github.io/beyond-regex/index.html" target="_blank">By Beyond Regex</a>
+            </div>
+        </footer>
     </div>
-    <p id="errorBox" class="code">Error Message</p>
-    <div id="graphCt" class="code"></div>
-    <pre><code class="json" id="treeRegex"></code></pre>
-    
-    <footer>
-        
-        <div class="normal">
-            Created by <a href="https://vquilon.github.io/" target="_blank">Victor QuilonR.</a>
-        </div>
-        <div class="embed">
-            <a id="embedFooterLink" href="https://jex.im/regulex/" target="_blank">By Regulex</a>
-        </div>
-    </footer>
+
+
     <!-- Libreria de Complete.ly -->
     <script src="libs/completely/complete.ly.1.0.1.js"></script>
 
