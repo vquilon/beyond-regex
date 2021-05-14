@@ -1,0 +1,45 @@
+@font-face {
+    font-family: 'MyWebFont';
+    /* IE9 Compat Modes */
+    src: url('webfont.eot');
+    /* IE6-IE8 */
+    src: url('webfont.eot?#iefix') format('embedded-opentype'),
+    /* Super Modern Browsers */
+    url('webfont.woff2') format('woff2'),
+    /* Pretty Modern Browsers */
+    url('webfont.woff') format('woff'),
+    /* Safari, Android, iOS */
+    url('webfont.ttf') format('truetype'),
+    /* Legacy iOS */
+    url('webfont.svg#svgFontName') format('svg');
+}
+
+@font-face {
+    font-family: "VictorMono";
+    src: url("/assets/fonts/VictorMono/WOFF/VictorMono-Regular.woff") format('woff'), /* IE6-IE8 */
+    url('/assets/fonts/VictorMono/WOFF2/VictorMono-Regular.woff2') format('woff2'), /* Super Modern Browsers */
+    url('/assets/fonts/VictorMono/TTF/VictorMono-Regular.ttf') format('truetype'), /* Pretty Modern Browsers */
+    url('/assets/fonts/VictorMono/OTF/VictorMono-Regular.otf') format('opentype');
+    /* Safari, Android, iOS */
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "VictorMono";
+    src: url("fonts/DejaVuSans-Bold.ttf");
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: "VictorMono";
+    src: url("fonts/DejaVuSans-Oblique.ttf");
+    font-style: italic, oblique;
+}
+
+@font-face {
+    font-family: "VictorMono";
+    src: url("fonts/DejaVuSans-BoldOblique.ttf");
+    font-weight: bold;
+    font-style: italic, oblique;
+}

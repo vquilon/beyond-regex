@@ -1,0 +1,20 @@
+/* @font-face {
+    font-family: 'MyWebFont';
+    src: url('webfont.eot'); IE9 Compat Modes
+    src: url('webfont.eot?#iefix') format('embedded-opentype'), IE6-IE8
+    url('webfont.woff2') format('woff2'), Super Modern Browsers
+    url('webfont.woff') format('woff'), Pretty Modern Browsers
+    url('webfont.ttf') format('truetype'), Safari, Android, iOS
+    url('webfont.svg#svgFontName') format('svg'); Legacy iOS
+} */
+@font-face {
+    font-family: "VictorMono";
+    src:
+    url('../fonts/VictorMono/WOFF2/VictorMono-Thin.woff2') format('woff2'), /* Super Modern Browsers */
+    url("../fonts/VictorMono/WOFF/VictorMono-Thin.woff") format('woff'), /* Pretty Modern Browsers */
+    url('../fonts/VictorMono/TTF/VictorMono-Thin.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('../fonts/VictorMono/OTF/VictorMono-Thin.otf') format('opentype'),
+    url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Thin') format('svg'); /* Legacy iOS */
+    font-style: normal;
+    font-weight: 100;
+}

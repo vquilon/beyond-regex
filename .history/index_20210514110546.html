@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Beyond Regex：Born to Be a RegEx editor or Beyond</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/f0601b0fb2.js" crossorigin="anonymous"></script>
+    <script type='module' src='https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js'></script>
+    <script nomodule='' src='https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js'></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONTS -->
+    <link rel="stylesheet" href="assets/styles/fonts.css">
+
+    <link rel="stylesheet" href="libs/highlight/highlight.min.css">
+    <link rel="stylesheet" href="assets/styles/style-json.css">
+    <link rel="stylesheet" href="assets/styles/main.css">
+    <link rel="stylesheet" href="assets/styles/scrollbars.css">
+</head>
+
+<body>
+    <div id="main">
+    <div class="heading">
+        <h1>
+            Beyond Regex <em>Born to Be a RegEx editor or Beyond</em>
+        </h1>
+
+        <!-- social icons -->
+        <div class="social-icons">
+            <a href="https://codepen.io/vquilon" class="social-icon social-icon--codepen">
+                <i class="fa fa-codepen"></i>
+                <div class="tooltip">Codepen</div>
+            </a>
+            <a href="https://github.com/vquilon" class="social-icon social-icon--github">
+                <i class="fa fa-github"></i>
+                <div class="tooltip">Github</div>
+            </a>
+            <!-- <a class="social-icon social-icon--twitter">
+                <i class="fa fa-twitter"></i>
+                <div class="tooltip">Twitter</div>
+            </a>
+            <a class="social-icon social-icon--dribbble">
+                <i class="fa fa-dribbble"></i>
+                <div class="tooltip">Dribbble</div>
+            </a>
+            <a class="social-icon social-icon--instagram">
+                <i class="fa fa-instagram"></i>
+                <div class="tooltip">Instagram</div>
+            </a> -->
+            <a href="https://www.linkedin.com/in/vquilonr-291194/" class="social-icon social-icon--linkedin">
+                <i class="fa fa-linkedin"></i>
+                <div class="tooltip">LinkedIn</div>
+            </a>
+            <!-- <a class="social-icon social-icon--facebook">
+                <i class="fa fa-facebook"></i>
+                <div class="tooltip">Facebook</div>
+            </a> -->
+        </div>
+        </div>
+        <div id="inputCt">
+            <div class="re code">
+                <table>
+                    <tr>
+                        <td style="width:1em; padding-left: 5px;">/</td>
+                        <td style="width:auto">
+                            <input id="input" class="input"
+                                value="^(abc)(?P<test>a|(group (?:other))|(a|b))*?[a-cdhm-z]$" />
+                        </td>
+                        <td style="width:1em; padding-left: 10px;">/</td>
+                        <!-- <td id="flagBox">
+                        </td> -->
+                        <td style="width: 100px;">
+                            <div id="checkflags">
+                                <div class="checkbox checkbox__1">
+                                    <input id="checkbox-ignorecase" type="checkbox" name="flag" value="i">
+                                    <label for="checkbox-ignorecase"><i>i</i></label>
+                                </div>
+                                <div class="checkbox checkbox__1">
+                                    <input id="checkbox-multiline" type="checkbox" name="flag" value="m">
+                                    <label for="checkbox-multiline"><i>m</i></label>
+                                </div>
+                                <div class="checkbox checkbox__1">
+                                    <input id="checkbox-globalmatch" type="checkbox" name="flag" value="g">
+                                    <label for="checkbox-globalmatch"><i>g</i></label>
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+
+            <div id="actionButtons">
+                <!-- <button class="btn btn__primary button-panel" id="parseClick">Parse!</button> -->
+                <button class="btn btn__primary button-panel" id="visualizeClick">Visualize</button>
+                <!-- <button class="btn btn__primary button-panel" id="exportIt">Export Image</button> -->
+                <button class="btn btn__primary button-panel" id="embedIt">Link!</button>
+
+
+
+                <div class="custom-dropdown">
+                    <select name="languageRegex" id="languageRegex">
+                        <option selected value="python">Python</option>
+                        <option value="javascript">Javascript</option>
+                    </select>
+                    </span>
+                </div>
+            </div>
+            <p id="errorBox" class="code">Error Message</p>
+            <div id="graphCt" class="code"></div>
+            <pre><code class="json" id="treeRegex"></code></pre>
+        </div>
+        <footer>
+
+            <div class="normal">
+                Created by <a href="https://vquilon.github.io/" target="_blank">Victor QuilonR.</a>
+                Forked from <a href="https://jex.im/" target="_blank">Jex</a>
+            </div>
+            <div class="embed">
+                <a id="embedFooterLink" href="https://vquilon.github.io/beyond-regex/index.html" target="_blank">By Beyond Regex</a>
+            </div>
+        </footer>
+    </div>
+
+
+    <!-- Libreria de Complete.ly -->
+    <script src="libs/completely/complete.ly.1.0.1.js"></script>
+
+    <!-- Libreria Raphael que pinta el SVG -->
+    <script src="libs/raphael/raphael.js"></script>
+    <!-- Plugin de Raphael que permite la creacion del tag `g` englobando a otros elementos SVG -->
+    <script src="assets/scripts/raphael-plugin/raphael-groups-plugin.js"></script>
+
+    <!-- Highligt coder -->
+    <script src="libs/highlight/highlight-10.4.1.min.js"></script>
+    <script src="assets/scripts/parse_json.js"></script>
+
+    <!-- Libreria para el autocompletado -->
+    <script src="libs/completely/complete.ly.1.0.1_modified.js"></script>
+    <script src="assets/scripts/completely-script/complete-regex.js"></script>
+
+    <!-- Librerias para visualizacion de regex -->
+    <!-- <script src="groups_elements.js"></script> -->
+    <script src="assets/scripts/auxiliar_functions.js"></script>
+    <script src="assets/scripts/NFA_parser.js"></script>
+    <script src="assets/scripts/paint_regex.js"></script>
+
+    <!-- Event Listeners y funciones principales -->
+    <script src="assets/scripts/main.js"></script>
+
+</body>
+
+</html>

@@ -5,7 +5,7 @@ html {
 body, html * {
     margin: 0;
     padding: 0;
-    font-family: "DejaVu Sans Mono", monospace;
+    font-family: "VictorMono", monospace;
 }
 
 /* body {
@@ -18,10 +18,12 @@ body, html * {
 }
 
 .code, .code * {
-    font-family: "DejaVu Sans Mono", monospace;
+    font-family: "VictorMono", monospace;
 }
 
 h1 {
+    font-style: italic;
+    font-weight: 400;
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: #202020;
     font-size: 80px;
@@ -35,10 +37,11 @@ h1 em {
     -webkit-text-stroke-width: 0px;
     text-shadow: 0 0 10px #e9cff6, 0 0 5px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
     color: white;
+    font-family: "VictorMono Oblique", monospace;
     font-size: medium;
     /* padding-left: 2em; */
     font-style: normal;
-    /* font-weight: normal; */
+    font-weight: 500;
     display: inline-block;
 }
 
@@ -88,7 +91,7 @@ h1 em {
     padding: 0 2px;
     border: none;
     background: #e2e2e2;
-    /* font-size: 1.2em; */
+    font-variant-ligatures: none;
     line-height: 1.4em;
     height: 1.4em;
     font-weight: bold;
@@ -203,7 +206,7 @@ h1 em {
 /* } */
 
 #parseClick, #visualizeClick, #embedIt, #exportIt {
-    font-family: "DejaVu Sans Mono", monospace;
+    font-family: "VictorMono", monospace;
     user-select: none;
     outline: none;
     font-size: 16px;
@@ -280,7 +283,7 @@ h1 em {
 }
 
 .checkbox__1 label i, .checkbox__2 label i {
-    font-family: "DejaVu Sans Mono", monospace;
+    font-family: "VictorMono", monospace;
     font-weight: 400;
     color: #797979;
     transition: 0.3s ease;
@@ -323,6 +326,7 @@ footer div.normal {
     margin: 1em auto;
     padding: 10px;
     font-size: 1.2em;
+    font-style: italic;
 }
 
 footer, footer a {
@@ -390,6 +394,7 @@ body.embed #graphCt {
     border: solid 1px black;
     box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
     border-radius: 10px;
+    font-variant-ligatures: none;
 }
 
 #errorBox {
@@ -407,7 +412,7 @@ body.embed #graphCt {
 }
 
 .code, .code * {
-    font-family: "DejaVu Sans Mono", monospace;
+    font-family: "VictorMono", monospace;
 }
 
 
@@ -434,7 +439,7 @@ select::-ms-expand {
 .custom-dropdown {
     position: relative;
     display: flex;
-    width: 140px;
+    width: 200px;
     height: 40px;
     line-height: 40px;
     overflow: hidden;
@@ -461,7 +466,7 @@ select::-ms-expand {
     
     font-size: medium;
     flex: 1;
-    padding: 0 .5em;
+    padding: 0 20px;
     color: #fff;
     cursor: pointer;
 }

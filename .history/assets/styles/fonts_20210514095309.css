@@ -1,0 +1,122 @@
+/* @font-face {
+    font-family: 'MyWebFont';
+    src: url('webfont.eot'); IE9 Compat Modes
+    src: url('webfont.eot?#iefix') format('embedded-opentype'), IE6-IE8
+    url('webfont.woff2') format('woff2'), Super Modern Browsers
+    url('webfont.woff') format('woff'), Pretty Modern Browsers
+    url('webfont.ttf') format('truetype'), Safari, Android, iOS
+    url('webfont.svg#svgFontName') format('svg'); Legacy iOS
+} */
+@font-face {
+    font-family: "VictorMono";
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-Thin.eot'); /* IE9 Compat Modes */
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-Thin.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/assets/fonts/VictorMono/WOFF2/VictorMono-Thin.woff2') format('woff2'), /* Super Modern Browsers */
+    url("/assets/fonts/VictorMono/WOFF/VictorMono-Thin.woff") format('woff'), /* Pretty Modern Browsers */
+    url('/assets/fonts/VictorMono/TTF/VictorMono-Thin.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('/assets/fonts/VictorMono/OTF/VictorMono-Thin.otf') format('opentype'),
+    url('/assets/fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Thin') format('svg'); /* Legacy iOS */
+    font-style: normal;
+    font-weight: 100;
+}
+@font-face {
+    font-family: "VictorMono";
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-ExtraLight.eot'); /* IE9 Compat Modes */
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-ExtraLight.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/assets/fonts/VictorMono/WOFF2/VictorMono-ExtraLight.woff2') format('woff2'), /* Super Modern Browsers */
+    url("/assets/fonts/VictorMono/WOFF/VictorMono-ExtraLight.woff") format('woff'), /* Pretty Modern Browsers */
+    url('/assets/fonts/VictorMono/TTF/VictorMono-ExtraLight.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('/assets/fonts/VictorMono/OTF/VictorMono-ExtraLight.otf') format('opentype'),
+    url('/assets/fonts/VictorMono/SVG/VictorMono.svg#VictorMono-ExtraLight') format('svg'); /* Legacy iOS */
+    font-style: normal;
+    font-weight: 200;
+}
+@font-face {
+    font-family: "VictorMono";
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-Light.eot'); /* IE9 Compat Modes */
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-Light.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/assets/fonts/VictorMono/WOFF2/VictorMono-Light.woff2') format('woff2'), /* Super Modern Browsers */
+    url("/assets/fonts/VictorMono/WOFF/VictorMono-Light.woff") format('woff'), /* Pretty Modern Browsers */
+    url('/assets/fonts/VictorMono/TTF/VictorMono-Light.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('/assets/fonts/VictorMono/OTF/VictorMono-Light.otf') format('opentype'),
+    url('/assets/fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Light') format('svg'); /* Legacy iOS */
+    font-style: normal;
+    font-weight: 300;
+}
+@font-face {
+    font-family: "VictorMono";
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-Regular.eot'); /* IE9 Compat Modes */
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/assets/fonts/VictorMono/WOFF2/VictorMono-Regular.woff2') format('woff2'), /* Super Modern Browsers */
+    url("/assets/fonts/VictorMono/WOFF/VictorMono-Regular.woff") format('woff'), /* Pretty Modern Browsers */
+    url('/assets/fonts/VictorMono/TTF/VictorMono-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('/assets/fonts/VictorMono/OTF/VictorMono-Regular.otf') format('opentype'),
+    url('/assets/fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Regular') format('svg'); /* Legacy iOS */
+    font-style: normal;
+    font-weight: 400;
+}
+@font-face {
+    font-family: "VictorMono";
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-Medium.eot'); /* IE9 Compat Modes */
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-Medium.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/assets/fonts/VictorMono/WOFF2/VictorMono-Medium.woff2') format('woff2'), /* Super Modern Browsers */
+    url("/assets/fonts/VictorMono/WOFF/VictorMono-Medium.woff") format('woff'), /* Pretty Modern Browsers */
+    url('/assets/fonts/VictorMono/TTF/VictorMono-Medium.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('/assets/fonts/VictorMono/OTF/VictorMono-Medium.otf') format('opentype'),
+    url('/assets/fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Medium') format('svg'); /* Legacy iOS */
+    font-style: normal;
+    font-weight: 500;
+}
+@font-face {
+    font-family: "VictorMono";
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-SemiBold.eot'); /* IE9 Compat Modes */
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-SemiBold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/assets/fonts/VictorMono/WOFF2/VictorMono-SemiBold.woff2') format('woff2'), /* Super Modern Browsers */
+    url("/assets/fonts/VictorMono/WOFF/VictorMono-SemiBold.woff") format('woff'), /* Pretty Modern Browsers */
+    url('/assets/fonts/VictorMono/TTF/VictorMono-SemiBold.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('/assets/fonts/VictorMono/OTF/VictorMono-SemiBold.otf') format('opentype'),
+    url('/assets/fonts/VictorMono/SVG/VictorMono.svg#VictorMono-SemiBold') format('svg'); /* Legacy iOS */
+    font-style: normal;
+    font-weight: 600;
+}
+@font-face {
+    font-family: "VictorMono";
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-Bold.eot'); /* IE9 Compat Modes */
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/assets/fonts/VictorMono/WOFF2/VictorMono-Bold.woff2') format('woff2'), /* Super Modern Browsers */
+    url("/assets/fonts/VictorMono/WOFF/VictorMono-Bold.woff") format('woff'), /* Pretty Modern Browsers */
+    url('/assets/fonts/VictorMono/TTF/VictorMono-Bold.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('/assets/fonts/VictorMono/OTF/VictorMono-Bold.otf') format('opentype'),
+    url('/assets/fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Bold') format('svg'); /* Legacy iOS */
+    font-style: normal;
+    font-weight: 700;
+}
+
+
+
+
+@font-face {
+    font-family: "VictorMono";
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-Regular.eot'); /* IE9 Compat Modes */
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/assets/fonts/VictorMono/WOFF2/VictorMono-Regular.woff2') format('woff2'), /* Super Modern Browsers */
+    url("/assets/fonts/VictorMono/WOFF/VictorMono-Regular.woff") format('woff'), /* Pretty Modern Browsers */
+    url('/assets/fonts/VictorMono/TTF/VictorMono-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('/assets/fonts/VictorMono/OTF/VictorMono-Regular.otf') format('opentype'),
+    url('/assets/fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Regular') format('svg'); /* Legacy iOS */
+    font-style: oblique;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "VictorMono";
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-Regular.eot'); /* IE9 Compat Modes */
+    src: url('/assets/fonts/VictorMono/EOT/VictorMono-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/assets/fonts/VictorMono/WOFF2/VictorMono-Regular.woff2') format('woff2'), /* Super Modern Browsers */
+    url("/assets/fonts/VictorMono/WOFF/VictorMono-Regular.woff") format('woff'), /* Pretty Modern Browsers */
+    url('/assets/fonts/VictorMono/TTF/VictorMono-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('/assets/fonts/VictorMono/OTF/VictorMono-Regular.otf') format('opentype'),
+    url('/assets/fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Regular') format('svg'); /* Legacy iOS */
+    font-style: italic;
+    font-weight: normal;
+}
