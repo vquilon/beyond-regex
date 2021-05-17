@@ -1,0 +1,93 @@
+---
+layout: main
+---
+<div class="heading">
+    <h1>
+        Beyond Regex <em>Born to Be a RegEx editor or Beyond</em>
+    </h1>
+
+    <!-- social icons -->
+    <div class="social-icons">
+        <a href="https://codepen.io/vquilon" class="social-icon social-icon--codepen">
+            <i class="fa fa-codepen"></i>
+            <div class="tooltip">Codepen</div>
+        </a>
+        <a href="https://github.com/vquilon" class="social-icon social-icon--github">
+            <i class="fa fa-github"></i>
+            <div class="tooltip">Github</div>
+        </a>
+        <!-- <a class="social-icon social-icon--twitter">
+            <i class="fa fa-twitter"></i>
+            <div class="tooltip">Twitter</div>
+        </a>
+        <a class="social-icon social-icon--dribbble">
+            <i class="fa fa-dribbble"></i>
+            <div class="tooltip">Dribbble</div>
+        </a>
+        <a class="social-icon social-icon--instagram">
+            <i class="fa fa-instagram"></i>
+            <div class="tooltip">Instagram</div>
+        </a> -->
+        <a href="https://www.linkedin.com/in/vquilonr-291194/" class="social-icon social-icon--linkedin">
+            <i class="fa fa-linkedin"></i>
+            <div class="tooltip">LinkedIn</div>
+        </a>
+        <!-- <a class="social-icon social-icon--facebook">
+            <i class="fa fa-facebook"></i>
+            <div class="tooltip">Facebook</div>
+        </a> -->
+    </div>
+</div>
+<div id="inputCt">
+    <div class="re code">
+        <table>
+            <tr>
+                <td style="width:1em; padding-left: 5px;">/</td>
+                <td style="width:auto">
+                    <!-- <div id="container-input"></div> -->
+                    <input id="input" class="input" value="^(abc)(?P<test>a|(group (?:other))|(a|b))*?[a-cdhm-z]$" />
+                </td>
+                <td style="width:1em; padding-left: 10px;">/</td>
+                <!-- <td id="flagBox">
+                </td> -->
+                <td style="width: 100px;">
+                    <div id="checkflags">
+                        <div class="checkbox checkbox__1">
+                            <input id="checkbox-ignorecase" type="checkbox" name="flag" value="i">
+                            <label for="checkbox-ignorecase"><i>i</i></label>
+                        </div>
+                        <div class="checkbox checkbox__1">
+                            <input id="checkbox-multiline" type="checkbox" name="flag" value="m">
+                            <label for="checkbox-multiline"><i>m</i></label>
+                        </div>
+                        <div class="checkbox checkbox__1">
+                            <input id="checkbox-globalmatch" type="checkbox" name="flag" value="g">
+                            <label for="checkbox-globalmatch"><i>g</i></label>
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+
+    <div id="actionButtons">
+        <!-- <button class="btn btn__primary button-panel" id="parseClick">Parse!</button> -->
+        <button class="btn btn__primary button-panel" id="visualizeClick">Visualize</button>
+        <!-- <button class="btn btn__primary button-panel" id="exportIt">Export Image</button> -->
+        <button class="btn btn__primary button-panel" id="embedIt">Link!</button>
+
+
+
+        <div class="custom-dropdown">
+            <select name="languageRegex" id="languageRegex">
+                <option selected value="python">Python</option>
+                <option value="javascript">Javascript</option>
+            </select>
+            </span>
+        </div>
+    </div>
+    <p id="errorBox" class="code">Error Message</p>
+    <div id="graphCt" class="code"></div>
+    <pre><code class="json" id="treeRegex"></code></pre>
+</div>
