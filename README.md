@@ -1,5 +1,5 @@
-# Beyond Regex
-Es un proyecto sin animo de lucro que busca la creacion de una herramienta web, capaz de editar y comprender las expresiones regulares de una forma unica. De esta forma se podra exprimir hasta la ultima capacidad y optimizacion de la que posee una busqueda tan avanzada como lo es esta secuencia de caracteres para formar un patron de busqueda.
+# BeyondEs un proyecto sin animo de lucro que busca la creacion de un editor RegEx,
+  capaz de editar y comprender estas expresiones regulares de una forma unica. Visualizando, construyendo y analizando, de forma que se podrá exprimir la máxima capacidad y llegar a la optimización del uso de esta tecnología, la cual posee una busqueda mas avanzada de como se creo en un inicio.
 
 ## Core
 Se hara uso de diferentes cores, como el tradicional `backtracking` o una optimizacion basada en ´NFA (nondeterministic finite automaton)´.

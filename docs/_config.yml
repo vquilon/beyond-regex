@@ -18,16 +18,18 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Your awesome title
-email: your-email@example.com
+title: Beyond Regex
+email: v.quilonr@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jekyllrb
-github_username:  jekyll
+  Es un proyecto sin animo de lucro que busca la creacion de un editor RegEx,
+  capaz de editar y comprender estas expresiones regulares de una forma unica.
+  Visualizando, construyendo y analizando, de forma que se podrá exprimir la
+  máxima capacidad y llegar a la optimización del uso de esta tecnología,
+  la cual posee una busqueda mas avanzada de como se creo en un inicio.
+baseurl: "/beyond-regex" # the subpath of your site, e.g. /blog
+url: "https://vquilon.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: VQuilon
+github_username:  vquilon
 
 # Build settings
 theme: minima
@@ -36,7 +38,18 @@ plugins:
   - jekyll-feed # Create an Atom feed using the official Jekyll feed gem
   - jekyll-seo-tag
   - "jekyll-github-metadata"
-  
+
+environment: "production"
+
+# --- Web Statistics Section --- #
+# Fill in your Google Analytics gtag.js ID to track your website using gtag
+gtag: "G-005J77BYYB"
+
+# Fill in your Google Analytics ID to track your website using GA
+#google_analytics: ""
+
+# Google Tag Manager ID
+#gtm: ""
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -52,8 +65,3 @@ exclude:
   - gemfiles/
   - Gemfile
   - Gemfile.lock
-  # - node_modules/
-  # - vendor/bundle/
-  # - vendor/cache/
-  # - vendor/gems/
-  # - vendor/ruby/
