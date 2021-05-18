@@ -1,0 +1,65 @@
+<!-- Install the PWA Locally -->
+<script type="module" src="https://cdn.jsdelivr.net/npm/@pwabuilder/pwainstall"></script>
+
+<div id="install-popup">
+    <span id="close-install" onclick="document.getElementById('close-install').parentNode.remove(); return false;">
+        <i class="fa fa-times" aria-hidden="true"></i>
+    </span>
+    <!-- <pwa-install id="installComponent" manifestpath="manifest.json"></pwa-install> -->
+</div>
+
+
+<script>
+    window.addEventListener('load', () => {
+        // Check to see if the API is supported.
+        if ('getInstalledRelatedApps' in navigator) {
+            // const {num_apps, app_info} = checkForRelatedApps();
+            // const is_installed = num_apps !== 0 && app_info.url === location.href
+            const is_installed = checkForRelatedApps2();
+            if (is_installed) {
+                // Si ya la tiene instalada
+                document.getElementById('install-popup').remove();
+            }
+            else{
+                var installComponent = document.createElement("pwa-install");
+                installComponent.setAttribute("manifestpath", "manifest.json");
+                installComponent.id = "installComponent";
+                document.getElementById("install-popup").appendChild(installComponent);
+            }
+        } else{
+            document.getElementById('install-popup').remove();
+        }
+    });
+
+    function checkForRelatedApps() {
+        let num_apps = 0;
+        let app_info = [];
+        navigator.getInstalledRelatedApps().then((relatedApps) => {
+            num_apps = relatedApps.length;
+            relatedApps.forEach((app) => {
+                const lines = [];
+                app_info.push({
+                    id: app.id,
+                    platform: app.platform,
+                    url: app.url,
+                });
+            });
+        });
+        return {num_apps, app_info}
+    }
+
+
+    function checkForRelatedApps2() {
+        if (!document.getElementById("installComponent").shadowRoot.querySelector("#openButton")) {
+            return true;
+        }
+
+        return false;
+    }
+    // const ref = document.getElementById("installComponent");
+    // ref.setAttribute()
+    // console.log(ref.getInstalledStatus());
+    // if(ref.getInstalledStatus()){
+    //     document.getElementById("install-pwa").remove();
+    // }
+</script>

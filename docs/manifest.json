@@ -1,0 +1,25 @@
+{
+  "dir": "ltr",
+  "lang": "es",
+  "name": "Beyond Regex [alpha]",
+  "short_name": "Beyond Regex",
+  "scope": "/beyond-regex/",
+  "display": "standalone",
+  "start_url": "index.html",
+  "background_color": "#000000",
+  "theme_color": "transparent",
+  "description": "Es un proyecto sin animo de lucro que busca la creacion de un editor RegEx, capaz de editar y comprender estas expresiones regulares de una forma unica. Visualizando, construyendo y analizando, de forma que se podrá exprimir la máxima capacidad y llegar a la optimización del uso de esta tecnología, la cual posee una busqueda mas avanzada de como se creo en un inicio.",
+  "orientation": "any",
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "https://vquilon.github.io/beyond-regex/assets/beyond-regex_icon.png",
+      "type": "image/png",
+      "sizes": "2000x2000"
+    }
+  ],
+  "url": "https://vquilon.github.io/beyond-regex/",
+  "generated": true,
+  "screenshots": []
+}

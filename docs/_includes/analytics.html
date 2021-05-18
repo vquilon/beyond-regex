@@ -6,6 +6,11 @@
 	function gtag(){dataLayer.push(arguments);}
 	gtag('js', new Date());
 
-	gtag('config', '{{ site.gtag }}');
+	// gtag('config', '{{ site.gtag }}');
+	// Set default value of custom dimension 1 to 'online'
+	gtag('config', 'GA_MEASUREMENT_ID', {
+		'custom_map': {'dimension1': 'online'}
+	});
+
 	</script>
 {% endif %}

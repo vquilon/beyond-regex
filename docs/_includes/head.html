@@ -7,11 +7,14 @@
 <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />
 <link rel="shortcut icon" type="image/png" href="assets/beyond-regex_icon.png">
 
-<!-- <link rel="stylesheet" href="/assets/css/sweetalert2.min.css"> -->
-<!-- <script src="/assets/js/sweetalert2.all.min.js"></script> -->
+<link rel="stylesheet" href="assets/vendor/sweetalert2/sweetalert2.min.css">
+<script src="assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
 
 <!-- Optional: include a polyfill for ES6 Promises for IE11 -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script> -->
+
+<!-- PWA Manifest.json -->
+<link rel="manifest" href="manifest.json"></link>
 
 {% if site.environment == "production" %}
   {% include analytics.html %}
@@ -25,6 +28,8 @@
 <script src="https://kit.fontawesome.com/f0601b0fb2.js" crossorigin="anonymous"></script>
 <script type='module' src='https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js'></script>
 <script nomodule='' src='https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js'></script>
+
+
 
 <!-- FONTS -->
 <link rel="stylesheet" href="assets/styles/fonts.css">

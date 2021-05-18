@@ -36,11 +36,11 @@ url: "https://vquilon.github.io" # the base hostname & protocol for your site, e
 twitter:
   username: VQuilon
   card: >- # this means to ignore newlines until "twitter_username:"
-  Es un proyecto sin animo de lucro que busca la creacion de un editor RegEx,
-  capaz de editar y comprender estas expresiones regulares de una forma unica.
-  Visualizando, construyendo y analizando, de forma que se podrá exprimir la
-  máxima capacidad y llegar a la optimización del uso de esta tecnología,
-  la cual posee una busqueda mas avanzada de como se creo en un inicio.
+    Es un proyecto sin animo de lucro que busca la creacion de un editor RegEx,
+    capaz de editar y comprender estas expresiones regulares de una forma unica.
+    Visualizando, construyendo y analizando, de forma que se podrá exprimir la
+    máxima capacidad y llegar a la optimización del uso de esta tecnología,
+    la cual posee una busqueda mas avanzada de como se creo en un inicio.
 twitter_username: VQuilon
 github_username:  vquilon
 

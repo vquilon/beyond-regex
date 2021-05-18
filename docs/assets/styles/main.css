@@ -14,7 +14,7 @@ body, html * {
 
 #main {
     height: 100%;
-    margin: 50px 20px 0px;
+    margin: 60px 20px 0px;
 }
 
 .version {
@@ -327,6 +327,7 @@ body, html * {
     -ms-user-select: none;
     user-select: none;
     min-height: 100px;
+    max-height: 500px;
 }
 
 #graphCt svg {
