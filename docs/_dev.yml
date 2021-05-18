@@ -19,11 +19,12 @@
 # in the templates via {{ site.myvariable }}.
 
 title: Beyond Regex (Dev Mode)
+name: Beyond Regex [dev]
 author: Victor Quilon Ranera
 email: v.quilonr@gmail.com
 image: /assets/beyond-regex_icon.png
 description: >- # this means to ignore newlines until "baseurl:"
-  &summary Es un proyecto sin animo de lucro que busca la creacion de un editor RegEx,
+  Es un proyecto sin animo de lucro que busca la creacion de un editor RegEx,
   capaz de editar y comprender estas expresiones regulares de una forma unica.
   Visualizando, construyendo y analizando, de forma que se podrá exprimir la
   máxima capacidad y llegar a la optimización del uso de esta tecnología,
@@ -31,13 +32,28 @@ description: >- # this means to ignore newlines until "baseurl:"
 baseurl: "/beyond-regex" # the subpath of your site, e.g. /blog
 url: "https://vquilon.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
-twitter_username: VQuilon
-github_username:  vquilon
-
 # SEO Settings
 twitter:
   username: VQuilon
-  card: *summary
+  card: >- # this means to ignore newlines until "twitter_username:"
+  Es un proyecto sin animo de lucro que busca la creacion de un editor RegEx,
+  capaz de editar y comprender estas expresiones regulares de una forma unica.
+  Visualizando, construyendo y analizando, de forma que se podrá exprimir la
+  máxima capacidad y llegar a la optimización del uso de esta tecnología,
+  la cual posee una busqueda mas avanzada de como se creo en un inicio.
+twitter_username: VQuilon
+github_username:  vquilon
+
+
+# # Feed
+# feed:
+#   categories:
+#     - regex
+#     - visualizer
+#     - debug
+#     - coding
+#     - python
+#     - javascript
 
 # Build settings
 theme: minima
