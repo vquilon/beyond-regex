@@ -17,6 +17,12 @@ body, html * {
     margin: 50px 20px 0px;
 }
 
+.version {
+    font-size: 34px;
+    text-shadow: none;
+    font-style: normal;
+}
+
 .code, .code * {
     font-family: "VictorMono", monospace;
 }

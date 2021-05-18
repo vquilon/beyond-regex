@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Beyond Regex
+title: Beyond Regex - alpha
 email: v.quilonr@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Es un proyecto sin animo de lucro que busca la creacion de un editor RegEx,
