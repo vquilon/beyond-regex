@@ -21,7 +21,8 @@ body, html * {
     font-size: 25px;
     text-shadow: none;
     font-style: normal;
-    background: #c81aff;
+    color:white;
+    background: #bc55dd;
     font-weight: 500;
     -webkit-text-stroke-width: 0px;
     padding: 0px 10px;
@@ -39,7 +40,7 @@ h1 {
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: #202020;
     font-size: 80px;
-    color: #e2e2e2;
+    color: white;
     line-height: 1;
     text-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
     min-height: 60px;
@@ -50,7 +51,7 @@ h1 em {
     text-shadow: 0 0 10px #e9cff6, 0 0 5px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
     color: white;
     font-family: "VictorMono Oblique", monospace;
-    font-size: medium;
+    font-size: 20px;
     /* padding-left: 2em; */
     font-style: normal;
     font-weight: 500;
