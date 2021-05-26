@@ -78,6 +78,7 @@ body, html * {
 }
 
 #inputCt div.re {
+    width: 100%;
     grid-row: 1/2;
     font-size: 24px;
     background: #e2e2e2;
@@ -141,6 +142,7 @@ body, html * {
 }
 
 #inputCt #actionButtons {
+    width: 100%;
     display: flex;
     grid-column-gap: 10px;
     margin: 20px 10px;
@@ -314,26 +316,6 @@ body, html * {
     text-shadow: 0 0 10px white, 0 0 2px #c81aff, 0 0 10px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
 }
 
-#graphCt {
-    padding: 4px;
-    border: 1px solid black;
-    background: #e2e2e2;
-    overflow: auto;
-    cursor: move;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    min-height: 100px;
-    max-height: 500px;
-}
-
-#graphCt svg {
-    display: block;
-    margin: 0 auto;
-}
 
 footer div.normal {
     text-align: center;
@@ -408,11 +390,12 @@ body.embed #graphCt {
 #graphCt, #errorBox {
     border: solid 1px black;
     box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     font-variant-ligatures: none;
 }
 
 #errorBox {
+    width: 100%;
     background: linear-gradient(145deg, #3b3b3b, #242424);
     text-shadow: 0 0 10px #f6cfd9, 0 0 5px #f82161, 0 0 10px #f82161, 0 0 20px #f82161;
     font-size: 18px;

@@ -1,8 +1,10 @@
 window.onload = function () {
-    // import { parse, visualize } from  "./paint_regex";
-    // var { parse, visualize } = require('./paint_regex');
+    var paper = new Raphael('graphCtView', 10, 10);
+    paper.canvas.id = 'graphCtSVG';
+    // TODO: Dibujar un boton que sea el de visualizar para dar por entendido que hay
+    // que pulsarlo si se quiere ver algo	
+    var svg_graph_controler, svg_thumb_controler;
 
-    var paper = new Raphael('graphCt', 10, 10);
     var input = document.getElementById('input');
     var inputCt = document.getElementById('inputCt');
     // var visualBtn = document.getElementById('visualIt');
@@ -21,7 +23,7 @@ window.onload = function () {
     // SET DE FUNCIONES AUXILIARES
     var showExportImage = function () {
         var ratio = window.devicePixelRatio || 1;
-        svg = graphCt.getElementsByTagName('svg')[0];
+        svg = paper.getElementsByTagName('svg')[0];
         var w = svg.clientWidth || parseInt(getComputedStyle(svg).width);
         var h = svg.clientHeight || parseInt(getComputedStyle(svg).height);
         var img = new Image;
@@ -40,7 +42,7 @@ window.onload = function () {
         ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
         img.onload = function () {
             ctx.drawImage(img, 0, 0);
-            graphCt.style.display = 'none';
+            paper.style.display = 'none';
             document.body.appendChild(canvas);
         }
             ;
@@ -49,43 +51,43 @@ window.onload = function () {
         var svgAsXML = (new XMLSerializer).serializeToString(svg);
         return "data:image/svg+xml," + encodeURIComponent(svgAsXML);
     }
-    var dragGraph = function (g) {
-        g.addEventListener('mousedown', startMove);
+    // var dragGraphListeners = function (g) {
+    //     g.addEventListener('mousedown', startMove);
 
-        function startMove(e) {
-            clearSelect();
-            var x = e.clientX
-                , y = e.clientY;
-            g.addEventListener('mousemove', onMove);
+    //     function startMove(e) {
+    //         clearSelect();
+    //         var x = e.clientX
+    //             , y = e.clientY;
+    //         g.addEventListener('mousemove', onMove);
 
-            document.addEventListener('mouseup', unbind, true);
-            window.addEventListener('mouseup', unbind, true);
-            function unbind(e) {
-                g.removeEventListener('mousemove', onMove);
-                document.removeEventListener('mouseup', unbind, true);
-                window.removeEventListener('mouseup', unbind, true);
-            }
+    //         document.addEventListener('mouseup', unbind, true);
+    //         window.addEventListener('mouseup', unbind, true);
+    //         function unbind(e) {
+    //             g.removeEventListener('mousemove', onMove);
+    //             document.removeEventListener('mouseup', unbind, true);
+    //             window.removeEventListener('mouseup', unbind, true);
+    //         }
 
-            function onMove(e) {
-                var dx = x - e.clientX
-                    , dy = y - e.clientY;
-                if (dx > 0 && g.scrollWidth - g.scrollLeft - g.clientWidth < 2 || dx < 0 && g.scrollLeft < 1) {
-                    document.documentElement.scrollLeft += dx;
-                    document.body.scrollLeft += dx;
-                } else {
-                    g.scrollLeft += dx;
-                }
-                if (dy > 0 && g.scrollHeight - g.scrollTop - g.clientHeight < 2 || dy < 0 && g.scrollTop < 1) {
-                    document.documentElement.scrollTop += dy;
-                    document.body.scrollTop += dy;
-                } else {
-                    g.scrollTop += dy;
-                }
-                x = e.clientX;
-                y = e.clientY;
-            }
-        }
-    }
+    //         function onMove(e) {
+    //             var dx = x - e.clientX
+    //                 , dy = y - e.clientY;
+    //             if (dx > 0 && g.scrollWidth - g.scrollLeft - g.clientWidth < 2 || dx < 0 && g.scrollLeft < 1) {
+    //                 document.documentElement.scrollLeft += dx;
+    //                 document.body.scrollLeft += dx;
+    //             } else {
+    //                 g.scrollLeft += dx;
+    //             }
+    //             if (dy > 0 && g.scrollHeight - g.scrollTop - g.clientHeight < 2 || dy < 0 && g.scrollTop < 1) {
+    //                 document.documentElement.scrollTop += dy;
+    //                 document.body.scrollTop += dy;
+    //             } else {
+    //                 g.scrollTop += dy;
+    //             }
+    //             x = e.clientX;
+    //             y = e.clientY;
+    //         }
+    //     }
+    // }
     var getInnerText = function (ele) {
         if (!ele)
             return '';
@@ -107,20 +109,20 @@ window.onload = function () {
         ele.appendChild(t);
         return s;
     }
-    var clearSelect = function () {
-        if (window.getSelection) {
-            if (window.getSelection().empty) {
-                // Chrome
-                window.getSelection().empty();
-            } else if (window.getSelection().removeAllRanges) {
-                // Firefox
-                window.getSelection().removeAllRanges();
-            }
-        } else if (document.selection) {
-            // IE
-            document.selection.empty();
-        }
-    }
+    // var clearSelect = function () {
+    //     if (window.getSelection) {
+    //         if (window.getSelection().empty) {
+    //             // Chrome
+    //             window.getSelection().empty();
+    //         } else if (window.getSelection().removeAllRanges) {
+    //             // Firefox
+    //             window.getSelection().removeAllRanges();
+    //         }
+    //     } else if (document.selection) {
+    //         // IE
+    //         document.selection.empty();
+    //     }
+    // }
     var hideError = function () {
         errorBox.style.display = 'none';
     }
@@ -232,21 +234,39 @@ window.onload = function () {
     function initMainEventsListener() {
         // inputRegex.addEventListener('change', parseEvent);
         var parseVisualizeEvent = function (event) {
+            // Se destruye el controlador svg
+            if (svg_graph_controler) {
+                svg_graph_controler.destroy();
+                delete svg_graph_controler;
+            }
+            if (svg_graph_controler) {
+                svg_thumb_controler.destroy();
+                delete svg_thumb_controler;
+            }
+            
+            // TODO Ojo con los listeners
+            document.querySelector(".control-panel").remove();
+
             _parseVisualizeRegex();
             // groupRaphItems();
+
+            // Una vez que se pinta actualizar el plugin de visualizador SVG
+            var [svg_graph_controler, svg_thumb_controler] = ThumbnailSVGControl({
+                mainViewId: 'graphCtView',
+                mainSVGId: 'graphCtSVG',
+                // Dejamos que lo autogenere con el id
+                thumbContainerId: 'thumbViewContainer',
+            });
+
         };
         // parseBtn.addEventListener("click", parseEvent);
         visualBtn.addEventListener("click", parseVisualizeEvent);
+
+        // dragGraphListeners(document.getElementById('graphCt'));
+
     }
+
     initMainEventsListener();
-    dragGraph(document.getElementById('graphCt'));
-
-
-
-
-
-
-
 
 
     // PARAMETROS GLOBALES DE JEX
@@ -324,6 +344,18 @@ window.onload = function () {
         return;
     } else {
         initEventsListener();
-        dragGraph(document.getElementById('graphCt'));
     }
+
+
+
+    // Una vez todo cargado y configurado, parseamos la de ejemplo
+    _parseVisualizeRegex();
+
+    // Se inicializa el objeto del plugin ThumbnailSVGControl
+    [svg_graph_controler, svg_thumb_controler] = ThumbnailSVGControl({
+        mainViewId: 'graphCtView',
+        mainSVGId: 'graphCtSVG',
+        // Dejamos que lo autogenere con el id
+        thumbContainerId: 'thumbViewContainer',
+    });
 };

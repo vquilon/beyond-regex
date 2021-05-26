@@ -7,6 +7,8 @@
 
   <link rel="stylesheet" href="assets/styles/pwa.css">
 
+  {% include styles-thumbnail-svg-control.html %}
+
   {% seo %}
 </head>
 
@@ -15,7 +17,7 @@
   {% include register_pwa.html %}
 
  
-
+  {% include svg-filters.html %}
   <div id="main">
     {{ content }}
   </div>
@@ -23,6 +25,7 @@
   {% include footer.html %}
 
   {% include scripts.html %}
+  {% include scripts-thumbnail-svg-control.html %}
 
 </body>
 
