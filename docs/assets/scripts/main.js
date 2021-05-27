@@ -3,7 +3,7 @@ window.onload = function () {
     paper.canvas.id = 'graphCtSVG';
     // TODO: Dibujar un boton que sea el de visualizar para dar por entendido que hay
     // que pulsarlo si se quiere ver algo	
-    var svg_graph_controler, svg_thumb_controler;
+    var svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl;
 
     var input = document.getElementById('input');
     var inputCt = document.getElementById('inputCt');
@@ -225,8 +225,26 @@ window.onload = function () {
         var regExpresion = inputRegex.value;
         var regEXSON = _parseRegex(regExpresion);
         if (regEXSON) {
+            // Se destruye el controlador svg
+            if (svg_graph_controller && svg_thumb_controller && destroyAllHandler_ThumbnailSVGControl) {
+                destroyAllHandler_ThumbnailSVGControl();
+                destroyAllHandler_ThumbnailSVGControl = undefined;
+            }
+
             visualize(regEXSON, getFlags(), paper);
+
+            // Una vez que se pinta actualizar el plugin de visualizador SVG
+            [svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl] = ThumbnailSVGControl({
+                mainViewId: 'graphCtView',
+                mainSVGId: 'graphCtSVG',
+                // Dejamos que lo autogenere con el id
+                thumbContainerId: 'thumbViewContainer',
+            });
+
             return true;
+        }
+        else {
+            return false;
         }
     };
 
@@ -234,30 +252,14 @@ window.onload = function () {
     function initMainEventsListener() {
         // inputRegex.addEventListener('change', parseEvent);
         var parseVisualizeEvent = function (event) {
-            // Se destruye el controlador svg
-            if (svg_graph_controler) {
-                svg_graph_controler.destroy();
-                delete svg_graph_controler;
+            if (!event.detail || event.detail == 1) {
+                this.disabled = true;
+
+                _parseVisualizeRegex();
+                // groupRaphItems();
+
+                this.disabled = false;
             }
-            if (svg_graph_controler) {
-                svg_thumb_controler.destroy();
-                delete svg_thumb_controler;
-            }
-            
-            // TODO Ojo con los listeners
-            document.querySelector(".control-panel").remove();
-
-            _parseVisualizeRegex();
-            // groupRaphItems();
-
-            // Una vez que se pinta actualizar el plugin de visualizador SVG
-            var [svg_graph_controler, svg_thumb_controler] = ThumbnailSVGControl({
-                mainViewId: 'graphCtView',
-                mainSVGId: 'graphCtSVG',
-                // Dejamos que lo autogenere con el id
-                thumbContainerId: 'thumbViewContainer',
-            });
-
         };
         // parseBtn.addEventListener("click", parseEvent);
         visualBtn.addEventListener("click", parseVisualizeEvent);
@@ -347,15 +349,6 @@ window.onload = function () {
     }
 
 
-
     // Una vez todo cargado y configurado, parseamos la de ejemplo
     _parseVisualizeRegex();
-
-    // Se inicializa el objeto del plugin ThumbnailSVGControl
-    [svg_graph_controler, svg_thumb_controler] = ThumbnailSVGControl({
-        mainViewId: 'graphCtView',
-        mainSVGId: 'graphCtSVG',
-        // Dejamos que lo autogenere con el id
-        thumbContainerId: 'thumbViewContainer',
-    });
 };

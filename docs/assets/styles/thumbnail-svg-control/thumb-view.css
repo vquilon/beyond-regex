@@ -14,6 +14,8 @@
 }
 
 #thumbViewContainer {
+	pointer-events: all;
+
 	/* 	Para arreglar que los divs tengan separacion */
 	font-size: 0px;
 	position: relative;
