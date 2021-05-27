@@ -3,7 +3,7 @@
 //  importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js');
 
-const SW_VERSION = '0.0.1alpha';
+const SW_VERSION = '0.0.alpha';
 const CACHE = `pwa-beyond_regex-v${SW_VERSION}`;
 // const urlsToCache = [
 
@@ -119,6 +119,9 @@ workbox.routing.registerRoute(
 // });
 // With time consumed offline mode
 workbox.googleAnalytics.initialize({
+  parameterOverrides: {
+    cd1: 'offline',
+  },
   hitFilter: (params) => {
     const queueTimeInSeconds = Math.round(params.get('qt') / 1000);
     params.set('cm1', queueTimeInSeconds);
