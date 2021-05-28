@@ -24,17 +24,19 @@
 	/* 	margin: 0px; */
 	height: 100%;
 	width: 20%;
-	border: 2px solid black;
-	box-shadow: 6px 6px 12px #00000063, -6px -6px 12px #00000063;
+	/* border: 2px solid black; */
+	/* box-shadow: 6px 6px 12px #00000063, -6px -6px 12px #00000063; */
 	
 	transition: all 0.2s linear;
 
 	padding: 10px;
-    border: unset;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
     /* background: radial-gradient(circle at 50% 50%, #e2e2e2a8 70%, #e2e2e236); */
     border-radius: 10px;
+
+	box-shadow: 0 8px 32px 0 rgb(31 38 135 / 37%);
+    backdrop-filter: blur( 10.0px );
+    -webkit-backdrop-filter: blur( 10.0px );
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
 .thumbViewClass {
 	position: relative;
@@ -77,8 +79,9 @@
 
 #scope {
 	fill: none !important;
-	stroke: black !important;
-    stroke-opacity: 0.4 !important;
+	stroke: white !important;
+    stroke-opacity: 0.5 !important;
+    stroke-width: 1px !important;
 }
 
 #scopeContainer {

@@ -392,7 +392,7 @@ body.embed #graphCt {
 #graphCt, #errorBox {
     border: solid 1px black;
     box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
-    /* border-radius: 10px; */
+    border-radius: 10px;
     font-variant-ligatures: none;
 }
 
