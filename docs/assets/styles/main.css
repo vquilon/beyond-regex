@@ -2,6 +2,7 @@ html {
     background: linear-gradient(145deg, #3b3b3b, #242424);
     min-height: 100vh;
 }
+
 body, html * {
     margin: 0;
     padding: 0;
@@ -19,16 +20,18 @@ body, html * {
 
 .version {
     font-size: 25px;
-    text-shadow: none;
     font-style: normal;
-    color:white;
-    background: #bc55dd;
+    text-shadow: 0 0 10px #e9cff6, 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+    color: white;
+    background: linear-gradient(145deg, #d88bf1, #8817ad);
+    box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
     font-weight: 500;
     -webkit-text-stroke-width: 0px;
+    border: 2px #c05ee0 solid;
     padding: 0px 10px;
     border-radius: 20px;
+    margin-left: 10px;
 }
-
 
 .code, .code * {
     font-family: "VictorMono", monospace;
@@ -51,10 +54,10 @@ body, html * {
     -webkit-text-stroke-width: 0px;
     text-shadow: 0 0 10px #e9cff6, 0 0 5px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
     color: white;
-    font-family: "VictorMono Oblique", monospace;
+    font-family: "VictorMono", monospace;
     font-size: 20px;
     /* padding-left: 2em; */
-    font-style: normal;
+    font-style: italic;
     font-weight: 500;
     display: inline-block;
 }
@@ -152,7 +155,6 @@ body, html * {
     flex-wrap: wrap;
     align-items: center;
 }
-
 
 :root {
     --primary-light: #8abdff;
@@ -260,6 +262,7 @@ body, html * {
     align-items: center;
     justify-content: center;
 }
+
 .checkbox input {
     display: none;
 }
@@ -315,7 +318,6 @@ body, html * {
     color: white;
     text-shadow: 0 0 10px white, 0 0 2px #c81aff, 0 0 10px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
 }
-
 
 footer div.normal {
     text-align: center;
@@ -413,11 +415,14 @@ body.embed #graphCt {
     font-family: "VictorMono", monospace;
 }
 
+/* ==================== */
+
+/* LANGUAGE SELECTOR */
 
 /* ==================== */
-/* LANGUAGE SELECTOR */
-/* ==================== */
+
 /* Reset Select */
+
 select {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -428,12 +433,15 @@ select {
     border: 0 !important;
     background-image: none;
 }
+
 /* Remove IE arrow */
+
 select::-ms-expand {
     display: none;
 }
 
 /* Custom dropdown */
+
 .custom-dropdown {
     margin: 10px;
     margin-left: 0;
@@ -462,8 +470,8 @@ select::-ms-expand {
     border: 0 !important;
     background: linear-gradient(145deg, #3b3b3b, #242424);
     background-image: none;
-    text-overflow: '';  /* hide default arrow in chrome OSX */
-    
+    text-overflow: '';
+    /* hide default arrow in chrome OSX */
     font-size: medium;
     flex: 1;
     padding: 0 20px;
@@ -471,16 +479,18 @@ select::-ms-expand {
     cursor: pointer;
 }
 
-.custom-dropdown select option{
+.custom-dropdown select option {
     background: #3b3b3b;
 }
 
-.custom-dropdown select option:hover{
+.custom-dropdown select option:hover {
     background: black !important;
 }
-select:focus > option:checked { 
+
+select:focus>option:checked {
     background: #000 !important;
 }
+
 /* .custom-dropdown select {
     background-color: #353535;
     color: #fff;
@@ -496,6 +506,7 @@ select:focus > option:checked {
 } */
 
 /* Arrow */
+
 .custom-dropdown::after {
     content: '\25BC';
     position: absolute;
@@ -509,6 +520,7 @@ select:focus > option:checked {
 }
 
 /* Transition */
+
 .custom-dropdown:hover::after {
     color: white;
     text-shadow: 0 0 10px #e9cff6, 0 0 5px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
@@ -594,7 +606,6 @@ select:focus > option:checked {
     align-content: flex-start;
     flex-wrap: wrap;
 }
-
 
 .social-icons {
     display: flex;

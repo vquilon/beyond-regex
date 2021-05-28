@@ -1,7 +1,7 @@
 #thumbSVG {
 	height: 100%;
 	width: 100%;
-	background: #f2f2f2;
+	/* background: #e2e2e2; */
 }
 
 #thumbSVG .svg-pan-zoom_viewport{
@@ -10,7 +10,7 @@
 
 #thumbViewContainer:hover {
     width: 40%;
-	 height: 140%;
+	height: 140%;
 }
 
 #thumbViewContainer {
@@ -28,6 +28,13 @@
 	box-shadow: 6px 6px 12px #00000063, -6px -6px 12px #00000063;
 	
 	transition: all 0.2s linear;
+
+	padding: 10px;
+    border: unset;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    /* background: radial-gradient(circle at 50% 50%, #e2e2e2a8 70%, #e2e2e236); */
+    border-radius: 10px;
 }
 .thumbViewClass {
 	position: relative;
@@ -38,8 +45,10 @@
 
 #thumbView {
 	z-index: 110;
-	background: white;
+	/* background: white; */
 	top: -200%;
+
+	border-radius: 10px;
 }
 
 #masked {
@@ -48,6 +57,8 @@
 	height: 100%;
 	z-index: 130;
 	pointer-events: none;
+
+	border-radius: 10px;
 }
 
 /* slightly transparent fallback */
@@ -66,9 +77,13 @@
 
 #scope {
 	fill: none !important;
+	stroke: black !important;
+    stroke-opacity: 0.4 !important;
 }
 
 #scopeContainer {
 	z-index: 120;
 	top: -100%;
+
+	border-radius: 10px;
 }

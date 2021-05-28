@@ -263,6 +263,7 @@ var ThumbnailSVGControl = function (options) {
             // let dirZoom = ((_newZoom - _oldZoom) / Math.abs(_newZoom - _oldZoom));
             // if (dirZoom * (actualZoom - _newZoom) < 0) {
             if (time < animationTime) {
+                // TODO: UTILIZAR SIEMPRE EL zoomBy
                 $svg_inst.zoom(actualZoom);
             } else {
                 // Cancel interval
