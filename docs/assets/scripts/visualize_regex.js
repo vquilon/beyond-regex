@@ -1230,7 +1230,7 @@ function visualize(regexson_tree, regex_flags, canvas_Raphael_paper) {
                 dot_item
         },
         backref: function (regexJSONInfo, offset_x, offset_y) {
-            var backref_item = createExactCharItem(regexJSONInfom, "Backref #" + regexJSONInfo.num, offset_x, offset_y, "navy", "white");
+            var backref_item = createExactCharItem(regexJSONInfo, "Backref #" + regexJSONInfo.num, offset_x, offset_y, "navy", "white");
             return backref_item.rect.r = 8,
                 backref_item
         },
