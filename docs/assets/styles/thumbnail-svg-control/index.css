@@ -1,7 +1,7 @@
 #graphCt {
     padding: 4px;
     /* border: 1px solid black; */
-    background: #e2e2e2;
+    /* background: #e2e2e2; */
     /* overflow: auto; */
     cursor: move;
     -webkit-touch-callout: none;
@@ -28,6 +28,7 @@
     border: 1px solid black;
     /* margin: 10px; */
     overflow: hidden;
+    border-radius: unset !important;
 }
 
 #graphCtView {
@@ -35,6 +36,9 @@
     height: 100%;
     min-height: 100%;
     /* display: inline; */
+    overflow: hidden;
+    background: #e2e2e2;
+    border-radius: 10px;
 }
 
 #graphCtSVG {
