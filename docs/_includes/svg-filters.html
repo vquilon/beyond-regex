@@ -39,6 +39,55 @@
     </radialGradient>
 
     <defs>
+        <!-- <filter id="distortion">
+            <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="turbulence"></feTurbulence>
+        <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="20" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+        </filter>
+
+        <filter id="transparent">
+    
+            
+            <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="dark_edge_01"></feMorphology>
+            <feOffset dx="5" dy="5" in="dark_edge_01" result="dark_edge_03"></feOffset>
+            <feFlood flood-color="rgba(0,0,0,.5)" result="dark_edge_04"></feFlood>
+            <feComposite in="dark_edge_04" in2="dark_edge_03" operator="in" result="dark_edge"></feComposite>
+            
+            
+            
+            
+            <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="light_edge_01"></feMorphology>
+            <feOffset dx="-2" dy="-2" in="light_edge_01" result="light_edge_03"></feOffset>
+            <feFlood flood-color="rgba(255,255,255,.5)" result="light_edge_04"></feFlood>
+            <feComposite in="light_edge_04" in2="light_edge_03" operator="in" result="light_edge"></feComposite>
+            
+            
+            
+            
+            <feMerge result="edges">
+               <feMergeNode in="dark_edge"></feMergeNode>
+               <feMergeNode in="light_edge"></feMergeNode>
+            </feMerge>
+            <feComposite in="edges" in2="SourceGraphic" operator="out" result="edges_complete"></feComposite>
+            
+            
+            
+           
+            <feGaussianBlur stdDeviation="5" result="bevel_blur"></feGaussianBlur>
+            <feSpecularLighting result="bevel_lighting" in="bevel_blur" specularConstant="2.4" specularExponent="13" lighting-color="rgba(60,60,60,.4)">
+              <feDistantLight azimuth="25" elevation="40"></feDistantLight>
+            </feSpecularLighting>
+            <feComposite in="bevel_lighting" in2="SourceGraphic" operator="in" result="bevel_complete"></feComposite>
+            
+            
+            
+           
+            <feMerge result="complete">
+               <feMergeNode in="edges_complete"></feMergeNode>
+               <feMergeNode in="bevel_complete"></feMergeNode>
+            </feMerge>
+        
+          </filter> -->
+
         <filter id="dropshadow">
             <feGaussianBlur in="SourceAlpha" stdDeviation="7"></feGaussianBlur>
             <feOffset dx="20" dy="20" result="offsetblur"></feOffset>

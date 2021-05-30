@@ -124,6 +124,10 @@
 	fill: url(#gradient-hover) !important;
 }
 
+/* .icon svg.lens g.main g path {
+	filter: url(#transparent);
+} */
+
 .icon .lens g.gradient{
 	transform: none;
 /* 	transform-origin: center; */

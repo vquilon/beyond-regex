@@ -864,11 +864,20 @@ var ThumbnailSVGControl = function (options) {
             $svg_icon.classList.add("lens");
             $svg_icon.setAttributeNS(null, 'viewBox', '0 0 550 550');
             $g_main.classList.add("main");
-            let $g_shineLight = document.createElementNS(svgns, 'g');
-            let $g_shineDark = document.createElementNS(svgns, 'g');
+
+            let $g_circle = document.createElementNS(svgns, 'circle');
+            let $g_clipPath = document.createElementNS(svgns, 'clipPath');
+            // let $g_shineLight = document.createElementNS(svgns, 'g');
+            // let $g_shineDark = document.createElementNS(svgns, 'g');
             let $g_gradient = document.createElementNS(svgns, 'g');
-            $g_shineLight.classList.add("shine-accent-light");
-            $g_shineDark.classList.add("shine-accent-dark");
+
+            $g_circle.setAttributeNS(null, 'r', '100%');
+            $g_circle.setAttributeNS(null, 'cx', '50%');
+            $g_circle.setAttributeNS(null, 'cy', '50%');
+            $g_circle.setAttributeNS(null, 'style', `clip-path: url(#clip-${icon_id});opacity: 0.2;fill: rgb(255 255 255);backdrop-filter: blur(10px);`);
+            $g_clipPath.id = `clip-${icon_id}`;
+            // $g_shineLight.classList.add("shine-accent-light");
+            // $g_shineDark.classList.add("shine-accent-dark");
             $g_gradient.classList.add("gradient");
 
             // Zoom Icon
@@ -878,11 +887,14 @@ var ThumbnailSVGControl = function (options) {
             let $path_icon = document.createElementNS(svgns, 'path');
             $path_icon.setAttributeNS(null, 'd', _path);
 
-            $g_shineLight.appendChild($path_icon);
-            $g_shineDark.appendChild($path_icon);
+            
+
+            // $g_shineLight.appendChild($path_icon);
+            // $g_shineDark.appendChild($path_icon);
             $g_gradient.appendChild($path_icon);
-            $g_main.appendChild($g_shineLight);
-            $g_main.appendChild($g_shineDark);
+            // $g_main.appendChild($g_shineLight);
+            // $g_main.appendChild($g_shineDark);
+            $g_main.appendChild($g_clipPath);
             $g_main.appendChild($g_gradient);
 
             $svg_icon.appendChild($g_main);
