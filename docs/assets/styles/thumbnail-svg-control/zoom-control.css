@@ -129,12 +129,13 @@
 } */
 
 .icon .lens g.gradient{
+	filter: url(#transparent);
 	transform: none;
 /* 	transform-origin: center; */
 }
 
 .icon .lens g.main{
-	transform: scale(0.55);
+	/* transform: scale(0.55); */
     filter: url(#dropshadow);
-    transform-origin: center;
+    /* transform-origin: center; */
 }

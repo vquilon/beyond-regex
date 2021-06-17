@@ -1,13 +1,15 @@
 <svg class="filter" xmlns="http://www.w3.org/2000/svg">
     <radialGradient id="gradient" cx="40%" cy="40%" r="90%" fx="10%" fy="20%">
-        <stop offset="0%" stop-color="#fff7e5" style="color: #ffffff;"></stop><stop offset="20%" stop-color="#e6e6e6" style="color: #e6e6e6;"></stop>
+        <stop offset="0%" stop-color="#fff7e5" style="color: #ffffff;"></stop>
+        <stop offset="20%" stop-color="#e6e6e6" style="color: #e6e6e6;"></stop>
         <stop offset="50%" stop-color="#adadad" style="color: #adadad;"></stop>
         <stop offset="70%" stop-color="#ababab" style="color: #ababab;"></stop>
         <stop offset="90%" stop-color="#7d7d7d" style="color: #7d7d7d;"></stop>
     </radialGradient>
 
     <radialGradient id="gradient-hover" cx="40%" cy="40%" r="90%" fx="10%" fy="20%">
-        <stop offset="0%" stop-color="#fff7e5" style="color: #ffffff;"></stop><stop offset="20%" stop-color="#FFEFCB" style="color: #FFEFCB;"></stop>
+        <stop offset="0%" stop-color="#fff7e5" style="color: #ffffff;"></stop>
+        <stop offset="20%" stop-color="#FFEFCB" style="color: #FFEFCB;"></stop>
         <stop offset="50%" stop-color="#F0846A" style="color: #F0846A;"></stop>
         <stop offset="70%" stop-color="#FF5699" style="color: #FF5699;"></stop>
         <stop offset="90%" stop-color="#C5363F" style="color: #C5363F;"></stop>
@@ -39,54 +41,56 @@
     </radialGradient>
 
     <defs>
-        <!-- <filter id="distortion">
+        <filter id="distortion">
             <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="turbulence"></feTurbulence>
-        <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="20" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+            <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="20" xChannelSelector="R" yChannelSelector="G">
+            </feDisplacementMap>
         </filter>
 
         <filter id="transparent">
-    
-            
+
+
             <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="dark_edge_01"></feMorphology>
             <feOffset dx="5" dy="5" in="dark_edge_01" result="dark_edge_03"></feOffset>
             <feFlood flood-color="rgba(0,0,0,.5)" result="dark_edge_04"></feFlood>
             <feComposite in="dark_edge_04" in2="dark_edge_03" operator="in" result="dark_edge"></feComposite>
-            
-            
-            
-            
+
+
+
+
             <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="light_edge_01"></feMorphology>
             <feOffset dx="-2" dy="-2" in="light_edge_01" result="light_edge_03"></feOffset>
             <feFlood flood-color="rgba(255,255,255,.5)" result="light_edge_04"></feFlood>
             <feComposite in="light_edge_04" in2="light_edge_03" operator="in" result="light_edge"></feComposite>
-            
-            
-            
-            
+
+
+
+
             <feMerge result="edges">
-               <feMergeNode in="dark_edge"></feMergeNode>
-               <feMergeNode in="light_edge"></feMergeNode>
+                <feMergeNode in="dark_edge"></feMergeNode>
+                <feMergeNode in="light_edge"></feMergeNode>
             </feMerge>
             <feComposite in="edges" in2="SourceGraphic" operator="out" result="edges_complete"></feComposite>
-            
-            
-            
-           
+
+
+
+
             <feGaussianBlur stdDeviation="5" result="bevel_blur"></feGaussianBlur>
-            <feSpecularLighting result="bevel_lighting" in="bevel_blur" specularConstant="2.4" specularExponent="13" lighting-color="rgba(60,60,60,.4)">
-              <feDistantLight azimuth="25" elevation="40"></feDistantLight>
+            <feSpecularLighting result="bevel_lighting" in="bevel_blur" specularConstant="2.4" specularExponent="13"
+                lighting-color="rgba(60,60,60,.4)">
+                <feDistantLight azimuth="25" elevation="40"></feDistantLight>
             </feSpecularLighting>
             <feComposite in="bevel_lighting" in2="SourceGraphic" operator="in" result="bevel_complete"></feComposite>
-            
-            
-            
-           
+
+
+
+
             <feMerge result="complete">
-               <feMergeNode in="edges_complete"></feMergeNode>
-               <feMergeNode in="bevel_complete"></feMergeNode>
+                <feMergeNode in="edges_complete"></feMergeNode>
+                <feMergeNode in="bevel_complete"></feMergeNode>
             </feMerge>
-        
-          </filter> -->
+
+        </filter>
 
         <filter id="dropshadow">
             <feGaussianBlur in="SourceAlpha" stdDeviation="7"></feGaussianBlur>
@@ -103,17 +107,20 @@
         </filter>
 
         <filter id="blur_clip">
-            <feColorMatrix in="SourceGraphic" result="LIGHTENED" type="matrix" values="3.3 0 0 0 0,
+            <feColorMatrix in="SourceGraphic" result="LIGHTENED" type="matrix"
+                values="3.3 0 0 0 0,
                                                                                                                                                                  0 3.3 0 0 0,
                                                                                                                                                                  0 0 3.3 0 0,
-                                                                                                                                                                 0 0 0 1 0"></feColorMatrix>  
-            <feGaussianBlur color-interpolation-filters="sRGB" id="blur_1" stdDeviation="4" result="BLUR" in="LIGHTENED"></feGaussianBlur>   
+                                                                                                                                                                 0 0 0 1 0">
+            </feColorMatrix>
+            <feGaussianBlur color-interpolation-filters="sRGB" id="blur_1" stdDeviation="4" result="BLUR"
+                in="LIGHTENED"></feGaussianBlur>
 
             <!-- 					<feImage id="feimage" xlink:href="data:image/svg+xml;charset=utf-8,<svg version=&quot;1.1&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;  width=&quot;100&quot; height=&quot;100&quot;><rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;black&quot;/></svg>" x="80px" y="80px" width="240px" height="240px" result="mask" preserveAspectRatio="none"></feImage> -->
 
             <!-- 					<feComposite in2="mask" in="BLUR" operator="in" result="comp"></feComposite>  -->
             <feMerge result="merge">
-                <feMergeNode in="SourceGraphic"></feMergeNode> 
+                <feMergeNode in="SourceGraphic"></feMergeNode>
                 <!-- 						<feMergeNode in="comp"></feMergeNode> -->
                 <feMergeNode in="BLUR"></feMergeNode>
             </feMerge>

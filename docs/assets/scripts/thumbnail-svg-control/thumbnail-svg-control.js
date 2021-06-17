@@ -473,7 +473,19 @@ var ThumbnailSVGControl = function (options) {
                 ` transparent calc(${bound_scope_box.x}px + ${bound_scope_box.width}px),` +
                 ` white calc(${bound_scope_box.x}px + ${bound_scope_box.width}px)` +
                 `)`;
-
+            
+            let clip_path = `polygon(` +
+            `0% 0%, 0% 100%, ` +
+            `${bound_scope_box.x}px 100%, ` +
+            `${bound_scope_box.x}px ${bound_scope_box.y}px, ` +
+            `calc(${bound_scope_box.x}px + ${bound_scope_box.width}px) ${bound_scope_box.y}px, ` +
+            `calc(${bound_scope_box.x}px + ${bound_scope_box.width}px) calc(${bound_scope_box.y}px + ${bound_scope_box.height}px), ` +
+            `${bound_scope_box.x}px calc(${bound_scope_box.y}px + ${bound_scope_box.height}px), ` +
+            `${bound_scope_box.x}px 100%, ` +
+            `${bound_scope_box.x}px 100%, ` +
+            `100% 100%, 100% 0%)`;
+            
+            $mask_thumb_scope.style.clipPath = clip_path;
             $mask_thumb_scope.style.webkitMask = mask_gradient;
             $mask_thumb_scope.style.mask = mask_gradient;
         }
@@ -862,7 +874,7 @@ var ThumbnailSVGControl = function (options) {
             let $svg_icon = document.createElementNS(svgns, 'svg');
             let $g_main = document.createElementNS(svgns, 'g');
             $svg_icon.classList.add("lens");
-            $svg_icon.setAttributeNS(null, 'viewBox', '0 0 550 550');
+            // $svg_icon.setAttributeNS(null, 'viewBox', '0 0 550 550');
             $g_main.classList.add("main");
 
             let $g_circle = document.createElementNS(svgns, 'circle');
@@ -874,7 +886,7 @@ var ThumbnailSVGControl = function (options) {
             $g_circle.setAttributeNS(null, 'r', '100%');
             $g_circle.setAttributeNS(null, 'cx', '50%');
             $g_circle.setAttributeNS(null, 'cy', '50%');
-            $g_circle.setAttributeNS(null, 'style', `clip-path: url(#clip-${icon_id});opacity: 0.2;fill: rgb(255 255 255);backdrop-filter: blur(10px);`);
+            $g_circle.setAttributeNS(null, 'style', `clip-path: url(#clip-${icon_id});opacity: 0.5;fill: rgb(255 255 255);`);
             $g_clipPath.id = `clip-${icon_id}`;
             // $g_shineLight.classList.add("shine-accent-light");
             // $g_shineDark.classList.add("shine-accent-dark");
@@ -887,16 +899,23 @@ var ThumbnailSVGControl = function (options) {
             let $path_icon = document.createElementNS(svgns, 'path');
             $path_icon.setAttributeNS(null, 'd', _path);
 
+            let $clipPath_icon = document.createElementNS(svgns, 'path');
+            $clipPath_icon.setAttributeNS(null, 'd', _path);
+            $clipPath_icon.style.transform = "translate(-35%, -35%) scale(0.06)";
+            $clipPath_icon.style.transformOrigin = "center";
             
-
             // $g_shineLight.appendChild($path_icon);
             // $g_shineDark.appendChild($path_icon);
+            $g_clipPath.appendChild($clipPath_icon);
             $g_gradient.appendChild($path_icon);
             // $g_main.appendChild($g_shineLight);
             // $g_main.appendChild($g_shineDark);
-            $g_main.appendChild($g_clipPath);
             $g_main.appendChild($g_gradient);
+            $g_main.style.transform = "translate(-35%, -35%) scale(0.06)";
+            $g_main.style.transformOrigin = "center";
 
+            $svg_icon.appendChild($g_circle);
+            $svg_icon.appendChild($g_clipPath);
             $svg_icon.appendChild($g_main);
             $zoom_icon.appendChild($svg_icon);
 
