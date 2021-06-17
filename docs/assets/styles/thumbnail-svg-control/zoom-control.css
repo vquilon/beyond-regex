@@ -51,7 +51,7 @@
 
 	/* background: rgba( 255, 255, 255, 0.30 ); */
     box-shadow: 0 8px 32px 0 rgb(31 38 135 / 37%);
-    backdrop-filter: blur( 10.0px );
+    backdrop-filter: blur( 5.0px );
     -webkit-backdrop-filter: blur( 10.0px );
     border: 1px solid rgba( 255, 255, 255, 0.18 );
 
@@ -81,7 +81,7 @@
 .icon .lens g.shine-accent-dark {
 	transform: translate(4px, 4px);
 }
-
+/* 
 .icon .lens g.shine-accent-dark path{
 	fill: url(#shine-accent-dark) !important;
 }
@@ -122,7 +122,7 @@
 }
 .icon:hover .lens g.gradient path{
 	fill: url(#gradient-hover) !important;
-}
+} */
 
 /* .icon svg.lens g.main g path {
 	filter: url(#transparent);

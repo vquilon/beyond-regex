@@ -877,16 +877,38 @@ var ThumbnailSVGControl = function (options) {
             // $svg_icon.setAttributeNS(null, 'viewBox', '0 0 550 550');
             $g_main.classList.add("main");
 
+
+            // Circles drop backdrop effect
+            // <mask id="mask-content">
+            //      Esto es lo que se quiere que se vea por fuera del cuadro que difumina
+            //     <use xlink:href="#back-content" fill="white"></use>
+            //      Aqui se quita el contenido, equivalente al clip-path, es lo que se difumina
+            //     <use xlink:href="#front-content" fill="black"></use>
+            // </mask>
+            // <clipPath id="clip-content">
+            //      Es lo que queda difuminado, dentro del clip-path
+            //     <use xlink:href="#front-content" fill="black"></use>
+            // </clipPath>
+            // <g style="mask: url(#mask-circle); fill: red;">
+            //     <g id="back-content">
+            //         <circle r="50%" cx="-10%" cy="50%"></circle>
+            //     </g>
+            // </g>
+            // El componente clonado y difuminado
+            // <use xlink:href="#back-content" style="clip-path: url(#clip-circle);fill: red;filter: url(#blur);clip-path: url(#front-content);"></use>
+            // Este es el view, el elemento que se utiliza para la parte difuminada
+            // <circle r="50%" cx="50%" cy="50%" id="front-content"></circle>
+            
             let $g_circle = document.createElementNS(svgns, 'circle');
             let $g_clipPath = document.createElementNS(svgns, 'clipPath');
             // let $g_shineLight = document.createElementNS(svgns, 'g');
             // let $g_shineDark = document.createElementNS(svgns, 'g');
             let $g_gradient = document.createElementNS(svgns, 'g');
-
+            
             $g_circle.setAttributeNS(null, 'r', '100%');
             $g_circle.setAttributeNS(null, 'cx', '50%');
             $g_circle.setAttributeNS(null, 'cy', '50%');
-            $g_circle.setAttributeNS(null, 'style', `clip-path: url(#clip-${icon_id});opacity: 0.5;fill: rgb(255 255 255);`);
+            $g_circle.setAttributeNS(null, 'style', `clip-path: url(#clip-${icon_id});opacity: 0.6; fill: black;`);
             $g_clipPath.id = `clip-${icon_id}`;
             // $g_shineLight.classList.add("shine-accent-light");
             // $g_shineDark.classList.add("shine-accent-dark");
