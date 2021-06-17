@@ -39,10 +39,10 @@
 }
 
 #graphCtView {
-    width: 100%;
-    height: 80%;
+    width: calc(100% - 1px);
+    height: calc(80% - 1px);
     min-height: 80%;
-    box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
+    /* box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c; */
     /* display: inline; */
     border-radius: 10px;
     background: #e2e2e2;
@@ -112,7 +112,9 @@
 .icon {
     box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
 }
-
+.icon svg circle {
+    fill: white !important;
+}
 .control-zoom {
     column-gap: 10px;
 }

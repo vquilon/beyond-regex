@@ -4,7 +4,8 @@
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 
-<link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />
+<link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}"
+  href="{{ site.baseurl }}/feed.xml" />
 <link rel="shortcut icon" type="image/png" href="assets/beyond-regex_icon.png">
 
 <link rel="stylesheet" href="assets/vendor/sweetalert2/sweetalert2.min.css">
@@ -14,10 +15,11 @@
 <!-- <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script> -->
 
 <!-- PWA Manifest.json -->
-<link rel="manifest" href="manifest.json"></link>
+<link rel="manifest" href="manifest.json">
+</link>
 
 {% if site.environment == "production" %}
-  {% include analytics.html %}
+{% include analytics.html %}
 {% endif %}
 
 <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
@@ -30,9 +32,18 @@
 <script nomodule='' src='https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js'></script>
 
 
+<style>
+  html,
+  body {
+    overscroll-behavior-y: contain;
+  }
+</style>
 
 <!-- FONTS -->
 <link rel="stylesheet" href="assets/styles/fonts.css">
+
+
+
 <link rel="stylesheet" href="assets/styles/main.css">
 <link rel="stylesheet" href="assets/styles/scrollbars.css">
 <link rel="stylesheet" href="assets/vendor/highlight/highlight.min.css">
