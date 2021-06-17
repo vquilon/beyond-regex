@@ -1,5 +1,5 @@
 #graphCt {
-    padding: 4px;
+    /* padding: 4px; */
     /* border: 1px solid black; */
     /* background: #e2e2e2; */
     /* overflow: auto; */
@@ -29,6 +29,10 @@
     /* margin: 10px; */
     overflow: hidden;
     border-radius: unset !important;
+
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
 #graphCtView {
@@ -39,6 +43,9 @@
     overflow: hidden;
     background: #e2e2e2;
     border-radius: 10px;
+
+    border: solid 1px #000000cc;
+    box-shadow: inset 0.3rem 0.3rem 0.5rem #0a0a0acc, inset -0.2rem -0.2rem 0.5rem rgb(83 83 83 / 80%);
 }
 
 #graphCtSVG {

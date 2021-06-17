@@ -1,0 +1,514 @@
+<style>
+    .mdc-icon-button {
+        display: inline-block;
+        position: relative;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        fill: currentColor;
+        color: inherit;
+        font-size: 24px;
+        text-decoration: none;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        width: 48px;
+        height: 48px;
+        padding: 12px;
+    }
+
+    .mdc-icon-button svg,
+    .mdc-icon-button img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .mdc-icon-button:disabled {
+        color: rgba(0, 0, 0, 0.38);
+        /* @alternate */
+        color: var(--mdc-theme-text-disabled-on-light, rgba(0, 0, 0, 0.38));
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .mdc-icon-button__icon {
+        display: inline-block;
+    }
+
+    .mdc-icon-button__icon.mdc-icon-button__icon--on {
+        display: none;
+    }
+
+    .mdc-icon-button--on .mdc-icon-button__icon {
+        display: none;
+    }
+
+    .mdc-icon-button--on .mdc-icon-button__icon.mdc-icon-button__icon--on {
+        display: inline-block;
+    }
+
+    .mdc-icon-button {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+    .mdc-icon-button::before,
+    .mdc-icon-button::after {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0;
+        pointer-events: none;
+        content: "";
+    }
+
+    .mdc-icon-button::before {
+        -webkit-transition: opacity 15ms linear, background-color 15ms linear;
+        -o-transition: opacity 15ms linear, background-color 15ms linear;
+        transition: opacity 15ms linear, background-color 15ms linear;
+        z-index: 1;
+    }
+
+
+    .mdc-icon-button::before,
+    .mdc-icon-button::after {
+        top: calc(50% - 50%);
+        /* @noflip */
+        left: calc(50% - 50%);
+        width: 100%;
+        height: 100%;
+    }
+
+    .mdc-icon-button::before,
+    .mdc-icon-button::after {
+        background-color: #000;
+    }
+
+    .mdc-icon-button:hover::before {
+        opacity: 0.04;
+    }
+
+    .mdc-icon-button:not(.mdc-ripple-upgraded):focus::before {
+        -webkit-transition-duration: 75ms;
+        -o-transition-duration: 75ms;
+        transition-duration: 75ms;
+        opacity: 0.12;
+    }
+
+    .mdc-icon-button:not(.mdc-ripple-upgraded)::after {
+        -webkit-transition: opacity 150ms linear;
+        -o-transition: opacity 150ms linear;
+        transition: opacity 150ms linear;
+    }
+
+    .mdc-icon-button:not(.mdc-ripple-upgraded):active::after {
+        -webkit-transition-duration: 75ms;
+        -o-transition-duration: 75ms;
+        transition-duration: 75ms;
+        opacity: 0.12;
+    }
+</style>
+
+<style>
+    .mdc-snackbar {
+        z-index: 8;
+        margin: 8px;
+        display: none;
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        pointer-events: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+    .mdc-snackbar__surface {
+        background-color: #333333;
+    }
+
+    .mdc-snackbar__label {
+        color: rgba(255, 255, 255, 0.87);
+    }
+
+    .mdc-snackbar__surface {
+        min-width: 344px;
+    }
+
+    @media (max-width: 480px),
+    (max-width: 344px) {
+        .mdc-snackbar__surface {
+            min-width: 100%;
+        }
+    }
+
+    .mdc-snackbar__surface {
+        max-width: 672px;
+    }
+
+    .mdc-snackbar__surface {
+        -webkit-box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+        box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+    }
+
+    .mdc-snackbar__surface {
+        border-radius: 4px;
+    }
+
+    .mdc-snackbar--opening,
+    .mdc-snackbar--open,
+    .mdc-snackbar--closing {
+        display: -ms-flexbox;
+        display: flex;
+    }
+
+    .mdc-snackbar--leading {
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+    }
+
+    .mdc-snackbar--stacked .mdc-snackbar__surface {
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -ms-flex-align: start;
+        align-items: flex-start;
+    }
+
+    .mdc-snackbar--stacked .mdc-snackbar__actions {
+        -ms-flex-item-align: end;
+        align-self: flex-end;
+        margin-bottom: 8px;
+    }
+
+    .mdc-snackbar__surface {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-transform: scale(0.8);
+        -ms-transform: scale(0.8);
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    .mdc-snackbar--open .mdc-snackbar__surface {
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+        opacity: 1;
+        pointer-events: auto;
+        -webkit-transition: opacity 500ms 0ms cubic-bezier(0, 0, 0.2, 1), -webkit-transform 500ms 0ms cubic-bezier(0, 0, 0.2, 1);
+        transition: opacity 500ms 0ms cubic-bezier(0, 0, 0.2, 1), -webkit-transform 500ms 0ms cubic-bezier(0, 0, 0.2, 1);
+        -o-transition: opacity 500ms 0ms cubic-bezier(0, 0, 0.2, 1), transform 500ms 0ms cubic-bezier(0, 0, 0.2, 1);
+        transition: opacity 500ms 0ms cubic-bezier(0, 0, 0.2, 1), transform 500ms 0ms cubic-bezier(0, 0, 0.2, 1);
+        transition: opacity 500ms 0ms cubic-bezier(0, 0, 0.2, 1), transform 500ms 0ms cubic-bezier(0, 0, 0.2, 1), -webkit-transform 500ms 0ms cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    .mdc-snackbar--closing .mdc-snackbar__surface {
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+        -webkit-transition: opacity 300ms 0ms cubic-bezier(0.4, 0, 1, 1);
+        -o-transition: opacity 300ms 0ms cubic-bezier(0.4, 0, 1, 1);
+        transition: opacity 300ms 0ms cubic-bezier(0.4, 0, 1, 1);
+    }
+
+    .mdc-snackbar__label {
+        font-family: Roboto, sans-serif;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        font-weight: 400;
+        letter-spacing: 0.0178571429em;
+        text-decoration: inherit;
+        text-transform: inherit;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 14px 16px;
+    }
+
+    .mdc-snackbar__label::before {
+        display: inline;
+        content: attr(data-mdc-snackbar-label-text);
+    }
+
+    .mdc-snackbar__actions {
+        /* @noflip */
+        margin-left: 0;
+        /* @noflip */
+        margin-right: 8px;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    [dir=rtl] .mdc-snackbar__actions,
+    .mdc-snackbar__actions[dir=rtl] {
+        /* @noflip */
+        margin-left: 8px;
+        /* @noflip */
+        margin-right: 0;
+    }
+
+    .mdc-snackbar__action:not(:disabled) {
+        color: #bb86fc;
+    }
+
+    .mdc-snackbar__action::before,
+    .mdc-snackbar__action::after {
+        background-color: #bb86fc;
+    }
+
+    .mdc-snackbar__action:hover::before {
+        opacity: 0.08;
+    }
+
+    .mdc-snackbar__action:not(.mdc-ripple-upgraded):focus::before {
+        -webkit-transition-duration: 75ms;
+        -o-transition-duration: 75ms;
+        transition-duration: 75ms;
+        opacity: 0.24;
+    }
+
+    .mdc-snackbar__action:not(.mdc-ripple-upgraded)::after {
+        -webkit-transition: opacity 150ms linear;
+        -o-transition: opacity 150ms linear;
+        transition: opacity 150ms linear;
+    }
+
+    .mdc-snackbar__action:not(.mdc-ripple-upgraded):active::after {
+        -webkit-transition-duration: 75ms;
+        -o-transition-duration: 75ms;
+        transition-duration: 75ms;
+        opacity: 0.24;
+    }
+
+    .mdc-snackbar__action.mdc-ripple-upgraded {
+        --mdc-ripple-fg-opacity: 0.24;
+    }
+
+    .mdc-snackbar__dismiss {
+        color: rgba(255, 255, 255, 0.87);
+    }
+
+    .mdc-snackbar__dismiss::before,
+    .mdc-snackbar__dismiss::after {
+        background-color: rgba(255, 255, 255, 0.87);
+    }
+
+    .mdc-snackbar__dismiss:hover::before {
+        opacity: 0.08;
+    }
+
+    .mdc-snackbar__dismiss:not(.mdc-ripple-upgraded):focus::before {
+        -webkit-transition-duration: 75ms;
+        -o-transition-duration: 75ms;
+        transition-duration: 75ms;
+        opacity: 0.24;
+    }
+
+    .mdc-snackbar__dismiss:not(.mdc-ripple-upgraded)::after {
+        -webkit-transition: opacity 150ms linear;
+        -o-transition: opacity 150ms linear;
+        transition: opacity 150ms linear;
+    }
+
+    .mdc-snackbar__dismiss:not(.mdc-ripple-upgraded):active::after {
+        -webkit-transition-duration: 75ms;
+        -o-transition-duration: 75ms;
+        transition-duration: 75ms;
+        opacity: 0.24;
+    }
+
+    .mdc-snackbar__dismiss.mdc-snackbar__dismiss {
+        width: 36px;
+        height: 36px;
+        padding: 9px;
+        font-size: 18px;
+    }
+
+    .mdc-snackbar__dismiss.mdc-snackbar__dismiss svg,
+    .mdc-snackbar__dismiss.mdc-snackbar__dismiss img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .mdc-snackbar__action+.mdc-snackbar__dismiss {
+        /* @noflip */
+        margin-left: 8px;
+        /* @noflip */
+        margin-right: 0;
+    }
+
+    [dir=rtl] .mdc-snackbar__action+.mdc-snackbar__dismiss,
+    .mdc-snackbar__action+.mdc-snackbar__dismiss[dir=rtl] {
+        /* @noflip */
+        margin-left: 0;
+        /* @noflip */
+        margin-right: 8px;
+    }
+
+    .snackbar-hero .mdc-snackbar {
+        position: relative;
+    }
+
+    .snackbar-demo-button {
+        margin: 8px 16px;
+    }
+</style>
+
+<style>
+    .mdc-snackbar {
+        top: 0;
+        left: inherit;
+        bottom: inherit;
+        /* opacity: 0;
+        visibility: hidden; */
+
+    }
+
+    /* .mdc-snackbar__surface {
+        -webkit-transition: all 0.3s;
+        transition: all 0.3s;
+    } */
+
+    /* .mdc-snackbar--opening .mdc-snackbar__surface,
+    .mdc-snackbar--open .mdc-snackbar__surface,
+    .mdc-snackbar--closing .mdc-snackbar__surface {
+        -webkit-transition: all 0.5s;
+        transition: all 0.5s;
+    } */
+
+    .mdc-snackbar__surface {
+        background: rgba(0, 0, 0, 0.40);
+        box-shadow: 0 8px 32px 0 rgb(91 31 135 / 37%);
+        backdrop-filter: blur(5.0px);
+        -webkit-backdrop-filter: blur(5.0px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .mdc-snackbar__action:not(:disabled) {
+        color: #f076fc;
+    }
+
+    .mdc-snackbar__actions button {
+        background: inherit;
+        border: none;
+        font-weight: 500;
+        font-style: normal;
+        cursor: pointer;
+        transition: all 0.2s;
+        user-select: none;
+    }
+
+    .mdc-snackbar__actions button#btn-install-app {
+        font-family: "VictorMono", monospace;
+        font-style: italic;
+        font-weight: 500;
+    }
+
+    .mdc-snackbar__actions button#btn-install-app:hover {
+        text-shadow: 0 0 10px #e9cff6, 0 0 5px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
+        color: white;
+    }
+</style>
+
+<div id="install-app" class="mdc-snackbar">
+    <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+        <div class="mdc-snackbar__label" aria-atomic="false">
+            Build your RegEx anywhere, even offline.
+        </div>
+        <div class="mdc-snackbar__actions" aria-atomic="true">
+            <button id="btn-install-app" type="button" class="mdc-button mdc-snackbar__action">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Install</span>
+            </button>
+            <button id="btn-close-install" class="mdc-icon-button mdc-snackbar__dismiss material-icons"
+                title="Dismiss">close</button>
+        </div>
+    </div>
+</div>
+
+<!-- <div id="install-app">
+    <button id="btn-install-app"></button>
+</div> -->
+
+<script>
+    // Initialize deferredPrompt for use later to show browser install prompt.
+    let deferredPrompt;
+
+    function showInstallPromotion() {
+        document.querySelector("#install-app").classList.toggle('mdc-snackbar--opening', true);
+        setTimeout(function () {
+            document.querySelector("#install-app").classList.toggle('mdc-snackbar--open', true);
+            document.querySelector("#install-app").classList.toggle('mdc-snackbar--opening', false);
+        }, 100);
+
+    }
+    function hideInstallPromotion() {
+        document.querySelector("#install-app").classList.toggle('mdc-snackbar--closing', true);
+        document.querySelector("#install-app").classList.toggle('mdc-snackbar--open', false);
+        setTimeout(function () {
+            document.querySelector("#install-app").classList.toggle('mdc-snackbar--closing', false);
+        }, 500);
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        // Update UI notify the user they can install the PWA
+        showInstallPromotion();
+        // Optionally, send analytics event that PWA install promo was shown.
+        console.log(`'beforeinstallprompt' event was fired.`);
+    });
+
+
+    document.querySelector("#btn-install-app").addEventListener('click', async () => {
+        // Hide the app provided install promotion
+        hideInstallPromotion();
+        // Show the install prompt
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        const { outcome } = await deferredPrompt.userChoice;
+        // Optionally, send analytics event with outcome of user choice
+        console.log(`User response to the install prompt: ${outcome}`);
+        // We've used the prompt, and can't use it again, throw it away
+        deferredPrompt = null;
+    });
+
+    document.querySelector("#btn-close-install").addEventListener('click', _ => {
+        hideInstallPromotion();
+    })
+
+    window.addEventListener('appinstalled', () => {
+        // Hide the app-provided install promotion
+        hideInstallPromotion();
+        // Clear the deferredPrompt so it can be garbage collected
+        deferredPrompt = null;
+        // Optionally, send analytics event to indicate successful install
+        console.log('PWA was installed');
+    });
+</script>

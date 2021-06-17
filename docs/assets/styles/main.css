@@ -21,7 +21,7 @@ body, html * {
 .version {
     font-size: 25px;
     font-style: normal;
-    text-shadow: 0 0 10px #e9cff6, 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+    text-shadow: 0 0 10px #e9cff6, 0 0 5px #ffffff, 0 0 20px #ffffff;
     color: white;
     background: linear-gradient(145deg, #d88bf1, #8817ad);
     box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
