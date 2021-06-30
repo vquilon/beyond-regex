@@ -82,6 +82,12 @@ plugins:
   - jekyll-redirect-from
 environment: production
 
+
+# Minify settings
+jekyll-minifier:
+  uglifier_args:
+    harmony: true
+
 # --- Web Statistics Section --- #
 # Fill in your Google Analytics gtag.js ID to track your website using gtag
 gtag: G-005J77BYYB

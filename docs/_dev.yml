@@ -79,6 +79,10 @@ plugins:
   - jekyll-github-metadata
   - jekyll-minifier
 
+# Solo para no hacer minimizacion en desarrollo
+jekyll-minifier:
+  exclude: "*"
+
 environment: "development"
 
 # --- Web Statistics Section --- #
