@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }}</title>
-    {% include head.html %}
+<head>
+  <!-- SEO tags -->
+  {% seo %}
 
-    {% seo %}
-  </head>
-  <body>
+  <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }}</title>
+  {% include head.html %}
+</head>
 
-    <div id="main">
-      {{ content }}
-    </div>
+<body>
 
-    {% include footer.html %}
-  </body>
+  <div id="main">
+    {{ content }}
+  </div>
+
+  {% include footer.html %}
+</body>
+
 </html>

@@ -52,8 +52,11 @@
                 }
             })
         }
-
-        const wb = new Workbox(`${location.href}sw_ga.js`);
+        let actual_url = location.href;
+        if (actual_url.lastIndexOf("index.html") === -1) {
+            actual_url = actual_url.slice(0, actual_url.length - "index.html".length)
+        }
+        const wb = new Workbox(`${actual_url}sw_ga.js`);
         let registration;
 
         // wb.addEventListener('activated', (event) => {
@@ -164,8 +167,11 @@
                 }
             })
         }
-
-        const wb = new Workbox(`${location.href}sw.js`);
+        let actual_url = location.href;
+        if (actual_url.lastIndexOf("index.html") === -1) {
+            actual_url = actual_url.slice(0, actual_url.length - "index.html".length)
+        }
+        const wb = new Workbox(`${actual_url}sw.js`);
         let registration;
 
         // wb.addEventListener('activated', (event) => {

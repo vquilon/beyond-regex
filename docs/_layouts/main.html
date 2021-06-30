@@ -2,6 +2,9 @@
 <html>
 
 <head>
+  <!-- SEO tags -->
+  {% seo %}
+
   <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }}</title>
   {% include head.html %}
 
@@ -9,7 +12,6 @@
 
   {% include styles-thumbnail-svg-control.html %}
 
-  {% seo %}
 </head>
 
 <body>
@@ -28,6 +30,7 @@
 
   {% include scripts.html %}
   {% include scripts-thumbnail-svg-control.html %}
+ 
 
 </body>
 

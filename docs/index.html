@@ -1,6 +1,11 @@
 ---
 layout: main
 ---
+
+<script>
+    window.history.replaceState('', document.title, window.location.pathname.slice(0, window.location.pathname.length - "index.html"));
+</script>
+
 <div class="heading">
     <h1>
         Beyond Regex<span class="version">alpha</span> <em>Born to Be a RegEx editor or Beyond</em>
@@ -44,8 +49,9 @@ layout: main
             <tr>
                 <td style="width:1em; padding-left: 5px;">/</td>
                 <td style="width:auto">
-                    <!-- <div id="container-input"></div> -->
-                    <input id="input" class="input" value="^BEYOND ReGex(?P<TOOLS>builder|[bv]isualize|(?=de)bugger) Born to be a RegEx editor$" />
+                    <div id="container-input">
+                        <input id="input" class="input" value="^BEYOND ReGex(?P<TOOLS>builder|[bv]isualize|(?=de)bugger) Born to be a RegEx editor$" />
+                    </div>
                 </td>
                 <td style="width:1em; padding-left: 10px;">/</td>
                 <!-- <td id="flagBox">

@@ -24,11 +24,9 @@ author: Victor Quilon Ranera
 email: v.quilonr@gmail.com
 image: /assets/beyond-regex_icon.png
 description: >- # this means to ignore newlines until "baseurl:"
-  Es un proyecto sin animo de lucro que busca la creacion de un editor RegEx,
-  capaz de editar y comprender estas expresiones regulares de una forma unica.
-  Visualizando, construyendo y analizando, de forma que se podrá exprimir la
-  máxima capacidad y llegar a la optimización del uso de esta tecnología,
-  la cual posee una busqueda mas avanzada de como se creo en un inicio.
+  It is a non-profit project that seeks the creation of a RegEx editor,
+  capable of understanding, building and analyzing these regular
+  expressions in a visual way.
 baseurl: "/beyond-regex" # the subpath of your site, e.g. /blog
 url: "https://vquilon.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
@@ -36,11 +34,28 @@ url: "https://vquilon.github.io" # the base hostname & protocol for your site, e
 twitter:
   username: VQuilon
   card: >- # this means to ignore newlines until "twitter_username:"
-    Es un proyecto sin animo de lucro que busca la creacion de un editor RegEx,
-    capaz de editar y comprender estas expresiones regulares de una forma unica.
-    Visualizando, construyendo y analizando, de forma que se podrá exprimir la
-    máxima capacidad y llegar a la optimización del uso de esta tecnología,
-    la cual posee una busqueda mas avanzada de como se creo en un inicio.
+    It is a non-profit project that seeks the creation of a RegEx editor,
+    capable of understanding, building and analyzing these regular
+    expressions in a visual way.
+# facebook:
+#   app_id: a Facebook app ID for Facebook insights
+#   publisher: a Facebook page URL or ID of the publishing entity
+#   admins: a Facebook user ID for domain insights linked to a personal account
+logo: /assets/beyond-regex_icon.png
+
+social:
+  name: Victor Quilon Ranera
+  links:
+    - https://www.twitter.com/vquilon
+    - https://www.facebook.com/victor.quilonranera
+    - https://www.linkedin.com/in/vquilonr-291194
+    - https://www.github.com/vquilon
+    - https://codepen.io/vquilon
+
+google_site_verification: aya_8l7Neibb7ZnPMItanCXP931UOWPLpeBBgyUNx1M
+
+locale: en_US
+
 twitter_username: VQuilon
 github_username:  vquilon
 
@@ -61,7 +76,8 @@ plugins:
   - jekyll-sitemap # Create a sitemap using the official Jekyll sitemap gem
   - jekyll-feed # Create an Atom feed using the official Jekyll feed gem
   - jekyll-seo-tag
-  - "jekyll-github-metadata"
+  - jekyll-github-metadata
+  - jekyll-minifier
 
 environment: "development"
 
