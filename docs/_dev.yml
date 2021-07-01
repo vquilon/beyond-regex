@@ -25,17 +25,18 @@ email: v.quilonr@gmail.com
 image: /assets/beyond-regex_icon.png
 description: >- # this means to ignore newlines until "baseurl:"
   It is a non-profit project that seeks the creation of a RegEx editor,
-  capable of understanding, building and analyzing these regular
+  capable of understanding, building and analyzing regular
   expressions in a visual way.
 baseurl: "/beyond-regex" # the subpath of your site, e.g. /blog
 url: "https://vquilon.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 # SEO Settings
+tagline: A tool to design your RegEx with the best performance
 twitter:
   username: VQuilon
   card: >- # this means to ignore newlines until "twitter_username:"
     It is a non-profit project that seeks the creation of a RegEx editor,
-    capable of understanding, building and analyzing these regular
+    capable of understanding, building and analyzing regular
     expressions in a visual way.
 # facebook:
 #   app_id: a Facebook app ID for Facebook insights
