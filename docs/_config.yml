@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Beyond Regex - 
+title: Beyond Regex - Edit, Visualize, Build, Share and much more
 name: Beyond Regex
 author: Victor Quilon Ranera
 email: v.quilonr@gmail.com
@@ -30,7 +30,6 @@ baseurl: "/beyond-regex" # the subpath of your site, e.g. /blog
 url: "https://vquilon.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 # SEO Settings
-tagline: Edit, Visualize, Buildm Share and much more
 twitter:
   username: VQuilon
   card: >- # this means to ignore newlines until "twitter_username:"
