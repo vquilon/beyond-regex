@@ -18,7 +18,8 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Beyond Regex - Edit, Visualize, Build, Share and much more
+title: Beyond Regex
+tagline: Edit, Visualize, Build, Share and much more
 name: Beyond Regex
 author: Victor Quilon Ranera
 email: v.quilonr@gmail.com
