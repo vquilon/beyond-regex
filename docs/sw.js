@@ -3,7 +3,7 @@
 //  importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
  importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js');
 
-const SW_VERSION = '0.0.alpha.5';
+const SW_VERSION = '0.0.alpha.6';
 const CACHE = `pwa-beyond_regex-v${SW_VERSION}`;
 // const urlsToCache = [
 
