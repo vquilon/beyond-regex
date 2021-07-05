@@ -16,7 +16,8 @@ window.onload = function () {
     var flags = document.getElementsByName('flag');
     var flagBox = document.getElementById('flagBox');
 
-    var languageRegex = document.getElementById('languageRegex');
+    // var languageRegex = document.getElementById('languageRegex');
+
 
     // SET DE FUNCIONES AUXILIARES
     var showExportImage = function () {
@@ -194,7 +195,7 @@ window.onload = function () {
         var regEXSON = null;
         try {
             var init_parse = parse();
-            var language_selected = languageRegex.value
+            var language_selected = document.querySelector("[name='languageRegex']:checked").value
             regEXSON = init_parse(regExpresion, null, language_selected);
         } catch (e) {
             if (e instanceof init_parse.RegexSyntaxError) {

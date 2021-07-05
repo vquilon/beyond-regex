@@ -279,6 +279,7 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
+  jekyll-coffeescript
   jekyll-feed (~> 0.12)
   jekyll-github-metadata
   jekyll-minifier

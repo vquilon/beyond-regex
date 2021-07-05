@@ -18,6 +18,7 @@ group :jekyll_plugins do
   gem "jekyll-sitemap"
   gem "jekyll-feed", "~> 0.12"
   gem "jekyll-seo-tag"
+  gem "jekyll-coffeescript"
   gem "jekyll-github-metadata"
   gem "jekyll-minifier"
   gem "jekyll-redirect-from"

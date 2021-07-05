@@ -2,6 +2,9 @@ html {
     background: linear-gradient(145deg, #3b3b3b, #242424);
     min-height: 100vh;
 }
+html, body {
+    overflow-x: hidden;
+}
 
 body, html * {
     margin: 0;
@@ -31,10 +34,6 @@ body, html * {
     padding: 0px 10px;
     border-radius: 20px;
     margin-left: 10px;
-}
-
-.code, .code * {
-    font-family: "VictorMono", monospace;
 }
 
 .heading h1 {
@@ -76,13 +75,8 @@ body, html * {
     margin: 20px 0px;
 }
 
-#inputCt div.re * {
-    font-size: 24px;
-}
-
 #inputCt div.re {
     width: 100%;
-    grid-row: 1/2;
     font-size: 24px;
     background: #e2e2e2;
     line-height: 1.4em;
@@ -95,16 +89,30 @@ body, html * {
     border: solid 1px black;
     box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
     border-radius: 10px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
 }
 
-#inputCt div.re table {
-    border: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
+#inputCt div.re #container-input {
+    flex-grow: 1;
+    margin: 10px 0px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: space-between;
 }
 
 #inputCt div.re .input {
+    font-family: "VictorMono", monospace;
+    font-size: 24px;
     color: #3030C0;
     padding: 0 2px;
     border: none;
@@ -255,6 +263,9 @@ body, html * {
 }
 
 #checkflags {
+    font-family: "VictorMono", monospace;
+    margin: 10px 5px;
+
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -411,9 +422,9 @@ body.embed #graphCt {
     overflow: auto;
 }
 
-.code, .code * {
+/* .code, .code * {
     font-family: "VictorMono", monospace;
-}
+} */
 
 /* ==================== */
 
@@ -640,7 +651,7 @@ select:focus>option:checked {
 }
 
 .social-icon:hover .tooltip {
-    box-shadow: inset 0.2rem 0.2rem 0.8rem #464646, inset -0.2rem -0.2rem 0.8rem #0c0c0c, 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
+    /* box-shadow: inset 0.2rem 0.2rem 0.8rem #464646, inset -0.2rem -0.2rem 0.8rem #0c0c0c, 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c; */
     color: white !important;
     opacity: 1;
     /* transition: box-shadow 0.4s 0.1s ease, color 0.4s ease, opacity 0.4s ease; */
@@ -756,7 +767,7 @@ select:focus>option:checked {
 /* Tooltips */
 
 .tooltip {
-    color: transparent !important;
+    color: white !important;
     display: block;
     opacity: 0;
     position: absolute;
@@ -769,8 +780,13 @@ select:focus>option:checked {
     text-transform: uppercase;
     transform: translate(-50%, 150%);
     z-index: 1;
-    background: linear-gradient(145deg, #3b3b3b, #242424) !important;
+    background: linear-gradient(145deg, #3b3b3b, #242424);
     /* transition: box-shadow 0.4s, color 0.4s 0.2s, opacity 0.2s 0.4s; */
+
+    background: #0000007a !important;
+    box-shadow: 0 0 15px 0px #ffffff4d, 0 0 10px #ffffff4d;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
 }
 
 .tooltip:before {

@@ -108,7 +108,7 @@ function parse() {
                 m
         }
     }
-    function load_NFA_Parser(language = "javascript") {
+    function load_NFA_Parser(language = "javascript6") {
         var selected_language_validStructs = validStructs[language];
         return NFAparser || (NFAparser = new NFA(selected_language_validStructs)), NFAparser
     }
@@ -781,7 +781,7 @@ function parse() {
 
         ])
     }
-    var python_validStricts = {
+    var python_validStructs = {
         compact: !0,
         accepts: base_validStructs.accepts,
         trans: base_validStructs.trans.concat([
@@ -793,8 +793,8 @@ function parse() {
         ])
     }
     var validStructs = {
-        javascript: javascript_validStructs,
-        python: python_validStricts
+        javascript6: javascript_validStructs,
+        python: python_validStructs
     };
 
     return init_object

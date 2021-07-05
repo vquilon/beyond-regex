@@ -14,67 +14,108 @@ layout: main
     <!-- social icons -->
     <div class="social-icons">
         <a href="https://codepen.io/vquilon" class="social-icon social-icon--codepen">
-            <i class="fa fa-codepen"></i>
+            <i class="fab fa-codepen"></i>
             <div class="tooltip">Codepen</div>
         </a>
         <a href="https://github.com/vquilon" class="social-icon social-icon--github">
-            <i class="fa fa-github"></i>
+            <i class="fab fa-github"></i>
             <div class="tooltip">Github</div>
         </a>
         <!-- <a class="social-icon social-icon--twitter">
-            <i class="fa fa-twitter"></i>
+            <i class="fab fa-twitter"></i>
             <div class="tooltip">Twitter</div>
         </a>
         <a class="social-icon social-icon--dribbble">
-            <i class="fa fa-dribbble"></i>
+            <i class="fab fa-dribbble"></i>
             <div class="tooltip">Dribbble</div>
         </a>
         <a class="social-icon social-icon--instagram">
-            <i class="fa fa-instagram"></i>
+            <i class="fab fa-instagram"></i>
             <div class="tooltip">Instagram</div>
         </a> -->
         <a href="https://www.linkedin.com/in/vquilonr-291194/" class="social-icon social-icon--linkedin">
-            <i class="fa fa-linkedin"></i>
+            <i class="fab fa-linkedin-in"></i>
             <div class="tooltip">LinkedIn</div>
         </a>
         <!-- <a class="social-icon social-icon--facebook">
-            <i class="fa fa-facebook"></i>
+            <i class="fab fa-facebook"></i>
             <div class="tooltip">Facebook</div>
         </a> -->
     </div>
 </div>
 <div id="inputCt">
     <div class="re code">
-        <table>
-            <tr>
-                <td style="width:1em; padding-left: 5px;">/</td>
-                <td style="width:auto">
-                    <div id="container-input">
-                        <input id="input" class="input" value="^BEYOND ReGex(?P<TOOLS>builder|[bv]isualize|(?=de)bugger) Born to be a RegEx editor$" />
-                    </div>
-                </td>
-                <td style="width:1em; padding-left: 10px;">/</td>
-                <!-- <td id="flagBox">
-                </td> -->
-                <td style="width: 100px;">
-                    <div id="checkflags">
-                        <div class="checkbox checkbox__1">
-                            <input id="checkbox-ignorecase" type="checkbox" name="flag" value="i">
-                            <label for="checkbox-ignorecase"><i>i</i></label>
-                        </div>
-                        <div class="checkbox checkbox__1">
-                            <input id="checkbox-multiline" type="checkbox" name="flag" value="m">
-                            <label for="checkbox-multiline"><i>m</i></label>
-                        </div>
-                        <div class="checkbox checkbox__1">
-                            <input id="checkbox-globalmatch" type="checkbox" name="flag" value="g">
-                            <label for="checkbox-globalmatch"><i>g</i></label>
-                        </div>
-                    </div>
-                </td>
+        <div class="select-box">
+            <div class="select-box__current" tabindex="1">
+                <div class="select-box__value">
+                    <input class="select-box__input" type="radio" id="0" value="python" name="languageRegex" checked>
+                    <p class="select-box__input-text"><i class="fab fa-python"></i><i class="code-version">>=3.7</i></p>
+                </div>
+                <div class="select-box__value">
+                    <input class="select-box__input" type="radio" id="1" value="javascript6" name="languageRegex">
+                    <p class="select-box__input-text"><i class="fab fa-js-square"></i><i class="code-version">ECMAS6</i></p>
+                </div>
+                <!-- <div class="select-box__value">
+                            <input class="select-box__input" type="radio" id="1" value="javascript5" name="languageRegex">
+                            <p class="select-box__input-text"><i class="fab fa-js-square"></i><i
+                                    class="code-version">ECMAS5</i></p>
+                        </div> -->
+                <!-- <div class="select-box__value">
+                            <input class="select-box__input" type="radio" id="2" value="php7" name="languageRegex">
+                            <p class="select-box__input-text"><i class="fab fa-php"></i><i class="code-version">>=7.3</i>
+                            </p>
+                        </div> -->
+                <!-- <div class="select-box__value">
+                            <input class="select-box__input" type="radio" id="4" value="java" name="languageRegex">
+                            <p class="select-box__input-text"><i class="fab fa-java"></i><i
+                                    class="code-version">8</i></p>
+                        </div> -->
+            </div>
+            <div class="select-box__list">
+                <div class="menu-item">
+                    <label class="item" for="0" aria-hidden="aria-hidden"><i class="fab fa-python"></i><i
+                            class="code-version">>=3.7</i></label>
+                </div>
+                <div class="menu-item">
+                    <label class="item" for="1" aria-hidden="aria-hidden"><i class="fab fa-js-square"></i><i
+                            class="code-version">ECMAS6</i></label>
+                </div>
+                <!-- <div class="menu-item">
+                            <label class="item" for="1" aria-hidden="aria-hidden"><i class="fab fa-js-square"></i><i
+                                    class="code-version">ECMAS5</i></label>
+                        </div> -->
+                <!-- <div class="menu-item">
+                            <label class="item" for="2" aria-hidden="aria-hidden"><i class="fab fa-php"></i><i
+                                    class="code-version">>=7.3</i></label>
+                        </div> -->
+                <!-- <div class="menu-item">
+                            <label class="item" for="5" aria-hidden="aria-hidden"><i class="fab fa-java"></i><i
+                                    class="code-version">8</i></label>
+                        </div> -->
+            </div>
+        </div>
+        <div id="container-input">
+            <span style="margin-left: 5px;">/</span>
+            <input id="input" class="input"
+                value="^BEYOND ReGex(?P<TOOLS>builder|[bv]isualize|(?=de)bugger) Born to be a RegEx editor$" />
+            <span style="margin-right: 5px;">/</span>
+        </div>
+        <div id="checkflags">
+            <div class="checkbox checkbox__1">
+                <input id="checkbox-ignorecase" type="checkbox" name="flag" value="i">
+                <label for="checkbox-ignorecase"><i>i</i></label>
+            </div>
+            <div class="checkbox checkbox__1">
+                <input id="checkbox-multiline" type="checkbox" name="flag" value="m">
+                <label for="checkbox-multiline"><i>m</i></label>
+            </div>
+            <div class="checkbox checkbox__1">
+                <input id="checkbox-globalmatch" type="checkbox" name="flag" value="g">
+                <label for="checkbox-globalmatch"><i>g</i></label>
+            </div>
 
-            </tr>
-        </table>
+        </div>
+
     </div>
 
     <div id="actionButtons">
@@ -83,13 +124,13 @@ layout: main
         <!-- <button class="btn btn__primary button-panel" id="exportIt">Export Image</button> -->
         <button class="btn btn__primary button-panel" id="embedIt">Link!</button>
 
-        <div class="custom-dropdown">
+        <!-- <div class="custom-dropdown">
             <select name="languageRegex" id="languageRegex">
                 <option selected value="python">Python</option>
                 <option value="javascript">Javascript</option>
             </select>
             </span>
-        </div>
+        </div> -->
     </div>
     <p id="errorBox" class="code">Error Message</p>
     <div id="graphCt" class="code">

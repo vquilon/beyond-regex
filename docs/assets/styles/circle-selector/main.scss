@@ -1,0 +1,299 @@
+---
+---
+// @import "compass/css3";
+@import "trig";
+
+/* * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+} */
+
+.select-box {
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  transition: all 0.5s;
+
+  margin: 5px 5px;
+}
+
+
+.select-box__current, .select-box__list {
+  transition: all 0.5s;
+}
+
+.menu-item {
+  transition: all 0.3s;
+}
+
+.menu-item label.item {
+  transition: all 0.3s;
+}
+
+.select-box:hover .select-box__list .menu-item, .select-box:hover .select-box__list .menu-item label.item  {
+  transition: all 0.2s ease;
+}
+
+.select-box__input-text {
+  transition: all 0.5s;
+}
+
+.menu-item .item .code-version {
+  transition: all 0.5s;
+}
+
+.select-box__input-text .code-version{
+  transition: all 0.5s;
+}
+
+
+.select-box__current {
+  position: absolute;
+  display: block;
+  font-size: 40px;
+  border-radius: 50%;
+  opacity: 1;
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+  width: 70px;
+  height: 70px;
+  flex: none;
+  z-index: 3;
+  box-sizing: content-box;
+}
+.select-box:hover .select-box__current{
+  // width: 160px;
+  // height: 160px;
+  opacity: 0.8;
+  z-index: 1;
+}
+
+
+.select-box__current::before {
+  background: rgba(255, 255, 255, 0.2);
+  content: '';
+  width: inherit;
+  height: inherit;
+  border-radius: 50%;
+  position: absolute;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  z-index: -1;
+  box-shadow: 0 0 15px 0px #ffffff4d, 0 0 10px #ffffff4d;
+  box-shadow: inset 0.2rem 0.2rem 0.8rem #fafafa, inset -0.2rem -0.2rem 0.8rem #7b7b7b, 0.3rem 0.3rem 0.5rem #838383, -0.2rem -0.2rem 0.5rem #ffffff;
+}
+.select-box:hover .select-box__current::before {
+  box-shadow: 0 0 15px 0px #ffffff4d, 0 0 10px #ffffff4d;
+  box-shadow: inset 0.2rem 0.2rem 0.8rem #fafafa, inset -0.2rem -0.2rem 0.8rem #7b7b7b, 0.3rem 0.3rem 0.5rem #838383, -0.2rem -0.2rem 0.5rem #ffffff;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+
+.select-box__list {
+  box-sizing: border-box;
+  width: 70px;
+  height: 70px;
+  flex: none;
+  display: flex;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row nowrap;
+  position: absolute;
+}
+.select-box:hover .select-box__list {
+  z-index: 4;
+  // width: 160px;
+  // height: 160px;
+}
+
+.menu-item {
+  cursor: pointer;
+  position: relative;
+  display: block;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 80px;
+  height: 80px;
+  opacity: 0;
+  box-sizing: border-box;
+  flex: none;
+  margin-left: -80px;
+  border-radius: 50%;
+}
+.menu-item:nth-child(1) {
+  margin-left: 0;
+}
+
+.menu-item label.item {
+  display: flex;
+  flex-flow: row nowrap;
+  position: static;
+
+  width: inherit;
+  height: inherit;
+  line-height: 80px;
+  color: rgba(0, 0, 0, 1);
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  text-align: center;
+  text-decoration: none;
+  font-size: 40px;
+  pointer-events: all;
+  cursor: pointer;
+  align-items: center;
+}
+.menu-item label.item:hover {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+  color: rgb(0, 0, 0);
+  background: rgba(255, 255, 255, 0.3);
+  font-size: 44.4444444444px;
+}
+
+.menu-item:active label.item {
+    background: rgba(255, 255, 255, 0.5);
+    color: rgb(0, 0, 0);
+    box-shadow: 0 0 15px 5px #ffffff4d, 0 0 10px 2px #ffffff4d !important;
+}
+
+
+//vars
+$fg:#e91e63;
+$bg:#8bc34a;
+$pi:3.14;
+
+//config
+$menu-items:6+1;
+$open-distance-hover:70px;
+$opening-angle:$pi*2;
+$i: 1;
+.select-box:hover .select-box__list .menu-item {
+  @for $i from 1 through $menu-items{
+    $angle:(($pi - $opening-angle)/2)+(($opening-angle/($menu-items - 1))*($i - 1));
+    &:nth-child(#{$i}){
+      transform: translate3d(cos($angle)*$open-distance-hover,sin($angle)*$open-distance-hover,0);
+    }
+    
+    &:nth-child(#{$i}):hover{
+      z-index: 4;
+      transform: translate3d(cos($angle)*$open-distance-hover,sin($angle)*$open-distance-hover,0) scale(1.5);
+    }
+  }
+}
+
+.select-box:hover .select-box__list .menu-item {
+  opacity: 1;
+}
+
+
+.select-box:hover .select-box__list .menu-item label.item {
+  pointer-events: auto;
+  box-shadow: 0 0 15px 0px #ffffff4d, 0 0 10px #ffffff4d;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+
+.select-box__input {
+  display: none;
+}
+
+.select-box__value {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.select-box__input-text {
+  display: none;
+  margin: auto;
+  width: 100%;
+  text-align: center;
+  padding: 25% 0;
+  border-radius: 50%;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.select-box:hover .select-box__current .select-box__value .select-box__input-text {
+  // padding: 35% 0;
+  color: rgb(0, 0, 0);
+}
+
+.select-box__input:checked + .select-box__input-text {
+  display: flex;
+  flex-flow: row nowrap;
+  position: static;
+}
+
+.menu-item .item .fas, .menu-item .item .far, .menu-item .item .fal, .menu-item .item .fad, .menu-item .item .fab, .menu-item .item .fac {
+  box-sizing: border-box;
+  width: 100%;
+  flex: none;
+}
+
+.select-box__input-text .fas, .select-box__input-text .far, .select-box__input-text .fal, .select-box__input-text .fad, .select-box__input-text .fab, .select-box__input-text .fac {
+  box-sizing: border-box;
+  width: 100%;
+  flex: none;
+  line-height: inherit;
+}
+
+.menu-item .item svg, .select-box__input-text svg {
+  box-sizing: border-box;
+  width: 100% !important;
+  flex: none;
+}
+
+.menu-item .item .code-version {
+  font-size: 15px;
+  box-sizing: border-box;
+  flex: none;
+  padding: 0 5px;
+  margin-bottom: -50%;
+  margin-left: -100%;
+  width: 100%;
+  background: rgba(216, 139, 241, 90%);
+  border-radius: 10px;
+  border: 1px rgba(255, 255, 255, 0.2) solid;
+  line-height: 1;
+  font-style: normal;
+  font-family: monospace;
+  opacity: 0;
+
+  color: rgba(255, 255, 255, 1);
+}
+
+
+.select-box:hover .select-box__list .menu-item .item .code-version {
+  opacity: 1;
+}
+
+.select-box__input-text .code-version{
+  opacity: 0;
+  font-size: 15px;
+  box-sizing: border-box;
+  flex: none;
+  padding: 0 5px;
+  margin-top: 40%;
+  margin-bottom: -10%;
+  margin-left: -100%;
+  width: 100%;
+  background: rgba(216, 139, 241, 90%);
+  border-radius: 10px;
+  border: 1px rgba(255, 255, 255, 0.2) solid;
+  line-height: 1;
+  font-style: normal;
+  font-family: monospace;
+  color: rgba(255, 255, 255, 1);
+}
+.select-box:hover .select-box__current .select-box__input-text .code-version {
+  // margin-top: 25%;
+  // visibility: visible;
+  opacity: 1;
+}

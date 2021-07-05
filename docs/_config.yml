@@ -23,10 +23,10 @@ tagline: Edit, Visualize, Build, Share and much more
 name: Beyond Regex
 author: Victor Quilon Ranera
 email: v.quilonr@gmail.com
-image: /assets/beyond-regex_icon.png
+image: /assets/images/icons/beyond_regex_icon.png
 description: >- # this means to ignore newlines until "baseurl:"
   Regular expression editor - visualizer - tester to understand, build and debug the NFA and backtracking based regex engine.
-  PHP, JS, and Python Support
+  Python, PHP and JS Support
 baseurl: "/beyond-regex" # the subpath of your site, e.g. /blog
 url: "https://vquilon.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
@@ -35,12 +35,12 @@ twitter:
   username: VQuilon
   card: >- # this means to ignore newlines until "twitter_username:"
     Regular expression editor - visualizer - tester to understand, build and debug the NFA and backtracking based regex engine.
-    PHP, JS, and Python Support
+    Python, PHP and JS Support
 # facebook:
 #   app_id: a Facebook app ID for Facebook insights
 #   publisher: a Facebook page URL or ID of the publishing entity
 #   admins: a Facebook user ID for domain insights linked to a personal account
-logo: /assets/beyond-regex_icon.png
+logo: /assets/images/icons/beyond_regex_icon.png
 
 social:
   name: Victor Quilon Ranera
@@ -75,6 +75,7 @@ plugins:
   - jekyll-sitemap # Create a sitemap using the official Jekyll sitemap gem
   - jekyll-feed # Create an Atom feed using the official Jekyll feed gem
   - jekyll-seo-tag
+  - jekyll-coffeescript
   - jekyll-github-metadata
   - jekyll-minifier
   - jekyll-redirect-from
@@ -85,6 +86,10 @@ environment: production
 jekyll-minifier:
   uglifier_args:
     harmony: true
+
+# Set the Sass partials directory, as we're using @imports
+sass:
+  style: :compressed # You might prefer to minify using :compressed
 
 # --- Web Statistics Section --- #
 # Fill in your Google Analytics gtag.js ID to track your website using gtag
