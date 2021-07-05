@@ -91,7 +91,7 @@ body, html * {
     border-radius: 10px;
 
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     flex-direction: row;
     align-content: center;
     justify-content: space-around;
