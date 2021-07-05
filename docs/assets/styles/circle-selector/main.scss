@@ -13,11 +13,10 @@
 
 .select-box {
   border-radius: 50%;
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
   transition: all 0.5s;
 
-  margin: 5px 5px;
 }
 
 
@@ -53,14 +52,14 @@
 .select-box__current {
   position: absolute;
   display: block;
-  font-size: 40px;
+  font-size: 30px;
   border-radius: 50%;
   opacity: 1;
   cursor: pointer;
   outline: none;
   box-sizing: border-box;
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
   flex: none;
   z-index: 3;
   box-sizing: content-box;
@@ -95,8 +94,8 @@
 
 .select-box__list {
   box-sizing: border-box;
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
   flex: none;
   display: flex;
   z-index: 2;
@@ -118,12 +117,12 @@
   bottom: 0;
   right: 0;
   left: 0;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   opacity: 0;
   box-sizing: border-box;
   flex: none;
-  margin-left: -80px;
+  margin-left: -60px;
   border-radius: 50%;
 }
 .menu-item:nth-child(1) {
@@ -137,7 +136,7 @@
 
   width: inherit;
   height: inherit;
-  line-height: 80px;
+  line-height: 60px;
   color: rgba(0, 0, 0, 1);
   background: rgba(255, 255, 255, 0.4);
   border-radius: 50%;
@@ -169,7 +168,7 @@ $pi:3.14;
 
 //config
 $menu-items:6+1;
-$open-distance-hover:70px;
+$open-distance-hover:55px;
 $opening-angle:$pi*2;
 $i: 1;
 .select-box:hover .select-box__list .menu-item {
@@ -181,7 +180,7 @@ $i: 1;
     
     &:nth-child(#{$i}):hover{
       z-index: 4;
-      transform: translate3d(cos($angle)*$open-distance-hover,sin($angle)*$open-distance-hover,0) scale(1.5);
+      transform: translate3d(cos($angle)*$open-distance-hover,sin($angle)*$open-distance-hover,0) scale(1.2);
     }
   }
 }
@@ -241,7 +240,7 @@ $i: 1;
   box-sizing: border-box;
   width: 100%;
   flex: none;
-  line-height: inherit;
+  line-height: 30px;
 }
 
 .menu-item .item svg, .select-box__input-text svg {
@@ -254,10 +253,10 @@ $i: 1;
   font-size: 15px;
   box-sizing: border-box;
   flex: none;
-  padding: 0 5px;
-  margin-bottom: -50%;
-  margin-left: -100%;
-  width: 100%;
+  /* padding: 0 5px; */
+  margin-bottom: -70%;
+  margin-left: -110%;
+  width: 120%;
   background: rgba(216, 139, 241, 90%);
   border-radius: 10px;
   border: 1px rgba(255, 255, 255, 0.2) solid;
@@ -279,18 +278,20 @@ $i: 1;
   font-size: 15px;
   box-sizing: border-box;
   flex: none;
-  padding: 0 5px;
-  margin-top: 40%;
+  /* padding: 0 5px; */
+  margin-top: 60%;
   margin-bottom: -10%;
-  margin-left: -100%;
-  width: 100%;
-  background: rgba(216, 139, 241, 90%);
+  margin-left: -110%;
+  width: 120%;
+  height: 10%;
+  white-space: nowrap;
+  background: rgba(216,139,241,0.9);
   border-radius: 10px;
-  border: 1px rgba(255, 255, 255, 0.2) solid;
-  line-height: 1;
+  border: 1px rgba(255,255,255,0.2) solid;
+  line-height: 15px;
   font-style: normal;
   font-family: monospace;
-  color: rgba(255, 255, 255, 1);
+  color: #fff;
 }
 .select-box:hover .select-box__current .select-box__input-text .code-version {
   // margin-top: 25%;

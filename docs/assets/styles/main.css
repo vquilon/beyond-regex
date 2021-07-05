@@ -90,16 +90,31 @@ body, html * {
     box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
     border-radius: 10px;
 
-    display: flex;
+    /* display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     align-content: center;
     justify-content: space-around;
+    align-items: center; */
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+}
+
+
+#inputCt div.re > div{
+    grid-row: 1;
+}
+#inputCt div.re div#langRegex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     align-items: center;
+    justify-content: center;
+    margin: 5px 5px;
 }
 
 #inputCt div.re #container-input {
-    flex-grow: 1;
+    /* flex-grow: 1; */
     margin: 10px 0px;
 
     display: flex;

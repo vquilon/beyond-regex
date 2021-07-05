@@ -1,0 +1,15 @@
+#inputCt div.re {
+    grid-template-columns: 1fr 1fr;
+}
+
+#inputCt div.re > div#langRegex {
+    grid-column: 1;
+}
+#inputCt div.re > div#checkflags {
+    grid-column: 2;
+}
+
+#inputCt div.re > div#container-input {
+    grid-row: 2;
+    grid-column: 1/3;
+}
