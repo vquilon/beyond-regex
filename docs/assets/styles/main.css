@@ -82,7 +82,7 @@ body, html * {
     line-height: 1.4em;
     color: #333;
     border: 1px solid black;
-    padding: 5px;
+    /* padding: 5px; */
     font-weight: bold;
     word-break: break-all;
     word-wrap: break-word;
@@ -156,7 +156,7 @@ body, html * {
     width: 100%;
     display: flex;
     grid-column-gap: 10px;
-    margin: 20px 10px;
+    margin: 20px 0px;
     grid-gap: 20px;
     justify-content: center;
     align-content: center;
@@ -264,7 +264,7 @@ body, html * {
 
 #checkflags {
     font-family: "VictorMono", monospace;
-    margin: 10px 5px;
+    margin: 10px 10px;
 
     display: flex;
     flex-direction: row;
@@ -408,12 +408,12 @@ body.embed #graphCt {
 }
 
 #errorBox {
-    width: 100%;
+    width: calc(100% - 32px);
     background: linear-gradient(145deg, #3b3b3b, #242424);
     text-shadow: 0 0 10px #f6cfd9, 0 0 5px #f82161, 0 0 10px #f82161, 0 0 20px #f82161;
     font-size: 18px;
     /* line-height: 1.4em; */
-    padding: 15px;
+    padding: 16px;
     color: white;
     white-space: pre;
     word-wrap: normal;
