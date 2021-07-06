@@ -4,9 +4,13 @@
 
 #inputCt div.re > div#langRegex {
     grid-column: 1;
+    background: #d2d2d2;
+    border-top-left-radius: 10px;
 }
 #inputCt div.re > div#checkflags {
     grid-column: 2;
+    background: #d2d2d2;
+    border-top-right-radius: 10px;
 }
 
 #inputCt div.re > div#container-input {

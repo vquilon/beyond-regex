@@ -110,17 +110,17 @@ body, html * {
     flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
-    margin: 5px 5px;
+    padding: 10px 10px;
 }
 
 #inputCt div.re #container-input {
     /* flex-grow: 1; */
-    margin: 10px 0px;
-
+    padding: 10px 0px;
     display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
     align-content: center;
+    border-top: 1px #ababab solid;
     align-items: center;
     justify-content: space-between;
 }
@@ -279,7 +279,7 @@ body, html * {
 
 #checkflags {
     font-family: "VictorMono", monospace;
-    margin: 10px 10px;
+    padding: 10px 10px;
 
     display: flex;
     flex-direction: row;
@@ -793,13 +793,14 @@ select:focus>option:checked {
     font-weight: bold;
     pointer-events: none;
     text-transform: uppercase;
-    transform: translate(-50%, 150%);
+    transform: translate(-50%, 60%);
     z-index: 1;
-    background: linear-gradient(145deg, #3b3b3b, #242424);
-    /* transition: box-shadow 0.4s, color 0.4s 0.2s, opacity 0.2s 0.4s; */
-
-    background: #0000007a !important;
-    box-shadow: 0 0 15px 0px #ffffff4d, 0 0 10px #ffffff4d;
+    background: linear-gradient(
+145deg
+, #3b3b3b, #242424);
+    transition: 0.5s;
+    background: rgb(0 0 0 / 25%) !important;
+    box-shadow: 0 0 5px 0px #0000004d, 0 0 10px #0000004d;
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
 }

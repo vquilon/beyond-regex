@@ -84,13 +84,19 @@
   z-index: -1;
   // box-shadow: 0 0 15px 0px #ffffff4d, 0 0 10px #ffffff4d;
   box-shadow: inset 0.2rem 0.2rem 0.8rem #fafafa, inset -0.2rem -0.2rem 0.8rem #7b7b7b, 0.3rem 0.3rem 0.5rem #838383, -0.2rem -0.2rem 0.5rem #ffffff;
+  transition: all 0.5s;
 }
 .select-box:hover .select-box__current::before {
   box-shadow: 0 0 15px 0px #ffffff4d, 0 0 10px #ffffff4d;
-  box-shadow: inset 0.2rem 0.2rem 0.8rem #fafafa, inset -0.2rem -0.2rem 0.8rem #7b7b7b, 0.3rem 0.3rem 0.5rem #838383, -0.2rem -0.2rem 0.5rem #ffffff;
+  box-shadow: inset 0.2rem 0.2rem 0.8rem #fafafa, inset -0.2rem -0.2rem 0.8rem #7b7b7b;
   background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.2);
 }
 
+.select-box:hover .select-box__current .select-box__value .select-box__input-text .code-icon {
+  // color: white;
+  // text-shadow: 0 0 10px white, 0 0 2px #c81aff, 0 0 10px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
+}
 
 .select-box__list {
   box-sizing: border-box;
@@ -214,7 +220,6 @@ $i: 1;
   margin: auto;
   width: 100%;
   text-align: center;
-  padding: 25% 0;
   border-radius: 50%;
   color: rgba(0, 0, 0, 0.7);
 }
@@ -226,8 +231,10 @@ $i: 1;
 
 .select-box__input:checked + .select-box__input-text {
   display: flex;
-  flex-flow: row nowrap;
   position: static;
+  align-items: center;
+  flex-wrap: nowrap;
+  flex-direction: column;
 }
 
 .menu-item .item .fas, .menu-item .item .far, .menu-item .item .fal, .menu-item .item .fad, .menu-item .item .fab, .menu-item .item .fac {
@@ -240,7 +247,8 @@ $i: 1;
   box-sizing: border-box;
   width: 100%;
   flex: none;
-  line-height: 30px;
+  line-height: 50px;
+  transition: 0.5s;
 }
 
 .menu-item .item svg, .select-box__input-text svg {
@@ -262,7 +270,6 @@ $i: 1;
   border: 1px rgba(255, 255, 255, 0.2) solid;
   line-height: 1;
   font-style: normal;
-  font-family: monospace;
   opacity: 0;
 
   color: rgba(255, 255, 255, 1);
@@ -278,12 +285,8 @@ $i: 1;
   font-size: 15px;
   box-sizing: border-box;
   flex: none;
-  /* padding: 0 5px; */
-  margin-top: 60%;
-  margin-bottom: -10%;
-  margin-left: -110%;
+  margin-top: -25%;
   width: 120%;
-  height: 10%;
   white-space: nowrap;
   background: rgba(216,139,241,0.9);
   border-radius: 10px;
