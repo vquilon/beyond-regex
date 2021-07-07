@@ -6,6 +6,14 @@ html, body {
     overflow-x: hidden;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
 body, html * {
     margin: 0;
     padding: 0;
@@ -15,10 +23,29 @@ body, html * {
 /* body {
     background: linear-gradient( 145deg, #3b3b3b, #242424);
 } */
+#container-main {
+    display: flex;
+    flex-wrap: nowrap;
+    flex: 1;
+    padding-bottom: 150px;
+}
 
 #main {
-    height: 100%;
-    margin: 60px 20px 0px;
+    /* height: 100%; */
+    padding: 60px 20px 0px;
+    /* Se tiene que restar al tamaño 100% el padding que se le da */
+    width: calc(100% - 40px);
+}
+
+#main-background {
+    background: url(../images/background_repeat_2.png);
+    opacity: 0.1;
+    width: 100%;
+    flex: none;
+    margin-left: -100%;
+    margin-top: -30px;
+    margin-bottom: -150px;
+    z-index: -1;
 }
 
 .version {
@@ -345,11 +372,20 @@ body, html * {
     text-shadow: 0 0 10px white, 0 0 2px #c81aff, 0 0 10px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
 }
 
+footer {
+    margin-top: -150px;
+    /* height: 150px; */
+    backdrop-filter: blur(5px);
+    box-shadow: inset 0 0 20px 0px #00000080, 0 0 5px 0px #00000080;
+    -webkit-backdrop-filter: blur(5px);
+    background: rgb(0 0 0 / 10%);
+}
+
 footer div.normal {
     text-align: center;
-    border-top: 1px solid grey;
-    margin: 1em auto;
-    padding: 10px;
+    /* border-top: 1px solid grey; */
+    padding: 50px;
+    height: 50px;
     font-size: 1.2em;
     font-style: italic;
 }
