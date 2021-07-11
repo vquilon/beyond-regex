@@ -12,7 +12,7 @@ var ThumbnailSVGControl = function (options) {
     const thumbContainerId = options.thumbContainerId || "thumbViewContainer";
     var $thumbContainer;
 
-    let scaleZoomSen = 0.5;
+    let scaleZoomSen = 0.2;
     let initialState = {
         pan: { x: 0, y: 0 },
         zoom: 0
@@ -237,7 +237,7 @@ var ThumbnailSVGControl = function (options) {
             $svg_inst.intervalZoomID = null;
         }
 
-        animationTime = animationTime || 0.1;
+        animationTime = animationTime || 0.5;
         fps = fps || 60;
         var // animationStepTime = 15,  // one per 30 frames
             iterations = fps * animationTime,
@@ -473,18 +473,18 @@ var ThumbnailSVGControl = function (options) {
                 ` transparent calc(${bound_scope_box.x}px + ${bound_scope_box.width}px),` +
                 ` white calc(${bound_scope_box.x}px + ${bound_scope_box.width}px)` +
                 `)`;
-            
+
             let clip_path = `polygon(` +
-            `0% 0%, 0% 100%, ` +
-            `${bound_scope_box.x}px 100%, ` +
-            `${bound_scope_box.x}px ${bound_scope_box.y}px, ` +
-            `calc(${bound_scope_box.x}px + ${bound_scope_box.width}px) ${bound_scope_box.y}px, ` +
-            `calc(${bound_scope_box.x}px + ${bound_scope_box.width}px) calc(${bound_scope_box.y}px + ${bound_scope_box.height}px), ` +
-            `${bound_scope_box.x}px calc(${bound_scope_box.y}px + ${bound_scope_box.height}px), ` +
-            `${bound_scope_box.x}px 100%, ` +
-            `${bound_scope_box.x}px 100%, ` +
-            `100% 100%, 100% 0%)`;
-            
+                `0% 0%, 0% 100%, ` +
+                `${bound_scope_box.x}px 100%, ` +
+                `${bound_scope_box.x}px ${bound_scope_box.y}px, ` +
+                `calc(${bound_scope_box.x}px + ${bound_scope_box.width}px) ${bound_scope_box.y}px, ` +
+                `calc(${bound_scope_box.x}px + ${bound_scope_box.width}px) calc(${bound_scope_box.y}px + ${bound_scope_box.height}px), ` +
+                `${bound_scope_box.x}px calc(${bound_scope_box.y}px + ${bound_scope_box.height}px), ` +
+                `${bound_scope_box.x}px 100%, ` +
+                `${bound_scope_box.x}px 100%, ` +
+                `100% 100%, 100% 0%)`;
+
             $mask_thumb_scope.style.clipPath = clip_path;
             $mask_thumb_scope.style.webkitMask = mask_gradient;
             $mask_thumb_scope.style.mask = mask_gradient;
@@ -569,7 +569,7 @@ var ThumbnailSVGControl = function (options) {
 
             let thumbView_interval = setInterval(function () {
                 thumb_svg.resize();
-                // thumb_svg.zoomBy(1.2);
+                thumb_svg.fit();
                 thumb_svg.center();
                 thumb_svg.updateThumbScope();
             }, 15);
@@ -729,19 +729,28 @@ var ThumbnailSVGControl = function (options) {
                             relativeMousePoint = point.matrixTransform(inversedScreenCTM);
                         }
                         else if (this === $thumbContainer) {
+                            // let scopeBounds = document.querySelector("#scope").getBoundingClientRect();
+                            // let scopePosX = scopeBounds.x + scopeBounds.width / 2;
+                            // let scopePosY = scopeBounds.y + scopeBounds.height / 2;
+                            let clientX = event.clientX;// || scopePosX;
+                            let clientY = event.clientY;// || scopePosY;
+
                             // Intento de calculo del punto en el main a partir del thumb
-                            let thumbPanX = event.clientX - (dimThumb.left + thumbWidth / 2 - resetTumbPanOffsetX);
-                            let thumbPanY = event.clientY - (dimThumb.top + thumbHeight / 2 - resetTumbPanOffsetY);
+                            let thumbPanX = clientX - (dimThumb.left + dimThumb.width / 2);
+                            let thumbPanY = clientY - (dimThumb.top + dimThumb.height / 2);
                             let mainPanX = thumbPanX * mainZoom / thumbZoom;
                             let mainPanY = thumbPanY * mainZoom / thumbZoom;
 
                             point.x = mainPanX;
                             point.y = mainPanY;
 
-                            relativeMousePoint = {
-                                x: mainPanX,
-                                y: mainPanY
-                            };
+                            relativeMousePoint = point.matrixTransform(inversedScreenCTM);
+                            // relativeMousePoint = {
+                            //     x: mainPanX,
+                            //     y: mainPanY
+                            // };
+                            console.log({t: "thumb", x: thumbPanX, y: thumbPanY})
+                            console.log({t: "mouse", }, relativeMousePoint);
                         }
 
 
@@ -899,13 +908,13 @@ var ThumbnailSVGControl = function (options) {
             // <use xlink:href="#back-content" style="clip-path: url(#clip-circle);fill: red;filter: url(#blur);clip-path: url(#front-content);"></use>
             // Este es el view, el elemento que se utiliza para la parte difuminada
             // <circle r="50%" cx="50%" cy="50%" id="front-content"></circle>
-            
+
             let $g_circle = document.createElementNS(svgns, 'circle');
             let $g_clipPath = document.createElementNS(svgns, 'clipPath');
             // let $g_shineLight = document.createElementNS(svgns, 'g');
             // let $g_shineDark = document.createElementNS(svgns, 'g');
             let $g_gradient = document.createElementNS(svgns, 'g');
-            
+
             $g_circle.setAttributeNS(null, 'r', '100%');
             $g_circle.setAttributeNS(null, 'cx', '50%');
             $g_circle.setAttributeNS(null, 'cy', '50%');
@@ -926,7 +935,7 @@ var ThumbnailSVGControl = function (options) {
             $clipPath_icon.setAttributeNS(null, 'd', _path);
             $clipPath_icon.style.transform = "translate(-35%, -35%) scale(0.06)";
             $clipPath_icon.style.transformOrigin = "center";
-            
+
             // $g_shineLight.appendChild($path_icon);
             // $g_shineDark.appendChild($path_icon);
             $g_clipPath.appendChild($clipPath_icon);

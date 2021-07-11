@@ -41,6 +41,60 @@
     </radialGradient>
 
     <defs>
+        <filter id="shadow" width="1.5" height="1.5" x="-.25" y="-.25">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur"></feGaussianBlur>
+            <feColorMatrix result="bluralpha" type="matrix" values="1 0 0 0   0
+             0 1 0 0   0
+             0 0 1 0   0
+             0 0 0 0.4 0 "></feColorMatrix>
+            <feOffset in="bluralpha" dx="3" dy="3" result="offsetBlur"></feOffset>
+            <feMerge>
+                <feMergeNode in="offsetBlur"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+
+        <!-- a transparent grey glow with no offset -->
+        <filter id="black-glow">
+            <feColorMatrix type="matrix" values="0 0 0 0   0
+                 0 0 0 0   0
+                 0 0 0 0   0
+                 0 0 0 0.7 0"></feColorMatrix>
+            <feGaussianBlur stdDeviation="2.5" result="coloredBlur"></feGaussianBlur>
+            <feMerge>
+                <feMergeNode in="coloredBlur"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+
+        <!-- a transparent glow that takes on the colour of the object it's applied to -->
+        <filter id="glow">
+            <!-- Thicken out the original shape -->
+            <feMorphology operator="dilate" radius="20" in="SourceAlpha" result="thicken"></feMorphology>
+
+            <!-- Use a gaussian blur to create the soft blurriness of the glow -->
+            <feGaussianBlur in="thicken" stdDeviation="20" result="blurred"></feGaussianBlur>
+
+            <!-- Change the colour -->
+            <!-- <feFlood flood-color="rgb(151 31 238 / 50%)" result="glowColor"></feFlood> -->
+            <feFlood flood-color="rgb(0 0 0 / 50%)" result="glowColor"></feFlood>
+            <!-- Color in the glows -->
+            <feComposite in="glowColor" in2="blurred" operator="in" result="softGlow_colored"></feComposite>
+
+            <feGaussianBlur stdDeviation="20" result="bevel_blur"></feGaussianBlur>
+            <feSpecularLighting result="bevel_lighting" in="bevel_blur" specularConstant="2.4" specularExponent="13"
+                lighting-color="rgba(0,0,0,1)">
+                <feDistantLight azimuth="25" elevation="40"></feDistantLight>
+            </feSpecularLighting>
+            <feComposite in="bevel_lighting" in2="SourceGraphic" operator="in" result="bevel_complete"></feComposite>
+            <!--	Layer the effects together -->
+            <feMerge>
+                <feMergeNode in="softGlow_colored"></feMergeNode>
+                <feMergeNode in="bevel_complete"></feMergeNode>
+
+            </feMerge>
+
+        </filter>
         <filter id="distortion">
             <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="turbulence"></feTurbulence>
             <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="20" xChannelSelector="R" yChannelSelector="G">
@@ -50,17 +104,17 @@
         <filter id="transparent">
 
 
-            <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="dark_edge_01"></feMorphology>
+            <feMorphology operator="dilate" radius="10" in="SourceAlpha" result="dark_edge_01"></feMorphology>
             <feOffset dx="5" dy="5" in="dark_edge_01" result="dark_edge_03"></feOffset>
-            <feFlood flood-color="rgba(0,0,0,.5)" result="dark_edge_04"></feFlood>
+            <feFlood flood-color="rgba(0,0,0,.4)" result="dark_edge_04"></feFlood>
             <feComposite in="dark_edge_04" in2="dark_edge_03" operator="in" result="dark_edge"></feComposite>
 
 
 
 
-            <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="light_edge_01"></feMorphology>
-            <feOffset dx="-2" dy="-2" in="light_edge_01" result="light_edge_03"></feOffset>
-            <feFlood flood-color="rgba(234,218,228,0.5)" result="light_edge_04"></feFlood>
+            <feMorphology operator="dilate" radius="10" in="SourceAlpha" result="light_edge_01"></feMorphology>
+            <feOffset dx="-5" dy="-5" in="light_edge_01" result="light_edge_03"></feOffset>
+            <feFlood flood-color="rgba(0,0,0,.4)" result="light_edge_04"></feFlood>
             <feComposite in="light_edge_04" in2="light_edge_03" operator="in" result="light_edge"></feComposite>
 
 
@@ -75,9 +129,9 @@
 
 
 
-            <feGaussianBlur stdDeviation="5" result="bevel_blur"></feGaussianBlur>
+            <feGaussianBlur stdDeviation="10" result="bevel_blur"></feGaussianBlur>
             <feSpecularLighting result="bevel_lighting" in="bevel_blur" specularConstant="2.4" specularExponent="13"
-                lighting-color="rgba(60,60,60,.4)">
+                lighting-color="rgba(200,200,200,1)">
                 <feDistantLight azimuth="25" elevation="40"></feDistantLight>
             </feSpecularLighting>
             <feComposite in="bevel_lighting" in2="SourceGraphic" operator="in" result="bevel_complete"></feComposite>
@@ -143,5 +197,5 @@
         </feMerge>
     </filter>
 
-    
+
 </svg>

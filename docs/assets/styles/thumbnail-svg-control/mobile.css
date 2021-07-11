@@ -16,9 +16,9 @@
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    max-height: 60vh;
+    max-height: 80vh;
     width: 100%;
-    height: 60vh;
+    height: 80vh;
     box-shadow: none;
     border: none;
     background: transparent;
@@ -64,13 +64,15 @@
     pointer-events: all;
     flex-flow: row nowrap;
     font-size: 0px;
-    height: clac(100% + 20px);
+    height: calc(100% + 20px);
     width: calc(30% + 20px);
-    box-shadow: 6px 6px 12px #00000063, -6px -6px 12px #00000063;
+    /* box-shadow: 6px 6px 12px #00000063, -6px -6px 12px #00000063; */
     transition: all 0.2s linear;
     border: unset;
     /* background: radial-gradient(circle at 50% 50%, #e2e2e2a8 70%, #e2e2e236); */
     border-radius: 10px;
+    background: rgb(255 255 255 / 20%);
+    box-shadow: inset 0 0 10px 0px #ffffff80, 0 0 5px 0px #ffffff80;
 }
 
 .thumbViewClass {
@@ -81,9 +83,8 @@
 }
 
 #masked {
-    background-color: transparent;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
     box-sizing: border-box;
     width: 100%;
     flex: none;
@@ -109,8 +110,15 @@
     border-radius: 10px;
 }
 
+#thumbViewContainer:hover {
+    width: 40%;
+    height: 180%;
+}
+
 .icon {
-    box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
+    background: rgb(255 255 255 / 30%);
+    box-shadow: inset 0 0 10px 0px #ffffff4d, 0 0 5px 0px #ffffffb3;
+    /* box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c; */
 }
 .icon svg circle {
     fill: white !important;
@@ -128,8 +136,13 @@
 }
 
 .icon:hover {
-    box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
+    box-shadow: inset 0 0 20px 0px #37c1ff, 0 0 15px 0px #b0e7ff;
 }
+
+.icon:active {
+    box-shadow: inset 0 0 20px 0px #37c1ff, 0 0 15px 0px #b0e7ff;
+}
+
 
 .icon#zoom-in:hover {
     transform: none;
@@ -147,7 +160,7 @@
     margin-left: 0px;
     margin-right: 0px;
 }
-
+/* 
 .icon .lens g.shine-accent-dark path {
     fill: url(#shine-accent-dark) !important;
 }
@@ -182,4 +195,9 @@
 
 .icon:active .lens g.gradient path {
     fill: url(#gradient-hover) !important;
+} */
+
+
+.json-container {
+    margin-top: 40px;
 }

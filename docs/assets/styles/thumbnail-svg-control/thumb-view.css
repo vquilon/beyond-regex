@@ -4,18 +4,17 @@
 	/* background: #e2e2e2; */
 }
 
-#thumbSVG .svg-pan-zoom_viewport{
+#thumbSVG .svg-pan-zoom_viewport {
 	transition: transform 0.1s linear;
 }
 
 #thumbViewContainer:hover {
-    width: 40%;
+	width: 40%;
 	height: 140%;
 }
 
 #thumbViewContainer {
 	pointer-events: all;
-
 	/* 	Para arreglar que los divs tengan separacion */
 	font-size: 0px;
 	/* position: relative; */
@@ -24,22 +23,21 @@
 	/* 	margin: 0px; */
 	height: 100%;
 	width: 20%;
-	/* border: 2px solid black; */
-	/* box-shadow: 6px 6px 12px #00000063, -6px -6px 12px #00000063; */
-	
-	transition: all 0.2s linear;
-
-    /* background: radial-gradient(circle at 50% 50%, #e2e2e2a8 70%, #e2e2e236); */
-    border-radius: 10px;
-
-	box-shadow: 0 8px 32px 0 rgb(31 38 135 / 37%);
-    border: 1px solid rgba( 255, 255, 255, 0.18 );
-
-
 	display: flex;
-    flex-flow: row nowrap;
+	flex-flow: row nowrap;
 	position: static;
+	border-radius: 10px;
+	/* border: 2px solid black; */	
+	/* border: 1px solid rgba( 255, 255, 255, 0.18); */
+	/* background: radial-gradient(circle at 50% 50%, #e2e2e2a8 70%, #e2e2e236); */
+	background: rgb(0 0 0 / 20%);
+	/* box-shadow: 6px 6px 12px #00000063, -6px -6px 12px #00000063; */
+	/* box-shadow: 0 8px 32px 0 rgb(31 38 135 / 37%); */
+    box-shadow: inset 0 0 10px 0px #00000080, 0 0 5px 0px #00000080;
+
+	transition: all 0.2s linear;
 }
+
 .thumbViewClass {
 	position: relative;
 	height: 100%;
@@ -47,82 +45,77 @@
 	overflow: hidden;
 }
 
+#thumbView {
+	background-color: rgba(255, 255, 255, .5);
+}
+
 
 #thumbView {
-    background-color: rgba(255, 255, 255, .5);
-}
-
-/* if backdrop support: very transparent and blurred */
-
-@supports (-webkit-backdrop-filter: blur(5px)) {
-    #thumbView {
-        background-color: transparent;
-        -webkit-backdrop-filter: blur(5px);
-		backdrop-filter: blur(5px);
-    }
-}
-
-@supports (backdrop-filter: blur(5px)) {
-    #thumbView {
-        background-color: transparent;
-        backdrop-filter: blur(5px);
-    }
-}
-
-#thumbView {
-    z-index: 110;
-    /* background: white; */
-    box-sizing: border-box;
-    border-radius: 10px;
-
+	z-index: 110;
+	/* background: white; */
+	box-sizing: border-box;
+	border-radius: 10px;
 	/* Para uso de glassmorpishm con mask y el parent div con border-radius */
 	width: 100%;
-    flex: none;
-    margin-left: -100%;
+	flex: none;
+	margin-left: -100%;
 }
 
 #masked {
 	width: 100%;
 	height: 100%;
 	z-index: 130;
-
 	position: relative;
 	pointer-events: none;
-
-    box-sizing: border-box;
-    flex: none;
+	box-sizing: border-box;
+	flex: none;
 	border-radius: 10px;
 }
 
 /* slightly transparent fallback */
+
 #masked {
-  background-color: rgba(255, 255, 255, .5);
+	background-color: rgb(75 0 130 / 30%);
+	background-color: rgb(0 0 0 / 20%);
 }
 
 /* if backdrop support: very transparent and blurred */
-@supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(1px))) {
-  #masked {
-    background-color: transparent;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-  }
+@supports (-webkit-backdrop-filter: blur(5px)) {
+	#thumbView {
+		background-color: transparent;
+		-webkit-backdrop-filter: blur(5px);
+		backdrop-filter: blur(5px);
+	}
+	#masked {
+		-webkit-backdrop-filter: blur(2px);
+		backdrop-filter: blur(2px);
+	}
+}
+
+@supports (backdrop-filter: blur(5px)) {
+	#thumbView {
+		background-color: transparent;
+		backdrop-filter: blur(5px);
+	}
+	#masked {
+		backdrop-filter: blur(2px);
+	}
 }
 
 #scope {
 	fill: none !important;
-	stroke: white !important;
-    stroke-opacity: 0.5 !important;
-    stroke-width: 1px !important;
+	stroke: none !important;
+	/* stroke: white !important;
+	stroke-opacity: 0.5 !important;
+	stroke-width: 1px !important; */
 }
 
 #scopeContainer {
 	z-index: 120;
 	/* top: -100%; */
-
 	border-radius: 10px;
-
 	box-sizing: border-box;
-    width: 100%;
-    flex: none;
-    margin-left: -100%;
+	width: 100%;
+	flex: none;
+	margin-left: -100%;
 }
