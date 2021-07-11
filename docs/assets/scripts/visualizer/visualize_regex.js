@@ -835,29 +835,31 @@ function visualize(regexson_tree, regex_flags, canvas_Raphael_paper) {
         setFontFamilySize(canvas_Raph);
 
         have_multiline_flag = !!~regex_flags.indexOf("m");
-        var regex_text_items = processRegexTextItems(regexson.tree);
-        regex_text_items.unshift(createRegexTextItem("/", colors_map.delimiter));
-        regex_text_items.unshift(createRegexTextItem("RegExp: "));
-        regex_text_items.push(createRegexTextItem("/", colors_map.delimiter));
-        regex_flags && regex_text_items.push(createRegexTextItem(regex_flags, colors_map.flags));
+        // Generacion del texto encima del grafo
+        // var regex_text_items = processRegexTextItems(regexson.tree);
+        // regex_text_items.unshift(createRegexTextItem("/", colors_map.delimiter));
+        // regex_text_items.unshift(createRegexTextItem("RegExp: "));
+        // regex_text_items.push(createRegexTextItem("/", colors_map.delimiter));
+        // regex_flags && regex_text_items.push(createRegexTextItem(regex_flags, colors_map.flags));
 
         var size_item_text = getFontStyles(graph_fontsize, "bold"),
             u = margin_items,
             l = size_item_text.height / 2 + margin_items,
             max_item_width = 0,
             max_item_height = 0;
-        max_item_width = regex_text_items.reduce(function (t, e) {
-            return e.x = t,
-                e.y = l,
-                t + e.text.length * size_item_text.width
-        }, u);
-        max_item_width += margin_items;
-        max_item_height = size_item_text.height + 2 * margin_items;
-        regex_text_items = canvas_Raph.add(regex_text_items);
+        // max_item_width = regex_text_items.reduce(function (t, e) {
+        //     return e.x = t,
+        //         e.y = l,
+        //         t + e.text.length * size_item_text.width
+        // }, u);
+        // max_item_width += margin_items;
+        // max_item_height = size_item_text.height + 2 * margin_items;
+        // regex_text_items = canvas_Raph.add(regex_text_items);
 
-        // Establece la altura para el size generado por el texto de la regex
-        canvas_Raph.setSize(max_item_width, size_item_text.height + 2 * margin_items);
+        // // Establece la altura para el size generado por el texto de la regex
+        // canvas_Raph.setSize(max_item_width, size_item_text.height + 2 * margin_items);
 
+        // Generacion del grafo
         // Se procesa el regexson para generar los items con formato json que despues procesara Raphael
         var raphael_items = generateRaphaelSVGItems(regexson.tree, 0, 0);
 

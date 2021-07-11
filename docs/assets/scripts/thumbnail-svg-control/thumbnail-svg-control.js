@@ -12,7 +12,7 @@ var ThumbnailSVGControl = function (options) {
     const thumbContainerId = options.thumbContainerId || "thumbViewContainer";
     var $thumbContainer;
 
-    let scaleZoomSen = 0.2;
+    let scaleZoomSen = 0.5;
     let initialState = {
         pan: { x: 0, y: 0 },
         zoom: 0
@@ -237,7 +237,7 @@ var ThumbnailSVGControl = function (options) {
             $svg_inst.intervalZoomID = null;
         }
 
-        animationTime = animationTime || 0.5;
+        animationTime = animationTime || 0.1;
         fps = fps || 60;
         var // animationStepTime = 15,  // one per 30 frames
             iterations = fps * animationTime,
@@ -569,6 +569,7 @@ var ThumbnailSVGControl = function (options) {
 
             let thumbView_interval = setInterval(function () {
                 thumb_svg.resize();
+                // thumb_svg.zoomBy(1.2);
                 thumb_svg.center();
                 thumb_svg.updateThumbScope();
             }, 15);
@@ -1061,7 +1062,7 @@ var ThumbnailSVGControl = function (options) {
     }
 
     // Preparacion inicial del estado de zoom
-    animateZoom(main_svg, 0.8 * main_svg.getZoom(), animationTime = 2, fps = 60, callback = function () {
+    animateZoom(main_svg, 0.9 * main_svg.getZoom(), animationTime = 1, fps = 60, callback = function () {
         initialState.pan = main_svg.getPan();
         initialState.zoom = main_svg.getZoom();
     });
