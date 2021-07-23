@@ -120,13 +120,13 @@
 .icon:hover .lens g.shine-accent-light path{
 	fill: url(#shine-accent-light-hover) !important;
 }
-
+*/
 .icon .lens g.gradient path{
 	fill: url(#gradient) !important;
 }
 .icon:hover .lens g.gradient path{
-	fill: url(#gradient-hover) !important;
-} */
+	fill: url(#gradient-accent) !important;
+}
 
 /* .icon svg.lens g.main g path {
 	filter: url(#transparent);

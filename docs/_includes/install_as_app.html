@@ -61,7 +61,7 @@
         border-radius: 50%;
         opacity: 0;
         pointer-events: none;
-        content: "";
+        /* content: ""; */
     }
 
     .mdc-icon-button::before {
@@ -87,7 +87,7 @@
     }
 
     .mdc-icon-button:hover::before {
-        opacity: 0.04;
+        /* opacity: 0.04; */
     }
 
     .mdc-icon-button:not(.mdc-ripple-upgraded):focus::before {
@@ -225,13 +225,13 @@
     }
 
     .mdc-snackbar__label {
-        font-family: Roboto, sans-serif;
+        /* font-family: Roboto, sans-serif; */
         -moz-osx-font-smoothing: grayscale;
         -webkit-font-smoothing: antialiased;
-        font-size: 0.875rem;
-        line-height: 1.25rem;
-        font-weight: 400;
-        letter-spacing: 0.0178571429em;
+        font-size: 1rem;
+        /* line-height: 1.25rem; */
+        font-weight: 600;
+        /* letter-spacing: 0.0178571429em; */
         text-decoration: inherit;
         text-transform: inherit;
         -ms-flex-positive: 1;
@@ -240,6 +240,7 @@
         box-sizing: border-box;
         margin: 0;
         padding: 14px 16px;
+        border-radius: 10px;
     }
 
     .mdc-snackbar__label::before {
@@ -260,6 +261,12 @@
         align-items: center;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
+        padding: 5px 20px;
+        padding-right: 10px;
+
+        background: linear-gradient(315deg, #03a9f4bf, #ff0058bf);
+        box-shadow: inset 0 0 20px 0px #fffefeb5, 0 0 5px 0px #fffefe00, -5px 0 10px -2px #ff0058, 5px 0 10px -2px #03a9f4;
+        border-radius: 10px;
     }
 
     [dir=rtl] .mdc-snackbar__actions,
@@ -271,12 +278,12 @@
     }
 
     .mdc-snackbar__action:not(:disabled) {
-        color: #bb86fc;
+        color: white;
     }
 
     .mdc-snackbar__action::before,
     .mdc-snackbar__action::after {
-        background-color: #bb86fc;
+        /* background-color: #8fdcff; */
     }
 
     .mdc-snackbar__action:hover::before {
@@ -316,8 +323,15 @@
         background-color: rgba(255, 255, 255, 0.87);
     }
 
+    .mdc-snackbar__action+.mdc-snackbar__dismiss:hover {
+        box-shadow: inset 0 0 20px 0px black, 0 0 20px -5px black;
+    }
+
     .mdc-snackbar__dismiss:hover::before {
-        opacity: 0.08;
+        /* opacity: 0.08; */
+        opacity: 1;
+        background: linear-gradient(113deg, #03a9f4, #ff0058);
+        z-index: -1;
     }
 
     .mdc-snackbar__dismiss:not(.mdc-ripple-upgraded):focus::before {
@@ -354,10 +368,12 @@
     }
 
     .mdc-snackbar__action+.mdc-snackbar__dismiss {
-        /* @noflip */
-        margin-left: 8px;
-        /* @noflip */
-        margin-right: 0;
+        margin-left: 10px;
+        margin-right: 5px;
+        border-radius: 50%;
+        background: none;
+        padding: 0;
+        box-sizing: content-box;
     }
 
     [dir=rtl] .mdc-snackbar__action+.mdc-snackbar__dismiss,
@@ -400,20 +416,16 @@
     } */
 
     .mdc-snackbar__surface {
-        background: rgba(0, 0, 0, 0.40);
-        box-shadow: inset 0 0 20px 0px #fffefe1a, 0 0 5px 0px #fffefe1a, 0 0 10px 0 #5b1f87;
-        backdrop-filter: blur(5.0px);
-        -webkit-backdrop-filter: blur(5.0px);
+        background: rgba(0, 0, 0, 0.60);
+        box-shadow: inset 0 0 40px 0px #fffefe63, 0px 0 5px 0px #ffffff66;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-    }
-
-    .mdc-snackbar__action:not(:disabled) {
-        color: #f076fc;
+        /* border: 1px solid rgba(255, 255, 255, 0.18); */
     }
 
     .mdc-snackbar__actions button {
-        background: inherit;
+        background: none;
         border: none;
         font-weight: 500;
         font-style: normal;
@@ -426,10 +438,13 @@
         font-family: "VictorMono", monospace;
         font-style: italic;
         font-weight: 500;
+        font-size: 1rem;
+        padding: 0 5px;
+        text-decoration: underline;
     }
 
     .mdc-snackbar__actions button#btn-install-app:hover {
-        text-shadow: 0 0 10px #e9cff6, 0 0 5px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
+        text-shadow: 0 0 10px #ffffff, 10px 0 5px #03a9f4, -10px 0 5px #ff0058, 0 0 10px #03a9f4, 0 0 20px #03a9f4;
         color: white;
     }
 </style>
