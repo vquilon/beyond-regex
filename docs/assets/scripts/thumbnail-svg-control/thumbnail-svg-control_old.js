@@ -638,18 +638,6 @@ var ThumbnailSVGControl = function (options) {
         // 	customPan.y = Math.max(topLimit, Math.min(bottomLimit, newPan.y));
         // 	return customPan;
         // };
-        
-        // Agrego todo lo que haya dentro de $mainSVG en una etiqueta g
-        let $gContainer = document.createElementNS("http://www.w3.org/2000/svg", 'g');
-        let $gViewPort = document.createElementNS("http://www.w3.org/2000/svg", 'g');
-        $gContainer.id = "mainSVGContainer";
-        $gViewPort.id = "mainSVGViewPort";
-        let children = [...$mainSVG.childNodes];
-        children.forEach(function(child) {
-            $gContainer.appendChild(child);
-        });
-        $gViewPort.appendChild($gContainer)
-        $mainSVG.appendChild($gViewPort);
 
         let _main_svg = svgPanZoom('#' + options.mainSVGId, {
             zoomEnabled: true,
@@ -866,14 +854,9 @@ var ThumbnailSVGControl = function (options) {
         $svg.appendChild($g);
 
         // Crear el thumbSVG
-        // $thumbSVG = $mainSVG.cloneNode(true);
-        $thumbSVG = document.createElementNS(svgns, 'svg');
-        let $useElemen = document.createElementNS(svgns, 'use');
-        $useElemen.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#mainSVGContainer');
+        $thumbSVG = $mainSVG.cloneNode(true);
         $thumbSVG.style = "";
         $thumbSVG.id = 'thumbSVG';
-        $thumbSVG.appendChild($useElemen);
-
         var $thumbView = wrapElementWithNoDOM($thumbSVG, newWrapType = "div", newWrapId = 'thumbView');
         $thumbView.classList.add("thumbViewClass");
 

@@ -8,6 +8,10 @@
 	transition: transform 0.1s linear;
 }
 
+/* #thumbViewContainer:hover {
+	transform: scale(1.4);
+	transform-origin: left bottom;
+} */
 #thumbViewContainer:hover {
 	width: 40%;
 	height: 140%;
@@ -23,6 +27,11 @@
 	/* 	margin: 0px; */
 	height: 100%;
 	width: 20%;
+	/* height: 100px;
+    width: 200px;
+    max-width: 50%;
+    max-height: 100%; */
+
 	display: flex;
 	flex-flow: row nowrap;
 	position: static;
