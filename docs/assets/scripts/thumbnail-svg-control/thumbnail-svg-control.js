@@ -568,9 +568,9 @@ var ThumbnailSVGControl = function (options) {
             }
 
             let thumbView_interval = setInterval(function () {
-                thumb_svg.resize();
-                thumb_svg.fit();
-                thumb_svg.center();
+                // thumb_svg.resize();
+                // thumb_svg.fit();
+                // thumb_svg.center();
                 thumb_svg.updateThumbScope();
             }, 15);
             setTimeout(function () {
@@ -1093,7 +1093,7 @@ var ThumbnailSVGControl = function (options) {
         initialState.zoom = main_svg.getZoom();
     });
 
-    thumb_svg.zoomBy(0.8);
+    // thumb_svg.zoomBy(0.8);
     thumb_svg.updateThumbScope();
 
     function destroyAll() {
@@ -1136,12 +1136,12 @@ var ThumbnailSVGControl = function (options) {
                 }
                 main_svg.resize();
                 if (scopeContainer_bCR.width > 0 && scopeContainer_bCR.height > 0) {
-                    thumb_svg.resize();
+                    // thumb_svg.resize();
                     // Centrar pan y zoom del thumbnail
-                    thumb_svg.resetZoom();
-                    thumb_svg.zoomOut();
-                    thumb_svg.zoomOut();
-                    thumb_svg.center(true);
+                    // thumb_svg.resetZoom();
+                    // thumb_svg.zoomOut();
+                    // thumb_svg.zoomOut();
+                    // thumb_svg.center(true);
                     // Actualizar el recuardo del viewbox del thumbnail
                     thumb_svg.updateThumbScope();
                 }
