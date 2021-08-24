@@ -9,17 +9,20 @@
   {% include head.html %}
 
   <link rel="stylesheet" href="assets/styles/pwa.css">
+  <link rel="stylesheet" href="assets/styles/install-as-app.css">
 
   {% include styles-thumbnail-svg-control.html %}
   {% include styles-circle-selector.html %}
 
+  {% include dom-physics-engine/head.html %}
+
 </head>
 
 <body>
-  
+
   {% include register_pwa.html %}
 
- 
+  <div id="debug"></div>
   {% include svg-filters.html %}
   <div id="container-main">
     {{ content }}
@@ -31,7 +34,9 @@
 
   {% include scripts.html %}
   {% include scripts-thumbnail-svg-control.html %}
- 
+  {% include dom-physics-engine/scripts.html %}
+
+  <script src="assets/scripts/main.js"></script>
 
 </body>
 

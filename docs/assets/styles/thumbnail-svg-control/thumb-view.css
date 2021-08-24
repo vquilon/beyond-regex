@@ -8,10 +8,11 @@
 	transition: transform 0.1s linear;
 }
 
-/* #thumbViewContainer:hover {
-	transform: scale(1.4);
-	transform-origin: left bottom;
-} */
+#thumbViewContainer:hover {
+	/* transform: scale(1.4);
+	transform-origin: left bottom; */
+	box-shadow: inset 0 0 20px 0px #fffefeb5, 0 0 5px 0px #fffefe00, -5px 0 10px -2px #ff0058, 5px 0 10px -2px #03a9f4;
+}
 
 #thumbViewContainer {
 	pointer-events: all;
@@ -24,24 +25,20 @@
 	/* height: 100%;
 	width: 20%; */
 	height: 100px;
-    width: 200px;
-    max-width: 50%;
-    max-height: 100%;
-
+	width: 200px;
+	max-width: 50%;
+	max-height: 100%;
 	display: flex;
 	flex-flow: row nowrap;
 	position: static;
 	border-radius: 10px;
-	/* border: 2px solid black; */	
+	/* border: 2px solid black; */
 	/* border: 1px solid rgba( 255, 255, 255, 0.18); */
 	/* background: radial-gradient(circle at 50% 50%, #e2e2e2a8 70%, #e2e2e236); */
 	background: rgb(0 0 0 / 20%);
 	/* box-shadow: 6px 6px 12px #00000063, -6px -6px 12px #00000063; */
-	/* box-shadow: 0 8px 32px 0 rgb(31 38 135 / 37%); */
-    box-shadow: inset 0 0 10px 0px #00000080, 0 0 5px 0px #00000080;
-
-	box-shadow: inset 0 0 20px 0px #fffefeb5, 0 0 5px 0px #fffefe00, -5px 0 10px -2px #ff0058, 5px 0 10px -2px #03a9f4;
-
+	box-shadow: 0 8px 32px 0 rgb(31 38 135 / 37%);
+	/* box-shadow: inset 0 0 10px 0px #00000080, 0 0 5px 0px #00000080; */
 	transition: all 0.2s linear;
 }
 
@@ -55,7 +52,6 @@
 #thumbView {
 	background-color: rgba(255, 255, 255, .5);
 }
-
 
 #thumbView {
 	z-index: 110;
@@ -87,6 +83,7 @@
 }
 
 /* if backdrop support: very transparent and blurred */
+
 @supports (-webkit-backdrop-filter: blur(5px)) {
 	#thumbView {
 		background-color: transparent;

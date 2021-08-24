@@ -103,14 +103,14 @@
   height: 50px;
   flex: none;
   display: flex;
-  z-index: 2;
+  z-index: 200;
   align-items: center;
   justify-content: center;
   flex-flow: row nowrap;
   position: absolute;
 }
 .select-box:hover .select-box__list {
-  z-index: 4;
+  z-index: 204;
   // width: 160px;
   // height: 160px;
 }
@@ -183,7 +183,7 @@ $i: 1;
     }
 
     &:nth-child(#{$i}):hover {
-      z-index: 4;
+      z-index: 204;
       transform: translate3d(cos($angle) * $open-distance-hover, sin($angle) * $open-distance-hover, 0) scale(1.2);
     }
   }

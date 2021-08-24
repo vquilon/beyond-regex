@@ -8,6 +8,30 @@ window.onbeforeunload = function (e) {
     }
 }
 
+window.onload = function () {
+    RegexVisualizer({});
+
+    let [resize_world, create_body_cb] = DOMPhysicsBox2D({
+        debug: false,
+        debug_DOM_id: "debug",
+        rigid_DOM_class: "box2d-object"
+    });
+
+    let makeRObject = function(event) {
+        create_body_cb($version, {randomForce: true});
+        event.target.removeEventListener("click", makeRObject, false);
+    };
+
+    let $version = document.querySelector(".heading span.version");
+    $version.addEventListener("click", makeRObject, false);
+    
+    let reportWindowSize = function() {
+        resize_world();
+    }
+    window.addEventListener('resize', reportWindowSize);
+}
+
+
 
 /* < body onbeforeunload = "ConfirmClose()" onunload = "HandleOnClose()" > */
 

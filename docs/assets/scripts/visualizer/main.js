@@ -1,4 +1,4 @@
-window.onload = function () {
+var RegexVisualizer = function (options) {
     var paper = new Raphael('graphCtView', 10, 10);
     paper.canvas.id = 'graphCtSVG';
     // TODO: Dibujar un boton que sea el de visualizar para dar por entendido que hay
