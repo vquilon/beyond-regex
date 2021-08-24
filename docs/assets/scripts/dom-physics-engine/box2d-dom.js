@@ -467,13 +467,15 @@ var DOMPhysicsBox2D = function (options) {
 
 	function save_bodies() {
 		bodies.forEach(function (body) {
-			body.box.SetAwake(0);
-			body.box.SetActive(0);
-			body.coordinates = { x: body.box.GetPosition().get_x(), y: body.box.GetPosition().get_y() };
 			body.lastVel = {
 				x: body.box.GetLinearVelocity().get_x(),
 				y: body.box.GetLinearVelocity().get_y(),
+				angular: body.box.GetAngularVelocity()
 			}
+			body.box.SetAwake(0);
+			body.box.SetActive(0);
+			body.coordinates = { x: body.box.GetPosition().get_x(), y: body.box.GetPosition().get_y() };
+
 			body.angle = body.box.GetAngle();
 
 			savedBodies.push(body);
@@ -499,6 +501,7 @@ var DOMPhysicsBox2D = function (options) {
 			newBoxBody.SetAwake(1);
 			newBoxBody.SetActive(1);
 			newBoxBody.SetLinearVelocity(new b2Vec2(body.lastVel.x, body.lastVel.y));
+			newBoxBody.SetAngularVelocity(body.lastVel.angular);
 
 			bodies.push({
 				coordinates: body.coordinates,
