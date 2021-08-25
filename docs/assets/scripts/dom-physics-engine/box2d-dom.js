@@ -19,6 +19,8 @@ var DOMPhysicsBox2D = function (options) {
 
 	var world = null;
 	var mouseJointGroundBody;
+	var ground;
+
 	var canvas;
 	var Box2D_context;
 	var myDebugDraw;
@@ -62,7 +64,10 @@ var DOMPhysicsBox2D = function (options) {
 	var bodies = [];
 	var savedBodies = [];
 	var previous = undefined;
-
+	var bodyTypes = {
+		RECTANGLE_ROUNDED: "rectangle_rounded",
+		RECTANGLE: "rectangle"
+	}
 
 	// Funciones auxiliares
 	function myRound(val, places) {
@@ -311,20 +316,13 @@ var DOMPhysicsBox2D = function (options) {
 
 	}
 
-	function createWorld() {
-		if (world != null)
-			window.Box2D.destroy(world);
-
-		world = new window.Box2D.b2World(new window.Box2D.b2Vec2(0.0, -gravityFactor));
-		// world.SetVelocityThreshold(0.0);
-		world.SetDebugDraw(myDebugDraw);
-
+	function createWalls() {
 		mouseJointGroundBody = world.CreateBody(new window.Box2D.b2BodyDef());
 
 		// Creacion del suelo y las paredes
-		var bd_ground = new window.Box2D.b2BodyDef();
+		let bd_ground = new window.Box2D.b2BodyDef();
 		bd_ground.restitution = 1.0;
-		var ground = world.CreateBody(bd_ground);
+		ground = world.CreateBody(bd_ground);
 		var groundShape = new window.Box2D.b2EdgeShape();
 
 		worldWidth = VIEW.width / PTM;
@@ -341,8 +339,239 @@ var DOMPhysicsBox2D = function (options) {
 		groundShape.Set(new window.Box2D.b2Vec2(worldWidth / 2, worldHeight / 2), new window.Box2D.b2Vec2(worldWidth / 2, -worldHeight / 2));
 		ground.CreateFixture(groundShape, 0.0);
 	}
+	function createWorld() {
+		if (world != null)
+			window.Box2D.destroy(world);
 
-	function create_new_body($nodeBody, opts) {
+		world = new window.Box2D.b2World(new window.Box2D.b2Vec2(0.0, -gravityFactor));
+		// world.SetVelocityThreshold(0.0);
+		world.SetDebugDraw(myDebugDraw);
+		createWalls();
+		
+	}
+
+	function resizeWalls() {
+		if(mouseJointGroundBody) {
+			world.DestroyBody(mouseJointGroundBody);
+			mouseJointGroundBody = undefined;
+		}
+		if(ground) {
+			world.DestroyBody(ground);
+			ground = undefined;
+		}
+
+		createWalls();
+	}
+
+	function _create_rounded_rectangle(posX, posY, width, height, radius) {
+		//1. Create rigid body requirement b2BodyDef
+		let bodyDefinition = new window.Box2D.b2BodyDef();
+		//Remember the conversion relationship between meters and pixels
+		bodyDefinition.set_type(Module.b2_dynamicBody);
+		bodyDefinition.set_position(new window.Box2D.b2Vec2(posX/PTM, posY/PTM));
+		
+		//2. Box2D world factory has more demand to create createBody () production rigid body
+		let body = world.CreateBody(bodyDefinition);
+		
+		//3. Create subclasses that dare to mention shape requirements b2ShapeDef
+		/* Detail our needs
+			Create multiple b2Shape requirements
+			Then the b2Body rigid body factory creates shapes based on demand createShape
+		*/
+		//Convert pixels to meters in Box2D
+		// Se ajusta el radio a un maximo
+		let minSize = Math.min(width, height);
+		let minRadius = Math.min(width, height)*0.99;
+		let topLeftRadius = radius.topLeft>=minSize ? minRadius : radius.topLeft;
+		let topRightRadius = radius.topRight>=minSize ? minRadius : radius.topRight;
+		let bottomLeftRadius = radius.bottomLeft>=minSize ? minRadius : radius.bottomLeft;
+		let bottomRightRadius = radius.bottomRight>=minSize ? minRadius : radius.bottomRight;
+
+		let b2Width = width/2/PTM;
+		let b2Height = height/2/PTM;
+
+		let b2TopLeftRadius = topLeftRadius/PTM;
+		let b2TopRightRadius = topRightRadius/PTM;
+		let b2BottomLeftRadius = bottomLeftRadius/PTM;
+		let b2BottomRightRadius = bottomRightRadius/PTM;
+		
+		let offsetTopLeftX = b2Width-b2TopLeftRadius;
+		let offsetTopLeftY = b2Height-b2TopLeftRadius;
+
+		let offsetTopRightX = b2Width-b2TopRightRadius;
+		let offsetTopRightY = b2Height-b2TopRightRadius;
+
+		let offsetBottomLeftX = b2Width-b2BottomLeftRadius;
+		let offsetBottomLeftY = b2Height-b2BottomLeftRadius;
+
+		let offsetBottomRightX = b2Width-b2BottomRightRadius;
+		let offsetBottomRightY = b2Height-b2BottomRightRadius;
+
+		//------------------------------------
+		//First create two rectangles. I subtracted radius from their height and width separately for rounded corners. You can comment out the code to create rounded corners below to see the effect
+		var shape = new window.Box2D.b2PolygonShape();
+		var fd = new window.Box2D.b2FixtureDef();
+		fd.set_density(3.0);
+        fd.set_friction(0.3);
+		fd.set_restitution(0.3);
+
+		//Create two rectangles
+		shape.SetAsBox(b2Width, b2Height-Math.min(b2BottomLeftRadius, b2BottomRightRadius));
+		fd.set_shape(shape);
+		body.CreateFixture(fd);
+		shape.SetAsBox(b2Width-Math.min(b2TopRightRadius, b2BottomRightRadius), b2Height);
+		fd.set_shape(shape);
+		body.CreateFixture(fd);
+		//------------------------------------
+		//Then, create four circles on the four corners to achieve the rounded corner effect
+		var circleShape = new window.Box2D.b2CircleShape();
+
+		circleShape.set_m_p(new window.Box2D.b2Vec2(-offsetTopLeftX, offsetTopLeftY));
+		circleShape.set_m_radius(b2TopLeftRadius);
+		fd.set_shape(circleShape);
+		body.CreateFixture(fd);
+
+		circleShape.set_m_p(new window.Box2D.b2Vec2(offsetTopRightX, offsetTopRightY));
+		circleShape.set_m_radius(b2TopRightRadius);
+		fd.set_shape(circleShape);
+		body.CreateFixture(fd);
+		
+		circleShape.set_m_p(new window.Box2D.b2Vec2(-offsetBottomLeftX, -offsetBottomLeftY));
+		circleShape.set_m_radius(b2BottomLeftRadius);
+		fd.set_shape(circleShape);
+		body.CreateFixture(fd);
+		
+		circleShape.set_m_p(new window.Box2D.b2Vec2(offsetBottomRightX, -offsetBottomRightY));
+		circleShape.set_m_radius(b2BottomRightRadius);
+		fd.set_shape(circleShape);
+		body.CreateFixture(fd);
+
+		// body.ResetMassData();
+		return body;
+	}
+
+	function _create_rectangle(posX, posY, width, height) {
+		var shape = new window.Box2D.b2PolygonShape();
+		var fd = new window.Box2D.b2FixtureDef();
+		fd.set_density(3.0);
+        fd.set_friction(0.3);
+		fd.set_restitution(0.3);
+
+		shape.SetAsBox(width/2/PTM, height/2/PTM);
+		fd.set_shape(shape);
+		var bodyDefinition = new window.Box2D.b2BodyDef();
+		bodyDefinition.set_type(Module.b2_dynamicBody);
+		bodyDefinition.set_position(new window.Box2D.b2Vec2(posX/PTM, posY/PTM));
+
+		var body = world.CreateBody(bodyDefinition);
+		body.CreateFixture(fd);
+
+		// temp.Set(16*(Math.random()-0.5), 4.0 + 2.5*i);
+		// body.SetTransform(temp, 0.0);
+		return body;
+	}
+
+	function _create_pill(posX, posY, width, height, radius) {
+		let bodyDefinition = new window.Box2D.b2BodyDef();
+		bodyDefinition.set_type(Module.b2_dynamicBody);
+		bodyDefinition.set_position(new window.Box2D.b2Vec2(posX/PTM, posY/PTM));
+		
+		let body = world.CreateBody(bodyDefinition);
+		
+		let minSize = Math.min(width, height);
+		let minRadius = Math.min(width, height)*0.99;
+		let maxRadiusLeft, maxRadiusRight;
+		if (typeof radius !== 'object') {
+			maxRadiusLeft = radius;
+			maxRadiusRight = radius;
+		} else{
+			maxRadiusLeft = Math.max(radius.topLeft, radius.bottomLeft);
+			maxRadiusRight = Math.max(radius.bottomRight, radius.bottomRight)
+		}
+		let leftRadius = maxRadiusLeft>=minSize ? minRadius : maxRadiusLeft;
+		let rightRadius = maxRadiusRight>=minSize ? minRadius : maxRadiusRight;
+
+		let b2Width = width/2/PTM;
+		let b2Height = height/2/PTM;
+
+		let b2LeftRadius = leftRadius/PTM;
+		let b2RightRadius = rightRadius/PTM;
+		
+		let offsetLeftX = b2Width-b2LeftRadius;
+		let offsetRightX = b2Width-b2RightRadius;
+
+		var shape = new window.Box2D.b2PolygonShape();
+		var fd = new window.Box2D.b2FixtureDef();
+		fd.set_density(3.0);
+        fd.set_friction(0.3);
+		fd.set_restitution(0.3);
+
+		shape.SetAsBox(b2Width-b2LeftRadius-b2RightRadius, b2Height);
+		fd.set_shape(shape);
+		body.CreateFixture(fd);
+
+		var circleShape = new window.Box2D.b2CircleShape();
+
+		circleShape.set_m_p(new window.Box2D.b2Vec2(-offsetLeftX, 0));
+		circleShape.set_m_radius(b2LeftRadius);
+		fd.set_shape(circleShape);
+		body.CreateFixture(fd);
+
+		circleShape.set_m_p(new window.Box2D.b2Vec2(offsetRightX, 0));
+		circleShape.set_m_radius(b2RightRadius);
+		fd.set_shape(circleShape);
+		body.CreateFixture(fd);
+
+		return body;
+	}
+
+	function _create_ellipse(posX, posY, width, height) {
+		let bodyDefinition = new window.Box2D.b2BodyDef();
+		bodyDefinition.set_type(Module.b2_dynamicBody);
+		bodyDefinition.set_position(new window.Box2D.b2Vec2(posX/PTM, posY/PTM));
+		
+		let body = world.CreateBody(bodyDefinition);
+
+		var fd = new window.Box2D.b2FixtureDef();
+		fd.set_density(3.0);
+        fd.set_friction(0.3);
+		fd.set_restitution(0.3);
+
+		var circleShape = new window.Box2D.b2CircleShape();
+
+		circleShape.set_m_p(new window.Box2D.b2Vec2(-offsetLeftX, 0));
+		circleShape.set_m_radius(b2LeftRadius);
+		fd.set_shape(circleShape);
+		body.CreateFixture(fd);
+
+		circleShape.set_m_p(new window.Box2D.b2Vec2(offsetRightX, 0));
+		circleShape.set_m_radius(b2RightRadius);
+		fd.set_shape(circleShape);
+		body.CreateFixture(fd);
+
+		return body;
+	}
+
+
+	function _getNumberFromStyle(styleNumber) {
+		try {
+			// Si tiene px, em ...
+			// Si tiene %
+			// TODO Realizar las conversiones
+			let num = parseFloat(styleNumber.replace(/%|[cm]m|in|p[xtc]|r?em|v(?:[hw]|min|max)|ch|ex/g, ''));
+			let unit = styleNumber.match(/%|[cm]m|in|p[xtc]|r?em|v(?:[hw]|min|max)|ch|ex/g);
+			if (unit) {
+				unit = unit[0];
+			}
+
+			return [num, unit];
+		} catch (e) {
+			return 0;
+		}
+	}
+
+	function get_data_from_DOMNode($nodeBody) {
+		
 		// $('p').each(function () {
 		// $(this).html('<span>' + $(this).text().split(' ').join('</span> <span>') + '</span>');
 		// $(this).find('span').each(function () {
@@ -380,10 +609,51 @@ var DOMPhysicsBox2D = function (options) {
 		// 		left: (spread - hShadow + 0.5*blur),
 		// 	});
 		// }
-		let ZERO = new b2Vec2(0, 0);
-		var boundings = $nodeBody.getBoundingClientRect();
+		let nodeStyles = window.getComputedStyle($nodeBody);
+		let boundings = $nodeBody.getBoundingClientRect();
+		// Se obtienen las medidas del nodo del DOM
+		if (boundings.width === 0 || boundings.height === 0) {
+			return undefined;
+		}
 
-		var lineHeight = window.getComputedStyle($nodeBody).lineHeight;
+		let calculateAvgBorder = function(styleBorder, w, h) {
+			let arrBorder = styleBorder.split(" ");
+			let arrUnit = [];
+			if (arrBorder.length <= 1) {
+				if(arrBorder[0] === ""){
+					arrBorder[0] = "0";
+				}
+				arrBorder[1] = arrBorder[0];
+			}
+
+			[arrBorder[0], arrUnit[0]] = _getNumberFromStyle(arrBorder[0]);
+			[arrBorder[1], arrUnit[1]] = _getNumberFromStyle(arrBorder[1]);
+
+			return [Math.max(arrBorder[0], arrBorder[1]), arrUnit[0]];
+		}
+
+		var borderRadius = {
+			topLeft: calculateAvgBorder(nodeStyles.borderTopLeftRadius),
+			topRight: calculateAvgBorder(nodeStyles.borderTopRightRadius),
+			bottomLeft: calculateAvgBorder(nodeStyles.borderBottomLeftRadius),
+			bottomRight: calculateAvgBorder(nodeStyles.borderBottomRightRadius)
+		}
+		let borderRadiusAvg = Object.values(borderRadius).map((v,i,a) => v[0]).reduce((a, b) => a + b) / Object.values(borderRadius).length;
+		let borderUnits = {
+			topLeft: borderRadius.topLeft[1],
+			topRight: borderRadius.topRight[1],
+			bottomLeft: borderRadius.bottomLeft[1],
+			bottomRight: borderRadius.bottomRight[1]
+		}
+		borderRadius = {
+			topLeft: borderRadius.topLeft[0],
+			topRight: borderRadius.topRight[0],
+			bottomLeft: borderRadius.bottomLeft[0],
+			bottomRight: borderRadius.bottomRight[0]
+		}
+
+
+		let lineHeight = nodeStyles.lineHeight;
 		if (lineHeight.indexOf("px")) {
 			lineHeight = parseFloat(lineHeight.slice(0, lineHeight.indexOf("px")));
 			if (lineHeight !== 0) {
@@ -391,22 +661,36 @@ var DOMPhysicsBox2D = function (options) {
 			}
 		}
 
-		// var left = boundings.left / PTM;
-		// var top = boundings.top / PTM;
-		var width = (boundings.width) / PTM;
-		var height = (boundings.height) / PTM;
-		var angle = 0;
-		if (width === 0 || height === 0) {
-			return;
-		}
-		var coordinates = {
-			x: (boundings.left + window.scrollX - VIEW.width / 2 + boundings.width / 2) / PTM,
-			y: (- boundings.top - window.scrollY + VIEW.height / 2 + boundings.height / 2 - lineHeight) / PTM
+		
+		let coordinates = {
+			x: boundings.left + window.scrollX - VIEW.width / 2 + boundings.width / 2,
+			y: - boundings.top - window.scrollY + VIEW.height / 2 + boundings.height / 2 - lineHeight
 		};
 
+		return {
+			coordinates: coordinates,
+			boundings: boundings,
+			borderAvg: borderRadiusAvg,
+			borderRadius: borderRadius,
+			borderUnits: borderUnits,
+			borderDifferentUnits: Object.values(borderUnits).join("") !== borderUnits.topLeft.repeat(4)
+		};
+	}
+
+	function create_new_body($nodeBody, opts) {
+		let ZERO = new b2Vec2(0, 0);
+		let nodeData = get_data_from_DOMNode($nodeBody);
+		if (nodeData===undefined){
+			return;
+		}
+		let coordinates = nodeData.coordinates;
+		let boundings = nodeData.boundings;
+		let borderRadius = nodeData.borderRadius;
+		
 		// Se le agregan estilos absolutos para que el translate funcione
 		$nodeBody.style.height = "fit-content";
 		$nodeBody.style.width = "fit-content";
+		// TODO
 		// $nodeBody.style.height = `${boundings.height}px`;
 		// $nodeBody.style.width = `${boundings.width}px`;
 		$nodeBody.style.position = "absolute";
@@ -418,26 +702,44 @@ var DOMPhysicsBox2D = function (options) {
 		$nodeBody.style.boxShadow = "none";
 		$nodeBody.style.transition = "none";
 
-		var shape = new window.Box2D.b2PolygonShape();
-		shape.SetAsBox(width / 2, height / 2);
+		// Se crea el cuerpo
+		let body;
 
-		var bodyDefinition = new window.Box2D.b2BodyDef();
-		bodyDefinition.set_type(Module.b2_dynamicBody);
-		// bodyDefinition.set_position(ZERO);
-		bodyDefinition.set_position(new window.Box2D.b2Vec2(coordinates.x, coordinates.y));
+		if (!nodeData.borderDifferentUnits) {
+			// Si el borde viene en porcentajes y es igual o superior a 50% es una elipse
+			if (nodeData.borderUnits.topLeft === "%" && nodeData.borderAvg >= 50) {
+				// body = _create_ellipse(coordinates.x, coordinates.y, boundings.width, boundings.height);
+				body = _create_pill(
+					coordinates.x, coordinates.y, boundings.width, boundings.height,
+					nodeData.borderAvg/100 * Math.min(boundings.width, boundings.height)
+				);
+			}
+			// Si el radius border es superior a la mitad del minimo ancho/alto entonces es un pill
+			else if (nodeData.borderAvg >= Math.min(boundings.width, boundings.height)) {
+				body = _create_pill(coordinates.x, coordinates.y, boundings.width, boundings.height, borderRadius);
+			} 
+		}
+		// Si los bordes tiene diferentes unidades de medida se hace un rounded directamente
+		else {
+			body = _create_rounded_rectangle(coordinates.x, coordinates.y, boundings.width, boundings.height, borderRadius);
+		}
+		// Si no el radio del borde es 0 entonces es un rectangulo normal
+		if (Object.values(borderRadius).reduce((a, b) => a[0] + b[0]) === 0) {
+			body = _create_rectangle(coordinates.x, coordinates.y, boundings.width, boundings.height);
+		}
+		// Si no son cero y no se ha creado el body entonces es un rounded
+		else if (body === undefined) {
+			body = _create_rounded_rectangle(coordinates.x, coordinates.y, boundings.width, boundings.height, borderRadius);
+		}
 
-		var body = world.CreateBody(bodyDefinition);
-		body.CreateFixture(shape, 5.0);
 
-		// temp.Set(16*(Math.random()-0.5), 4.0 + 2.5*i);
-		// body.SetTransform(temp, 0.0);
+		// Se aplican fuerzas
 		body.SetLinearVelocity(ZERO);
 		body.SetAwake(1);
 		body.SetActive(1);
-
 		if (opts.randomForce) {
 			let newForce = new b2Vec2(
-				Math.floor(Math.random() * 500) + 100,
+				0,
 				- Math.floor(Math.random() * 1000) + 500
 			);
 			body.ApplyForce(newForce);
@@ -447,9 +749,10 @@ var DOMPhysicsBox2D = function (options) {
 		// height_bounding = (1/(Math.cos(angle)^2-Math.sin(angle)^2)) * (- bounds.width * Math.sin(angle) + bounds.height * Math.cos(angle));
 
 		return {
+			type: bodyTypes.RECTANGLE_ROUNDED,
 			coordinates: coordinates,
 			domElement: $nodeBody,
-			domSizes: { width: width * PTM, height: height * PTM },
+			domSizes: { width: boundings.width, height: boundings.height, borderRadius: borderRadius},
 			box: body
 		}
 	}
@@ -474,10 +777,10 @@ var DOMPhysicsBox2D = function (options) {
 			}
 			body.box.SetAwake(0);
 			body.box.SetActive(0);
-			body.coordinates = { x: body.box.GetPosition().get_x(), y: body.box.GetPosition().get_y() };
+			body.coordinates = { x: body.box.GetPosition().get_x()*PTM, y: body.box.GetPosition().get_y()*PTM };
 
 			body.angle = body.box.GetAngle();
-
+			world.DestroyBody(body.box);
 			savedBodies.push(body);
 		});
 
@@ -487,16 +790,23 @@ var DOMPhysicsBox2D = function (options) {
 
 	function recreate_bodies() {
 		savedBodies.forEach(function (body) {
-			let shape = new window.Box2D.b2PolygonShape();
-			shape.SetAsBox(body.domSizes.width / (2 * PTM), body.domSizes.height / (2 * PTM));
-
-			let bodyDefinition = new window.Box2D.b2BodyDef();
-			bodyDefinition.set_type(Module.b2_dynamicBody);
-			bodyDefinition.set_position(new window.Box2D.b2Vec2(body.coordinates.x, body.coordinates.y));
-			bodyDefinition.set_angle(body.angle);
-
-			let newBoxBody = world.CreateBody(bodyDefinition);
-			newBoxBody.CreateFixture(shape, 5.0);
+			let newBoxBody;
+			if (body.type === bodyTypes.RECTANGLE_ROUNDED) {
+				newBoxBody = _create_rounded_rectangle(
+					body.coordinates.x, body.coordinates.y,
+					body.domSizes.width, body.domSizes.height,
+					body.domSizes.borderRadius
+				);
+			}
+			else if (body.type === bodyTypes.RECTANGLE) {
+				newBoxBody = _create_rectangle(
+					body.coordinates.x, body.coordinates.y,
+					body.domSizes.width, body.domSizes.height
+				);
+			}
+			else {
+				return;
+			}
 
 			newBoxBody.SetAwake(1);
 			newBoxBody.SetActive(1);
@@ -504,12 +814,12 @@ var DOMPhysicsBox2D = function (options) {
 			newBoxBody.SetAngularVelocity(body.lastVel.angular);
 
 			bodies.push({
+				type: body.type,
 				coordinates: body.coordinates,
 				domElement: body.domElement,
-				domSizes: { width: body.domSizes.width, height: body.domSizes.height },
+				domSizes: body.domSizes,
 				box: newBoxBody
 			});
-
 
 		});
 		savedBodies = [];
@@ -659,16 +969,39 @@ var DOMPhysicsBox2D = function (options) {
 
 	function exported_resize_world() {
 		save_bodies();
-		canvasView.style.display = "";
-		VIEW.width = canvasView.getBoundingClientRect().width;
+		// canvasView.style.display = "";
+		// VIEW.width = canvasView.getBoundingClientRect().width;
+		VIEW.width = window.innerWidth;
+		// if (!options.debug) {
+		// 	canvasView.style.display = "none";
+		// }
 		// Cambiar por la altura que contenga el view que se quiere del elemento en este caso toda la pagina
+		canvas.height = 0;
+		canvas.style.height = "0";
+
 		VIEW.height = document.documentElement.scrollHeight;
 		canvas.width = VIEW.width;
 		canvas.height = VIEW.height;
-		Box2D_context = canvas.getContext('2d');
-		createWorld();
+		canvas.style.height = "";
+		VIEW.centerX = VIEW.width / 2;
+		VIEW.centerY = VIEW.height / 2;
+		VIEW.offsetX = VIEW.width / 2;
+		VIEW.offsetY = VIEW.height / 2;
+		canvasOffset = {
+			x: VIEW.offsetX,
+			y: VIEW.offsetY
+		};
+		viewCenterPixel = {
+			x: VIEW.centerX,
+			y: VIEW.centerY
+		};
+
+		// createWorld();
+		resizeWalls();
+
+		// Se coloca el centro de la camara
+		setViewCenterWorld(new b2Vec2(0, 0), true);
 		recreate_bodies();
-		canvasView.style.display = "none";
 	}
 
 	return [exported_resize_world, exported_init_new_body];

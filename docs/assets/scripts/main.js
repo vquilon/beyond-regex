@@ -19,7 +19,12 @@ window.onload = function () {
 
     let makeRObject = function(event) {
         create_body_cb($version, {randomForce: true});
+        document.querySelectorAll(".social-icon").forEach(function($el){
+            create_body_cb($el, {randomForce: false});
+        });
         event.target.removeEventListener("click", makeRObject, false);
+
+        setTimeout(function(){ resize_world(); }, 100);
     };
 
     let $version = document.querySelector(".heading span.version");
