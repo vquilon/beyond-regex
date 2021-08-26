@@ -51,6 +51,7 @@ body, html * {
 }
 
 .version {
+    text-align: center;
     line-height: 25px;
     font-size: 25px;
     font-style: normal;
@@ -828,6 +829,8 @@ select:focus>option:checked {
 
 .tooltip {
     color: white !important;
+    height: 20px;
+    line-height: 20px;
     display: block;
     opacity: 0;
     position: absolute;

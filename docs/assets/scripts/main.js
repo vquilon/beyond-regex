@@ -11,20 +11,26 @@ window.onbeforeunload = function (e) {
 window.onload = function () {
     RegexVisualizer({});
 
-    let [resize_world, create_body_cb] = DOMPhysicsBox2D({
-        debug: false,
+    let [resize_world, create_body_cb, remove_rbodies, playpause_world] = DOMPhysicsBox2D({
+        initPause: true,
+        debug: false, keyListeners: false,
         debug_DOM_id: "debug",
         rigid_DOM_class: "box2d-object"
     });
 
     let makeRObject = function(event) {
-        create_body_cb($version, {randomForce: true});
-        document.querySelectorAll(".social-icon").forEach(function($el){
-            create_body_cb($el, {randomForce: false});
-        });
+        playpause_world();
+        document.querySelector(".heading h1 em").addEventListener("click", stopPhysicEngine, false);
+        try {
+            create_body_cb($version, {randomForce: true});
+            document.querySelectorAll(".social-icon").forEach(function($el){
+                create_body_cb($el, {randomForce: false});
+            });
+            setTimeout(function(){ resize_world(); }, 100);
+        } catch (e) {
+            console.error(e);
+        } 
         event.target.removeEventListener("click", makeRObject, false);
-
-        setTimeout(function(){ resize_world(); }, 100);
     };
 
     let $version = document.querySelector(".heading span.version");
@@ -34,6 +40,13 @@ window.onload = function () {
         resize_world();
     }
     window.addEventListener('resize', reportWindowSize);
+
+    let stopPhysicEngine = function(event) {
+        remove_rbodies();
+        $version.addEventListener("click", makeRObject, false);
+        event.target.removeEventListener("click", stopPhysicEngine, false);
+    }
+    
 }
 
 
