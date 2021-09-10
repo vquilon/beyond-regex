@@ -474,11 +474,25 @@
                     // Agregar el id y clase y ocultar
                     var res, children = auxAddWithGroup(paperproto, j.children);
                     // Eliminar j.children para limpiar los atributos
+                    let _g_indices = j.indices;
+                    let _g_id = j.id;
+                    delete j.indices;
+                    delete j.id;
                     g = paperproto[j.type](children).attr(j);
+                    // g.node.id = "";
+                    g.node.setAttribute("data-id", _g_id);
+                    g.node.setAttribute("data-indices", _g_indices.join(","));
+
                     appendChildrenToNode(g[0], children.items);
                     children = res.push(g);
                 } else {
-                    var children = elements[has](j.type) && res.push(paperproto[j.type]().attr(j));
+                    if(elements[has](j.type)) {
+                        let child = paperproto[j.type]().attr(j);
+                        // child.node.id = j.id || "";
+                        var children = res.push(child);
+                    }
+                    
+                    
                 }
 
             }

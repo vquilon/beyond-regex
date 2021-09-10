@@ -869,3 +869,155 @@ select:focus>option:checked {
     border-color: transparent;
     transform: translate(-50%, -190%);
 }
+
+/* GRAPH LOADER */
+#graph-loader {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+    background: #e2e2e2;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    flex-wrap: nowrap;
+
+    row-gap: calc(50% - 10px - 100px/2);
+
+    overflow: hidden;
+
+    transition: opacity 0.5s;
+    opacity: 0;
+
+    pointer-events: none;
+}
+#graph-loader.loading {
+    opacity: 1;
+}
+
+#graph-loader .progress {
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    height: 10px;
+    /* border-bottom-right-radius: 20px; */
+
+    flex: none;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+
+    background: #03a9f4;
+
+    transition: transform 0.2s ease-out;
+    animation: animateBackground 2s linear infinite;
+}
+
+#graph-loader.loading .progress {
+    background: linear-gradient(90deg, #03a9f4 0%, #ff0058 33%, #03a9f4 66%, #ff0058 100%);
+    background-size: 300% 100%;
+    animation: animateBackground 2s linear infinite;
+}
+
+#graph-loader.loading .progress span {
+    background: linear-gradient(90deg, #03a9f4 0%, #ff0058 33%, #03a9f4 66%, #ff0058 100%);
+    background-size: 300% 100%;
+    width: 100%;
+    height: 100%;
+    display: block;
+    transition: width 0.2s ease-out;
+    animation: animateBackground 2s linear infinite;
+    flex: none;
+}
+
+#graph-loader .progress span:nth-child(1) {
+    filter: blur(5px);
+}
+
+#graph-loader .progress span:nth-child(2) {
+    filter: blur(10px);
+    margin-left: -100%;
+}
+
+#graph-loader .progress span:nth-child(3) {
+    filter: blur(20px);
+    margin-left: -100%;
+}
+
+@keyframes animateBackground {
+    0% {
+        background-position: 100%
+    }
+    100% {
+        background-position: 0%
+    }
+}
+
+#graph-loader .spinner {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-left: calc(50% - 100px/2);
+}
+
+#graph-loader.loading .spinner {
+    background: linear-gradient(315deg, #03a9f4, #ff0058);
+    animation: rotate 1.2s linear infinite;
+}
+
+#graph-loader.loading .spinner span {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(315deg, #03a9f4, #ff0058)
+}
+
+#graph-loader.loading .spinner span:nth-child(1) {
+    filter: blur(5px);
+}
+
+#graph-loader.loading .spinner.loading span:nth-child(2) {
+    filter: blur(10px);
+}
+
+#graph-loader.loading .spinner.loading span:nth-child(3) {
+    filter: blur(25px);
+}
+
+#graph-loader.loading .spinner.loading span:nth-child(4) {
+    filter: blur(50px);
+}
+
+#graph-loader .spinner:after {
+    content: '';
+    position: absolute;
+    /* top: 10px; */
+    /* left: 10px; */
+    /* right: 10px; */
+    /* bottom: 10px; */
+    width: 80%;
+    height: 80%;
+    background: #f1f1f1;
+    /* border: solid white 10px; */
+    box-shadow: 0px 0px 10px 2px white;
+    border-radius: 50%;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

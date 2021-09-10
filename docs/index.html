@@ -141,13 +141,24 @@ layout: main
         </div>
         <p id="errorBox" class="code">Error Message</p>
         <div id="graphCt" class="code">
+            <div id="graph-loader">
+                <div class="progress" data-value="0" data-max="100"></div>
+                <div class="spinner">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
             <div id="graphCtView">
-                <!-- <svg id="mainSVG" style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; " xmlns="http://www.w3.org/2000/svg" version="1.1">
+                <!-- <svg version="1.1" height="100%" width="100%" id="graphCtSVG">
+                    <g id="RaphaelPaperContainer"><g/>
                 </svg> -->
             </div>
         </div>
     
-        <pre><code class="json" id="treeRegex"></code></pre>
+        <pre><code class="json" id="regex-json"></code></pre>
+        <pre><code class="json" id="raphael-json"></code></pre>
     </div>
 </div>
 <div id="main-background"></div>

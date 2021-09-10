@@ -1,0 +1,150 @@
+.control-zoom {
+	display: flex;
+  	column-gap: 20px;
+	pointer-events: none;
+	
+	transition: all 0.2s linear;
+}
+.control-zoom:hover {
+  column-gap: 0px;
+}
+.control-zoom:hover .icon{
+	transform: scale(0.8);
+}
+.icon:hover {
+	z-index: 20;
+	/* box-shadow: 20px 20px 60px #88689799; */
+	box-shadow: inset 0 0 20px 5px #37c1ff, 0 0 10px 0px #b0e7ff
+}
+.icon#zoom-in:hover{
+	transform: translate(0px, -20px) scale(2);
+	margin-right: 20px;
+}
+.icon#zoom-out:hover{
+	transform: translate(0px, -20px) scale(2);
+	margin-left: 20px;
+	margin-right: 20px;
+}
+.icon#zoom-reset:hover{
+	transform: translate(0px, -20px) scale(2);
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+.icon {
+	pointer-events: auto;
+	transition: all 0.2s linear;
+	
+	/* width: 25px;
+	height: 25px; */
+	width: 45px;
+	height: 45px;
+	right: 10px;
+	/* padding: 10px; */
+	border-radius: 200px;
+	/* background-color: white; */
+	/* box-shadow: 10px 10px 40px #88689799; */
+	/* background: #f1f6fc; */
+	/* background: -moz-linear-gradient(-45deg, #f1fefc 6%, #c7cae9 100%);
+	background: -webkit-linear-gradient(-45deg, #f1f6fc 0%, #c7cae9 100%);
+	background: linear-gradient(135deg, #f1f6fc 0%, #c7cae9 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f6fc', endColorstr='#c7cae9', GradientType-1); */
+
+    backdrop-filter: blur( 2px );
+    -webkit-backdrop-filter: blur( 2px );
+    /* border: 1px solid rgba( 255, 255, 255, 0.18 ); */
+
+	/* background: rgba( 255, 255, 255, 0.30 ); */
+    /* box-shadow: 0 8px 32px 0 rgb(31 38 135 / 37%); */
+	background: rgb(0 0 0 / 20%);
+    box-shadow: inset 0 0 10px 0px #0000004d, 0 0 5px 0px #000000b3;
+
+}
+
+.icon svg {
+	width: 100%;
+	height: 100%;
+	filter: unset;
+}
+
+.filter{
+	width: 0;
+	height: 0;
+}
+
+.icon .lens g, .icon .lens g path {
+	transition: all 0.5s ease;
+}
+
+.icon:hover {
+	cursor: pointer;
+}
+.icon .lens g.shine-accent-light {
+	transform: translate(-4px, -4px);
+}
+.icon .lens g.shine-accent-dark {
+	transform: translate(4px, 4px);
+}
+/* 
+.icon .lens g.shine-accent-dark path{
+	fill: url(#shine-accent-dark) !important;
+}
+.icon .lens g.shine-accent-light path{
+	fill: url(#shine-accent-light) !important;
+}
+
+.icon:hover .lens g.shine-accent-dark path{
+	fill: url(#shine-accent-dark-hover) !important;
+}
+.icon:hover .lens g.shine-accent-light path{
+	fill: url(#shine-accent-light-hover) !important;
+}
+
+.icon .lens g.shine path{
+	fill: url(#shine) !important;
+}
+.icon:hover .lens g.shine path{
+	fill: url(#shine-hover) !important;
+}
+
+.icon .lens g.shine-accent-dark path{
+	fill: url(#shine-accent-dark) !important;
+}
+.icon .lens g.shine-accent-light path{
+	fill: url(#shine-accent-light) !important;
+}
+
+.icon:hover .lens g.shine-accent-dark path{
+	fill: url(#shine-accent-dark-hover) !important;
+}
+.icon:hover .lens g.shine-accent-light path{
+	fill: url(#shine-accent-light-hover) !important;
+}
+*/
+.icon .lens g.gradient path{
+	fill: url(#gradient) !important;
+}
+.icon:hover .lens g.gradient path{
+	fill: url(#gradient-accent) !important;
+}
+
+/* .icon svg.lens g.main g path {
+	filter: url(#transparent);
+} */
+
+.icon .lens g.gradient{
+	/* filter: url(#transparent); */
+	transform: none;
+/* 	transform-origin: center; */
+	
+}
+
+.icon .lens g.main {
+	/* transform: scale(0.55); */
+    /* filter: url(#dropshadow);
+	filter: url(#glow); */
+    /* transform-origin: center; */
+	fill: #37c1ff;
+    stroke: black;
+    stroke-width: 20px;
+}

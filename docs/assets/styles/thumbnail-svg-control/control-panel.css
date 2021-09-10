@@ -2,7 +2,7 @@
 	pointer-events: none;
 	z-index: 10;
 	display: flex;
-	top: calc(-20% - 10px);
+	top: -15px;
 	position: relative;
 	margin-left: 10px;
 	margin-right: 10px;

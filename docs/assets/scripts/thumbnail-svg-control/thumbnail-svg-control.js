@@ -1,5 +1,10 @@
 var ThumbnailSVGControl = function (options) {
     var flagFirstReset = true;
+    var flagAnimations = {
+        pan: false,
+        zoom: false
+    };
+
     var $mainView = document.getElementById(options.mainViewId);
     var $mainSVG = document.getElementById(options.mainSVGId);
     var $thumbSVG = document.getElementById(options.thumbSVGId);
@@ -128,192 +133,209 @@ var ThumbnailSVGControl = function (options) {
 
     // FUNCIONES ANIMACION DE PAN
     function animatePan($svg_inst, _newPan, animationTime, fps, callback = undefined) { // {x: 1, y: 2}
-        if (animationTime === 0) {
+        if (flagAnimations.pan) {
+            if (animationTime === 0) {
+                if ($svg_inst.intervalPanID) {
+                    clearInterval($svg_inst.intervalPanID)
+                    $svg_inst.intervalPanID = null;
+                }
+                $svg_inst.pan(_newPan);
+                return;
+            }
+
             if ($svg_inst.intervalPanID) {
                 clearInterval($svg_inst.intervalPanID)
                 $svg_inst.intervalPanID = null;
             }
+
+            animationTime = animationTime || 0.5;
+            fps = fps || 60;
+            var iterations = fps * animationTime, // ms duration
+                // animationStepTime = 15,  // one per 30 frames
+                animationStepTime = animationTime / iterations,
+                animationStep = 0,
+                time = 0,
+                _oldPan = $svg_inst.getPan(),
+                actualPan = $svg_inst.getPan(),
+                stepX = (_newPan.x - _oldPan.x) / iterations,
+                stepy = (_newPan.y - _oldPan.y) / iterations
+
+            $svg_inst.intervalPanID = setInterval(function () {
+                time += animationStepTime;
+                actualPan.x = linear(time, _oldPan.x, _newPan.x - _oldPan.x, animationTime);
+                actualPan.y = linear(time, _oldPan.y, _newPan.y - _oldPan.y, animationTime);
+                // actualZoom += step;
+                // let dirPan = {
+                // 	x: ((_newPan.x - _oldPan.x) / Math.abs(_newPan.x - _oldPan.x)),
+                // 	y: ((_newPan.y - _oldPan.y) / Math.abs(_newPan.y - _oldPan.y)),
+                // };
+                // if (dirPan.x * (actualPan.x - _newPan.x) < 0 && dirPan.y * (actualPan.y - _newPan.y) < 0) {
+                if (time < animationTime) {
+                    $svg_inst.pan(actualPan);
+                } else {
+                    // Cancel interval
+                    clearInterval($svg_inst.intervalPanID)
+                    $svg_inst.intervalPanID = null;
+                }
+            }, animationStepTime)
+        } else {
             $svg_inst.pan(_newPan);
-            return;
         }
-
-        if ($svg_inst.intervalPanID) {
-            clearInterval($svg_inst.intervalPanID)
-            $svg_inst.intervalPanID = null;
-        }
-
-        animationTime = animationTime || 0.5;
-        fps = fps || 60;
-        var iterations = fps * animationTime, // ms duration
-            // animationStepTime = 15,  // one per 30 frames
-            animationStepTime = animationTime / iterations,
-            animationStep = 0,
-            time = 0,
-            _oldPan = $svg_inst.getPan(),
-            actualPan = $svg_inst.getPan(),
-            stepX = (_newPan.x - _oldPan.x) / iterations,
-            stepy = (_newPan.y - _oldPan.y) / iterations
-
-        $svg_inst.intervalPanID = setInterval(function () {
-            time += animationStepTime;
-            actualPan.x = linear(time, _oldPan.x, _newPan.x - _oldPan.x, animationTime);
-            actualPan.y = linear(time, _oldPan.y, _newPan.y - _oldPan.y, animationTime);
-            // actualZoom += step;
-            // let dirPan = {
-            // 	x: ((_newPan.x - _oldPan.x) / Math.abs(_newPan.x - _oldPan.x)),
-            // 	y: ((_newPan.y - _oldPan.y) / Math.abs(_newPan.y - _oldPan.y)),
-            // };
-            // if (dirPan.x * (actualPan.x - _newPan.x) < 0 && dirPan.y * (actualPan.y - _newPan.y) < 0) {
-            if (time < animationTime) {
-                $svg_inst.pan(actualPan);
-            } else {
-                // Cancel interval
-                clearInterval($svg_inst.intervalPanID)
-                $svg_inst.intervalPanID = null;
-            }
-        }, animationStepTime)
+        
     }
-    function animatePanBy($svg_inst, amount, animationTime, fps, callback = undefined) { // {x: 1, y: 2}
-        if (animationTime === 0) {
+    function animatePanBy($svg_inst, _amount, animationTime, fps, callback = undefined) { // {x: 1, y: 2}
+        if (flagAnimations.pan) {
+            if (animationTime === 0) {
+                if ($svg_inst.intervalPanID) {
+                    clearInterval($svg_inst.intervalPanID)
+                    $svg_inst.intervalPanID = null;
+                }
+                let actualPan = svg_inst.getPan();
+                $svg_inst.pan({ x: actualPan.x + _amount.x, y: actualPan.y + _amount.y });
+                return;
+            }
+
             if ($svg_inst.intervalPanID) {
                 clearInterval($svg_inst.intervalPanID)
                 $svg_inst.intervalPanID = null;
             }
-            let actualPan = svg_inst.getPan();
-            $svg_inst.pan({ x: actualPan.x + amount.x, y: actualPan.y + amount.y });
-            return;
+
+            animationTime = animationTime || 0.5;
+            fps = fps || 60;
+            var iterations = fps * animationTime, // ms duration
+                // animationStepTime = 15,  // one per 30 frames
+                animationStepTime = animationTime / iterations,
+                animationStep = 0,
+                time = 0,
+                _oldPan = $svg_inst.getPan(),
+                actualPan = _oldPan,
+                _newPan = { x: _oldPan.x + _amount.x, y: _oldPan.y + _amount.y },
+                stepX = (_newPan.x - _oldPan.x) / iterations,
+                stepy = (_newPan.y - _oldPan.y) / iterations
+
+            $svg_inst.intervalPanID = setInterval(function () {
+                time += animationStepTime;
+                actualPan.x = linear(time, _oldPan.x, _newPan.x - _oldPan.x, animationTime);
+                actualPan.y = linear(time, _oldPan.y, _newPan.y - _oldPan.y, animationTime);
+                // actualZoom += step;
+                // let dirPan = {
+                // 	x: ((_newPan.x - _oldPan.x) / Math.abs(_newPan.x - _oldPan.x)),
+                // 	y: ((_newPan.y - _oldPan.y) / Math.abs(_newPan.y - _oldPan.y)),
+                // };
+                // if (dirPan.x * (actualPan.x - _newPan.x) < 0 && dirPan.y * (actualPan.y - _newPan.y) < 0) {
+                if (time < animationTime) {
+                    $svg_inst.pan(actualPan);
+                } else {
+                    // Cancel interval
+                    clearInterval(intervalID)
+                    $svg_inst.intervalPanID = null;
+                }
+            }, animationStepTime)
+        } else {
+            $svg_inst.panBy(_amount);
         }
-
-        if ($svg_inst.intervalPanID) {
-            clearInterval($svg_inst.intervalPanID)
-            $svg_inst.intervalPanID = null;
-        }
-
-        animationTime = animationTime || 0.5;
-        fps = fps || 60;
-        var iterations = fps * animationTime, // ms duration
-            // animationStepTime = 15,  // one per 30 frames
-            animationStepTime = animationTime / iterations,
-            animationStep = 0,
-            time = 0,
-            _oldPan = $svg_inst.getPan(),
-            actualPan = _oldPan,
-            _newPan = { x: _oldPan.x + amount.x, y: _oldPan.y + amount.y },
-            stepX = (_newPan.x - _oldPan.x) / iterations,
-            stepy = (_newPan.y - _oldPan.y) / iterations
-
-        $svg_inst.intervalPanID = setInterval(function () {
-            time += animationStepTime;
-            actualPan.x = linear(time, _oldPan.x, _newPan.x - _oldPan.x, animationTime);
-            actualPan.y = linear(time, _oldPan.y, _newPan.y - _oldPan.y, animationTime);
-            // actualZoom += step;
-            // let dirPan = {
-            // 	x: ((_newPan.x - _oldPan.x) / Math.abs(_newPan.x - _oldPan.x)),
-            // 	y: ((_newPan.y - _oldPan.y) / Math.abs(_newPan.y - _oldPan.y)),
-            // };
-            // if (dirPan.x * (actualPan.x - _newPan.x) < 0 && dirPan.y * (actualPan.y - _newPan.y) < 0) {
-            if (time < animationTime) {
-                $svg_inst.pan(actualPan);
-            } else {
-                // Cancel interval
-                clearInterval(intervalID)
-                $svg_inst.intervalPanID = null;
-            }
-        }, animationStepTime)
     }
     // FUNCIONES ANIMACION DE ZOOM
     function animateZoom($svg_inst, _newZoom, animationTime, fps, callback = undefined) { // {x: 1, y: 2}
-        if (animationTime === 0) {
+        if (flagAnimations.zoom) {
+            if (animationTime === 0) {
+                if ($svg_inst.intervalZoomID) {
+                    clearInterval($svg_inst.intervalZoomID)
+                    $svg_inst.intervalZoomID = null;
+                }
+                $svg_inst.zoom(_newZoom);
+                return;
+            }
+
             if ($svg_inst.intervalZoomID) {
                 clearInterval($svg_inst.intervalZoomID)
                 $svg_inst.intervalZoomID = null;
             }
+
+            animationTime = animationTime || 0.5;
+            fps = fps || 60;
+            var // animationStepTime = 15,  // one per 30 frames
+                iterations = fps * animationTime,
+                animationStepTime = animationTime / iterations,
+                animationStep = 0,
+                time = 0,
+                _oldZoom = $svg_inst.getZoom(),
+                actualZoom = _oldZoom,
+                step = (_newZoom - _oldZoom) / iterations;
+
+            $svg_inst.intervalZoomID = setInterval(function () {
+                time += animationStepTime;
+                actualZoom = linear(time, _oldZoom, _newZoom - _oldZoom, animationTime);
+                let change = _newZoom - _oldZoom;
+                if (Math.abs(change) < 0.001) {
+                    actualZoom = _newZoom;
+                    $svg_inst.zoom(actualZoom);
+                    clearInterval($svg_inst.intervalZoomID);
+                    $svg_inst.intervalZoomID = null;
+                    if (callback) callback();
+                }
+                // actualZoom += step;
+                // let dirZoom = ((_newZoom - _oldZoom) / Math.abs(_newZoom - _oldZoom));
+                // if (dirZoom * (actualZoom - _newZoom) < 0) {
+                if (time < animationTime) {
+                    // TODO: UTILIZAR SIEMPRE EL zoomBy
+                    $svg_inst.zoom(actualZoom);
+                } else {
+                    // Cancel interval
+                    clearInterval($svg_inst.intervalZoomID);
+                    $svg_inst.intervalZoomID = null;
+                    if (callback) callback();
+                }
+            }, animationStepTime)
+        } else {
             $svg_inst.zoom(_newZoom);
-            return;
         }
-
-        if ($svg_inst.intervalZoomID) {
-            clearInterval($svg_inst.intervalZoomID)
-            $svg_inst.intervalZoomID = null;
-        }
-
-        animationTime = animationTime || 0.5;
-        fps = fps || 60;
-        var // animationStepTime = 15,  // one per 30 frames
-            iterations = fps * animationTime,
-            animationStepTime = animationTime / iterations,
-            animationStep = 0,
-            time = 0,
-            _oldZoom = $svg_inst.getZoom(),
-            actualZoom = _oldZoom,
-            step = (_newZoom - _oldZoom) / iterations;
-
-        $svg_inst.intervalZoomID = setInterval(function () {
-            time += animationStepTime;
-            actualZoom = linear(time, _oldZoom, _newZoom - _oldZoom, animationTime);
-            let change = _newZoom - _oldZoom;
-            if (Math.abs(change) < 0.001) {
-                actualZoom = _newZoom;
-                $svg_inst.zoom(actualZoom);
-                clearInterval($svg_inst.intervalZoomID);
-                $svg_inst.intervalZoomID = null;
-                if (callback) callback();
-            }
-            // actualZoom += step;
-            // let dirZoom = ((_newZoom - _oldZoom) / Math.abs(_newZoom - _oldZoom));
-            // if (dirZoom * (actualZoom - _newZoom) < 0) {
-            if (time < animationTime) {
-                // TODO: UTILIZAR SIEMPRE EL zoomBy
-                $svg_inst.zoom(actualZoom);
-            } else {
-                // Cancel interval
-                clearInterval($svg_inst.intervalZoomID);
-                $svg_inst.intervalZoomID = null;
-                if (callback) callback();
-            }
-        }, animationStepTime)
     }
     function animateZoomAtPointBy($svg_inst, _newZoomPercent, atPoint, animationTime, fps, callback = undefined) { // {x: 1, y: 2}
-        if (animationTime === 0) {
+        if (flagAnimations.zoom) {
+            if (animationTime === 0) {
+                if ($svg_inst.intervalZoomID) {
+                    clearInterval($svg_inst.intervalZoomID)
+                    $svg_inst.intervalZoomID = null;
+                }
+                $svg_inst.zoomAtPoint($svg_inst.getZoom() * _newZoomPercent, atPoint);
+                return;
+            }
+
             if ($svg_inst.intervalZoomID) {
                 clearInterval($svg_inst.intervalZoomID)
                 $svg_inst.intervalZoomID = null;
             }
-            $svg_inst.zoomAtPoint($svg_inst.getZoom() * _newZoomPercent, atPoint);
-            return;
+
+            animationTime = animationTime || 0.5;
+            fps = fps || 60;
+            var // animationStepTime = 15,  // one per 30 frames
+                iterations = fps * animationTime,
+                animationStepTime = animationTime / iterations,
+                animationStep = 0,
+                time = 0,
+                _oldZoom = $svg_inst.getZoom(),
+                _newZoom = _oldZoom * _newZoomPercent,
+                actualZoom = _oldZoom,
+                step = (_newZoom - _oldZoom) / iterations;
+
+            $svg_inst.intervalZoomID = setInterval(function () {
+                time += animationStepTime;
+                actualZoom = linear(time, _oldZoom, _newZoom - _oldZoom, animationTime);
+                // actualZoom += step;
+                // let dirZoom = ((_newZoom - _oldZoom) / Math.abs(_newZoom - _oldZoom));
+                // if (dirZoom * (actualZoom - _newZoom) < 0) {
+                if (time < animationTime) {
+                    $svg_inst.zoomAtPoint(actualZoom, atPoint);
+                } else {
+                    // Cancel interval
+                    clearInterval($svg_inst.intervalZoomID);
+                    $svg_inst.intervalZoomID = null;
+                }
+            }, animationStepTime)
+        } else {
+            $svg_inst.zoomAtPointBy(_newZoomPercent, atPoint);
         }
-
-        if ($svg_inst.intervalZoomID) {
-            clearInterval($svg_inst.intervalZoomID)
-            $svg_inst.intervalZoomID = null;
-        }
-
-        animationTime = animationTime || 0.5;
-        fps = fps || 60;
-        var // animationStepTime = 15,  // one per 30 frames
-            iterations = fps * animationTime,
-            animationStepTime = animationTime / iterations,
-            animationStep = 0,
-            time = 0,
-            _oldZoom = $svg_inst.getZoom(),
-            _newZoom = _oldZoom * _newZoomPercent,
-            actualZoom = _oldZoom,
-            step = (_newZoom - _oldZoom) / iterations;
-
-        $svg_inst.intervalZoomID = setInterval(function () {
-            time += animationStepTime;
-            actualZoom = linear(time, _oldZoom, _newZoom - _oldZoom, animationTime);
-            // actualZoom += step;
-            // let dirZoom = ((_newZoom - _oldZoom) / Math.abs(_newZoom - _oldZoom));
-            // if (dirZoom * (actualZoom - _newZoom) < 0) {
-            if (time < animationTime) {
-                $svg_inst.zoomAtPoint(actualZoom, atPoint);
-            } else {
-                // Cancel interval
-                clearInterval($svg_inst.intervalZoomID);
-                $svg_inst.intervalZoomID = null;
-            }
-        }, animationStepTime)
     }
 
     var getSVGDocument = function (objectElem) {
@@ -567,20 +589,22 @@ var ThumbnailSVGControl = function (options) {
                 }
             }
 
-            let thumbView_interval = setInterval(function () {
-                // thumb_svg.resize();
-                // thumb_svg.fit();
-                // thumb_svg.center();
-                thumb_svg.updateThumbScope();
-            }, 15);
-            setTimeout(function () {
-                clearInterval(thumbView_interval);
-            }, _trasnsition_number);
+            thumb_svg.updateThumbScope();
+            // let thumbView_interval = setInterval(function () {
+            //     // thumb_svg.resize();
+            //     // thumb_svg.fit();
+            //     // thumb_svg.center();
+            //     thumb_svg.updateThumbScope();
+            // }, 15);
+
+            // setTimeout(function () {
+            //     clearInterval(thumbView_interval);
+            // }, _trasnsition_number);
 
         };
-        $scopeContainer.addEventListener('mouseenter', resizeThumbViewListener);
-        $scopeContainer.addEventListener('mouseleave', resizeThumbViewListener);
-        $mainView.addEventListener('mouseleave', resizeThumbViewListener);
+        // $scopeContainer.addEventListener('mouseenter', resizeThumbViewListener);
+        // $scopeContainer.addEventListener('mouseleave', resizeThumbViewListener);
+        // $mainView.addEventListener('mouseleave', resizeThumbViewListener);
 
 
         let _$zoom_in = document.querySelector(`#zoom-in`);
@@ -761,8 +785,8 @@ var ThumbnailSVGControl = function (options) {
                             //     x: mainPanX,
                             //     y: mainPanY
                             // };
-                            console.log({t: "thumb", x: thumbPanX, y: thumbPanY})
-                            console.log({t: "mouse", }, relativeMousePoint);
+                            // console.log({t: "thumb", x: thumbPanX, y: thumbPanY})
+                            // console.log({t: "mouse", }, relativeMousePoint);
                         }
 
 
@@ -771,6 +795,10 @@ var ThumbnailSVGControl = function (options) {
                         // that.zoomAtPointBy(zoom, relativeMousePoint);
                         animateZoomAtPointBy(that, zoom, relativeMousePoint, animationTime = 0.2);
                     }
+
+                    $mainSVG.eventListenerList = [];
+                    $mainView.eventListenerList = [];
+                    _options.svgElement.eventListenerList = [];
 
                     _options.svgElement.addEventListener(support, wheelHandlerListener);
                 },
@@ -1017,6 +1045,8 @@ var ThumbnailSVGControl = function (options) {
                     let support = "onwheel" in document.createElement("div") ? "wheel" : // Modern browsers support "wheel"
                         document.onmousewheel !== undefined ? "mousewheel" : // Webkit and IE support at least "mousewheel"
                             "DOMMouseScroll";
+                    $thumbSVG.eventListenerList = [];
+                    $thumbContainer.eventListenerList = [];
                     $thumbContainer.addEventListener(support, wheelHandlerListener);
                 },
                 destroy: function (_options) {
@@ -1093,7 +1123,7 @@ var ThumbnailSVGControl = function (options) {
         initialState.zoom = main_svg.getZoom();
     });
 
-    // thumb_svg.zoomBy(0.8);
+    thumb_svg.zoomBy(0.9);
     thumb_svg.updateThumbScope();
 
     function destroyAll() {

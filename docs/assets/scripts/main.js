@@ -9,43 +9,49 @@ window.onbeforeunload = function (e) {
 }
 
 window.onload = function () {
-    RegexVisualizer({});
-
-    let [resize_world, create_body_cb, remove_rbodies, playpause_world] = DOMPhysicsBox2D({
-        initPause: true,
-        debug: false, keyListeners: false,
-        debug_DOM_id: "debug",
-        rigid_DOM_class: "box2d-object"
+    RegexVisualizer({
+        debug: false,
+        regexSONId: "regex-json",
+        raphaelJSONId: "raphael-json",
+        loader_view_id: "graph-loader",
+        progress_bar_class: "progress"
     });
 
-    let makeRObject = function(event) {
-        playpause_world();
-        document.querySelector(".heading h1 em").addEventListener("click", stopPhysicEngine, false);
-        try {
-            create_body_cb($version, {randomForce: true});
-            document.querySelectorAll(".social-icon").forEach(function($el){
-                create_body_cb($el, {randomForce: false});
-            });
-            setTimeout(function(){ resize_world(); }, 100);
-        } catch (e) {
-            console.error(e);
-        } 
-        event.target.removeEventListener("click", makeRObject, false);
-    };
+    // let [resize_world, create_body_cb, remove_rbodies, playpause_world] = DOMPhysicsBox2D({
+    //     initPause: true,
+    //     debug: false, keyListeners: false,
+    //     debug_DOM_id: "debug",
+    //     rigid_DOM_class: "box2d-object"
+    // });
 
-    let $version = document.querySelector(".heading span.version");
-    $version.addEventListener("click", makeRObject, false);
+    // let makeRObject = function(event) {
+    //     playpause_world();
+    //     document.querySelector(".heading h1 em").addEventListener("click", stopPhysicEngine, false);
+    //     try {
+    //         create_body_cb($version, {randomForce: true});
+    //         document.querySelectorAll(".social-icon").forEach(function($el){
+    //             create_body_cb($el, {randomForce: false});
+    //         });
+    //         setTimeout(function(){ resize_world(); }, 100);
+    //     } catch (e) {
+    //         console.error(e);
+    //     } 
+    //     event.target.removeEventListener("click", makeRObject, false);
+    // };
+
+    // let $version = document.querySelector(".heading span.version");
+    // $version.addEventListener("click", makeRObject, false);
     
-    let reportWindowSize = function() {
-        resize_world();
-    }
-    window.addEventListener('resize', reportWindowSize);
+    // let reportWindowSize = function() {
+    //     resize_world();
+    // }
+    // window.addEventListener('resize', reportWindowSize);
 
-    let stopPhysicEngine = function(event) {
-        remove_rbodies();
-        $version.addEventListener("click", makeRObject, false);
-        event.target.removeEventListener("click", stopPhysicEngine, false);
-    }
+    // let stopPhysicEngine = function(event) {
+    //     remove_rbodies();
+    //     $version.addEventListener("click", makeRObject, false);
+    //     event.target.removeEventListener("click", stopPhysicEngine, false);
+    // }
     
 }
 

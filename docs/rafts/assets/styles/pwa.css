@@ -1,0 +1,54 @@
+#install-popup #close-install {
+    color: white;
+}
+
+#install-popup {
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    position: fixed;
+    height: 50px;
+    top: 0px;
+    background: #222222f2;
+}
+
+#install-popup #close-install, #install-popup pwa-install {
+    margin: 0px 20px;
+}
+
+#install-popup #close-install {
+    cursor: pointer;
+}
+
+
+/* Cannot change css styles under shaow-root */
+#install-popup pwa-install #openButton {
+    background: var(--install-button-color);
+    border-radius: 5px;
+    font-family: 'VictorMono', monospace;
+    padding: 0px 20px;
+    font-style: italic;
+    font-size: 15px;
+}
+
+/* CARD */
+#install-popup pwa-install #installModal, #install-popup pwa-install #background {
+    background: #3c3c3c7d !important;
+}
+
+@media (max-width: 1220px) {
+    #install-popup #installModal {
+        margin: 0px;
+        border-radius: 0px;
+        min-height: 100%;
+        width: 100%;
+        animation-name: mobile;
+        background: #3c3c3c7d !important;
+        animation-duration: 250ms;
+    }
+}

@@ -802,32 +802,10 @@ function parse() {
 // ),
 
 // if (define("visualize", ["./Kit", "./parse"], function(t, e) {
-function visualize(regexson_tree, regex_flags, canvas_Raphael_paper) {
+function visualize(regexson_tree, regex_flags, canvas_Raphael_paper, $progress_bar) {
     var _aux_Kit = Kit();
     // var e = parse();
-    function getFontStyles(font_size, font_weight) {
-        if (font_weight = font_weight || "normal", map_font_style[font_size] && map_font_style[font_size][font_weight])
-            return map_font_style[font_size][font_weight];
-        font_style_aux_element.attr({
-            "font-size": font_size,
-            "font-weight": font_weight
-        });
-        var font_style_aux_bbox = font_style_aux_element.getBBox();
-        return map_font_style[font_size] = map_font_style[font_size] || {},
-            map_font_style[font_size][font_weight] = {
-                width: font_style_aux_bbox.width / ((font_style_aux_element.attr("text").length - 1) / 2),
-                height: font_style_aux_bbox.height / 2
-            }
-    }
-    function setFontFamilySize(canvas_Raphael) {
-        // Se crea este elemento vacio para determiar el tamaño que tienen los caracteres
-        // dentro del grafo para un familia de fuente y tamaño, despues se cambia el 
-        // estilo
-        font_style_aux_element = canvas_Raphael.text(-1e3, -1e3, "XgfTlM|.q\nXgfTlM|.q").attr({
-            "font-family": font_family,
-            "font-size": graph_fontsize
-        })
-    }
+    
     function paintRegex(regexson, regex_flags, canvas_Raph) {
         canvas_Raph.clear(), canvas_Raph.setSize(0, 0);
         var container_regex_rect = canvas_Raph.rect(0, 0, 0, 0);
@@ -876,9 +854,43 @@ function visualize(regexson_tree, regex_flags, canvas_Raphael_paper) {
         // Se borra finalmente ya que no se va a utilizar
         font_style_aux_element.remove();
 
+        $progress_bar.updateProgressBar(50);
+        
         // Se pintan todos los items en el canvas de Raphael
-        canvas_Raph.addv2(raphael_items.items)
+        canvas_Raph.addv2(raphael_items.items);
+
+
+        // let progress_val = $progress_bar.attributes.getNamedItem("data-value").value;
+        // Se actualiza
+        $progress_bar.updateProgressBar(100);
+
+        return raphael_items;
     }
+    
+    function getFontStyles(font_size, font_weight) {
+        if (font_weight = font_weight || "normal", map_font_style[font_size] && map_font_style[font_size][font_weight])
+            return map_font_style[font_size][font_weight];
+        font_style_aux_element.attr({
+            "font-size": font_size,
+            "font-weight": font_weight
+        });
+        var font_style_aux_bbox = font_style_aux_element.getBBox();
+        return map_font_style[font_size] = map_font_style[font_size] || {},
+            map_font_style[font_size][font_weight] = {
+                width: font_style_aux_bbox.width / ((font_style_aux_element.attr("text").length - 1) / 2),
+                height: font_style_aux_bbox.height / 2
+            }
+    }
+    function setFontFamilySize(canvas_Raphael) {
+        // Se crea este elemento vacio para determiar el tamaño que tienen los caracteres
+        // dentro del grafo para un familia de fuente y tamaño, despues se cambia el 
+        // estilo
+        font_style_aux_element = canvas_Raphael.text(-1e3, -1e3, "XgfTlM|.q\nXgfTlM|.q").attr({
+            "font-family": font_family,
+            "font-size": graph_fontsize
+        })
+    }
+
     function generateRaphaelSVGItems(regexson_tree, _offset_x, _offset_y) {
         regexson_tree.unshift({
             type: "startPoint"
@@ -895,7 +907,6 @@ function visualize(regexson_tree, regex_flags, canvas_Raphael_paper) {
             raph_item._translate ? raph_item._translate(offset_x, offset_y) : (raph_item.x += offset_x, raph_item.y += offset_y);
         });
     }
-
     // Funcion que ordena y crea los paths
     function processRegexJSONToRaphaelSVG(regexJSONInfo, offset_x, offset_y) {
         var processed_items_result = [];
@@ -949,6 +960,8 @@ function visualize(regexson_tree, regex_flags, canvas_Raphael_paper) {
     function createGroupContainerItem(regexJSONInfo, children_items, offset_x, offset_y, width, height) {
         return {
             type: "group",
+            id: regexJSONInfo.id || "",
+            indices: [regexJSONInfo.indices[0] + 1, regexJSONInfo.indices[1] - 1],
             class: `g:${regexJSONInfo.type}:${[regexJSONInfo.indices[0] + 1, regexJSONInfo.indices[1] - 1].join(';')}`,
             children: children_items,
             transform: `t${offset_x},${offset_y}`,
@@ -1098,6 +1111,7 @@ function visualize(regexson_tree, regex_flags, canvas_Raphael_paper) {
         var _circle_radius = 10;
         var circle_item = {
             type: "circle",
+            id: regexJSONInfo.id,
             class: `circle:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
             fill: radialGradientColor,
             cx: _circle_radius, // offset_x + _circle_radius,
@@ -1205,10 +1219,22 @@ function visualize(regexson_tree, regex_flags, canvas_Raphael_paper) {
     var stroke_color = "#e2e2e2", have_multiline_flag = !1, margin_items = 10, map_font_style = {};
     var generator_Raph_map = {
         startPoint: function (regexJSONInfo, offset_x, offset_y) {
-            return createCircleItem({ type: "startPoint", indices: [-1, -1] }, offset_x, offset_y, "r(0.5,0.5)#EFE-green")
+            return createCircleItem(
+                { 
+                    type: "startPoint",
+                    id: "startPoint",
+                    indices: [-1, -1]
+                }, offset_x, offset_y, "r(0.5,0.5)#EFE-green"
+            );
         },
         endPoint: function (regexJSONInfo, offset_x, offset_y) {
-            return createCircleItem({ type: "endPoint", indices: [Infinity, Infinity] }, offset_x, offset_y, "r(0.5,0.5)#FFF-#000")
+            return createCircleItem(
+                {
+                    type: "endPoint",
+                    id: "endPoint",
+                    indices: [Infinity, Infinity]
+                }, offset_x, offset_y, "r(0.5,0.5)#FFF-#000"
+            );
         },
         empty: function (regexJSONInfo, offset_x, offset_y) {
             return {
@@ -1519,6 +1545,8 @@ function visualize(regexson_tree, regex_flags, canvas_Raphael_paper) {
 
                 var groupinfo_rect_item = {
                     type: "rect",
+                    id: regexJSONInfo.id,
+                    indices: regexJSONInfo.indices,
                     class: `rect:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
                     x: 0,
                     y: subgroups_items_element.y - 10,

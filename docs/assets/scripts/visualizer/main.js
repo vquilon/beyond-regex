@@ -1,10 +1,15 @@
 var RegexVisualizer = function (options) {
+    var $loader_view = document.querySelector(`#${options.loader_view_id}`);
+    var $progress_bar = $loader_view.querySelector(`.${options.progress_bar_class}`);
+
     var paper = new Raphael('graphCtView', 10, 10);
     paper.canvas.id = 'graphCtSVG';
+    // var paper = new Raphael('RaphaelPaperContainer', 10, 10);
+    // paper.canvas.id = 'raphaelSVG';
     // TODO: Dibujar un boton que sea el de visualizar para dar por entendido que hay
     // que pulsarlo si se quiere ver algo	
     var svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl;
-
+    
     var inputRegex = document.getElementById('input');
     var inputCt = document.getElementById('inputCt');
     // var visualBtn = document.getElementById('visualIt');
@@ -166,6 +171,16 @@ var RegexVisualizer = function (options) {
     //     setInnerText(flagBox, getFlags());
     // }));
 
+    var _updateJSONViewer = function($elem, jsonData) {
+        if(options.debug) {
+            $elem.innerHTML = "";
+            window.setTimeout(() => JsonView.renderJSON(jsonData, $elem), 50);
+        }
+    }
+    var _updateRaphaelItemsJSON = function(_raphaelItems) {
+        const $elemRaphael = document.querySelector(`#${options.raphaelJSONId}`);
+        _updateJSONViewer($elemRaphael, _raphaelItems)
+    }
 
     var _updateREGEXSON = function (_regexTree) {
         function escapteHTML(inHTMLtext) {
@@ -181,9 +196,8 @@ var RegexVisualizer = function (options) {
             groupCount: _regexTree.groupCount,
             tree: _regexTree.tree
         }
-        const treeRegex = document.querySelector('#treeRegex');
-        treeRegex.innerHTML = "";
-        const treeData = JsonView.renderJSON(_regexTree, treeRegex);
+        const $regexSON = document.querySelector(`#${options.regexSONId}`);
+        _updateJSONViewer($regexSON, _regexTree);
     };
 
     var _parseRegex = function (regExpresion) {
@@ -224,21 +238,56 @@ var RegexVisualizer = function (options) {
         var regExpresion = inputRegex.value;
         var regEXSON = _parseRegex(regExpresion);
         if (regEXSON) {
-            // Se destruye el controlador svg
-            if (svg_graph_controller && svg_thumb_controller && destroyAllHandler_ThumbnailSVGControl) {
-                destroyAllHandler_ThumbnailSVGControl();
-                destroyAllHandler_ThumbnailSVGControl = undefined;
+            // Antes hay que disponer un loader con una pequeña barra de carga
+            // Esta se obtiene el objeto barra que se vaya cargando
+            $loader_view.classList.add("loading");
+            // console.log("Agregar clase loading");
+            let updateProgressBar =function(newValue) {
+                // console.log(`Actualizando valor de progreso: ${newValue}`);
+                this.attributes.getNamedItem("data-value").value = `${newValue}`;
+                this.style.transform = `scaleX(${newValue/100})`;
             }
+            $progress_bar.updateProgressBar = updateProgressBar;
+            
+            // Se destruye el controlador svg
+            // if (svg_graph_controller && svg_thumb_controller && destroyAllHandler_ThumbnailSVGControl) {
+            //     destroyAllHandler_ThumbnailSVGControl();
+            //     destroyAllHandler_ThumbnailSVGControl = undefined;
+            // }
+            
+            // Se le pasa como argumento el loader
+            var raphael_items = {};
+            let paintRegex = function() {
+                raphael_items = visualize(regEXSON, getFlags(), paper, $progress_bar);
+                _updateRaphaelItemsJSON(raphael_items);
+                // Una vez que se pinta actualizar el plugin de visualizador SVG
+                // if (!svg_graph_controller && !svg_thumb_controller && !destroyAllHandler_ThumbnailSVGControl) {
+                    // [svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl] = ThumbnailSVGControl({
+                    //     mainViewId: 'graphCtView',
+                    //     mainSVGId: 'graphCtSVG',
+                    //     // Dejamos que lo autogenere con el id
+                    //     thumbContainerId: 'thumbViewContainer',
+                    // });
+                // }
 
-            visualize(regEXSON, getFlags(), paper);
-
-            // Una vez que se pinta actualizar el plugin de visualizador SVG
-            [svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl] = ThumbnailSVGControl({
-                mainViewId: 'graphCtView',
-                mainSVGId: 'graphCtSVG',
-                // Dejamos que lo autogenere con el id
-                thumbContainerId: 'thumbViewContainer',
-            });
+                [svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl] = CustomThumbnailSVGControl({
+                    mainViewId: 'graphCtView',
+                    mainSVGId: 'graphCtSVG',
+                    // Dejamos que lo autogenere con el id
+                    thumbContainerId: 'thumbViewContainer',
+                });
+                
+            }
+            window.setTimeout(paintRegex, 100);
+            
+            // Se vuelve a ocultar el loader
+            let hideLoader = function() {
+                // console.log("Ocultar loader");
+                $loader_view.classList.remove("loading");
+                $progress_bar.attributes.getNamedItem("data-value").value = "0";
+                $progress_bar.style.transform = "";
+            }
+            window.setTimeout(hideLoader, 200);
 
             return true;
         }
