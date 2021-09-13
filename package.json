@@ -1,0 +1,31 @@
+{
+  "name": "beyond-regex",
+  "version": "1.0.0",
+  "description": "Proyecto sin animo de lucro que busca la creacion de un editor **RegEx**,\r   capaz de editar y comprender estas expresiones regulares de una forma unica. **Visualizando, construyendo y analizando**, de manera que se podrá exprimir la máxima capacidad y llegar a la optimización del uso de esta tecnología, la cual posee una busqueda mas avanzada de como se creo en un inicio.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vquilon/beyond-regex.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vquilon/beyond-regex/issues"
+  },
+  "homepage": "https://github.com/vquilon/beyond-regex#readme",
+  "dependencies": {
+    "grunt": "^1.4.1",
+    "grunt-cli": "^1.4.3"
+  },
+  "devDependencies": {
+    "grunt-contrib-cssmin": "^4.0.0",
+    "grunt-contrib-uglify": "^5.0.1",
+    "grunt-remove-comments": "^0.1.6"
+  }
+}
