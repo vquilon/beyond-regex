@@ -57,7 +57,6 @@ function drawCircle(center, radius, axis, fill, ctx) {
     ctx.stroke();
 
     if (fill) {
-        //render axis marker
         var vert2V = copyVec2(centerV);
         vert2V.op_add(scaledVec2(axisV, radius));
         ctx.beginPath();

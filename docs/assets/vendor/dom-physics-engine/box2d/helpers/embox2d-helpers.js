@@ -1,10 +1,5 @@
-//Having to type 'Box2D.' in front of everything makes porting
-//existing C++ code a pain in the butt. This function can be used
-//to make everything in the Box2D namespace available without
-//needing to do that.
 function using(ns, pattern) {    
     if (pattern == undefined) {
-        // import all
         for (var name in ns) {
             this[name] = ns[name];
         }
@@ -12,7 +7,6 @@ function using(ns, pattern) {
         if (typeof(pattern) == 'string') {
             pattern = new RegExp(pattern);
         }
-        // import only stuff matching given pattern
         for (var name in ns) {
             if (name.match(pattern)) {
                 this[name] = ns[name];
@@ -20,26 +14,16 @@ function using(ns, pattern) {
         }       
     }
 }
-    
-
-//to replace original C++ operator =
 function copyVec2(vec) {
     return new Box2D.b2Vec2(vec.get_x(), vec.get_y());
 }
-
-//to replace original C++ operator * (float)
 function scaleVec2(vec, scale) {
     vec.set_x( scale * vec.get_x() );
     vec.set_y( scale * vec.get_y() );            
 }
-
-//to replace original C++ operator *= (float)
 function scaledVec2(vec, scale) {
     return new Box2D.b2Vec2(scale * vec.get_x(), scale * vec.get_y());
 }
-
-
-// http://stackoverflow.com/questions/12792486/emscripten-bindings-how-to-create-an-accessible-c-c-array-from-javascript
 function createChainShape(vertices, closedLoop) {
     var shape = new Box2D.b2ChainShape();            
     var buffer = Box2D._malloc(vertices.length * 8);
