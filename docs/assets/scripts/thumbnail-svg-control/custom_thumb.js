@@ -1,4 +1,33 @@
-var ThumbnailSVGControl = function (options) {
+var CustomThumbnailSVGControl = function (options) {
+    // import { ShadowViewport } from "./shadow_viewport";
+    const mainSVGContainer = "mainSVGContainer";
+    const mainSVGViewPort = "mainSVGViewPort";
+
+    var optionsViewportDefaults = {
+        viewportSelector: '.svg-pan-zoom_viewport', // Viewport selector. Can be querySelector string or SVGElement
+        panEnabled: true, // enable or disable panning (default enabled)
+        controlIconsEnabled: false, // insert icons to give user an option in addition to mouse events to control pan/zoom (default disabled)
+        zoomEnabled: true, // enable or disable zooming (default enabled)
+        dblClickZoomEnabled: true, // enable or disable zooming by double clicking (default enabled)
+        mouseWheelZoomEnabled: true, // enable or disable zooming by mouse wheel (default enabled)
+        preventMouseEventsDefault: true, // enable or disable preventDefault for mouse events
+        zoomScaleSensitivity: 0.1, // Zoom sensitivity
+        minZoom: 0.5, // Minimum Zoom level
+        maxZoom: 10, // Maximum Zoom level
+        fit: true, // enable or disable viewport fit in SVG (default true)
+        contain: false, // enable or disable viewport contain the svg (default false)
+        center: true, // enable or disable viewport centering in SVG (default true)
+        refreshRate: 'auto', // Maximum number of frames per second (altering SVG's viewport)
+        beforeZoom: null, //
+        onZoom: null, // 
+        beforePan: null, //
+        onPan: null, // 
+        customEventsHandler: null, // 
+        eventsListenerElement: null, // 
+        onUpdatedCTM: null, // 
+    }
+    if (options.thumbnailViewport === undefined) options.thumbnailViewport = optionsViewportDefaults;
+
     var flagFirstReset = true;
     var flagAnimations = {
         pan: false,
@@ -25,6 +54,7 @@ var ThumbnailSVGControl = function (options) {
     var resetTumbPanOffsetX, resetTumbPanOffsetY;
     var main_svg, thumb_svg;
 
+    var thumb_viewport;
 
     // VARIABLES DE FUNCIONES LISTENERS
     var elements_with_listeners = [];
@@ -181,7 +211,7 @@ var ThumbnailSVGControl = function (options) {
         } else {
             $svg_inst.pan(_newPan);
         }
-        
+
     }
     function animatePanBy($svg_inst, _amount, animationTime, fps, callback = undefined) { // {x: 1, y: 2}
         if (flagAnimations.pan) {
@@ -357,36 +387,6 @@ var ThumbnailSVGControl = function (options) {
         if (!main_svg || !thumb_svg) {
             return;
         }
-
-        // Se crean los atributos de intervalos para las animaciones de pan y zoom
-        // main_svg.intervalPanID = null;
-        // main_svg.intervalZoomID = null;
-
-        // thumb_svg.intervalPanID = null;
-        // thumb_svg.intervalZoomID = null;
-
-        // 		var resizeTimer;
-        // 		var interval = 0; //msec
-        // 		window.addEventListener('resize', function(event){
-        // 			if (resizeTimer !== false) {
-        // 				clearTimeout(resizeTimer);
-        // 			}
-        // 			resizeTimer = setTimeout(function () {
-        // 				// Variables globales
-
-        // 				flagFirstReset = true;
-        // 				// Ajustar tamaño del SVG
-        // 				main_svg.resize();
-        // 				thumb_svg.resize();
-        // 				// Centrar pan y zoom del thumbnail
-        // 				thumb_svg.resetZoom();
-        // 				thumb_svg.zoomOut();
-        // 				thumb_svg.zoomOut();
-        // 				thumb_svg.center(true);
-        // 				// Actualizar el recuardo del viewbox del thumbnail
-        // 				thumb_svg.updateThumbScope();
-        // 			}, interval);
-        // 		});
 
         main_svg.setOnZoom(function (level) {
             thumb_svg.updateThumbScope();
@@ -662,17 +662,18 @@ var ThumbnailSVGControl = function (options) {
         // 	customPan.y = Math.max(topLimit, Math.min(bottomLimit, newPan.y));
         // 	return customPan;
         // };
-        
+
         // Agrego todo lo que haya dentro de $mainSVG en una etiqueta g
         let $gContainer = document.createElementNS("http://www.w3.org/2000/svg", 'g');
         let $gViewPort = document.createElementNS("http://www.w3.org/2000/svg", 'g');
-        $gContainer.id = "mainSVGContainer";
-        $gViewPort.id = "mainSVGViewPort";
+        
+        $gContainer.id = mainSVGContainer;
+        $gViewPort.id = mainSVGViewPort;
         let children = [...$mainSVG.childNodes];
-        children.forEach(function(child) {
+        children.forEach(function (child) {
             $gContainer.appendChild(child);
         });
-        $gViewPort.appendChild($gContainer)
+        $gViewPort.appendChild($gContainer);
         $mainSVG.appendChild($gViewPort);
 
         let _main_svg = svgPanZoom('#' + options.mainSVGId, {
@@ -848,8 +849,131 @@ var ThumbnailSVGControl = function (options) {
         return _main_svg;
     };
 
+    var _setupSvgAttributes = function (svg) {
+        // Setting default attributes
+        let svg_utils = {
+            svgNS: 'http://www.w3.org/2000/svg',
+            xmlNS: 'http://www.w3.org/XML/1998/namespace',
+            xmlnsNS: 'http://www.w3.org/2000/xmlns/',
+            xlinkNS: 'http://www.w3.org/1999/xlink',
+            evNS: 'http://www.w3.org/2001/xml-events'
+        }
+        svg.setAttribute('xmlns', svg_utils.svgNS);
+        svg.setAttributeNS(svg_utils.xmlnsNS, 'xmlns:xlink', svg_utils.xlinkNS);
+        svg.setAttributeNS(svg_utils.xmlnsNS, 'xmlns:ev', svg_utils.evNS);
 
+        // Needed for Internet Explorer, otherwise the viewport overflows
+        if (svg.parentNode !== null) {
+            var style = svg.getAttribute('style') || '';
+            if (style.toLowerCase().indexOf('overflow') === -1) {
+                svg.setAttribute('style', 'overflow: hidden; ' + style);
+            }
+        }
+    }
+    var _getBoundingClientRectNormalized = function (svg) {
+        if (svg.clientWidth && svg.clientHeight) {
+            return { width: svg.clientWidth, height: svg.clientHeight }
+        } else
+            if (!!svg.getBoundingClientRect()) {
+                return svg.getBoundingClientRect();
+            } else {
+                throw new Error('Cannot get BoundingClientRect for SVG.');
+            }
+    }
 
+    var getOrCreateViewport = function (svg, selector, svgns) {
+        var viewport = null
+
+        // if (Utils.isElement(selector)) {
+        //     viewport = selector
+        // } else {
+        //     viewport = svg.querySelector(selector)
+        // }
+
+        // Check if there is just one main group in SVG
+        if (!viewport) {
+            var childNodes = Array.prototype.slice.call(svg.childNodes || svg.children).filter(function (el) {
+                return el.nodeName !== 'defs' && el.nodeName !== '#text'
+            })
+
+            // Node name should be SVGGElement and should have no transform attribute
+            // Groups with transform are not used as viewport because it involves parsing of all transform possibilities
+            if (childNodes.length === 1 && childNodes[0].nodeName === 'g' && childNodes[0].getAttribute('transform') === null) {
+                viewport = childNodes[0]
+            }
+        }
+
+        // If no favorable group element exists then create one
+        if (!viewport) {
+            var viewportId = 'viewport-' + new Date().toISOString().replace(/\D/g, '');
+            viewport = document.createElementNS(svgns, 'g');
+            viewport.setAttribute('id', viewportId);
+
+            // Internet Explorer (all versions?) can't use childNodes, but other browsers prefer (require?) using childNodes
+            var svgChildren = svg.childNodes || svg.children;
+            if (!!svgChildren && svgChildren.length > 0) {
+                for (var i = svgChildren.length; i > 0; i--) {
+                    // Move everything into viewport except defs
+                    if (svgChildren[svgChildren.length - i].nodeName !== 'defs') {
+                        viewport.appendChild(svgChildren[svgChildren.length - i]);
+                    }
+                }
+            }
+            svg.appendChild(viewport);
+        }
+
+        // Parse class names
+        var classNames = [];
+        if (viewport.getAttribute('class')) {
+            classNames = viewport.getAttribute('class').split(' ')
+        }
+
+        // Set class (if not set already)
+        if (!~classNames.indexOf('svg-pan-zoom_viewport')) {
+            classNames.push('svg-pan-zoom_viewport')
+            viewport.setAttribute('class', classNames.join(' '))
+        }
+
+        return viewport
+    }
+
+    var _createShadowViewportThumbnail = function (_svg_thumb) {
+        // SVGUtils.setupSvgAttributes(_svg_thumb);
+        _setupSvgAttributes(_svg_thumb);
+        let _boundingClientRectNormalized = _getBoundingClientRectNormalized(_svg_thumb);
+        // let _boundingClientRect = _svg_thumb.getBoundingClientRect();
+
+        let width = _boundingClientRectNormalized.width;
+        let height = _boundingClientRectNormalized.height;
+        let selector = options.thumbnailViewport.viewportSelector || optionsViewportDefaults;
+        let viewport = getOrCreateViewport(_svg_thumb, selector);
+        return new ShadowViewport(viewport, {
+            svg: _svg_thumb,
+            width: width,
+            height: height,
+            fit: options.thumbnailViewport.fit || optionsViewportDefaults.fit,
+            contain: options.thumbnailViewport.contain || optionsViewportDefaults.contain,
+            center: options.thumbnailViewport.center || optionsViewportDefaults.fit,
+            refreshRate: options.thumbnailViewport.refreshRate || optionsViewportDefaults.fit,
+            // Put callbacks into functions as they can change through time,
+            beforeZoom: function (oldScale, newScale) {
+                if (viewport && options.thumbnailViewport.beforeZoom) { return options.thumbnailViewport.beforeZoom(oldScale, newScale) }
+            },
+            onZoom: function (scale) {
+                if (viewport && options.thumbnailViewport.onZoom) { return options.thumbnailViewport.onZoom(scale) }
+            },
+            beforePan: function (oldPoint, newPoint) {
+                if (viewport && options.thumbnailViewport.beforePan) { return options.thumbnailViewport.beforePan(oldPoint, newPoint) }
+            },
+            onPan: function (point) {
+                if (viewport && options.thumbnailViewport.onPan) { return options.thumbnailViewport.onPan(point) }
+            },
+            onUpdatedCTM: function (ctm) {
+                if (viewport && options.thumbnailViewport.onUpdatedCTM) { return options.thumbnailViewport.onUpdatedCTM(ctm) }
+            }
+        })
+
+    }
     // Control del Thumbnail
     // Creacionn del thumbnail a partir del mismo SVG del main
     var createThumbnail = function () {
@@ -897,10 +1021,16 @@ var ThumbnailSVGControl = function (options) {
         // $thumbSVG = $mainSVG.cloneNode(true);
         $thumbSVG = document.createElementNS(svgns, 'svg');
         let $useElemen = document.createElementNS(svgns, 'use');
-        $useElemen.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#mainSVGContainer');
+        $useElemen.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${mainSVGContainer}`);
+        let $thumbViewport = document.createElementNS(svgns, 'g');
+        $thumbViewport.id = "thumbnail-viewport"
+        let thumb_viewport_class = options.thumbnailViewport.viewportSelector || optionsViewportDefaults;
+        $thumbViewport.classList.add(thumb_viewport_class.slice(1));
+        $thumbViewport.appendChild($useElemen);
+
         $thumbSVG.style = "";
         $thumbSVG.id = 'thumbSVG';
-        $thumbSVG.appendChild($useElemen);
+        $thumbSVG.appendChild($thumbViewport);
 
         var $thumbView = wrapElementWithNoDOM($thumbSVG, newWrapType = "div", newWrapId = 'thumbView');
         $thumbView.classList.add("thumbViewClass");
@@ -1024,9 +1154,15 @@ var ThumbnailSVGControl = function (options) {
         $control_panel.classList.add(controlPanelClass);
         $control_panel.appendChild($thumbContainer);
         $control_panel.appendChild($control_zoom);
-
+        
+        // Borro el anterior control panel
+        
         insertAfter($mainView, $control_panel);
 
+        // Calcular el transform
+        // transform: matrix(0.233779, 0, 0, 0.233779, 0, 3.26552);
+        thumb_viewport = _createShadowViewportThumbnail($thumbSVG);
+        // transform: matrix(0.233779, 0, 0, 0.233779, 0, 3.26552);
     }
     var initThumbView = function () {
         var thumbViewSVGDoc = getSVGDocument($thumbSVG);
@@ -1085,23 +1221,26 @@ var ThumbnailSVGControl = function (options) {
 
     };
 
-    createThumbnail();
+    
     // TODO: Agregar appendChild de un svg relativo al main
 
-    loadMainSVGListener = function (event) {
-        main_svg = initMainView();
-    };
-    loadThumbSVGListener = function (event) {
-        thumb_svg = initThumbView();
-    };
-    $mainSVG.addEventListener("load", loadMainSVGListener, false);
-    $thumbSVG.addEventListener("load", loadThumbSVGListener, false);
+    // loadMainSVGListener = function (event) {
+    //     main_svg = initMainView();
+    // };
+    // loadThumbSVGListener = function (event) {
+    //     thumb_svg = initThumbView();
+    // };
+    // $mainSVG.addEventListener("load", loadMainSVGListener, false);
+    // $thumbSVG.addEventListener("load", loadThumbSVGListener, false);
 
     // Se inicializan los controles
     // TODO: Condicion de solo se inician si son etiquetas SVG inline
-    main_svg = initMainView();
-    thumb_svg = initThumbView();
 
+    main_svg = initMainView();
+    
+    createThumbnail();
+    
+    thumb_svg = initThumbView();
 
     bindThumbnailSVGControlListeners(main_svg, thumb_svg);
 
@@ -1131,9 +1270,15 @@ var ThumbnailSVGControl = function (options) {
         delete main_svg;
         thumb_svg.destroy();
         delete thumb_svg;
-
+        
         $mainView.parentElement.getElementsByClassName(controlPanelClass)[0].remove();
-        // $mainSVG.remove();
+    }
+
+    function updateSVGContent(newSVG) {
+        // Actualiza el contenido del SVG
+        // Simplemente es cambiar `mainSVGContainer`
+        let $svgContainer = $mainView.querySelector(`${mainSVGContainer}`);
+        $svgContainer
     }
 
     var firstResize = true;
@@ -1192,7 +1337,8 @@ var ThumbnailSVGControl = function (options) {
         }
     });
     // Only observe the 2nd box
-    ro.observe($mainView);
+    // ro.observe($mainView);
 
+    // return [main_svg, thumb_svg, destroyAll];
     return [main_svg, thumb_svg, destroyAll];
 };
