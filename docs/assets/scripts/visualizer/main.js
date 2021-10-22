@@ -269,7 +269,9 @@ var RegexVisualizer = function (options) {
                     //     thumbContainerId: 'thumbViewContainer',
                     // });
                 // }
-
+                if ( destroyAllHandler_ThumbnailSVGControl ) {
+                    destroyAllHandler_ThumbnailSVGControl();
+                }
                 [svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl] = CustomThumbnailSVGControl({
                     mainViewId: 'graphCtView',
                     mainSVGId: 'graphCtSVG',

@@ -1,5 +1,7 @@
 var CustomThumbnailSVGControl = function (options) {
     // import { ShadowViewport } from "./shadow_viewport";
+    const mainSVGContainer = "mainSVGContainer";
+    const mainSVGViewPort = "mainSVGViewPort";
 
     var optionsViewportDefaults = {
         viewportSelector: '.svg-pan-zoom_viewport', // Viewport selector. Can be querySelector string or SVGElement
@@ -664,8 +666,9 @@ var CustomThumbnailSVGControl = function (options) {
         // Agrego todo lo que haya dentro de $mainSVG en una etiqueta g
         let $gContainer = document.createElementNS("http://www.w3.org/2000/svg", 'g');
         let $gViewPort = document.createElementNS("http://www.w3.org/2000/svg", 'g');
-        $gContainer.id = "mainSVGContainer";
-        $gViewPort.id = "mainSVGViewPort";
+        
+        $gContainer.id = mainSVGContainer;
+        $gViewPort.id = mainSVGViewPort;
         let children = [...$mainSVG.childNodes];
         children.forEach(function (child) {
             $gContainer.appendChild(child);
@@ -1018,7 +1021,7 @@ var CustomThumbnailSVGControl = function (options) {
         // $thumbSVG = $mainSVG.cloneNode(true);
         $thumbSVG = document.createElementNS(svgns, 'svg');
         let $useElemen = document.createElementNS(svgns, 'use');
-        $useElemen.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${options.mainSVGId}`);
+        $useElemen.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${mainSVGContainer}`);
         let $thumbViewport = document.createElementNS(svgns, 'g');
         $thumbViewport.id = "thumbnail-viewport"
         let thumb_viewport_class = options.thumbnailViewport.viewportSelector || optionsViewportDefaults;
@@ -1151,7 +1154,9 @@ var CustomThumbnailSVGControl = function (options) {
         $control_panel.classList.add(controlPanelClass);
         $control_panel.appendChild($thumbContainer);
         $control_panel.appendChild($control_zoom);
-
+        
+        // Borro el anterior control panel
+        
         insertAfter($mainView, $control_panel);
 
         // Calcular el transform
@@ -1216,7 +1221,7 @@ var CustomThumbnailSVGControl = function (options) {
 
     };
 
-    createThumbnail();
+    
     // TODO: Agregar appendChild de un svg relativo al main
 
     // loadMainSVGListener = function (event) {
@@ -1232,6 +1237,9 @@ var CustomThumbnailSVGControl = function (options) {
     // TODO: Condicion de solo se inician si son etiquetas SVG inline
 
     main_svg = initMainView();
+    
+    createThumbnail();
+    
     thumb_svg = initThumbView();
 
     bindThumbnailSVGControlListeners(main_svg, thumb_svg);
@@ -1258,13 +1266,19 @@ var CustomThumbnailSVGControl = function (options) {
     thumb_svg.updateThumbScope();
 
     function destroyAll() {
-        //# main_svg.destroy();
-        //# delete main_svg;
-        //# thumb_svg.destroy();
-        //# delete thumb_svg;
+        main_svg.destroy();
+        delete main_svg;
+        thumb_svg.destroy();
+        delete thumb_svg;
+        
+        $mainView.parentElement.getElementsByClassName(controlPanelClass)[0].remove();
+    }
 
-        //# $mainView.parentElement.getElementsByClassName(controlPanelClass)[0].remove();
-
+    function updateSVGContent(newSVG) {
+        // Actualiza el contenido del SVG
+        // Simplemente es cambiar `mainSVGContainer`
+        let $svgContainer = $mainView.querySelector(`${mainSVGContainer}`);
+        $svgContainer
     }
 
     var firstResize = true;

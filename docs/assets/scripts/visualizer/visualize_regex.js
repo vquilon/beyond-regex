@@ -101,8 +101,8 @@ function parse() {
                 groupCount: y,
                 tree: i
             });
-            return m.traverse(l, CHARSET_NODE),
-                m.traverse(u, ASSERT_NODE),
+            return m.traverse(define_error_out_order_charset, CHARSET_NODE, language),
+                m.traverse(define_error_assert_non_quantificable, ASSERT_NODE, language),
                 c(i),
                 d = !1,
                 m
@@ -168,9 +168,14 @@ function parse() {
         }, r),
             t.reverse()
     }
-    function u(t) {
-        if (t.repeat) {
-            var e = t.assertionType
+    /**
+     * Comprueba si un assert tiene un quantificador, si es asi lanza un error
+     * @param {*} regex_object
+     */
+    function define_error_assert_non_quantificable(regex_object, regex_language) {
+        // Defino en que idiomas esto es posible
+        if (regex_object.repeat && regex_language !="python") {
+            var e = regex_object.assertionType
                 , r = "Nothing to repeat! Repeat after assertion doesn't make sense!";
             if ("AssertLookahead" === e || "AssertNegativeLookahead" === e) {
                 var n = "AssertLookahead" === e ? "?=" : "?!"
@@ -179,13 +184,13 @@ function parse() {
             }
             throw new define_regexError({
                 type: "NothingRepeat",
-                lastIndex: t.indices[1] - 1,
+                lastIndex: regex_object.indices[1] - 1,
                 message: r
             })
         }
     }
-    function l(t) {
-        t.ranges = auxKit.sortUnique(t.ranges.map(function (t) {
+    function define_error_out_order_charset(regex_json_tree, regex_language) {
+        regex_json_tree.ranges = auxKit.sortUnique(regex_json_tree.ranges.map(function (t) {
             if (t[0] > t[1])
                 throw new define_regexError({
                     type: "OutOfOrder",
@@ -224,16 +229,16 @@ function parse() {
         AssertBegin: "AssertBegin"
     };
     r(),
-        create_regexObject.prototype.traverse = function (t, e) {
-            function r(t, n) {
-                t.forEach(function (t) {
-                    e && t.type !== e || n(t),
-                        t.sub ? r(t.sub, n) : t.branches && t.branches.forEach(function (t) {
-                            r(t, n)
+        create_regexObject.prototype.traverse = function (has_error_callback, re_token_type, re_language) {
+            function recursive_search_tree(regex_tree, _error_cb, _re_language) {
+                regex_tree.forEach(function (branch) {
+                    re_token_type && branch.type !== re_token_type || _error_cb(branch, _re_language),
+                        branch.sub ? recursive_search_tree(branch.sub, _error_cb, _re_language) : branch.branches && branch.branches.forEach(function (branch_leaf) {
+                            recursive_search_tree(branch_leaf, _error_cb, _re_language)
                         })
                 })
             }
-            r(this.tree, t)
+            recursive_search_tree(this.tree, has_error_callback, re_language)
         };
 
     var d;

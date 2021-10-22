@@ -12,3 +12,6 @@ echo 'export PATH="$GEM_HOME/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 
 gem install jekyll bundler
+
+cd docs
+bundle install
