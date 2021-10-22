@@ -12,3 +12,13 @@ echo 'export PATH="$GEM_HOME/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 
 gem install jekyll bundler
+
+cd docs
+bundle install
+
+curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh -o install_nvm.sh
+chmod +x install_nvm.sh
+./install_nvm.sh
+
+source ~/.bashrc
+nvm install --lts
