@@ -15,29 +15,23 @@
   {% include styles-circle-selector.html %}
 
   <!-- {% include dom-physics-engine/head.html %} -->
+  {% include scripts.html %}
+  {% include scripts-thumbnail-svg-control.html %}
+  <!-- {% include dom-physics-engine/scripts.html %} -->
 
+  <script defer src="assets/scripts/main.js"></script>
 </head>
 
 <body>
-
   {% include register_pwa.html %}
-
+  {% include install_as_app.html %}
+  
   <div id="debug"></div>
   {% include svg-filters.html %}
   <div id="container-main">
     {{ content }}
   </div>
-
   {% include footer.html %}
-
-  {% include install_as_app.html %}
-
-  {% include scripts.html %}
-  {% include scripts-thumbnail-svg-control.html %}
-  <!-- {% include dom-physics-engine/scripts.html %} -->
-
-  <script src="assets/scripts/main.js"></script>
-
 </body>
 
 </html>

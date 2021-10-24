@@ -15,7 +15,7 @@
 
 
 {% if site.environment == "production" %}
-<script type="module">
+<script defer type="module">
     // This code sample uses features introduced in Workbox v6.
     import { Workbox } from 'https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-window.prod.mjs';
 
@@ -130,7 +130,7 @@
 </script>
 
 {% else %}
-<script type="module">
+<script defer type="module">
     // This code sample uses features introduced in Workbox v6.
     import { Workbox } from 'https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-window.prod.mjs';
 
