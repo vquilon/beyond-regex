@@ -30,8 +30,8 @@ var CustomThumbnailSVGControl = function (options) {
 
     var flagFirstReset = true;
     var flagAnimations = {
-        pan: false,
-        zoom: false
+        pan: true,
+        zoom: true
     };
 
     var $mainView = document.getElementById(options.mainViewId);
@@ -161,210 +161,198 @@ var CustomThumbnailSVGControl = function (options) {
         return -(a * Math.pow(2, 10 * (time -= 1)) * Math.sin((time * duration - s) * (2 * Math.PI) / p)) + startPosition;
     }
 
+    function FPSCtrl(fps, animationDuration, frameCallback, animationCallback) {
+        var	delay = 1000 / fps;
+        var time = 0;
+        var _time = null;
+        var frame = -1;
+        var animationStepTime = 1 / fps;
+
+        function loop(timestamp) {
+            time += animationStepTime;
+
+            if (_time === null) _time = timestamp;
+            var seg = Math.floor((timestamp - _time) / delay);
+
+            // Duracion total es menor al actual
+            if (time < animationDuration) {
+                frameCallback(this, time);
+                this.requestAnimationRef = requestAnimationFrame(loop);
+            } else {
+                // Finish Animation
+                cancelAnimationFrame(this.requestAnimationRef);
+                this.requestAnimationRef = undefined;
+                if ( animationCallback ) animationCallback();
+            }
+        }
+
+        this.requestAnimationRef = undefined;
+
+        this.isPlaying = false;
+
+        this.frameRate = function(newfps) {
+            if (!arguments.length) return fps;
+            fps = newfps;
+            delay = 1000 / fps;
+            animationStepTime = 1 / fps;
+            frame = -1;
+            _time = null;
+        };
+
+        this.start = function() {
+            if (!this.isPlaying) {
+                this.isPlaying = true;
+                this.requestAnimationRef = requestAnimationFrame(loop);
+            }
+        };
+
+        this.stop = function() {
+            if (this.isPlaying) {
+                cancelAnimationFrame(this.requestAnimationRef);
+                this.isPlaying = false;
+                _time = null;
+                time = 0;
+                frame = -1;
+            }
+        };
+    }
+
     // FUNCIONES ANIMACION DE PAN
-    function animatePan($svg_inst, _newPan, animationTime, fps, callback = undefined) { // {x: 1, y: 2}
+    function animatePan($svg_inst, _newPan, animationDuration, fps, callback = undefined) { // {x: 1, y: 2}
         if (flagAnimations.pan) {
-            if (animationTime === 0) {
-                if ($svg_inst.intervalPanID) {
-                    clearInterval($svg_inst.intervalPanID)
-                    $svg_inst.intervalPanID = null;
+            if (animationDuration === 0) {
+                if ( $svg_inst.panFPScontrol ) {
+                    $svg_inst.panFPScontrol.stop();
                 }
                 $svg_inst.pan(_newPan);
+                if ( callback ) callback();
                 return;
             }
-
-            if ($svg_inst.intervalPanID) {
-                clearInterval($svg_inst.intervalPanID)
-                $svg_inst.intervalPanID = null;
+            // Cancel previous animation
+            if ( $svg_inst.panFPScontrol ) {
+                $svg_inst.panFPScontrol.stop();
             }
 
-            animationTime = animationTime || 0.5;
+            animationDuration = animationDuration || 0.5;
             fps = fps || 60;
-            var iterations = fps * animationTime, // ms duration
-                // animationStepTime = 15,  // one per 30 frames
-                animationStepTime = animationTime / iterations,
-                animationStep = 0,
-                time = 0,
-                _oldPan = $svg_inst.getPan(),
-                actualPan = $svg_inst.getPan(),
-                stepX = (_newPan.x - _oldPan.x) / iterations,
-                stepy = (_newPan.y - _oldPan.y) / iterations
+            var _oldPan = $svg_inst.getPan(),
+                actualPan = $svg_inst.getPan();
 
-            $svg_inst.intervalPanID = setInterval(function () {
-                time += animationStepTime;
-                actualPan.x = linear(time, _oldPan.x, _newPan.x - _oldPan.x, animationTime);
-                actualPan.y = linear(time, _oldPan.y, _newPan.y - _oldPan.y, animationTime);
-                // actualZoom += step;
-                // let dirPan = {
-                // 	x: ((_newPan.x - _oldPan.x) / Math.abs(_newPan.x - _oldPan.x)),
-                // 	y: ((_newPan.y - _oldPan.y) / Math.abs(_newPan.y - _oldPan.y)),
-                // };
-                // if (dirPan.x * (actualPan.x - _newPan.x) < 0 && dirPan.y * (actualPan.y - _newPan.y) < 0) {
-                if (time < animationTime) {
-                    $svg_inst.pan(actualPan);
-                } else {
-                    // Cancel interval
-                    clearInterval($svg_inst.intervalPanID)
-                    $svg_inst.intervalPanID = null;
-                }
-            }, animationStepTime)
-        } else {
+            const stepCallback = (fpsControl, actualTime) => {
+                actualPan.x = linear(actualTime, _oldPan.x, _newPan.x - _oldPan.x, animationDuration);
+                actualPan.y = linear(actualTime, _oldPan.y, _newPan.y - _oldPan.y, animationDuration);
+                $svg_inst.pan(actualPan);
+            }
+
+            $svg_inst.panFPScontrol = new FPSCtrl(fps, animationDuration, stepCallback, callback);
+            $svg_inst.panFPScontrol.start();
+        }
+        else {
             $svg_inst.pan(_newPan);
+            if ( callback ) callback();
         }
 
     }
-    function animatePanBy($svg_inst, _amount, animationTime, fps, callback = undefined) { // {x: 1, y: 2}
+    function animatePanBy($svg_inst, _amount, animationDuration, fps, callback = undefined) { // {x: 1, y: 2}
         if (flagAnimations.pan) {
-            if (animationTime === 0) {
-                if ($svg_inst.intervalPanID) {
-                    clearInterval($svg_inst.intervalPanID)
-                    $svg_inst.intervalPanID = null;
-                }
+            if ($svg_inst.panFPScontrol) {
+                $svg_inst.panFPScontrol.stop();
+            }
+            if (animationDuration === 0) {
                 let actualPan = svg_inst.getPan();
                 $svg_inst.pan({ x: actualPan.x + _amount.x, y: actualPan.y + _amount.y });
+                if ( callback ) callback();
                 return;
             }
 
-            if ($svg_inst.intervalPanID) {
-                clearInterval($svg_inst.intervalPanID)
-                $svg_inst.intervalPanID = null;
+            animationDuration = animationDuration || 0.5;
+            fps = fps || 60;
+            var _oldPan = $svg_inst.getPan(),
+                actualPan = _oldPan,
+                _newPan = { x: _oldPan.x + _amount.x, y: _oldPan.y + _amount.y };
+
+            const stepCallback = (fpsControl, time) => {
+                actualPan.x = linear(time, _oldPan.x, _newPan.x - _oldPan.x, animationDuration);
+                actualPan.y = linear(time, _oldPan.y, _newPan.y - _oldPan.y, animationDuration);
+                $svg_inst.pan(actualPan);
             }
 
-            animationTime = animationTime || 0.5;
-            fps = fps || 60;
-            var iterations = fps * animationTime, // ms duration
-                // animationStepTime = 15,  // one per 30 frames
-                animationStepTime = animationTime / iterations,
-                animationStep = 0,
-                time = 0,
-                _oldPan = $svg_inst.getPan(),
-                actualPan = _oldPan,
-                _newPan = { x: _oldPan.x + _amount.x, y: _oldPan.y + _amount.y },
-                stepX = (_newPan.x - _oldPan.x) / iterations,
-                stepy = (_newPan.y - _oldPan.y) / iterations
-
-            $svg_inst.intervalPanID = setInterval(function () {
-                time += animationStepTime;
-                actualPan.x = linear(time, _oldPan.x, _newPan.x - _oldPan.x, animationTime);
-                actualPan.y = linear(time, _oldPan.y, _newPan.y - _oldPan.y, animationTime);
-                // actualZoom += step;
-                // let dirPan = {
-                // 	x: ((_newPan.x - _oldPan.x) / Math.abs(_newPan.x - _oldPan.x)),
-                // 	y: ((_newPan.y - _oldPan.y) / Math.abs(_newPan.y - _oldPan.y)),
-                // };
-                // if (dirPan.x * (actualPan.x - _newPan.x) < 0 && dirPan.y * (actualPan.y - _newPan.y) < 0) {
-                if (time < animationTime) {
-                    $svg_inst.pan(actualPan);
-                } else {
-                    // Cancel interval
-                    clearInterval(intervalID)
-                    $svg_inst.intervalPanID = null;
-                }
-            }, animationStepTime)
-        } else {
+            $svg_inst.panFPScontrol = new FPSCtrl(fps, animationDuration, stepCallback, callback);
+            $svg_inst.panFPScontrol.start();
+        }
+        else {
             $svg_inst.panBy(_amount);
+            if ( callback ) callback();
         }
     }
     // FUNCIONES ANIMACION DE ZOOM
-    function animateZoom($svg_inst, _newZoom, animationTime, fps, callback = undefined) { // {x: 1, y: 2}
+    function animateZoom($svg_inst, _newZoom, animationDuration, fps, callback = undefined) { // {x: 1, y: 2}
         if (flagAnimations.zoom) {
-            if (animationTime === 0) {
-                if ($svg_inst.intervalZoomID) {
-                    clearInterval($svg_inst.intervalZoomID)
-                    $svg_inst.intervalZoomID = null;
-                }
+            if ( $svg_inst.zoomFPScontrol ) {
+                $svg_inst.zoomFPScontrol.stop();
+            }
+
+            if (animationDuration === 0) {
                 $svg_inst.zoom(_newZoom);
+                if ( callback ) callback();
                 return;
             }
 
-            if ($svg_inst.intervalZoomID) {
-                clearInterval($svg_inst.intervalZoomID)
-                $svg_inst.intervalZoomID = null;
-            }
-
-            animationTime = animationTime || 0.5;
+            animationDuration = animationDuration || 0.5;
             fps = fps || 60;
-            var // animationStepTime = 15,  // one per 30 frames
-                iterations = fps * animationTime,
-                animationStepTime = animationTime / iterations,
-                animationStep = 0,
-                time = 0,
-                _oldZoom = $svg_inst.getZoom(),
-                actualZoom = _oldZoom,
-                step = (_newZoom - _oldZoom) / iterations;
+            var _oldZoom = $svg_inst.getZoom(),
+                actualZoom = _oldZoom;
 
-            $svg_inst.intervalZoomID = setInterval(function () {
-                time += animationStepTime;
-                actualZoom = linear(time, _oldZoom, _newZoom - _oldZoom, animationTime);
+            const stepCallback = (fpsControl, time) => {
+                actualZoom = linear(time, _oldZoom, _newZoom - _oldZoom, animationDuration);
                 let change = _newZoom - _oldZoom;
                 if (Math.abs(change) < 0.001) {
                     actualZoom = _newZoom;
                     $svg_inst.zoom(actualZoom);
-                    clearInterval($svg_inst.intervalZoomID);
-                    $svg_inst.intervalZoomID = null;
-                    if (callback) callback();
+                    fpsControl.stop();
                 }
-                // actualZoom += step;
-                // let dirZoom = ((_newZoom - _oldZoom) / Math.abs(_newZoom - _oldZoom));
-                // if (dirZoom * (actualZoom - _newZoom) < 0) {
-                if (time < animationTime) {
-                    // TODO: UTILIZAR SIEMPRE EL zoomBy
+                else {
                     $svg_inst.zoom(actualZoom);
-                } else {
-                    // Cancel interval
-                    clearInterval($svg_inst.intervalZoomID);
-                    $svg_inst.intervalZoomID = null;
-                    if (callback) callback();
                 }
-            }, animationStepTime)
-        } else {
+                
+
+            }
+            $svg_inst.zoomFPScontrol = new FPSCtrl(fps, animationDuration, stepCallback, callback);
+            $svg_inst.zoomFPScontrol.start();
+        }
+        else {
             $svg_inst.zoom(_newZoom);
+            if ( callback ) callback();
         }
     }
-    function animateZoomAtPointBy($svg_inst, _newZoomPercent, atPoint, animationTime, fps, callback = undefined) { // {x: 1, y: 2}
+    function animateZoomAtPointBy($svg_inst, _newZoomPercent, atPoint, animationDuration, fps, callback = undefined) { // {x: 1, y: 2}
         if (flagAnimations.zoom) {
-            if (animationTime === 0) {
-                if ($svg_inst.intervalZoomID) {
-                    clearInterval($svg_inst.intervalZoomID)
-                    $svg_inst.intervalZoomID = null;
-                }
+            if ( $svg_inst.zoomFPScontrol ) {
+                $svg_inst.zoomFPScontrol.stop();
+            }
+
+            if (animationDuration === 0) {
                 $svg_inst.zoomAtPoint($svg_inst.getZoom() * _newZoomPercent, atPoint);
+                if ( callback ) callback();
                 return;
             }
 
-            if ($svg_inst.intervalZoomID) {
-                clearInterval($svg_inst.intervalZoomID)
-                $svg_inst.intervalZoomID = null;
-            }
-
-            animationTime = animationTime || 0.5;
+            animationDuration = animationDuration || 0.5;
             fps = fps || 60;
-            var // animationStepTime = 15,  // one per 30 frames
-                iterations = fps * animationTime,
-                animationStepTime = animationTime / iterations,
-                animationStep = 0,
-                time = 0,
-                _oldZoom = $svg_inst.getZoom(),
+            var _oldZoom = $svg_inst.getZoom(),
                 _newZoom = _oldZoom * _newZoomPercent,
-                actualZoom = _oldZoom,
-                step = (_newZoom - _oldZoom) / iterations;
+                actualZoom = _oldZoom;
 
-            $svg_inst.intervalZoomID = setInterval(function () {
-                time += animationStepTime;
-                actualZoom = linear(time, _oldZoom, _newZoom - _oldZoom, animationTime);
-                // actualZoom += step;
-                // let dirZoom = ((_newZoom - _oldZoom) / Math.abs(_newZoom - _oldZoom));
-                // if (dirZoom * (actualZoom - _newZoom) < 0) {
-                if (time < animationTime) {
-                    $svg_inst.zoomAtPoint(actualZoom, atPoint);
-                } else {
-                    // Cancel interval
-                    clearInterval($svg_inst.intervalZoomID);
-                    $svg_inst.intervalZoomID = null;
-                }
-            }, animationStepTime)
-        } else {
+            const stepCallback = (fpsControl, time) => {
+                actualZoom = linear(time, _oldZoom, _newZoom - _oldZoom, animationDuration);
+                $svg_inst.zoomAtPoint(actualZoom, atPoint);
+            }
+            $svg_inst.zoomFPScontrol = new FPSCtrl(fps, animationDuration, stepCallback, callback);
+            $svg_inst.zoomFPScontrol.start();
+        }
+        else {
             $svg_inst.zoomAtPointBy(_newZoomPercent, atPoint);
+            if ( callback ) callback();
         }
     }
 
@@ -536,10 +524,13 @@ var CustomThumbnailSVGControl = function (options) {
 
             let actualMainPan = main_svg.getPan();
             if (!move) {
-                animatePan(_main_svg, { x: mainPanX, y: mainPanY }, animateTime = 0.5);
+                animatePan(_main_svg, { x: mainPanX, y: mainPanY }, animateTime = 0.1);
             }
             else {
-                if (!_main_svg.intervalPanID) {
+                if ( _main_svg.panFPScontrol.isPlaying ) {
+                    _main_svg.panFPScontrol.stop();
+                }
+                else {
                     _main_svg.pan({ x: mainPanX, y: mainPanY });
                 }
             }
@@ -687,7 +678,8 @@ var CustomThumbnailSVGControl = function (options) {
             },
             preventMouseEventsDefault: true,
             // beforePan: beforePan,
-            // minZoom: 0.25,
+            minZoom: 0.8,
+            maxZoom: Infinity,
             // onZoom: function() {
             // 		var zoomLevel = panZoomInstance.getZoom();
             // 		if ( zoomLevel <= 0.25 ) {
@@ -761,40 +753,36 @@ var CustomThumbnailSVGControl = function (options) {
                         };
 
                         if (this === $mainSVG) {
-                            point.x = event.clientX
-                            point.y = event.clientY
+                            point.x = event.clientX;
+                            point.y = event.clientY;
+                            // console.log("MAIN MOUSE", point.x, point.y);
                             relativeMousePoint = point.matrixTransform(inversedScreenCTM);
                         }
                         else if (this === $thumbContainer) {
-                            // let scopeBounds = document.querySelector("#scope").getBoundingClientRect();
-                            // let scopePosX = scopeBounds.x + scopeBounds.width / 2;
-                            // let scopePosY = scopeBounds.y + scopeBounds.height / 2;
                             let clientX = event.clientX;// || scopePosX;
                             let clientY = event.clientY;// || scopePosY;
+                            // console.log("THUMB MOUSE", clientX, clientY);
 
-                            // Intento de calculo del punto en el main a partir del thumb
-                            let thumbPanX = clientX - (dimThumb.left + dimThumb.width / 2);
-                            let thumbPanY = clientY - (dimThumb.top + dimThumb.height / 2);
-                            let mainPanX = thumbPanX * mainZoom / thumbZoom;
-                            let mainPanY = thumbPanY * mainZoom / thumbZoom;
-
-                            point.x = mainPanX;
-                            point.y = mainPanY;
-
+                            // METODO 2:
+                            let thumbScopeBounds = document.querySelector('#scope').getBoundingClientRect();
+                            let scaleX = mainSVGBounds.width / thumbScopeBounds.width ;
+                            let scaleY = mainSVGBounds.height / thumbScopeBounds.height;
+                            point.x = mainSVGBounds.x - (thumbScopeBounds.x - clientX) * scaleX;
+                            point.y = mainSVGBounds.y - (thumbScopeBounds.y - clientY) * scaleY;
+                            // console.log("MAIN CALCULATED: BEST", point.x, point.y);
+                            
                             relativeMousePoint = point.matrixTransform(inversedScreenCTM);
-                            // relativeMousePoint = {
-                            //     x: mainPanX,
-                            //     y: mainPanY
-                            // };
-                            // console.log({t: "thumb", x: thumbPanX, y: thumbPanY})
-                            // console.log({t: "mouse", }, relativeMousePoint);
                         }
 
 
                         let zoom = Math.pow(1 + that.zoomScaleSensitivity, (-1) * delta); // multiplying by neg. 1 so as to make zoom in/out behavior match Google maps behavior
 
+
+                        if ( main_svg.zoomFPScontrol ) {
+                            main_svg.zoomFPScontrol.stop();
+                        }
                         // that.zoomAtPointBy(zoom, relativeMousePoint);
-                        animateZoomAtPointBy(that, zoom, relativeMousePoint, animationTime = 0.2);
+                        animateZoomAtPointBy(that, zoom, relativeMousePoint, animationDuration = 0);
                     }
 
                     $mainSVG.eventListenerList = [];
@@ -805,13 +793,11 @@ var CustomThumbnailSVGControl = function (options) {
                 },
                 // Destroy custom events handler
                 destroy: function (_options) {
-                    if (main_svg.intervalZoomID) {
-                        clearInterval(main_svg.intervalZoomID);
-                        main_svg.intervalZoomID = null;
+                    if (main_svg.zoomFPScontrol) {
+                        main_svg.zoomFPScontrol.stop();
                     }
-                    if (main_svg.intervalPanID) {
-                        clearInterval(main_svg.intervalPanID);
-                        main_svg.intervalPanID = null;
+                    if (main_svg.panFPScontrol) {
+                        main_svg.panFPScontrol.stop();
                     }
 
 
@@ -1162,7 +1148,7 @@ var CustomThumbnailSVGControl = function (options) {
         // Calcular el transform
         // transform: matrix(0.233779, 0, 0, 0.233779, 0, 3.26552);
         thumb_viewport = _createShadowViewportThumbnail($thumbSVG);
-        // transform: matrix(0.233779, 0, 0, 0.233779, 0, 3.26552);
+        // TODO: Utilizar el ViewPort para controlar la diferencia del minimap al original
     }
     var initThumbView = function () {
         var thumbViewSVGDoc = getSVGDocument($thumbSVG);
@@ -1172,7 +1158,7 @@ var CustomThumbnailSVGControl = function (options) {
 
         let _thumb_svg = svgPanZoom(`#${$thumbSVG.id}`, {
             zoomEnabled: true,
-            panEnabled: false,
+            panEnabled: true,
             controlIconsEnabled: false,
             dblClickZoomEnabled: false,
             preventMouseEventsDefault: false,
@@ -1186,13 +1172,12 @@ var CustomThumbnailSVGControl = function (options) {
                     $thumbContainer.addEventListener(support, wheelHandlerListener);
                 },
                 destroy: function (_options) {
-                    if (thumb_svg.intervalZoomID) {
-                        clearInterval(thumb_svg.intervalZoomID);
-                        thumb_svg.intervalZoomID = null;
+                    if (thumb_svg.zoomFPScontrol) {
+                        thumb_svg.zoomFPScontrol.stop();
+                        
                     }
-                    if (thumb_svg.intervalPanID) {
-                        clearInterval(thumb_svg.intervalPanID);
-                        thumb_svg.intervalPanID = null;
+                    if (thumb_svg.panFPScontrol) {
+                        thumb_svg.panFPScontrol.stop();
                     }
                     // $thumbSVG.removeEventListener('load', loadThumbSVGListener);
                     $thumbSVG.removeAllEventListener();
@@ -1257,7 +1242,7 @@ var CustomThumbnailSVGControl = function (options) {
     }
 
     // Preparacion inicial del estado de zoom
-    animateZoom(main_svg, 0.9 * main_svg.getZoom(), animationTime = 1, fps = 60, callback = function () {
+    animateZoom(main_svg, 0.9 * main_svg.getZoom(), animationDuration = 0.5, fps = 60, callback = function () {
         initialState.pan = main_svg.getPan();
         initialState.zoom = main_svg.getZoom();
     });
@@ -1291,32 +1276,28 @@ var CustomThumbnailSVGControl = function (options) {
                 // Ajustar tamaño del SVG
                 if (!firstResize) {
                     firstResize = false;
-                    if (main_svg.intervalZoomID) {
-                        clearInterval(main_svg.intervalZoomID);
-                        main_svg.intervalZoomID = null;
+                    if (main_svg.zoomFPScontrol) {
+                        main_svg.zoomFPScontrol.stop();
                     }
-                    if (main_svg.intervalPanID) {
-                        clearInterval(main_svg.intervalPanID);
-                        main_svg.intervalPanID = null;
+                    if (main_svg.panFPScontrol) {
+                        main_svg.panFPScontrol.stop();
                     }
 
-                    if (thumb_svg.intervalZoomID) {
-                        clearInterval(thumb_svg.intervalZoomID);
-                        thumb_svg.intervalZoomID = null;
+                    if (thumb_svg.zoomFPScontrol) {
+                        thumb_svg.zoomFPScontrol.stop();
                     }
-                    if (thumb_svg.intervalPanID) {
-                        clearInterval(thumb_svg.intervalPanID);
-                        thumb_svg.intervalPanID = null;
+                    if (thumb_svg.panFPScontrol) {
+                        thumb_svg.panFPScontrol.stop();
                     }
                 }
                 main_svg.resize();
                 if (scopeContainer_bCR.width > 0 && scopeContainer_bCR.height > 0) {
-                    // thumb_svg.resize();
+                    thumb_svg.resize();
                     // Centrar pan y zoom del thumbnail
-                    // thumb_svg.resetZoom();
-                    // thumb_svg.zoomOut();
-                    // thumb_svg.zoomOut();
-                    // thumb_svg.center(true);
+                    thumb_svg.resetZoom();
+                    thumb_svg.zoomOut();
+                    thumb_svg.zoomOut();
+                    thumb_svg.center(true);
                     // Actualizar el recuardo del viewbox del thumbnail
                     thumb_svg.updateThumbScope();
                 }
@@ -1337,7 +1318,7 @@ var CustomThumbnailSVGControl = function (options) {
         }
     });
     // Only observe the 2nd box
-    // ro.observe($mainView);
+    ro.observe($mainView);
 
     // return [main_svg, thumb_svg, destroyAll];
     return [main_svg, thumb_svg, destroyAll];

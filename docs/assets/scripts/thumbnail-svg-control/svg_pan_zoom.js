@@ -652,8 +652,10 @@ SVGPanZoom.prototype.getPublicInstance = function() {
     // Create cache
     if (!this.publicInstance) {
         this.publicInstance = this.pi = {
+            // Viewport
+            viewport: that.viewport 
             // Pan
-            enablePan: function() {that.options.panEnabled = true; return that.pi}
+            ,enablePan: function() {that.options.panEnabled = true; return that.pi}
             , disablePan: function() {that.options.panEnabled = false; return that.pi}
             , isPanEnabled: function() {return !!that.options.panEnabled}
             , pan: function(point) {that.pan(point); return that.pi}
