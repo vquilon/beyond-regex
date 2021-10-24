@@ -23,7 +23,6 @@ var RegexVisualizer = function (options) {
 
     // var languageRegex = document.getElementById('languageRegex');
 
-
     // SET DE FUNCIONES AUXILIARES
     var showExportImage = function () {
         var ratio = window.devicePixelRatio || 1;
@@ -165,7 +164,7 @@ var RegexVisualizer = function (options) {
             else
                 flags[i].checked = false;
         }
-        setInnerText(flagBox, fg);
+        // setInnerText(flagBox, fg);
     }
     // flags.forEach(flag => flag.addEventListener('change', (event) => {
     //     setInnerText(flagBox, getFlags());
@@ -238,6 +237,9 @@ var RegexVisualizer = function (options) {
         var regExpresion = inputRegex.value;
         var regEXSON = _parseRegex(regExpresion);
         if (regEXSON) {
+            // Se desactiva el boton
+            visualBtn.disabled = true;
+
             // Antes hay que disponer un loader con una pequeña barra de carga
             // Esta se obtiene el objeto barra que se vaya cargando
             $loader_view.classList.add("loading");
@@ -288,31 +290,33 @@ var RegexVisualizer = function (options) {
                 $loader_view.classList.remove("loading");
                 $progress_bar.attributes.getNamedItem("data-value").value = "0";
                 $progress_bar.style.transform = "";
+                
+
+                // Se le da al boton otra vez el aspecto normal
+                visualBtn.disabled = false;
             }
             window.setTimeout(hideLoader, 200);
 
             return true;
         }
         else {
+            visualBtn.disabled = true;
             return false;
         }
     };
 
 
     function initMainEventsListener() {
-        inputRegex.addEventListener('change', function(event){
+        inputRegex.addEventListener('input', function(event){
             // parseEvent();
             window.hasChanges = true;
+            visualBtn.disabled = false;
         });
         
         var parseVisualizeEvent = function (event) {
             if (!event.detail || event.detail == 1) {
-                this.disabled = true;
-
                 _parseVisualizeRegex();
                 // groupRaphItems();
-
-                this.disabled = false;
             }
         };
         // parseBtn.addEventListener("click", parseEvent);
@@ -387,6 +391,17 @@ var RegexVisualizer = function (options) {
         //     var hash = serializeHash(newParams);
         //     window.open(location.href.split('#!')[0] + hash, "_blank");
         // });
+
+        let langs = document.querySelectorAll("[name='languageRegex']");
+        for(var i = 0, max = langs.length; i < max; i++) {
+            langs[i].onclick = function() {
+                if ( !$loader_view.classList.contains("loading") ) {
+                    if ( visualBtn.disabled ) {
+                        visualBtn.disabled = false;
+                    }
+                }
+            }
+        }
     }
 
     if (params.flags) {

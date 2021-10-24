@@ -262,6 +262,16 @@ body, html * {
     transform: translateY(6px);
 }
 
+.btn__primary:disabled {
+    box-shadow: none;
+    background: #4c4c4c;
+    transform: translateY(6px);
+}
+.btn__primary:disabled:hover {
+    text-shadow: none;
+    cursor: not-allowed;
+}
+
 .btn__secondary {
     /* color: #9baacf; */
     color: #f1e1ff;
@@ -893,6 +903,7 @@ select:focus>option:checked {
     opacity: 0;
 
     pointer-events: none;
+    cursor: wait;
 }
 #graph-loader.loading {
     opacity: 1;
