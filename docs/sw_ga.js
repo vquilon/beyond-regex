@@ -2,8 +2,8 @@
 
 //  importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js');
+importScripts('./version.js');
 
-const SW_VERSION = '0.0.alpha.12';
 const CACHE = `pwa-beyond_regex-v${SW_VERSION}`;
 // const urlsToCache = [
 

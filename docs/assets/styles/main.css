@@ -103,10 +103,6 @@ body, html * {
     align-content: center;
 }
 
-#errorBox {
-    margin: 20px 0px;
-}
-
 #inputCt div.re {
     width: 100%;
     font-size: 24px;
@@ -497,6 +493,7 @@ body.embed #graphCt {
     font-size: 18px;
     /* line-height: 1.4em; */
     padding: 16px;
+    margin: 10px 0px;
     color: white;
     white-space: pre;
     word-wrap: normal;
