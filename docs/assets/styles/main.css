@@ -382,6 +382,7 @@ body, html * {
     color: #313030c2;
 
     background: linear-gradient(90deg, #03a9f4, #ff0058);
+    background-clip: text;
     -webkit-background-clip: text;
     -moz-background-clip: text;
     -webkit-text-fill-color: #47474700;
