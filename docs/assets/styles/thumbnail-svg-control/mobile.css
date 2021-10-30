@@ -151,7 +151,8 @@
 
 .icon#zoom-in:hover {
     transform: none;
-    margin-right: 0px;
+    /* margin-right: 0px; */
+    margin: 0px;
 }
 
 .icon#zoom-out:hover {
