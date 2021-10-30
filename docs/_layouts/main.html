@@ -6,32 +6,31 @@
   {% seo %}
 
   <!-- <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }}</title> -->
-  {% include head.html %}
+  {% include meta/head.html %}
 
   <link rel="stylesheet" href="assets/styles/pwa.css">
   <link rel="stylesheet" href="assets/styles/install-as-app.css">
 
-  {% include styles-thumbnail-svg-control.html %}
-  {% include styles-circle-selector.html %}
+  {% include thumbnail-svg-control/styles.html %}
+  {% include editor/circle-selector/styles.html %}
 
   <!-- {% include dom-physics-engine/head.html %} -->
   {% include scripts.html %}
-  {% include scripts-thumbnail-svg-control.html %}
+  {% include thumbnail-svg-control/scripts.html %}
   <!-- {% include dom-physics-engine/scripts.html %} -->
 
   <script defer src="assets/scripts/main.js"></script>
 </head>
 
 <body>
-  {% include register_pwa.html %}
-  {% include install_as_app.html %}
+  {% include pwa/register_pwa.html %}
+  {% include pwa/install_as_app.html %}
   
-  <div id="debug"></div>
-  {% include svg-filters.html %}
+  {% include svg-utils/svg-filters.html %}
   <div id="container-main">
     {{ content }}
   </div>
-  {% include footer.html %}
+  {% include meta/footer.html %}
 </body>
 
 </html>

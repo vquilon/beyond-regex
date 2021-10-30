@@ -68,7 +68,9 @@ github_username:  vquilon
 #     - coding
 #     - python
 #     - javascript
-
+feed:
+  disable: true
+  
 # Build settings
 theme: minima
 plugins:

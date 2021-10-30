@@ -1,0 +1,79 @@
+<div class="re code">
+    <div id="langRegex">
+        <div class="select-box">
+            <div class="select-box__current" tabindex="1">
+                <div class="select-box__value">
+                    <input class="select-box__input" type="radio" id="0" value="python" name="languageRegex"
+                        checked>
+                    <p class="select-box__input-text"><i class="fab fa-python code-icon"></i><i class="code-version">Python</i>
+                    </p>
+                </div>
+                <div class="select-box__value">
+                    <input class="select-box__input" type="radio" id="1" value="javascript6" name="languageRegex">
+                    <p class="select-box__input-text"><i class="fab fa-js-square code-icon"></i><i
+                            class="code-version">ECMAS6</i></p>
+                </div>
+                <!-- <div class="select-box__value">
+                            <input class="select-box__input" type="radio" id="1" value="javascript5" name="languageRegex">
+                            <p class="select-box__input-text"><i class="fab fa-js-square code-icon"></i><i
+                                    class="code-version">ECMAS5</i></p>
+                        </div> -->
+                <!-- <div class="select-box__value">
+                            <input class="select-box__input" type="radio" id="2" value="php7" name="languageRegex">
+                            <p class="select-box__input-text"><i class="fab fa-php code-icon"></i><i class="code-version">>=7.3</i>
+                            </p>
+                        </div> -->
+                <!-- <div class="select-box__value">
+                            <input class="select-box__input" type="radio" id="4" value="java" name="languageRegex">
+                            <p class="select-box__input-text"><i class="fab fa-java code-icon"></i><i
+                                    class="code-version">8</i></p>
+                        </div> -->
+            </div>
+            <div class="select-box__list">
+                <div class="menu-item">
+                    <label class="item" for="0" aria-hidden="aria-hidden"><i class="fab fa-python"></i><i
+                            class="code-version">>=3.7</i></label>
+                </div>
+                <div class="menu-item">
+                    <label class="item" for="1" aria-hidden="aria-hidden"><i class="fab fa-js-square"></i><i
+                            class="code-version">ECMAS6</i></label>
+                </div>
+                <!-- <div class="menu-item">
+                            <label class="item" for="1" aria-hidden="aria-hidden"><i class="fab fa-js-square"></i><i
+                                    class="code-version">ECMAS5</i></label>
+                        </div> -->
+                <!-- <div class="menu-item">
+                            <label class="item" for="2" aria-hidden="aria-hidden"><i class="fab fa-php"></i><i
+                                    class="code-version">>=7.3</i></label>
+                        </div> -->
+                <!-- <div class="menu-item">
+                            <label class="item" for="5" aria-hidden="aria-hidden"><i class="fab fa-java"></i><i
+                                    class="code-version">8</i></label>
+                        </div> -->
+            </div>
+        </div>
+    </div>
+    <div id="container-input">
+        <span style="margin-left: 5px;">/</span>
+        <input id="input" class="input"
+            value="^BEYOND ReGex(?P<TOOLS>builder|[bv]isualize|(?=de)bugger) Born to be a RegEx editor$" />
+        <span style="margin-right: 5px;">/</span>
+    </div>
+    <div id="checkflags">
+        <div class="checkbox checkbox__1">
+            <input id="checkbox-ignorecase" type="checkbox" name="flag" value="i">
+            <label for="checkbox-ignorecase"><i>i</i></label>
+        </div>
+        <div class="checkbox checkbox__1">
+            <input id="checkbox-multiline" type="checkbox" name="flag" value="m">
+            <label for="checkbox-multiline"><i>m</i></label>
+        </div>
+        <div class="checkbox checkbox__1">
+            <input id="checkbox-globalmatch" type="checkbox" name="flag" value="g">
+            <label for="checkbox-globalmatch"><i>g</i></label>
+        </div>
+
+    </div>
+
+</div>
+<p id="errorBox" class="code"></p>
