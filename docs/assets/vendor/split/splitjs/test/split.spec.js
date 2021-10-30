@@ -1,6 +1,3 @@
-/* eslint-env jasmine */
-/* global Split */
-/* eslint-disable no-var, func-names, prefer-arrow-callback, object-shorthand, prefer-template */
 
 function calcParts(expr) {
     var re = /calc\(([\d]*\.?[\d]*?)%\s?-\s?([\d]+)px\)/

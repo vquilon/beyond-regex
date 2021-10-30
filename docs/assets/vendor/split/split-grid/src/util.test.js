@@ -1,4 +1,3 @@
-/* eslint-env jest */
 
 import { getStyles, getGapValue, firstNonZero } from './util'
 

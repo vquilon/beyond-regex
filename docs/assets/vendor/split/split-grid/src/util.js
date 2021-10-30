@@ -11,7 +11,6 @@ export const getGapValue = (unit, size) => {
 }
 
 export const firstNonZero = tracks => {
-    // eslint-disable-next-line no-plusplus
     for (let i = 0; i < tracks.length; i++) {
         if (tracks[i].numeric > 0) {
             return i
@@ -23,7 +22,6 @@ export const firstNonZero = tracks => {
 export const NOOP = () => false
 
 export const defaultWriteStyle = (element, gridTemplateProp, style) => {
-    // eslint-disable-next-line no-param-reassign
     element.style[gridTemplateProp] = style
 }
 

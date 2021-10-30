@@ -7,7 +7,6 @@ export default el =>
                 try {
                     rules = Array.from(s.cssRules || [])
                 } catch (e) {
-                    // Ignore results on security error
                 }
 
                 return rules
@@ -18,7 +17,6 @@ export default el =>
             try {
                 matches = el.matches(r.selectorText)
             } catch (e) {
-                // Ignore matching erros
             }
 
             return matches

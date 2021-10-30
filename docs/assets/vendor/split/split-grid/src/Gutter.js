@@ -180,8 +180,6 @@ class Gutter {
         if ('button' in e && e.button !== 0) {
             return
         }
-
-        // Don't actually drag the element. We emulate that in the drag function.
         e.preventDefault()
 
         if (this.element) {
@@ -221,8 +219,6 @@ class Gutter {
                     trackPercentage[track].numeric
             }
         }
-
-        // get start of gutter track
         const gutterStart = this.getSizeAtTrack(this.track, false) + this.start
         this.dragStartOffset = this.getMousePosition(e) - gutterStart
 
@@ -238,18 +234,12 @@ class Gutter {
 
         this.aTrackStart = this.getSizeAtTrack(this.aTrack, false) + this.start
         this.bTrackEnd = this.getSizeAtTrack(this.bTrack, true) + this.start
-
-        // Set the dragging property of the pair object.
         this.dragging = true
-
-        // All the binding. `window` gets the stop events in case we drag out of the elements.
         window.addEventListener('mouseup', this.stopDragging)
         window.addEventListener('touchend', this.stopDragging)
         window.addEventListener('touchcancel', this.stopDragging)
         window.addEventListener('mousemove', this.drag)
         window.addEventListener('touchmove', this.drag)
-
-        // Disable selection. Disable!
         this.grid.addEventListener('selectstart', NOOP)
         this.grid.addEventListener('dragstart', NOOP)
 
@@ -257,8 +247,6 @@ class Gutter {
         this.grid.style.webkitUserSelect = 'none'
         this.grid.style.MozUserSelect = 'none'
         this.grid.style.pointerEvents = 'none'
-
-        // Set the cursor at multiple levels
         this.grid.style.cursor = this.cursor
         window.document.body.style.cursor = this.cursor
 
@@ -267,8 +255,6 @@ class Gutter {
 
     stopDragging() {
         this.dragging = false
-
-        // Remove the stored event listeners. This is why we store them.
         this.cleanup()
 
         this.onDragEnd(this.direction, this.track)

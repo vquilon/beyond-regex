@@ -1,7 +1,6 @@
 module.exports = config => {
     config.set({
         customLaunchers: {
-            // latest firefox, chrome, safari
             sl_firefox_latest: {
                 base: 'SauceLabs',
                 browserName: 'firefox',
@@ -20,22 +19,18 @@ module.exports = config => {
                 platform: 'macOS 10.15',
                 version: 'latest',
             },
-
-            // latest edge
             sl_edge: {
                 base: 'SauceLabs',
                 browserName: 'MicrosoftEdge',
                 platform: 'Windows 10',
                 version: 'latest',
             },
-            // ie 11
             sl_ie_11: {
                 base: 'SauceLabs',
                 browserName: 'internet explorer',
                 platform: 'Windows 10',
                 version: 'latest',
             },
-            // ie 10
             sl_ie_10: {
                 base: 'SauceLabs',
                 browserName: 'internet explorer',
