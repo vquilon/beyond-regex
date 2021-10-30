@@ -1,0 +1,15 @@
+<div id="main">
+    <script>
+        window.history.replaceState('', document.title, window.location.pathname.slice(0, window.location.pathname.length - "index.html"));
+    </script>
+    
+    {% include header.html %}
+    
+    <div id="inputCt">
+        {% include editor/editor.html %}
+        {% include panels/visualizer.html %}
+        
+        {% include debug.html %}
+    </div>
+</div>
+<div id="main-background"></div>

@@ -50,24 +50,45 @@ workbox.routing.registerRoute(
 //   'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css',
 // ]);
 
-// Demonstrates using default cache
+// Network First for DOM, Styles and Scripts
 workbox.routing.registerRoute(
-    new RegExp('.*\\.(?:js)'),
-    new workbox.strategies.NetworkFirst(),
+  ({request}) =>
+    request.destination === 'document' ||
+    request.destination === 'script' ||
+    request.destination === 'style',
+    new workbox.strategies.NetworkFirst()
+    // new RegExp('.*\\.(?:js)'),
+    // new workbox.strategies.NetworkFirst(),
 );
 
-// Demonstrates a custom cache name for a route.
 workbox.routing.registerRoute(
-    new RegExp('.*\\.(?:png|jpg|jpeg|svg|gif)'),
-    new workbox.strategies.CacheFirst({
-      cacheName: 'image-cache',
-      plugins: [
-        new workbox.expiration.ExpirationPlugin({
-          maxEntries: 3,
-        }),
-      ],
-    }),
+  ({request}) => request.destination === 'image',
+  new workbox.strategies.CacheFirst({
+    cacheName: `${CACHE}_images`,
+    plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+      }),
+    ],
+  }),
 );
+
+// Demonstrates a custom cache name for a regex-expresion
+// workbox.routing.registerRoute(
+//     new RegExp('.*\\.(?:png|jpg|jpeg|svg|gif)'),
+//     new workbox.strategies.CacheFirst({
+//       cacheName: 'image-cache',
+//       plugins: [
+//         new workbox.expiration.ExpirationPlugin({
+//           maxEntries: 3,
+//         }),
+//       ],
+//     }),
+// );
 
 // self.addEventListener('fetch', function(event) {
 //   event.respondWith(
