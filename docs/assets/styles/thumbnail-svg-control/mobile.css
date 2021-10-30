@@ -2,10 +2,9 @@
     pointer-events: none;
     z-index: 10;
     display: flex;
-    top: unset;
+    top: 80%;
     position: inherit;
     margin-left: 10px;
-    margin-right: 10px;
     height: 20%;
     column-gap: 10px;
     justify-content: space-between;
@@ -14,16 +13,17 @@
 
 #graphCt {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: nowrap;
-    max-height: 80vh;
     width: 100%;
     height: 80vh;
+    max-height: 80vh;
     box-shadow: none;
     border: none;
     background: transparent;
     margin: 0;
     overflow: visible;
+    align-items: flex-start;
 }
 
 #graphCt .control-panel {
@@ -38,10 +38,15 @@
     transform: unset;
 }
 
+#graphCt #graph-loader {
+    height: calc(80% - 20px);
+    min-height: calc(80% - 20px);
+}
+
 #graphCtView {
     width: 100%;
-    height: 80%;
-    min-height: 80%;
+    height: calc(80% - 20px);
+    min-height: calc(80% - 20px);
     /* box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c; */
     /* display: inline; */
     border-radius: 10px;

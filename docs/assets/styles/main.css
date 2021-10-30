@@ -897,7 +897,7 @@ select:focus>option:checked {
     width: 100%;
     height: 100%;
     position: relative;
-    z-index: 2;
+    z-index: 20;
     background: #e2e2e2;
     border-radius: 10px;
 
