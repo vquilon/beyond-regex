@@ -8,8 +8,11 @@
   <!-- <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }}</title> -->
   {% include meta/head.html %}
 
-  <link rel="stylesheet" href="assets/styles/pwa.css">
-  <link rel="stylesheet" href="assets/styles/install-as-app.css">
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/pwa.css">
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/install-as-app.css">
+
+  
+  {% include offline-handler.html %}
 
   {% include thumbnail-svg-control/styles.html %}
   {% include editor/circle-selector/styles.html %}
@@ -19,7 +22,7 @@
   {% include thumbnail-svg-control/scripts.html %}
   <!-- {% include dom-physics-engine/scripts.html %} -->
 
-  <script defer src="assets/scripts/main.js"></script>
+  <script defer src="{{ site.baseurl }}/assets/scripts/main.js"></script>
 </head>
 
 <body>
@@ -30,6 +33,8 @@
   <div id="container-main">
     {{ content }}
   </div>
+
+  
   {% include meta/footer.html %}
 </body>
 

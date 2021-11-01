@@ -14,10 +14,10 @@
 </script> -->
 
 {% if site.environment == "production" %}
-<script defer type="module" src="register_pwa_prod.js"></script>
+  {% include pwa/registers/register_pwa_prod.html %}
 
 {% else %}
-<script defer type="module" src="register_pwa_dev.js"></script>
+  {% include pwa/registers/register_pwa_dev.html %}
 <!-- <script type="module">
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {

@@ -26,10 +26,11 @@ body, html * {
 } */
 
 #container-main {
-    display: flex;
+    /* display: flex;
     flex-wrap: nowrap;
-    flex: 1;
+    flex: 1; */
     padding-bottom: 150px;
+    position: relative;
 }
 
 #main {
@@ -39,14 +40,14 @@ body, html * {
     width: calc(100% - 40px);
 }
 
-#main-background {
-    background: url(../images/background_repeat_2.png);
+#container-main:before {
+    content: "";
+    position: absolute;
+    background-image: url(../images/background_repeat_2.png);
     opacity: 0.1;
+    background-repeat: repeat;
     width: 100%;
-    flex: none;
-    margin-left: -100%;
-    margin-top: -30px;
-    margin-bottom: -150px;
+    height: 100%;
     z-index: -1;
 }
 
