@@ -1,1 +1,1 @@
-const SW_VERSION = '0.0.alpha.12';
+const SW_VERSION = '0.0.alpha.13';
