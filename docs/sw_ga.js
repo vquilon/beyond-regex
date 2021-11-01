@@ -2,8 +2,8 @@
 
 //  importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js');
-importScripts('./version.js');
 
+const SW_VERSION = '0.0.alpha.13';
 const CACHE = `pwa-beyond_regex-v${SW_VERSION}`;
 // const urlsToCache = [
 
@@ -38,35 +38,45 @@ if (workbox.navigationPreload.isSupported()) {
 }
 
 
-// Registro de las urls para cachear
+// PRECACHING DE ENLACES EXTERNOS
+// workbox.precaching.precacheAndRoute([
+//   'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css',
+// ]);
+
+// ESTRATEGIA NETWORK FIRST, DESPUES TIRARIA DEL CACHE DE ARRIBA StaleWithRevalidate
+workbox.routing.registerRoute(
+  ({request}) =>
+    request.destination === 'document' ||
+    request.destination === 'script' ||
+    request.destination === 'style',
+    new workbox.strategies.NetworkFirst()
+    // new RegExp('.*\\.(?:js)'),
+    // new workbox.strategies.NetworkFirst(),
+);
+
+// CACHE UNICO PARA IMAGENES
+workbox.routing.registerRoute(
+  ({request}) => request.destination === 'image',
+  new workbox.strategies.CacheFirst({
+    cacheName: `${CACHE}_images`,
+    plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+      }),
+    ],
+  }),
+);
+
+// Cacheo de todas las URLs propias
 workbox.routing.registerRoute(
   new RegExp('/*'),
   new workbox.strategies.StaleWhileRevalidate({
     cacheName: CACHE
   })
-);
-
-// workbox.precaching.precacheAndRoute([
-//   'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css',
-// ]);
-
-// Demonstrates using default cache
-workbox.routing.registerRoute(
-    new RegExp('.*\\.(?:js)'),
-    new workbox.strategies.NetworkFirst(),
-);
-
-// Demonstrates a custom cache name for a route.
-workbox.routing.registerRoute(
-    new RegExp('.*\\.(?:png|jpg|jpeg|svg|gif)'),
-    new workbox.strategies.CacheFirst({
-      cacheName: 'image-cache',
-      plugins: [
-        new workbox.expiration.ExpirationPlugin({
-          maxEntries: 3,
-        }),
-      ],
-    }),
 );
 
 // self.addEventListener('fetch', function(event) {
