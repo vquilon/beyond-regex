@@ -71,6 +71,8 @@
     font-size: 0px;
     height: calc(100% + 20px);
     width: calc(30% + 20px);
+    margin: 0;
+    
     /* box-shadow: 6px 6px 12px #00000063, -6px -6px 12px #00000063; */
     transition: all 0.2s linear;
     border: unset;
@@ -116,8 +118,7 @@
 }
 
 #thumbViewContainer:hover {
-    width: 40%;
-    height: 180%;
+    box-shadow: none;
 }
 
 .icon {
@@ -130,6 +131,7 @@
 }
 .control-zoom {
     column-gap: 10px;
+    margin: 0;
 }
 
 .control-zoom:hover {
@@ -141,11 +143,11 @@
 }
 
 .icon:hover {
-    box-shadow: inset 0 0 20px 0px #37c1ff, 0 0 15px 0px #b0e7ff;
+    box-shadow: inset 0 0 20px 0px #efefef, 0 0 15px 0px #ffffff;
 }
 
 .icon:active {
-    box-shadow: inset 0 0 20px 0px #37c1ff, 0 0 15px 0px #b0e7ff;
+    box-shadow: inset 0 0 20px 0px #efefef, 0 0 15px 0px #ffffff, inset 5px 0px 20px -5px #ff0058, inset -5px 0px 20px -5px #03a9f4;
 }
 
 

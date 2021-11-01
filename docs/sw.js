@@ -5,6 +5,8 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox
 importScripts('./version.js');
 
 const CACHE = `pwa-beyond_regex-v${SW_VERSION}`;
+const OFFLINE_INDEX = "/offline/";
+
 // const urlsToCache = [
 
 // ];
@@ -38,19 +40,12 @@ if (workbox.navigationPreload.isSupported()) {
 }
 
 
-// Registro de las urls para cachear
-workbox.routing.registerRoute(
-  new RegExp('/*'),
-  new workbox.strategies.StaleWhileRevalidate({
-    cacheName: CACHE
-  })
-);
-
+// PRECACHING DE ENLACES EXTERNOS
 // workbox.precaching.precacheAndRoute([
 //   'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css',
 // ]);
 
-// Network First for DOM, Styles and Scripts
+// ESTRATEGIA NETWORK FIRST, DESPUES TIRARIA DEL CACHE DE ARRIBA StaleWithRevalidate
 workbox.routing.registerRoute(
   ({request}) =>
     request.destination === 'document' ||
@@ -61,6 +56,7 @@ workbox.routing.registerRoute(
     // new workbox.strategies.NetworkFirst(),
 );
 
+// CACHE UNICO PARA IMAGENES
 workbox.routing.registerRoute(
   ({request}) => request.destination === 'image',
   new workbox.strategies.CacheFirst({
@@ -77,18 +73,13 @@ workbox.routing.registerRoute(
   }),
 );
 
-// Demonstrates a custom cache name for a regex-expresion
-// workbox.routing.registerRoute(
-//     new RegExp('.*\\.(?:png|jpg|jpeg|svg|gif)'),
-//     new workbox.strategies.CacheFirst({
-//       cacheName: 'image-cache',
-//       plugins: [
-//         new workbox.expiration.ExpirationPlugin({
-//           maxEntries: 3,
-//         }),
-//       ],
-//     }),
-// );
+// Cacheo de todas las URLs propias
+workbox.routing.registerRoute(
+  new RegExp('/*'),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: CACHE
+  })
+);
 
 // self.addEventListener('fetch', function(event) {
 //   event.respondWith(
