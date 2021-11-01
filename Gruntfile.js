@@ -8,10 +8,10 @@ module.exports = function (grunt) {
         //         "dest": "js/app.js"
         //     }
         // },
+        // Este plugin es malo solo puede con un fichero a la vez
         removeHtmlComments: {
             target: {
-                src: '**/*.html',
-                dest: 'docs'
+                src: '**/*.html'
             }
         },
         remove_comments: {
