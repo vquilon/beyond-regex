@@ -26,6 +26,7 @@
   "devDependencies": {
     "grunt-contrib-cssmin": "^4.0.0",
     "grunt-contrib-uglify": "^5.0.1",
-    "grunt-remove-comments": "^0.1.6"
+    "grunt-remove-comments": "^0.1.6",
+    "grunt-remove-html-comments": "^1.0.0"
   }
 }

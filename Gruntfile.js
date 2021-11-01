@@ -8,6 +8,12 @@ module.exports = function (grunt) {
         //         "dest": "js/app.js"
         //     }
         // },
+        removeHtmlComments: {
+            target: {
+                src: '**/*.html',
+                dest: 'docs'
+            }
+        },
         remove_comments: {
             options: {
                 // Task-specific options go here.
@@ -76,12 +82,13 @@ module.exports = function (grunt) {
 
     // Load required modules
     // grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-remove-html-comments');
     grunt.loadNpmTasks('grunt-remove-comments');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
     // Task definitions
     // grunt.registerTask('default', ['concat']);
-    grunt.registerTask('prod', ['remove_comments:prod_js', 'remove_comments:prod_css', 'uglify:prod', 'cssmin:prod']);
+    grunt.registerTask('prod', ['removeHtmlComments', 'remove_comments:prod_js', 'remove_comments:prod_css', 'uglify:prod', 'cssmin:prod']);
 
 };

@@ -7,4 +7,5 @@
 # sudo apt install node-grunt-cli
 # Completar Gruntfile.js
 # Ejecutar grunt
-grunt prod
+# grunt prod
+./node_modules/grunt-cli/bin/grunt prod
