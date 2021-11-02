@@ -2,40 +2,66 @@
 <html>
 
 <head>
-  <!-- SEO tags -->
-  {% seo %}
+  <!-- ORDEN CORRECTO DE LAS ETIQUETAS DENTRO DEL HEAD -->
+  <!-- meta charset|http-equiv|viewport -->
+  <!-- title -->
+  <!-- preconnect -->
+  <!-- scripts src="" async -->
+  <!-- css with @import -->
+  <!-- sync js -->
+  <!-- sync css -->
+  <!-- preload -->
+  <!-- script src="" defer -->
+  <!-- prefetch / prerender -->
+  <!-- seo tags (meta, icons, Open graph, etc) -->
+  <!-- noscript -->
+  <!-- template -->
 
-  <!-- <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }}</title> -->
-  {% include meta/head.html %}
+  {% include meta/meta.html %}
+  {% include meta/base_styles_scripts.html %}
 
+  <!-- Estilos propios del PWA -->
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/pwa.css">
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/install-as-app.css">
 
-  
-  {% include offline-handler.html %}
+  <!-- Scripts para el control de la barra de conexion -->
+  {% include offline-status/scripts.html %}
 
   {% include thumbnail-svg-control/styles.html %}
   {% include editor/circle-selector/styles.html %}
 
-  <!-- {% include dom-physics-engine/head.html %} -->
+  <!-- {% include dom-physics-engine/styles.html %} -->
   {% include scripts.html %}
   {% include thumbnail-svg-control/scripts.html %}
   <!-- {% include dom-physics-engine/scripts.html %} -->
 
   <script defer src="{{ site.baseurl }}/assets/scripts/main.js"></script>
+
+  <!-- SEO tags -->
+  {% seo %}
+
+  <noscript>
+    <h2 id="noscript">Please enable JavaScript in order to use all features</h2>
+  </noscript>
 </head>
 
 <body>
+  <script defer>
+    document.body.classList.add("js-enabled");
+  </script>
+
   {% include pwa/register_pwa.html %}
   {% include pwa/install_as_app.html %}
-  
+
   {% include svg-utils/svg-filters.html %}
   <div id="container-main">
     {{ content }}
   </div>
 
-  
+
   {% include meta/footer.html %}
+
+  {% include offline-status/connection-box.html %}
 </body>
 
 </html>

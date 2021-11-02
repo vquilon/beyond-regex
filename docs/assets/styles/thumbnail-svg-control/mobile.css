@@ -26,6 +26,11 @@
     align-items: flex-start;
 }
 
+#graphCt>* {
+    height: calc(80% - 20px) !important;
+    min-height: calc(80% - 20px) !important;
+}
+
 #graphCt .control-panel {
     opacity: 1;
     transition: none;
@@ -56,6 +61,8 @@
 #graphCtSVG {
     overflow: hidden;
     position: static !important;
+    /* DISABLED SCROLL WHOLE PAGE */
+    touch-action: none;
     top: 0px !important;
     height: 100%;
     width: 100%;
@@ -72,7 +79,6 @@
     height: calc(100% + 20px);
     width: calc(30% + 20px);
     margin: 0;
-    
     /* box-shadow: 6px 6px 12px #00000063, -6px -6px 12px #00000063; */
     transition: all 0.2s linear;
     border: unset;
@@ -126,9 +132,11 @@
     box-shadow: inset 0 0 10px 0px #ffffff4d, 0 0 5px 0px #ffffffb3;
     /* box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c; */
 }
+
 .icon svg circle {
     fill: white !important;
 }
+
 .control-zoom {
     column-gap: 10px;
     margin: 0;
@@ -150,7 +158,6 @@
     box-shadow: inset 0 0 20px 0px #efefef, 0 0 15px 0px #ffffff, inset 5px 0px 20px -5px #ff0058, inset -5px 0px 20px -5px #03a9f4;
 }
 
-
 .icon#zoom-in:hover {
     transform: none;
     /* margin-right: 0px; */
@@ -168,6 +175,7 @@
     margin-left: 0px;
     margin-right: 0px;
 }
+
 /* 
 .icon .lens g.shine-accent-dark path {
     fill: url(#shine-accent-dark) !important;
@@ -204,7 +212,6 @@
 .icon:active .lens g.gradient path {
     fill: url(#gradient-hover) !important;
 } */
-
 
 .json-container {
     margin-top: 40px;

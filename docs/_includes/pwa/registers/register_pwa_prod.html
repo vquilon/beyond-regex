@@ -40,7 +40,7 @@
             actual_url = actual_url.slice(0, actual_url.length - "index.html".length)
         }
         // const wb = new Workbox(`${actual_url}sw_ga.js`);
-        const wb = new Workbox("{{ site.baseurl }}sw_ga.js");
+        const wb = new Workbox("{{ site.baseurl }}/sw_ga.js");
         let registration;
 
         // wb.addEventListener('activated', (event) => {

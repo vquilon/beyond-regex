@@ -1,6 +1,7 @@
 .vscode/
 .idea/
 .history/
+forks/
 docs/_site
 docs/.sass-cache
 docs/.jekyll-cache

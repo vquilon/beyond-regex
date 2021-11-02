@@ -1,0 +1,33 @@
+/* UBICAR AQUI TODOS LOS ESTILOS DE LOS PANELES CONTENEDORES */
+
+#graphCt i.disabledJS-JS {
+    margin-left: -100%;
+    width: 100%;
+    text-align: center;
+    z-index: 200;
+    font-size: 112px;
+    display: flex;
+    height: 100%;
+    flex-wrap: nowrap;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #ffffff;
+    justify-content: center;
+    align-items: center;
+}
+
+#graphCt i.disabledJS-JS:before {
+    width: 100%;
+    background: linear-gradient( 360deg, #03a9f4, #ff0058);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: #47474700;
+}
+
+#graphCt i.disabledJS-JS i.disabledJS-ban {
+    font-size: 150%;
+    width: 100%;
+    margin-left: -100%;
+    opacity: 0.8;
+    color: #ff001f;
+}

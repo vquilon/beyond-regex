@@ -1,11 +1,9 @@
-{% include meta/meta.html %}
-
 <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 
-<link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}"
-  href="{{ site.baseurl }}/feed.xml" />
+<!-- NO TENGO UN FEED DE MOMENTO -->
+<!-- <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" /> -->
 
 <!-- Icons -->
 <link rel="shortcut icon" type="image/png" href="{{ site.baseurl }}/assets/images/icons/beyond_regex_icon.png">
@@ -26,10 +24,6 @@
 <link rel="icon" type="image/png" sizes="192x192" href="{{ site.baseurl }}/assets/images/icons/beyond_regex_icon_192.png">
 
 
-<!-- Sweet Alert -->
-<link rel="stylesheet" href="{{ site.baseurl }}/assets/vendor/sweetalert2/sweetalert2.min.css">
-<script src="{{ site.baseurl }}/assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
-
 <!-- Font Awesome 5 -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/vendor/font-awesome/css/all.min.css">
 
@@ -43,32 +37,32 @@
   {% include analytics.html %}
 {% endif %}
 
-<link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
+<!-- <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet"> -->
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 
-<script type='module' src='https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js'></script>
-<script nomodule='' src='https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js'></script>
-
-
-<style>
-  html,
-  body {
-    overscroll-behavior-y: contain;
-  }
-</style>
+<script defer type='module' src='https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js'></script>
+<script defer nomodule='' src='https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js'></script>
 
 <!-- FONTS -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/fonts.css">
 
+<!-- Sweet Alert -->
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/vendor/sweetalert2/sweetalert2.min.css">
+<script defer src="{{ site.baseurl }}/assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
 
-
+<!-- ESTILOS PRINCIPALES -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/main.css">
 <link rel="stylesheet" type="text/css" media="only screen and (max-width: 800px)" href="{{ site.baseurl }}/assets/styles/mobile.css" />
+<!-- ESTILOS PANELES -->
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/panels.css">
 
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/scrollbars.css">
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/vendor/highlight/highlight.min.css">
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/style-json.css">
 
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/offline-styles.css">
+
+
+<!-- <link rel="stylesheet" href="https://csswizardry.com/ct/ct.css" class="ct" /> -->
