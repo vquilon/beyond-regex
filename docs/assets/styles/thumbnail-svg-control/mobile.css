@@ -1,40 +1,38 @@
-.control-panel {
-    pointer-events: none;
-    z-index: 10;
-    display: flex;
-    top: 80%;
-    position: inherit;
-    margin-left: 10px;
-    height: 20%;
-    column-gap: 10px;
-    justify-content: space-between;
-    align-items: flex-end;
-}
-
 #graphCt {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     width: 100%;
+    min-height: 400px;
     height: 80vh;
-    max-height: 80vh;
+    max-height: 500px;
     box-shadow: none;
     border: none;
     background: transparent;
     margin: 0;
     overflow: visible;
-    align-items: flex-start;
+    align-items: stretch;
 }
 
-#graphCt>* {
+#graphCt>*:not(.control-panel) {
     height: calc(80% - 20px) !important;
     min-height: calc(80% - 20px) !important;
 }
 
 #graphCt .control-panel {
     opacity: 1;
-    transition: none;
     transform: unset;
+    transition: none;
+    pointer-events: none;
+    z-index: 10;
+    display: flex;
+    top: 80%;
+    position: relative;
+    margin-left: 10px;
+    height: 20%;
+    column-gap: 10px;
+    justify-content: space-between;
+    align-items: flex-end;
 }
 
 #graphCt:hover .control-panel {
@@ -54,8 +52,6 @@
     min-height: calc(80% - 20px);
     /* box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c; */
     /* display: inline; */
-    border-radius: 10px;
-    background: #e2e2e2;
 }
 
 #graphCtSVG {
@@ -66,8 +62,9 @@
     top: 0px !important;
     height: 100%;
     width: 100%;
-    border-radius: 10px;
     display: inline;
+    border-radius: 10px;
+    background: #e2e2e2;
 }
 
 #thumbViewContainer {

@@ -2,7 +2,6 @@
 	pointer-events: none;
 	z-index: 10;
 	display: flex;
-	top: -15px;
 	position: relative;
 	margin-left: 10px;
 	margin-right: 10px;
@@ -15,9 +14,9 @@
 #graphCt .control-panel {
 	opacity: 0;
 	transition: opacity 0.5s ease, transform 0.5s ease;
-	transform: translate(0, 100px);
+	transform: translateY(85px);
 }
 #graphCt:hover .control-panel {
 	opacity: 1;
-	transform: none;
+	transform: translateY(-15px);
 }

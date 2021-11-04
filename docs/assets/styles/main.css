@@ -21,7 +21,7 @@ html {
 
 body {
     min-height: 100vh;
-    min-width: 300px;
+    min-width: 500px;
     /* Only for background 100% height */
     position: relative;
 }
@@ -62,32 +62,41 @@ h2#noscript {
 }
 
 #container-main {
-    padding-bottom: 150px;
     position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .heading {
+    position: fixed;
+    width: 350px;
+    max-width: 100vw;
     height: 100vh;
     box-sizing: border-box;
-    padding: 60px 40px;
-
+    grid-gap: 50px;
+    padding: 60px 00px;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     align-content: space-between;
     flex-wrap: wrap;
-    
-    border-bottom: solid 5px white;
+    border-right: solid 5px white;
     background: #00000075;
-    
     backdrop-filter: blur(10px);
-
     box-shadow: inset 0 0 10px -5px white, 0 0 10px white, 0 5px 25px 5px black;
+    overflow-y: auto;
+
+    z-index: 50;
+
+    transition: transform 0.2 linear;
 }
+
 
 .heading #title {
     display: flex;
     flex-wrap: wrap;
+    margin: 0 40px;
 }
 
 .heading #title h1 {
@@ -137,6 +146,7 @@ h2#noscript {
 }
 
 /* Social Icons */
+
 .heading .social-icons {
     display: flex;
     grid-gap: 10px;
@@ -331,10 +341,22 @@ h2#noscript {
 }
 
 #main {
-    padding: 60px 20px 0px;
+    padding: 40px 20px 0px;
     width: 100%;
     box-sizing: border-box;
 }
+
+#container-main .heading {
+    transform: translateX(-350px);
+}
+
+#container-main.menu-open .heading {
+    transform: none;
+}
+
+/* #container-main.menu-open #main {
+    transform: translateX(350px);
+} */
 
 #inputCt {
     display: flex;
@@ -635,9 +657,8 @@ h2#noscript {
 }
 
 footer {
-    z-index: 200;
-    margin-top: -150px;
-    /* height: 150px; */
+    /* z-index: 200; */
+    height: 150px;
     backdrop-filter: blur(5px);
     box-shadow: inset 0 0 20px 0px #fffefe1a, 0 0 5px 0px #fffefe1a;
     -webkit-backdrop-filter: blur(5px);

@@ -1136,14 +1136,13 @@ var CustomThumbnailSVGControl = function (options) {
         $control_zoom.appendChild($zoom_out);
         $control_zoom.appendChild($zoom_reset);
 
-        let $control_panel = document.createElement('div');
-        $control_panel.classList.add(controlPanelClass);
+        let $control_panel = $mainView.parentElement.querySelector(`.${controlPanelClass}`);
         $control_panel.appendChild($thumbContainer);
         $control_panel.appendChild($control_zoom);
         
         // Borro el anterior control panel
         
-        insertAfter($mainView, $control_panel);
+        // insertAfter($mainView, $control_panel);
 
         // Calcular el transform
         // transform: matrix(0.233779, 0, 0, 0.233779, 0, 3.26552);
@@ -1256,7 +1255,10 @@ var CustomThumbnailSVGControl = function (options) {
         thumb_svg.destroy();
         delete thumb_svg;
         
-        $mainView.parentElement.getElementsByClassName(controlPanelClass)[0].remove();
+        let $controlPanel = $mainView.parentElement.querySelector(`.${controlPanelClass}`);
+        while ($controlPanel.firstChild) {
+            $controlPanel.removeChild($controlPanel.lastChild);
+        }
     }
 
     function updateSVGContent(newSVG) {

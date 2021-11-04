@@ -1,3 +1,7 @@
+body {
+    min-width: 300px;
+}
+
 #inputCt div.re {
     grid-template-columns: 1fr 1fr;
 }

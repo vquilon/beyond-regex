@@ -35,6 +35,8 @@
   {% include thumbnail-svg-control/scripts.html %}
   <!-- {% include dom-physics-engine/scripts.html %} -->
 
+  {% include mobile/styles.html %}
+
   <script defer src="{{ site.baseurl }}/assets/scripts/main.js"></script>
 
   <!-- SEO tags -->
@@ -57,9 +59,6 @@
   <div id="container-main">
     {{ content }}
   </div>
-
-
-  {% include meta/footer.html %}
 
   {% include offline-status/connection-box.html %}
 </body>
