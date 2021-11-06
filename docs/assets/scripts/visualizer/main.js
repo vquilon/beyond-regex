@@ -4,8 +4,7 @@ var RegexVisualizer = function (options) {
 
     var paper = new Raphael('graphCtView', 10, 10);
     paper.canvas.id = 'graphCtSVG';
-    // var paper = new Raphael('RaphaelPaperContainer', 10, 10);
-    // paper.canvas.id = 'raphaelSVG';
+
     // TODO: Dibujar un boton que sea el de visualizar para dar por entendido que hay
     // que pulsarlo si se quiere ver algo	
     var svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl;
@@ -22,6 +21,10 @@ var RegexVisualizer = function (options) {
     var flagBox = document.getElementById('flagBox');
 
     // var languageRegex = document.getElementById('languageRegex');
+
+    const processNonBlockingFunction = (func) => {
+        setTimeout(func, 100);
+    };
 
     // SET DE FUNCIONES AUXILIARES
     var showExportImage = function () {
@@ -300,7 +303,7 @@ var RegexVisualizer = function (options) {
             return true;
         }
         else {
-            visualBtn.disabled = true;
+            visualBtn.disabled = false;
             return false;
         }
     };

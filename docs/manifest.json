@@ -5,7 +5,7 @@
   "short_name": "Beyond Regex",
   "scope": "/beyond-regex/",
   "display": "standalone",
-  "start_url": "/",
+  "start_url": "/index.html",
   "background_color": "#000000",
   "theme_color": "#1E003D",
   "description": "Regular expression editor - visualizer - tester to understand, build and debug the NFA and backtracking based regex engine. PHP, JS, and Python Support",
