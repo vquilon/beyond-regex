@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  {% include head/meta.html %}
+  {% include head/base_styles_scripts.html %}
+
+  {% include mobile/styles.html %}
+  <!-- SEO tags -->
+  {% seo %}
+
+  <noscript>
+    <h2 id="noscript">Please enable JavaScript in order to use all features</h2>
+  </noscript>
+</head>
+
+<body>
+  <script defer>
+    document.body.classList.add("js-enabled");
+  </script>
+  {% include pwa/register_pwa.html %}
+  <div id="container-main">
+    {{ content }}
+  </div>
+</body>
+
+</html>

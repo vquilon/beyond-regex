@@ -89,7 +89,6 @@ h2#noscript {
     height: 100vh;
     padding-left: 100px;
     box-sizing: content-box;
-
     background: #000000ba;
     backdrop-filter: blur(10px);
     /* border-right: solid 5px white; */
@@ -149,6 +148,7 @@ h2#noscript {
     justify-content: center;
     align-content: space-between;
     flex-wrap: wrap;
+    overflow-x: hidden;
 }
 
 .heading #title {
@@ -200,6 +200,59 @@ h2#noscript {
 }
 
 .heading #logo img {
+    width: 100px;
+}
+
+.heading section#sections {
+    display: flex;
+    grid-gap: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+}
+
+.heading section#sections a {
+    width: 120px;
+    height: 120px;
+    background: #ffffff3d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.heading section#sections a:hover {
+    background: #ffffff70;
+    box-shadow: inset 0 0 10px 2px white, 0 0 25px white;
+}
+
+.heading section#sections a i {
+    font-size: 60px;
+    color: white;
+}
+
+.heading section#sections a.building {
+    position: relative;
+}
+
+.heading section#sections a.building:before {
+    content: "";
+    width: 20px;
+    height: 100%;
+    border-radius: 5px;
+    position: absolute;
+    background: repeating-linear-gradient(0deg,
+    yellow 0px, yellow 10px,
+    black 10px, black 20px,
+    yellow 20px, yellow 30px,
+    black 30px, black 40px);
+
+    transform: rotate(45deg);
+}
+
+.heading section#sections a img {
     width: 100px;
 }
 
@@ -400,6 +453,7 @@ h2#noscript {
 
 #main {
     padding: 40px 20px 0px;
+    margin-top: 40px;
     width: 100%;
     box-sizing: border-box;
 }
