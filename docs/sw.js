@@ -2,8 +2,10 @@
 
 //  importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js');
-importScripts('./version.js');
-importScripts('./changelog.js')
+importScripts('./changelog.js');
+
+const SW_VERSION = '0.0.alpha';
+const SW_BUILD = '14'
 
 const CACHE_IMAGES = "beyond_regex-images";
 const CACHE_FONTS = "beyond_regex-fonts";
@@ -101,7 +103,15 @@ const regexRemaining = `(?!${regexChangelog}|${regexBeyondFiles}|${regexFonts}|$
 workbox.routing.registerRoute(
   new RegExp(`.+${regexChangelog}$`),
   new workbox.strategies.NetworkFirst({
-    cacheName: CACHE_VERSIONED
+    cacheName: CACHE_VERSIONED,
+    plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.ExpirationPlugin({
+        maxAgeSeconds: 4 * 30 * 24 * 60 * 60, // 4 Months
+      }),
+    ],
   })
 );
 
@@ -110,7 +120,15 @@ workbox.routing.registerRoute(
 workbox.routing.registerRoute(
   new RegExp(`.+${regexBeyondFiles}$`),
   new workbox.strategies.StaleWhileRevalidate({
-    cacheName: CACHE_VERSIONED
+    cacheName: CACHE_VERSIONED,
+    plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.ExpirationPlugin({
+        maxAgeSeconds: 4 * 30 * 24 * 60 * 60, // 4 Months
+      }),
+    ]
   })
 );
 
@@ -125,7 +143,7 @@ workbox.routing.registerRoute(
       }),
       new workbox.expiration.ExpirationPlugin({
         maxEntries: 60,
-        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+        maxAgeSeconds: 4 * 30 * 24 * 60 * 60, // 4 Months
       }),
     ],
   }),
@@ -150,12 +168,20 @@ workbox.routing.registerRoute(
 
 // CACHEO EL RESTO DE URLS A MI CACHE VERSIONADA
 // LA CUAL SE BORRARA CADA VEZ QUE SE ACTUALICE
-workbox.routing.registerRoute(
-  new RegExp(`.+${regexRemaining}$`),
-  new workbox.strategies.CacheFirst({
-    cacheName: CACHE_VERSIONED
-  })
-);
+// workbox.routing.registerRoute(
+//   new RegExp(`.+${regexRemaining}$`),
+//   new workbox.strategies.CacheFirst({
+//     cacheName: CACHE_VERSIONED,
+//     plugins: [
+//       new workbox.cacheableResponse.CacheableResponsePlugin({
+//         statuses: [0, 200],
+//       }),
+//       new workbox.expiration.ExpirationPlugin({
+//         maxAgeSeconds: 365 * 24 * 60 * 60, // 1 año
+//       }),
+//     ],
+//   })
+// );
 
 // self.addEventListener('fetch', function(event) {
 //   event.respondWith(

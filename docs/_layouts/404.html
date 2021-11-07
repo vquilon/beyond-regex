@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  {% include head/meta.html %}
+  {% include head/base_styles_scripts.html %}
+
+  <!-- Estilos propios del PWA -->
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/pwa.css">
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/install-as-app.css">
+
+  <!-- Scripts para el control de la barra de conexion -->
+  {% include offline-status/scripts.html %}
+
+  {% include mobile/styles.html %}
+
+  <script defer src="{{ site.baseurl }}/assets/scripts/main.js"></script>
+
+  <!-- SEO tags -->
+  {% seo %}
+
+</head>
+
+<body>
+  {% include pwa/register_pwa.html %}
+  {% include pwa/install_as_app.html %}
+
+  <div id="container-main">
+    {{ content }}
+  </div>
+
+  {% include offline-status/connection-box.html %}
+</body>
+
+</html>

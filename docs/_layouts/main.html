@@ -17,8 +17,8 @@
   <!-- noscript -->
   <!-- template -->
 
-  {% include meta/meta.html %}
-  {% include meta/base_styles_scripts.html %}
+  {% include head/meta.html %}
+  {% include head/base_styles_scripts.html %}
 
   <!-- Estilos propios del PWA -->
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/pwa.css">
@@ -27,12 +27,12 @@
   <!-- Scripts para el control de la barra de conexion -->
   {% include offline-status/scripts.html %}
 
-  {% include thumbnail-svg-control/styles.html %}
+  {% include panels/visualizer/auxiliar/thumbnail-svg-control/styles.html %}
   {% include editor/circle-selector/styles.html %}
 
   <!-- {% include dom-physics-engine/styles.html %} -->
-  {% include scripts.html %}
-  {% include thumbnail-svg-control/scripts.html %}
+  {% include panels/visualizer/scripts.html %}
+  {% include panels/visualizer/auxiliar/thumbnail-svg-control/scripts.html %}
   <!-- {% include dom-physics-engine/scripts.html %} -->
 
   {% include mobile/styles.html %}

@@ -1,12 +1,12 @@
-{% include header.html %}
+{% include sidebar/sidebar.html %}
 <div id="main">
         <!-- <script>
             window.history.replaceState('', document.title, window.location.pathname.slice(0, window.location.pathname.length - "index.html"));
         </script> -->
     <div id="inputCt">
         {% include editor/editor.html %}
-        {% include panels/visualizer.html %}
+        {% include panels/visualizer/visualizer.html %}
         
-        {% include debug.html %}
+        {% include editor/debug/debug.html %}
     </div>
 </div>
