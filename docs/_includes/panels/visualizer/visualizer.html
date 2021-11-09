@@ -1,26 +1,2 @@
-<div id="actionButtons">
-    <!-- <button class="btn btn__primary button-panel" id="parseClick">Parse!</button> -->
-    <button class="btn btn__primary button-panel" id="visualizeClick">Visualize</button>
-    <!-- <button class="btn btn__primary button-panel" id="exportIt">Export Image</button> -->
-    <button class="btn btn__primary button-panel" id="embedIt">Link!</button>
-
-    <!-- <div class="custom-dropdown">
-        <select name="languageRegex" id="languageRegex">
-            <option selected value="python">Python</option>
-            <option value="javascript">Javascript</option>
-        </select>
-        </span>
-    </div> -->
-</div>
-<div id="graphCt" class="code">
-    <div id="graph-loader">
-        <div class="progress" data-value="0" data-max="100"></div>
-        <div class="spinner">
-            <span></span>
-        </div>
-    </div>
-    <div id="graphCtView">
-    </div>
-    {% include noscripts/disabled-js.html %}
-    <div class="control-panel"></div>
-</div>
+{% include panels/visualizer/controls.html %}
+{% include panels/visualizer/panel.html %}

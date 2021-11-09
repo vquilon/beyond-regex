@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% include head/base_styles_scripts.html %}
+    {% include editor/scripts.html %}
+    <noscript>
+        <h2 id="noscript">Please enable JavaScript in order to use all features</h2>
+    </noscript>
+
+    {% if page.includes_head %}
+        {% case page.includes_head %}
+            {% when 'visualizer' %}
+                {% include panels/visualizer/auxiliar/thumbnail-svg-control/styles.html %}
+                {% include panels/visualizer/scripts.html %}
+                {% include panels/visualizer/auxiliar/thumbnail-svg-control/scripts.html %}
+        
+            {% else %}
+        
+        {% endcase %}
+    {% endif %}
+
+    {% if page.include_js %}
+        {% for js_file in page.include_js %}
+        <script defer type="text/javascript" src="{{ site.baseurl }}{{ js_file }}"></script>
+        {% endfor %}
+    {% endif %}
+
+</head>
+
+<body>
+    <script defer>
+        document.body.classList.add("js-enabled");
+    </script>
+
+    {% include svg-utils/svg-filters.html %}
+    <div id="container-main">
+        {{ content }}
+    </div>
+</body>
+
+</html>

@@ -14,11 +14,19 @@ window.onload = function () {
     // OFFLINE HANDLER
     offlineHandler();
 
-    // VISUALIZER PANEL
-    RegexVisualizer({
+
+    let editorParser = EditorParser({
         debug: false,
         regexSONId: "regex-json",
         raphaelJSONId: "raphael-json",
+
+        loader_view_id: "graph-loader",
+    });
+
+    // VISUALIZER PANEL
+    RegexVisualizerPanel({
+        editorParser: editorParser,
+
         loader_view_id: "graph-loader",
         progress_bar_class: "progress"
     });

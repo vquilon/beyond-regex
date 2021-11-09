@@ -65,7 +65,7 @@
     pointer-events: none;
     position: absolute;
     border-radius: 10px;
-    box-shadow: inset 4px 4px 5px #00000099, inset -4px -4px 5px #ffffff45;
+    box-shadow: inset 4px 4px 5px #00000099, inset -10px -10px 15px -15px #ffffff3b, 10px 10px 15px -15px #ffffff24;
 }
 
 #graphCt>* {

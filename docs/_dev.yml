@@ -80,6 +80,7 @@ plugins:
   - jekyll-coffeescript
   - jekyll-github-metadata
   - jekyll-minifier
+  - jekyll-redirect-from
 
 environment: "development"
 

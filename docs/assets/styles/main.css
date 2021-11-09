@@ -95,7 +95,7 @@ h2#noscript {
     box-shadow: 0 5px 25px 5px black;
     overflow-y: hidden;
     z-index: 50;
-    transition: transform 0.6s cubic-bezier(0.3, -0.6, 0.6, 0.3);
+    transition: transform 0.4s cubic-bezier(0.3, -0.6, 0.6, 0.3);
 }
 
 #sidebar .container-heading {
@@ -464,7 +464,7 @@ h2#noscript {
 
 #container-main.menu-open #sidebar {
     transform: translateX(-100px);
-    transition: transform 0.6s cubic-bezier(0.3, 0.3, 0.6, 1.4);
+    transition: transform 0.5s cubic-bezier(0.3, 0.3, 0.6, 1.4);
 }
 
 /* #container-main.menu-open #main {
