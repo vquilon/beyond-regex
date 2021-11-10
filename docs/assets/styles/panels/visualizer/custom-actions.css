@@ -1,0 +1,49 @@
+.options-panel {
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    pointer-events: none;
+}
+
+.options-panel > span.material-icons {
+    border-radius: 50%;
+    pointer-events: all;
+    background: linear-gradient(315deg, #cecece40, #ffffff40);
+    color: #4b0082;
+    backdrop-filter: blur(5px);
+    box-shadow: inset 0 0 15px -2px #ffffff5c, 0 8px 32px 0 rgb(31 38 135 / 37%);
+
+    transition: color 0.2s linear;
+}
+span#share-visualize:before {
+    content: "";
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+    
+    z-index: -1;
+    opacity: 0;
+    border-radius: 50%;
+    background: linear-gradient(315deg, #03a9f4bf, #ff0058bf);
+
+    transition: opacity 0.2s linear;
+}
+
+.options-panel>span.material-icons:hover {
+    color: white;
+    background: transparent;
+}
+span#share-visualize:hover:before {
+    opacity: 1;
+}
+
+span.sweetalert-icon.material-icons {
+    font-size: 1em;
+}

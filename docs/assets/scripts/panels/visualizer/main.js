@@ -15,6 +15,7 @@ var RegexVisualizerPanel = function (options) {
     }
 
     const trim = options.editorParser.trim;
+    const getReLanguage = options.editorParser.getReLanguage;
     const getFlags = options.editorParser.getFlags;
     const setFlags = options.editorParser.setFlags;
     const getInputValue = options.editorParser.getInputValue;
@@ -101,7 +102,7 @@ var RegexVisualizerPanel = function (options) {
                 // Se le da al boton otra vez el aspecto normal
                 visualBtn.disabled = false;
             }
-            let start = new Date().getTime();
+
             window.setTimeout(() => {
 
                 raphael_items = RegexVisualizer(regEXSON, getFlags(), paper, $progress_bar);
@@ -127,11 +128,7 @@ var RegexVisualizerPanel = function (options) {
 
                 // Se vuelve a ocultar el loader
                 hideLoader();
-
-                console.log("TERMINADO EL PAINT", new Date().getTime() - start);
             }, 0);
-
-            console.log("TERMINADO EL VISUALIZER", new Date().getTime() - start);
             return true;
         }
         else {
@@ -143,7 +140,7 @@ var RegexVisualizerPanel = function (options) {
 
     const visualizeSharedRegex = () => {
         var regExpresion = params.re;
-        var regEXSON = parseRegex(regExpresion, language_selected=params.reLang);
+        var regEXSON = parseRegex(regExpresion, language_selected = params.reLang);
         if (regEXSON) {
             $loader_view.classList.add("loading");
             let updateProgressBar = function (newValue) {
@@ -177,14 +174,23 @@ var RegexVisualizerPanel = function (options) {
         }
     }
 
-    const _link_SerializeHash = function (params) {
-        var re = getInputValue();
-        var flags = getFlags();
-        return "#!" + (params.debug ? "debug=true&" : "") + (params.cmd ? "cmd=" + params.cmd + "&" : "") + (params.embed ? "embed=true&" : "") + "flags=" + flags + "&re=" + encodeURIComponent(params.re = re);
+    const generatePanelURL = function (params) {
+        let re = "";
+        let flags = "";
+        let reLang = "";
+        if (isPanelShared) {
+            re = params.re;
+            flags = params.flags;
+            reLang = params.reLang;
+        }
+        else {
+            re = getInputValue();
+            flags = getFlags();
+            reLang = getReLanguage();
+        }
+        return `/panels/visualizer#!flags=${flags}&re=${encodeURIComponent(re)}&reLang=${reLang}`;
     }
-    const _link_ChangeHash = function () {
-        location.hash = _link_SerializeHash(params);
-    }
+
     const escapeHTML = (unsafe) => {
         return unsafe
             .replace(/&/g, "&amp;")
@@ -193,36 +199,88 @@ var RegexVisualizerPanel = function (options) {
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
     }
-    const showExportImage = () => {
-        var ratio = window.devicePixelRatio || 1;
-        svg = paper.canvas;
-        var w = svg.clientWidth || parseInt(getComputedStyle(svg).width);
-        var h = svg.clientHeight || parseInt(getComputedStyle(svg).height);
-        var img = new Image;
-        img.width = w;
-        img.height = h;
-        img.setAttribute('src', exportImage_svgDataURL(svg));
 
-        var canvas = document.createElement("canvas");
-
-        canvas.width = w * ratio;
-        canvas.height = h * ratio;
-        canvas.style.width = w + "px";
-        canvas.style.height = h + "px";
-        canvas.className = "exportCanvas";
-        var ctx = canvas.getContext("2d");
-        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-        img.onload = function () {
-            ctx.drawImage(img, 0, 0);
-            paper.style.display = 'none';
-            document.body.appendChild(canvas);
-        };
-    }
-    const exportImage_svgDataURL = function (svg) {
+    const _exportAsImgSVG = function (svg) {
         var svgAsXML = (new XMLSerializer).serializeToString(svg);
         return "data:image/svg+xml," + encodeURIComponent(svgAsXML);
     }
+    const _exportAsImgPNG = function (svg) {
+        var svgAsXML = (new XMLSerializer).serializeToString(svg);
+        return "data:image/png," + encodeURIComponent(svgAsXML);
+    }
 
+    const generateImageOn = async ($canvas, $img) => {
+        //Use raphael.export to fetch the SVG from the paper
+        // let svg = paper.toSVG();
+        let $svg = paper.canvas.cloneNode(true);
+
+        let svgViewPort = $svg.querySelector("g#mainSVGViewPort");
+        svgViewPort.removeAttribute("transform");
+        svgViewPort.removeAttribute("style");
+        let svgViewContainer = svgViewPort.querySelector("g#mainSVGContainer");
+        svgViewContainer.removeChild(svgViewContainer.querySelector("desc"));
+        svgViewContainer.removeChild(svgViewContainer.querySelector("defs"));
+
+        // Determines if wants transparent PNG or Custom Background
+        let rectBackground = svgViewContainer.firstElementChild;
+        rectBackground.style.stroke = "none";
+        rectBackground.style.strokeWidth = "";
+        const updateBackgroundStyle = (rectBack, fill = "", stroke = "", strokeWidth = "") => {
+            rectBack.style.fill = fill || rectBack.style.fill || rectBack.getAttribute("fill");
+            rectBack.style.stroke = stroke || rectBack.style.stroke || rectBack.getAttribute("stroke");
+            rectBack.style.strokeWidth = strokeWidth || rectBack.style.strokeWidth || rectBack.getAttribute("stroke-width");
+
+            let ratio = window.devicePixelRatio || 1;
+            let w = $svg.clientWidth || parseInt(getComputedStyle($svg).width);
+            let h = $svg.clientHeight || parseInt(getComputedStyle($svg).height);
+
+            // Due to a bug because is duplicated
+            $svg.removeAttribute("xmlns:xlink");
+
+            let svgOuter = $svg.outerHTML;
+            //Use canvg to draw the SVG onto the empty canvas
+            // Legacy Version
+            // canvgv2($canvas, svgOuter, {
+            //     ignoreAnimation: freeze,
+            //     ignoreMouse: freeze,
+            //     // renderCallback() {
+            //     //     renderSource(svg);
+            //     // }
+            // });
+
+            // New version
+            // const canVinst = await canvg.Canvg.from(ctx, svgOuter);
+            // canVinst.resize(w * ratio, h * ratio, custom.preserveAspectRatio.value);
+            // // With Animations elements from the SVG
+            // // await v.start();
+            // // No animations (Normal render)
+            // await canVinst.render();
+
+            // //fetch the dataURL from the canvas and set it as src on the image
+            // let dataURL = $canvas.toDataURL("image/png");
+            // $img.setAttribute("src", dataURL);
+
+            // Old Method
+            let img = new Image;
+            img.width = w;
+            img.height = h;
+
+            var ctx = $canvas.getContext("2d");
+            ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+            img.onload = function () {
+                ctx.drawImage(img, 0, 0);
+            };
+            $img.setAttribute('src', _exportAsImgSVG($svg));
+        }
+        updateBackgroundStyle(rectBackground);
+
+        return {
+            $img: $img,
+            rectBackground: rectBackground,
+            updateBackgroundStyle: updateBackgroundStyle
+        }
+
+    }
     function initEventsListener() {
         visualBtn.addEventListener("click", (event) => {
             if (!event.detail || event.detail == 1) {
@@ -278,7 +336,7 @@ var RegexVisualizerPanel = function (options) {
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // _link_ChangeHash();
+                    // updateLocationURL();
                     showExportImage()
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     // Swal.fire(
@@ -298,6 +356,89 @@ var RegexVisualizerPanel = function (options) {
         // });
     }
 
+    // Listeners
+    document.querySelector("#share-visualize").addEventListener("click", (event) => {
+        // OPEN SWAL WITH IFRAME LINK AND IMAGE EXPORT
+        const exportedIframeURL = new Promise((resolve) => {
+            resolve({
+                panelURL: generatePanelURL()
+            });
+        })
+
+        exportedIframeURL.then((res) => {
+            Swal.fire({
+                title: 'Share the interactive graph!',
+                icon: "info",
+                iconHtml: `<span class="sweetalert-icon material-icons">share</span>`,
+                html: `
+                <div class="copy-text">
+                    <div id="iframe-visualizer" class="iframe-url">
+                        <span>${res.panelURL}</span>
+                        <div id="wrap-copy-iframe"><button id="copy-iframe"><i class="far fa-copy"></i></button></div>
+                    </div>
+                </div>
+                
+                <canvas style="width: 100%; height: unset;" id="export-image"></canvas>
+                <img style="width: 100%; height: unset;" id="exported-img" src="">
+                `,
+                showCancelButton: true,
+                showCloseButton: true,
+                cancelButtonText: 'Close',
+                didOpen: () => {
+                    Swal.showLoading();
+
+                    // Listeners button copy
+                    document.querySelector("button#copy-iframe").addEventListener("click", function () {
+                        // let input = document.querySelector("input#iframe-visualizer");
+                        // input.select();
+                        // document.execCommand("copy");
+                        navigator.clipboard.writeText(res.panelURL);
+
+                        document.querySelector("#iframe-visualizer").classList.add("copied");
+                        // window.getSelection().removeAllRanges();
+                        setTimeout(function () {
+                            document.querySelector("#iframe-visualizer").classList.remove("copied");
+                        }, 2500);
+                    });
+                    let { $img, rectBackground, updateBackgroundStyle } = generateImageOn(
+                        document.querySelector("canvas#export-image"),
+                        document.querySelector("img#exported-img")
+                    );
+                    Swal.hideLoading();
+                }
+            })
+        })
+
+
+
+        // Swal.fire({
+        //     title: 'Share the interactive graph!',
+        //     html: "",
+        //     icon: 'info',
+        //     showCancelButton: true,
+        //     showCloseButton: true,
+        //     confirmButtonText: 'Yes, update it!',
+        //     cancelButtonText: 'No, cancel!',
+        //     reverseButtons: true
+        // }).then((result) => {
+        //     if (result.isConfirmed) {
+        //         Swal.fire(
+        //             'Updating...',
+        //             'Beyond Regex will be updated when the page reload, now!',
+        //             'success'
+        //         )
+        //     } else if (result.dismiss === Swal.DismissReason.cancel) {
+        //         Swal.fire(
+        //             'Cancelled',
+        //             `Your Service Worker version is ${swVersion}.`,
+        //             'info'
+        //         )
+
+        //     }
+        // })
+    });
+
+
     if (isPanelShared) {
         visualizeSharedRegex();
     }
@@ -308,5 +449,11 @@ var RegexVisualizerPanel = function (options) {
         visualizeRegex();
     }
 
+
+
+
+    return {
+        generatePanelURL: generatePanelURL
+    }
 };
 

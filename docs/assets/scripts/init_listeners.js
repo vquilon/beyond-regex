@@ -8,7 +8,33 @@ window.onbeforeunload = function (e) {
     }
 }
 
+
 window.onload = function () {
+    const changeDark2LightTheme = () => {
+        window.enableSweetAlert2Theme = (theme="dark") => {
+            // deactivate actual
+            let $activateLinkTheme = document.head.querySelector(".sweetalert-theme[rel='stylesheet']");
+            $activateLinkTheme.rel = "alternate stylesheet";
+            // Now activate the requested
+            document.head.querySelector(`#sweetalert-${theme}`).rel = "stylesheet";
+        }
+        window.runExampleSwalThemeSwitch = async () => {
+            let $actualLink = document.head.querySelector(".sweetalert-theme[rel='stylesheet']");
+            let actualTheme = $actualLink.id.substring($actualLink.id.indexOf("-")+1);
+            await Swal.fire({
+                title: `I'm dark`,
+                onBeforeOpen: () => window.enableSweetAlert2Theme('dark')
+            })
+
+            await Swal.fire({
+                title: `I'm default`,
+                onBeforeOpen: () => window.enableSweetAlert2Theme('default')
+            })
+            window.enableSweetAlert2Theme(actualTheme);
+        }
+    }
+    changeDark2LightTheme();
+
     // UBICAR TODOS LOS SCRIPTS QUE NECESITEN ESPERAR A LA CARGA DEL DOM
 
     // OFFLINE HANDLER
@@ -30,6 +56,18 @@ window.onload = function () {
         loader_view_id: "graph-loader",
         progress_bar_class: "progress"
     });
+
+
+
+    document.querySelector("#close-side").addEventListener("click", (event) => {
+        document.querySelector("#container-main").classList.toggle("menu-open")
+    });
+
+    document.querySelector("#container-main > #sidebar-overlay").addEventListener("click", (event) => {
+        document.querySelector("#container-main").classList.remove("menu-open")
+    });
+
+
 }
 
 
@@ -59,7 +97,7 @@ window.onload = function () {
 
 //     let $version = document.querySelector(".heading span.version");
 //     $version.addEventListener("click", makeRObject, false);
-    
+
 //     let reportWindowSize = function() {
 //         resize_world();
 //     }

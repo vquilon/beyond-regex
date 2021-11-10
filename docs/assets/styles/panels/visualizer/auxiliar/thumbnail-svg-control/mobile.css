@@ -14,7 +14,7 @@
     align-items: stretch;
 }
 
-#graphCt>*:not(.control-panel) {
+#graphCt>*:not(.control-panel), #graphCt:after, #graphCt:before {
     height: calc(80% - 20px) !important;
     min-height: calc(80% - 20px) !important;
 }

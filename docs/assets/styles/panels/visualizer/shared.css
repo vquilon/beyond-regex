@@ -1,0 +1,12 @@
+#container-main {
+    position: relative;
+    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 40px;
+}
+#graphCt {
+    height: 100% !important;
+    max-height: unset !important;
+}

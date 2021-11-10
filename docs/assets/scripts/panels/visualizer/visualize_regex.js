@@ -335,13 +335,13 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $prog
             _translate: _translate_path
         }
     }
-    function createCircleItem(regexJSONInfo, offset_x, offset_y, radialGradientColor) {
+    function createCircleItem(regexJSONInfo, offset_x, offset_y, fillColor) {
         var _circle_radius = 10;
         var circle_item = {
             type: "circle",
             id: regexJSONInfo.id,
             class: `circle:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
-            fill: radialGradientColor,
+            fill: fillColor,
             cx: _circle_radius, // offset_x + _circle_radius,
             cy: 0, // offset_y,
             r: _circle_radius,
@@ -451,7 +451,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $prog
                     type: "startPoint",
                     id: "startPoint",
                     indices: [-1, -1]
-                }, offset_x, offset_y, "r(0.5,0.5)#EFE-green"
+                }, offset_x, offset_y, colors_map.startRegex // "r(0.5,0.5)#EFE-green"
             );
         },
         endPoint: function (regexJSONInfo, offset_x, offset_y) {
@@ -460,7 +460,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $prog
                     type: "endPoint",
                     id: "endPoint",
                     indices: [Infinity, Infinity]
-                }, offset_x, offset_y, "r(0.5,0.5)#FFF-#000"
+                }, offset_x, offset_y, colors_map.endRegex // "r(0.5,0.5)#FFF-#000"
             );
         },
         empty: function (regexJSONInfo, offset_x, offset_y) {
@@ -901,6 +901,8 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $prog
         }
     };
     var colors_map = {
+        startRegex: "#03a9f4",
+        endRegex: "#ff0058",
         delimiter: "Indigo",
         flags: "darkgreen",
         exact: "#334",

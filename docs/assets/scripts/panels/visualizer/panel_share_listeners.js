@@ -8,10 +8,11 @@ window.onload = function () {
     });
 
     // VISUALIZER PANEL
-    RegexVisualizerPanel({
+    visualizerPanel = RegexVisualizerPanel({
         editorParser: editorParser,
 
         loader_view_id: "graph-loader",
         progress_bar_class: "progress"
     });
+
 }

@@ -82,6 +82,30 @@ h2#noscript {
     background: #ffffff9c;
 }
 
+#container-main > #sidebar-overlay {
+    position: absolute;
+    width: 100%;
+    z-index: 20;
+    height: 100%;
+    background: #0000008f;
+    backdrop-filter: unset;
+    
+    cursor: pointer;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: opacity 1s, visibility 0s 1s, backdrop-filter 0.5s;
+}
+
+#container-main.menu-open > #sidebar-overlay {
+    backdrop-filter: saturate(0.5);
+    opacity: 1;
+    visibility: visible;
+
+    transition: opacity 1s 0.1s, visibility 0s, backdrop-filter 0.5s 0.5s;
+}
+
 #sidebar {
     position: fixed;
     width: 350px;
@@ -243,12 +267,7 @@ h2#noscript {
     height: 100%;
     border-radius: 5px;
     position: absolute;
-    background: repeating-linear-gradient(0deg,
-    yellow 0px, yellow 10px,
-    black 10px, black 20px,
-    yellow 20px, yellow 30px,
-    black 30px, black 40px);
-
+    background: repeating-linear-gradient(0deg, yellow 0px, yellow 10px, black 10px, black 20px, yellow 20px, yellow 30px, black 30px, black 40px);
     transform: rotate(45deg);
 }
 
@@ -1190,4 +1209,84 @@ select:focus>option:checked {
         transform: rotate(360deg);
         border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
     }
+}
+
+
+/* COPY IFRAMES */
+/*  DUE TO A BUG FOR OVERFLOW VISIBLE INSIDE CUSTOM HTML */
+.swal2-html-container {
+    overflow: unset;
+}
+div#iframe-visualizer {
+    background: #ffffff1f;
+    position: relative;
+    padding: 1em;
+    text-align: left;
+}
+
+#wrap-copy-iframe {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.2s, opacity 0.5s, visibility 0s 0.8s;
+}
+button#copy-iframe {
+    background: #0000009c;
+    border: none;
+
+    box-sizing: content-box;
+    border-radius: 0.5em;
+    padding: 0.25em;
+    width: 2em;
+    cursor: pointer;
+    height: 2em;
+   
+}
+
+button#copy-iframe > i {
+    font-size: 1.5em;
+    color: #bcbcbc;
+}
+
+#iframe-visualizer:hover > #wrap-copy-iframe {
+   opacity: 1;
+   visibility: visible;
+   transition: opacity 0.5s, visibility 0s;
+}
+
+button#copy-iframe:hover {
+    transform: scale(1.1);
+}
+
+#iframe-visualizer.copied > #wrap-copy-iframe:before {
+	content: "Copied";
+	position: absolute;
+	top: -45px;
+	right: -15px;
+    width: max-content;
+	background: #5c81dc;
+	padding: 8px 10px;
+	border-radius: 20px;
+	font-size: 15px;
+	display: none;
+    pointer-events: none;
+}
+#iframe-visualizer.copied > #wrap-copy-iframe:after {
+	content: "";
+	position: absolute;
+	top: -15px;
+	right: 12px;
+	width: 10px;
+	height: 10px;
+	background: #5c81dc;
+	transform: rotate(45deg);
+	display: none;
+    pointer-events: none;
+}
+#iframe-visualizer.copied:hover > #wrap-copy-iframe:before,
+#iframe-visualizer.copied:hover > #wrap-copy-iframe:after {
+	display: block;
 }

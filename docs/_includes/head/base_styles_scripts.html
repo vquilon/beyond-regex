@@ -46,9 +46,15 @@
 <!-- FONTS -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/fonts.css">
 
-<!-- Sweet Alert -->
-<link rel="preload" as="style" onload="this.rel='stylesheet'" href="{{ site.baseurl }}/assets/vendor/sweetalert2/sweetalert2.min.css">
-<script defer src="{{ site.baseurl }}/assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
+<!-- Sweet Alert CSS [preload] -->
+<link class="sweetalert-theme" id="sweetalert-default" rel="preload" as="style" onload="this.rel='stylesheet alternate'" href="{{ site.baseurl }}/assets/vendor/sweetalert2/sweetalert2.min.css">
+<link class="sweetalert-theme" id="sweetalert-dark" rel="preload" as="style" onload="this.rel='stylesheet'" href="{{ site.baseurl }}/assets/vendor/sweetalert2/sweetalert2-dark.min.css">
+
+<!-- Modifications on Vendors styles -->
+<link rel="preload" as="style" onload="this.rel='stylesheet'" href="{{ site.baseurl }}/assets/styles/vendors-ext.css">
+
+<!-- Sweet Alert JS -->
+<script defer src="{{ site.baseurl }}/assets/vendor/sweetalert2/sweetalert2.js"></script>
 
 <!-- ESTILOS PRINCIPALES -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/main.css">
@@ -59,5 +65,5 @@
 <!-- OFFLINE CONNECTION BOX STYLES -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/offline-styles.css">
 
-<!-- MEASURE PERFORMANCE CSS -->
+<!-- MEASURE PERFORMANCE CSS --> 
 <!-- <link rel="stylesheet" href="https://csswizardry.com/ct/ct.css" class="ct" /> -->

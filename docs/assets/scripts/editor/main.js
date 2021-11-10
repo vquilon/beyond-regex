@@ -2,9 +2,9 @@ var EditorParser = (options) => {
     const NONEDITOR = options.noneditor || false
     const DEBUG = options.debug || false;
 
-    var inputRegex = document.getElementById('input');
-    var errorBox = document.getElementById('errorBox');
-    var flags = document.getElementsByName('flag');
+    var $inputRegex = document.getElementById('input');
+    var $errorBox = document.getElementById('errorBox');
+    var $flags = document.getElementsByName('flag');
     
     let raphaelJSONId = options.raphaelJSONId || "raphael-json";
     let regexSONId = options.regexSONId || "regex-json";
@@ -13,34 +13,38 @@ var EditorParser = (options) => {
     var $loader_view = document.querySelector(`#${options.loader_view_id}`);
 
     var hideError = function () {
-        errorBox.style.display = 'none';
+        $errorBox.style.display = 'none';
     }
     var showError = function (re, err) {
-        errorBox.style.display = 'block';
+        $errorBox.style.display = 'block';
         var msg = ["Error:" + err.message, ""];
         if (typeof err.lastIndex === 'number') {
             msg.push(re);
             msg.push(Kit().repeats('-', err.lastIndex) + "^");
         }
-        setInnerText(errorBox, msg.join("\n"));
+        setInnerText($errorBox, msg.join("\n"));
     }
     var getFlags = function () {
         var fg = '';
-        for (var i = 0, l = flags.length; i < l; i++) {
-            if (flags[i].checked)
-                fg += flags[i].value;
+        for (var i = 0, l = $flags.length; i < l; i++) {
+            if ($flags[i].checked)
+                fg += $flags[i].value;
         }
         return fg;
     }
     var setFlags = function (fg) {
         for (var i = 0, l = fg.length; i < l; i++) {
-            if (~fg.indexOf(flags[i].value))
-                flags[i].checked = true;
+            if (~fg.indexOf($flags[i].value))
+                $flags[i].checked = true;
             else
-                flags[i].checked = false;
+                $flags[i].checked = false;
         }
         // setInnerText(flagBox, fg);
     }
+
+    const getReLanguage = () => {
+        return document.querySelector("[name='languageRegex']:checked").value;
+    };
 
     var getInnerText = function (ele) {
         if (!ele)
@@ -112,12 +116,12 @@ var EditorParser = (options) => {
         // Aqui se realiza el parseo
         var skipError = false;
 
-        // changeHash();
+        // updateLocationURL();
         hideError();
         var regEXSON = null;
         try {
             var init_parse = RegexParser();
-            var language_selected = document.querySelector("[name='languageRegex']:checked").value
+            var language_selected = getReLanguage();
             regEXSON = init_parse(regExpresion, null, language_selected);
         } catch (e) {
             if (e instanceof init_parse.RegexSyntaxError) {
@@ -163,10 +167,10 @@ var EditorParser = (options) => {
         return s.replace(/^\s+/, '').replace(/\s+$/, '');
     }
     var getInputValue = function () {
-        return trim(inputRegex.value);
+        return trim($inputRegex.value);
     };
     var setInputValue = function (v) {
-        return inputRegex.value = trim(v);
+        return $inputRegex.value = trim(v);
     };
 
     function getParams() {
@@ -195,8 +199,17 @@ var EditorParser = (options) => {
     }
 
 
+    const generateURL = function (params) {
+        var re = getInputValue();
+        var flags = getFlags();
+        return "#!" + (params.debug ? "debug=true&" : "") + (params.cmd ? "cmd=" + params.cmd + "&" : "") + (params.embed ? "embed=true&" : "") + "flags=" + flags + "&re=" + encodeURIComponent(params.re = re);
+    }
+    const updateLocationURL = function () {
+        location.hash = generateURL(params);
+    }
+
     function initEventsListener() {
-        inputRegex.addEventListener('input', function (event) {
+        $inputRegex.addEventListener('input', function (event) {
             // parseEvent();
             window.hasChanges = true;
             visualBtn.disabled = false;
@@ -247,6 +260,7 @@ var EditorParser = (options) => {
         parseRegex: parseRegex,
         getFlags: getFlags,
         setFlags: setFlags,
+        getReLanguage: getReLanguage,
         getInputValue: getInputValue,
         _updateRaphaelItemsJSON: _updateRaphaelItemsJSON
     }
