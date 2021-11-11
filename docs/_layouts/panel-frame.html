@@ -2,21 +2,15 @@
 <html>
 
 <head>
+    {% include head/meta.html %}
     {% include head/base_styles_scripts.html %}
-    {% include editor/scripts.html %}
 
-    <noscript>
-        <h2 id="noscript">Please enable JavaScript in order to use all features</h2>
-    </noscript>
-
+    <!-- STYLES -->
     {% if page.includes_head %}
         {% case page.includes_head %}
             {% when 'visualizer' %}
                 {% include panels/visualizer/styles.html %}
                 {% include panels/visualizer/auxiliar/thumbnail-svg-control/styles.html %}
-                {% include panels/visualizer/scripts.html %}
-                {% include panels/visualizer/auxiliar/thumbnail-svg-control/scripts.html %}
-               
             {% else %}
         
         {% endcase %}
@@ -33,12 +27,29 @@
         <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}{{ css_file }}" />
         {% endfor %}
     {% endif %}
+    
+    
+    <!-- SCRIPTS -->
+    {% include editor/scripts.html %}
+
+    {% if page.includes_head %}
+        {% case page.includes_head %}
+            {% when 'visualizer' %}
+                {% include panels/visualizer/scripts.html %}
+                {% include panels/visualizer/auxiliar/thumbnail-svg-control/scripts.html %}
+            {% else %}
+        {% endcase %}
+    {% endif %}
 
     {% if page.include_js %}
         {% for js_file in page.include_js %}
         <script defer type="text/javascript" src="{{ site.baseurl }}{{ js_file }}"></script>
         {% endfor %}
     {% endif %}
+
+    <noscript>
+        <h2 id="noscript">Please enable JavaScript in order to use all features</h2>
+    </noscript>
 
 </head>
 

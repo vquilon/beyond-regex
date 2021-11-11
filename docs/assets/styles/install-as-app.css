@@ -1,429 +1,86 @@
-.mdc-icon-button {
-    display: inline-block;
-    position: relative;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    fill: currentColor;
-    color: inherit;
-    font-size: 24px;
-    text-decoration: none;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    width: 48px;
-    height: 48px;
-    padding: 12px;
-}
-
-.mdc-icon-button svg, .mdc-icon-button img {
-    width: 24px;
-    height: 24px;
-}
-
-.mdc-icon-button:disabled {
-    color: rgba(0, 0, 0, 0.38);
-    /* @alternate */
-    color: var(--mdc-theme-text-disabled-on-light, rgba(0, 0, 0, 0.38));
-    cursor: default;
-    pointer-events: none;
-}
-
-.mdc-icon-button__icon {
-    display: inline-block;
-}
-
-.mdc-icon-button__icon.mdc-icon-button__icon--on {
-    display: none;
-}
-
-.mdc-icon-button--on .mdc-icon-button__icon {
-    display: none;
-}
-
-.mdc-icon-button--on .mdc-icon-button__icon.mdc-icon-button__icon--on {
-    display: inline-block;
-}
-
-.mdc-icon-button {
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-
-.mdc-icon-button::before, .mdc-icon-button::after {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0;
-    pointer-events: none;
-    /* content: ""; */
-}
-
-.mdc-icon-button::before {
-    -webkit-transition: opacity 15ms linear, background-color 15ms linear;
-    -o-transition: opacity 15ms linear, background-color 15ms linear;
-    transition: opacity 15ms linear, background-color 15ms linear;
-    z-index: 1;
-}
-
-.mdc-icon-button::before, .mdc-icon-button::after {
-    top: calc(50% - 50%);
-    /* @noflip */
-    left: calc(50% - 50%);
-    width: 100%;
-    height: 100%;
-}
-
-.mdc-icon-button::before, .mdc-icon-button::after {
-    background-color: #000;
-}
-
-.mdc-icon-button:hover::before {
-    /* opacity: 0.04; */
-}
-
-.mdc-icon-button:not(.mdc-ripple-upgraded):focus::before {
-    -webkit-transition-duration: 75ms;
-    -o-transition-duration: 75ms;
-    transition-duration: 75ms;
-    opacity: 0.12;
-}
-
-.mdc-icon-button:not(.mdc-ripple-upgraded)::after {
-    -webkit-transition: opacity 150ms linear;
-    -o-transition: opacity 150ms linear;
-    transition: opacity 150ms linear;
-}
-
-.mdc-icon-button:not(.mdc-ripple-upgraded):active::after {
-    -webkit-transition-duration: 75ms;
-    -o-transition-duration: 75ms;
-    transition-duration: 75ms;
-    opacity: 0.12;
-}
-
-.mdc-snackbar {
-    z-index: 200;
-    margin: 8px;
-    display: none;
+div#install-app {
     position: fixed;
+    top: 1em;
+    margin: 0 1em;
     right: 0;
-    bottom: 0;
-    left: 0;
-    -ms-flex-align: center;
-    align-items: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    pointer-events: none;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-
-.mdc-snackbar__surface {
-    background-color: #333333;
-}
-
-.mdc-snackbar__label {
-    color: rgba(255, 255, 255, 0.87);
-}
-
-.mdc-snackbar__surface {
-    min-width: 344px;
-}
-
-@media (max-width: 480px), (max-width: 344px) {
-    .mdc-snackbar__surface {
-        min-width: 100%;
-    }
-}
-
-.mdc-snackbar__surface {
-    max-width: 672px;
-}
-
-.mdc-snackbar__surface {
-    -webkit-box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
-    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
-}
-
-.mdc-snackbar__surface {
-    border-radius: 4px;
-}
-
-.mdc-snackbar--opening, .mdc-snackbar--open, .mdc-snackbar--closing {
-    display: -ms-flexbox;
-    display: flex;
-}
-
-.mdc-snackbar--leading {
-    -ms-flex-pack: start;
-    justify-content: flex-start;
-}
-
-.mdc-snackbar--stacked .mdc-snackbar__surface {
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -ms-flex-align: start;
-    align-items: flex-start;
-}
-
-.mdc-snackbar--stacked .mdc-snackbar__actions {
-    -ms-flex-item-align: end;
-    align-self: flex-end;
-    margin-bottom: 8px;
-}
-
-.mdc-snackbar__surface {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-align: center;
-    align-items: center;
-    -ms-flex-pack: start;
-    justify-content: flex-start;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    -webkit-transform: scale(0.8);
-    -ms-transform: scale(0.8);
-    transform: scale(0.8);
+    z-index: 300;
+    border-radius: 0.5em;
+    box-shadow: 0 10px 20px -10px #0000008c;
     opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0s 0.3s;
 }
 
-.mdc-snackbar--open .mdc-snackbar__surface {
-    -webkit-transform: scale(1);
-    -ms-transform: scale(1);
-    transform: scale(1);
-    opacity: 1;
-    pointer-events: auto;
-    -webkit-transition: opacity 500ms 0ms cubic-bezier(0, 0, 0.2, 1), -webkit-transform 500ms 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: opacity 500ms 0ms cubic-bezier(0, 0, 0.2, 1), -webkit-transform 500ms 0ms cubic-bezier(0, 0, 0.2, 1);
-    -o-transition: opacity 500ms 0ms cubic-bezier(0, 0, 0.2, 1), transform 500ms 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: opacity 500ms 0ms cubic-bezier(0, 0, 0.2, 1), transform 500ms 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: opacity 500ms 0ms cubic-bezier(0, 0, 0.2, 1), transform 500ms 0ms cubic-bezier(0, 0, 0.2, 1), -webkit-transform 500ms 0ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.mdc-snackbar--closing .mdc-snackbar__surface {
-    -webkit-transform: scale(1);
-    -ms-transform: scale(1);
-    transform: scale(1);
-    -webkit-transition: opacity 300ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    -o-transition: opacity 300ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: opacity 300ms 0ms cubic-bezier(0.4, 0, 1, 1);
-}
-
-.mdc-snackbar__label {
-    /* font-family: Roboto, sans-serif; */
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-    font-size: 1rem;
-    /* line-height: 1.25rem; */
-    font-weight: 600;
-    /* letter-spacing: 0.0178571429em; */
-    text-decoration: inherit;
-    text-transform: inherit;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 14px 16px;
-    border-radius: 10px;
-}
-
-.mdc-snackbar__label::before {
-    display: inline;
-    content: attr(data-mdc-snackbar-label-text);
-}
-
-.mdc-snackbar__actions {
-    /* @noflip */
-    margin-left: 0;
-    /* @noflip */
-    margin-right: 8px;
-    display: -ms-flexbox;
+div#cont-install-app {
     display: flex;
-    -ms-flex-negative: 0;
-    flex-shrink: 0;
-    -ms-flex-align: center;
+}
+
+span#desc-install {
+    display: flex;
+    /* background: #00000057; */
+    color: white;
+    align-content: center;
     align-items: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 5px 20px;
-    padding-right: 10px;
-    background: linear-gradient(315deg, #03a9f4bf, #ff0058bf);
-    box-shadow: inset 0 0 20px 0px #fffefeb5, 0 0 5px 0px #fffefe00, -5px 0 10px -2px #ff0058, 5px 0 10px -2px #03a9f4;
-    border-radius: 10px;
+    padding: 0em 2em;
 }
 
-[dir=rtl] .mdc-snackbar__actions, .mdc-snackbar__actions[dir=rtl] {
-    /* @noflip */
-    margin-left: 8px;
-    /* @noflip */
-    margin-right: 0;
+div#install-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: stretch;
+    grid-gap: 1em;
 }
 
-.mdc-snackbar__action:not(:disabled) {
-    color: white;
+div#container-install-app {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    grid-gap: 1em;
+    background: #00000082;
+    backdrop-filter: unset;
+    padding: 1em;
+    border-radius: 0.5em;
+    transition: backdrop-filter 0.2s 0.3s;
 }
 
-.mdc-snackbar__action::before, .mdc-snackbar__action::after {
-    /* background-color: #8fdcff; */
-}
-
-.mdc-snackbar__action:hover::before {
-    opacity: 0.08;
-}
-
-.mdc-snackbar__action:not(.mdc-ripple-upgraded):focus::before {
-    -webkit-transition-duration: 75ms;
-    -o-transition-duration: 75ms;
-    transition-duration: 75ms;
-    opacity: 0.24;
-}
-
-.mdc-snackbar__action:not(.mdc-ripple-upgraded)::after {
-    -webkit-transition: opacity 150ms linear;
-    -o-transition: opacity 150ms linear;
-    transition: opacity 150ms linear;
-}
-
-.mdc-snackbar__action:not(.mdc-ripple-upgraded):active::after {
-    -webkit-transition-duration: 75ms;
-    -o-transition-duration: 75ms;
-    transition-duration: 75ms;
-    opacity: 0.24;
-}
-
-.mdc-snackbar__action.mdc-ripple-upgraded {
-    --mdc-ripple-fg-opacity: 0.24;
-}
-
-.mdc-snackbar__dismiss {
-    color: rgba(255, 255, 255, 0.87);
-}
-
-.mdc-snackbar__dismiss::before, .mdc-snackbar__dismiss::after {
-    background-color: rgba(255, 255, 255, 0.87);
-}
-
-.mdc-snackbar__action+.mdc-snackbar__dismiss:hover {
-    box-shadow: inset 0 0 20px 0px black, 0 0 20px -5px black;
-}
-
-.mdc-snackbar__dismiss:hover::before {
-    /* opacity: 0.08; */
-    opacity: 1;
-    background: linear-gradient(113deg, #03a9f4, #ff0058);
-    z-index: -1;
-}
-
-.mdc-snackbar__dismiss:not(.mdc-ripple-upgraded):focus::before {
-    -webkit-transition-duration: 75ms;
-    -o-transition-duration: 75ms;
-    transition-duration: 75ms;
-    opacity: 0.24;
-}
-
-.mdc-snackbar__dismiss:not(.mdc-ripple-upgraded)::after {
-    -webkit-transition: opacity 150ms linear;
-    -o-transition: opacity 150ms linear;
-    transition: opacity 150ms linear;
-}
-
-.mdc-snackbar__dismiss:not(.mdc-ripple-upgraded):active::after {
-    -webkit-transition-duration: 75ms;
-    -o-transition-duration: 75ms;
-    transition-duration: 75ms;
-    opacity: 0.24;
-}
-
-.mdc-snackbar__dismiss.mdc-snackbar__dismiss {
-    width: 36px;
-    height: 36px;
-    padding: 9px;
-    font-size: 18px;
-}
-
-.mdc-snackbar__dismiss.mdc-snackbar__dismiss svg, .mdc-snackbar__dismiss.mdc-snackbar__dismiss img {
-    width: 18px;
-    height: 18px;
-}
-
-.mdc-snackbar__action+.mdc-snackbar__dismiss {
-    margin-left: 10px;
-    margin-right: 5px;
-    border-radius: 50%;
-    background: none;
-    padding: 0;
-    box-sizing: content-box;
-}
-
-[dir=rtl] .mdc-snackbar__action+.mdc-snackbar__dismiss, .mdc-snackbar__action+.mdc-snackbar__dismiss[dir=rtl] {
-    /* @noflip */
-    margin-left: 0;
-    /* @noflip */
-    margin-right: 8px;
-}
-
-.snackbar-hero .mdc-snackbar {
-    position: relative;
-}
-
-.snackbar-demo-button {
-    margin: 8px 16px;
-}
-
-.mdc-snackbar {
-    top: 0;
-    left: inherit;
-    bottom: inherit;
-    /* opacity: 0;
-    visibility: hidden; */
-}
-
-/* .mdc-snackbar__surface {
-    -webkit-transition: all 0.3s;
-    transition: all 0.3s;
-} */
-
-/* .mdc-snackbar--opening .mdc-snackbar__surface,
-.mdc-snackbar--open .mdc-snackbar__surface,
-.mdc-snackbar--closing .mdc-snackbar__surface {
-    -webkit-transition: all 0.5s;
-    transition: all 0.5s;
-} */
-
-.mdc-snackbar__surface {
-    background: rgba(0, 0, 0, 0.60);
-    box-shadow: inset 0 0 40px 0px #fffefe63, 0px 0 5px 0px #ffffff66;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 10px;
-    /* border: 1px solid rgba(255, 255, 255, 0.18); */
-}
-
-.mdc-snackbar__actions button {
-    background: none;
+#install-actions > button {
     border: none;
-    font-weight: 500;
-    font-style: normal;
     cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
-}
-
-.mdc-snackbar__actions button#btn-install-app {
-    font-family: "VictorMono", monospace;
-    font-style: italic;
-    font-weight: 500;
-    font-size: 1rem;
-    padding: 0 5px;
-    text-decoration: underline;
-}
-
-.mdc-snackbar__actions button#btn-install-app:hover {
-    text-shadow: 0 0 10px #ffffff, 10px 0 5px #03a9f4, -10px 0 5px #ff0058, 0 0 10px #03a9f4, 0 0 20px #03a9f4;
     color: white;
+}
+
+button#btn-close-install {
+    border-radius: 50%;
+    padding: 0.25em;
+    color: #959595;
+    background: #ffffff1f;
+}
+
+button#btn-install-app {
+    font-size: 1em;
+    font-weight: bold;
+    padding: 0 2em;
+    border-radius: 0.5em;
+    background: linear-gradient(315deg, #03a9f4bf, #ff0058bf);
+}
+
+button#btn-install-app:hover {
+    text-shadow: 0 0 10px white;
+}
+
+div#install-app.open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s, visibility 0s;
+}
+
+div#install-app.closed {
+    display: none;
+}
+
+#install-app.open div#container-install-app {
+    backdrop-filter: blur(5px);
 }

@@ -1,16 +1,10 @@
-<div id="install-app" class="mdc-snackbar">
-    <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
-        <div class="mdc-snackbar__label" aria-atomic="false">
-            Build your RegEx anywhere, even offline.
+<div id="install-app">
+    <div id="container-install-app">
+        <div id="install-actions">
+            <button id="btn-install-app" type="button" title="Install as App">Install</button>
+            <button id="btn-close-install" class="material-icons" title="Dismiss">close</button>
         </div>
-        <div class="mdc-snackbar__actions" aria-atomic="true">
-            <button id="btn-install-app" type="button" class="mdc-button mdc-snackbar__action">
-                <div class="mdc-button__ripple"></div>
-                <span class="mdc-button__label">Install</span>
-            </button>
-            <button id="btn-close-install" class="mdc-icon-button mdc-snackbar__dismiss material-icons"
-                title="Dismiss">close</button>
-        </div>
+        <span id="desc-install">Build your RegEx anywhere, even offline.</span>
     </div>
 </div>
 
@@ -23,18 +17,12 @@
     let deferredPrompt;
 
     function showInstallPromotion() {
-        document.querySelector("#install-app").classList.toggle('mdc-snackbar--opening', true);
-        setTimeout(function () {
-            document.querySelector("#install-app").classList.toggle('mdc-snackbar--open', true);
-            document.querySelector("#install-app").classList.toggle('mdc-snackbar--opening', false);
-        }, 100);
-
+        document.querySelector("#install-app").classList.add('open');
     }
     function hideInstallPromotion() {
-        document.querySelector("#install-app").classList.toggle('mdc-snackbar--closing', true);
-        document.querySelector("#install-app").classList.toggle('mdc-snackbar--open', false);
+        document.querySelector("#install-app").classList.remove('open');
         setTimeout(function () {
-            document.querySelector("#install-app").classList.toggle('mdc-snackbar--closing', false);
+            document.querySelector("#install-app").classList.toggle('closed');
         }, 500);
     }
 

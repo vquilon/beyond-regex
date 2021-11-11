@@ -174,7 +174,7 @@ var RegexVisualizerPanel = function (options) {
         }
     }
 
-    const generatePanelURL = function (params) {
+    const generatePanelURL = function () {
         let re = "";
         let flags = "";
         let reLang = "";
@@ -188,7 +188,13 @@ var RegexVisualizerPanel = function (options) {
             flags = getFlags();
             reLang = getReLanguage();
         }
-        return `/panels/visualizer#!flags=${flags}&re=${encodeURIComponent(re)}&reLang=${reLang}`;
+        const src = `${location.href}/panels/visualizer`
+        const iframeLink = `<iframe frameborder="0" 
+            width="500px" height="300px" 
+            src="${src}#!embed=true&flags=${flags}&re=${encodeURIComponent(re)}&reLang=${reLang}">
+            </iframe>`;
+
+        return iframeLink;
     }
 
     const escapeHTML = (unsafe) => {
@@ -373,7 +379,7 @@ var RegexVisualizerPanel = function (options) {
                 html: `
                 <div class="copy-text">
                     <div id="iframe-visualizer" class="iframe-url">
-                        <span>${res.panelURL}</span>
+                        <span>${escapeHTML(res.panelURL)}</span>
                         <div id="wrap-copy-iframe"><button id="copy-iframe"><i class="far fa-copy"></i></button></div>
                     </div>
                 </div>
@@ -398,7 +404,7 @@ var RegexVisualizerPanel = function (options) {
                         // window.getSelection().removeAllRanges();
                         setTimeout(function () {
                             document.querySelector("#iframe-visualizer").classList.remove("copied");
-                        }, 2500);
+                        }, 1000);
                     });
                     let { $img, rectBackground, updateBackgroundStyle } = generateImageOn(
                         document.querySelector("canvas#export-image"),
