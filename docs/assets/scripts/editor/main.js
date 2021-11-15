@@ -2,27 +2,35 @@ var EditorParser = (options) => {
     const NONEDITOR = options.noneditor || false
     const DEBUG = options.debug || false;
 
-    var $inputRegex = document.getElementById('input');
-    var $errorBox = document.getElementById('errorBox');
+    var $inputRegex = document.querySelector('#input');
+    var $editorError = document.querySelector('#editor-error');
     var $flags = document.getElementsByName('flag');
+
+    var $iframeBtn = document.querySelector('#iframeIt');
     
     let raphaelJSONId = options.raphaelJSONId || "raphael-json";
     let regexSONId = options.regexSONId || "regex-json";
 
-    var visualBtn = document.getElementById('visualizeClick');
+    var visualBtn = document.querySelector('#visualizeClick');
     var $loader_view = document.querySelector(`#${options.loader_view_id}`);
 
     var hideError = function () {
-        $errorBox.style.display = 'none';
+        $editorError.style.display = 'none';
     }
     var showError = function (re, err) {
-        $errorBox.style.display = 'block';
-        var msg = ["Error:" + err.message, ""];
+        $editorError.style.display = 'block';
+        var msg_re = [];
+        var msg_def = [];
         if (typeof err.lastIndex === 'number') {
-            msg.push(re);
-            msg.push(Kit().repeats('-', err.lastIndex) + "^");
+            msg_re.push(re);
+            // msg_re.push(Kit().repeats('-', err.lastIndex) + "^");
         }
-        setInnerText($errorBox, msg.join("\n"));
+        msg_def.push("Error:" + err.message);
+        msg_def.push("");
+        $editorError.querySelector(".errorBox").style.setProperty("--position-error-ch", `${err.lastIndex}ch`)
+        
+        setInnerText($editorError.querySelector(".errorBox"), msg_re.join("\n"));
+        setInnerText($editorError.querySelector(".errorDef"), msg_def.join("\n"));
     }
     var getFlags = function () {
         var fg = '';
@@ -68,6 +76,14 @@ var EditorParser = (options) => {
         return s;
     }
 
+    const escapeHTML = (unsafe) => {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
     // var clearSelect = function () {
     //     if (window.getSelection) {
     //         if (window.getSelection().empty) {
@@ -213,6 +229,45 @@ var EditorParser = (options) => {
             // parseEvent();
             window.hasChanges = true;
             visualBtn.disabled = false;
+        });
+
+        $iframeBtn.addEventListener('click', function () {
+            if (!parseRegex($inputRegex.value)) return false;
+
+            var src = location.href;
+            var i = src.indexOf('#');
+            src = i > 0 ? src.slice(0, i) : src;
+            var re = getInputValue();
+            // window.prompt("Copy the html code:", html);
+
+            const iframeLink = `
+            <iframe frameborder="0" width="500px" height="300px"
+            src="${src}#!embed=true&flags=${getFlags()}&re=${encodeURIComponent(re)}">
+            </iframe>`
+            ;
+
+            const iframeLinkLiteral = escapeHTML(iframeLink);
+            Swal.fire({
+                title: 'Share your visual regex',
+                html: `
+                <div id="visualizer-iframe-copy" class="container-copy">
+                    <div class="iframe-copier">
+                        <div class="iframe-content">
+                            <span>${iframeLinkLiteral}</span>
+                        </div>
+                        <div class="wrap-copy-iframe"><button class="copy-iframe"><i class="far fa-copy"></i></button></div>
+                    </div>
+                </div>
+                `,
+                // <div id="iframe-link">${iframeLink}</div>
+                // `,
+                icon: 'info',
+                iconHtml: `<span class="sweetalert-icon material-icons">share</span>`,
+                showCancelButton: true,
+                showConfirmButton: false,
+                // showCloseButton: true,
+                cancelButtonText: 'Close',
+            });
         });
 
         // parseBtn.addEventListener("click", (event) => {

@@ -54,11 +54,17 @@
     height: var(--minimized-height);
     font-size: var(--minimized-height);
 
-    transition: transform 0.2s linear; 
+    transition: transform 0.2s linear;
+
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
 }
 
 #connection-status-box #box-connect #box-show #offline-button:disabled {
     background: linear-gradient(315deg, #7a7a7a, #808080);
+    cursor: not-allowed;
 }
 
 #connection-status-box #box-connect #box-info {
@@ -78,6 +84,8 @@
     font-size: 30px;
     height: 40px;
     width: 40px;
+    border: none;
+    cursor: pointer;
 
     color: white;
     background: linear-gradient(315deg, #03a9f4, #ff0058);

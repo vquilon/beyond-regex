@@ -1,10 +1,9 @@
 var RegexVisualizerPanel = function (options) {
     var inputRegex = document.getElementById('input');
     var visualBtn = document.getElementById('visualizeClick');
-    var embedBtn = document.getElementById('embedIt');
-    // var exportBtn = document.getElementById('exportIt');
+    var exportBtn = document.getElementById('exportIt');
 
-    const isPanelShared = !inputRegex && !visualBtn && !embedBtn;
+    const isPanelShared = !inputRegex && !visualBtn;
     if (isPanelShared) {
         // ES UN SHARED
         var params = options.editorParser.getParams();
@@ -24,8 +23,8 @@ var RegexVisualizerPanel = function (options) {
     var $loader_view = document.querySelector(`#${options.loader_view_id}`);
     var $progress_bar = $loader_view.querySelector(`.${options.progress_bar_class}`);
 
-    var paper = new Raphael('graphCtView', 10, 10);
-    paper.canvas.id = 'graphCtSVG';
+    var paper = new Raphael('visualizer-graphView', 10, 10);
+    paper.canvas.id = 'visualizer-graphSVG';
 
     var svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl;
 
@@ -110,8 +109,8 @@ var RegexVisualizerPanel = function (options) {
                 // Una vez que se pinta actualizar el plugin de visualizador SVG
                 // if (!svg_graph_controller && !svg_thumb_controller && !destroyAllHandler_ThumbnailSVGControl) {
                 // [svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl] = ThumbnailSVGControl({
-                //     mainViewId: 'graphCtView',
-                //     mainSVGId: 'graphCtSVG',
+                //     mainViewId: 'visualizer-graphView',
+                //     mainSVGId: 'visualizer-graphSVG',
                 //     // Dejamos que lo autogenere con el id
                 //     thumbContainerId: 'thumbViewContainer',
                 // });
@@ -120,8 +119,8 @@ var RegexVisualizerPanel = function (options) {
                     destroyAllHandler_ThumbnailSVGControl();
                 }
                 [svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl] = CustomThumbnailSVGControl({
-                    mainViewId: 'graphCtView',
-                    mainSVGId: 'graphCtSVG',
+                    mainViewId: 'visualizer-graphView',
+                    mainSVGId: 'visualizer-graphSVG',
                     // Dejamos que lo autogenere con el id
                     thumbContainerId: 'thumbViewContainer',
                 });
@@ -160,8 +159,8 @@ var RegexVisualizerPanel = function (options) {
 
             raphael_items = RegexVisualizer(regEXSON, getFlags(), paper, $progress_bar);
             [svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl] = CustomThumbnailSVGControl({
-                mainViewId: 'graphCtView',
-                mainSVGId: 'graphCtSVG',
+                mainViewId: 'visualizer-graphView',
+                mainSVGId: 'visualizer-graphSVG',
                 thumbContainerId: 'thumbViewContainer',
             });
             // Se oculta el loader
@@ -215,7 +214,7 @@ var RegexVisualizerPanel = function (options) {
         return "data:image/png," + encodeURIComponent(svgAsXML);
     }
 
-    const generateImageOn = async ($canvas, $img) => {
+    const generateImageOn = async ($canvas, $img, $anchor) => {
         //Use raphael.export to fetch the SVG from the paper
         // let svg = paper.toSVG();
         let $svg = paper.canvas.cloneNode(true);
@@ -276,7 +275,9 @@ var RegexVisualizerPanel = function (options) {
             img.onload = function () {
                 ctx.drawImage(img, 0, 0);
             };
-            $img.setAttribute('src', _exportAsImgSVG($svg));
+            let url_blob = _exportAsImgSVG($svg)
+            $img.setAttribute('src', url_blob);
+            $anchor.setAttribute('href', url_blob);
         }
         updateBackgroundStyle(rectBackground);
 
@@ -294,65 +295,7 @@ var RegexVisualizerPanel = function (options) {
             }
         });
 
-        // dragGraphListeners(document.getElementById('graphCt'));
-
-        embedBtn.addEventListener('click', function () {
-            if (!parseRegex(inputRegex.value)) return false;
-
-            var src = location.href;
-            var i = src.indexOf('#');
-            src = i > 0 ? src.slice(0, i) : src;
-            var re = getInputValue();
-            // window.prompt("Copy the html code:", html);
-
-            const iframeLink = `<iframe frameborder="0" 
-            width="${Math.ceil(paper.width)}" height="${Math.ceil(paper.height)}" 
-            src="${src}#!embed=true&flags=${getFlags()}&re=${encodeURIComponent(re)}">
-            </iframe>`;
-
-            const iframeLinkLiteral = escapeHTML(iframeLink);
-            Swal.fire({
-                title: 'Share your visual regex',
-                html: `
-                <style>
-                    #copy-link {
-                        background: #00000029;
-                        border-top-right-radius: 10px;
-                        border-top-left-radius: 10px;
-                        word-break: break-all;
-                    }
-                    #iframe-link {
-                        width: 100%;
-                    }
-                    #iframe-link > iframe {
-                        width: 80%;
-                        border-bottom-left-radius: 10px;
-                        border-bottom-right-radius: 10px;
-                    }
-                </style>
-                <div>Copy the html code</div>
-                <div id="copy-link">${iframeLinkLiteral}</div>`,
-                // <div id="iframe-link">${iframeLink}</div>
-                // `,
-                icon: 'info',
-                showCancelButton: true,
-                showCloseButton: true,
-                confirmButtonText: 'Export IMG',
-                cancelButtonText: 'No, cancel!',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // updateLocationURL();
-                    showExportImage()
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    // Swal.fire(
-                    //     'Cancelled',
-                    //     `Your Service Worker version is ${swVersion}.`,
-                    //     'info'
-                    // )
-                }
-            });
-        });
+        // dragGraphListeners(document.getElementById('visualizer-graph'));
 
         // exportBtn.addEventListener('click', function () {
         //     var newParams = Object.assign({}, params);
@@ -369,7 +312,7 @@ var RegexVisualizerPanel = function (options) {
             resolve({
                 panelURL: generatePanelURL()
             });
-        })
+        });
 
         exportedIframeURL.then((res) => {
             Swal.fire({
@@ -377,42 +320,45 @@ var RegexVisualizerPanel = function (options) {
                 icon: "info",
                 iconHtml: `<span class="sweetalert-icon material-icons">share</span>`,
                 html: `
-                <div class="copy-text">
-                    <div id="iframe-visualizer" class="iframe-url">
-                        <span>${escapeHTML(res.panelURL)}</span>
-                        <div id="wrap-copy-iframe"><button id="copy-iframe"><i class="far fa-copy"></i></button></div>
+                <div id="visualizer-iframe-copy" class="container-copy">
+                    <div class="iframe-copier">
+                        <div class="iframe-content">
+                            <span>${escapeHTML(res.panelURL)}</span>
+                        </div>
+                        <div class="wrap-copy-iframe"><button class="copy-iframe"><i class="far fa-copy"></i></button></div>
                     </div>
                 </div>
+                <canvas style="display:none; width: 100%; height: unset;" id="export-image"></canvas>
                 
-                <canvas style="width: 100%; height: unset;" id="export-image"></canvas>
-                <img style="width: 100%; height: unset;" id="exported-img" src="">
+                <a class="anchor-export-img" href="" download="graph-regex.png"><img id="exported-img" src=""><span><i class="fas fa-download"></i>PNG</span></a>
                 `,
                 showCancelButton: true,
-                showCloseButton: true,
+                showConfirmButton: false,
+                // showCloseButton: true,
                 cancelButtonText: 'Close',
                 didOpen: () => {
                     Swal.showLoading();
 
                     // Listeners button copy
-                    document.querySelector("button#copy-iframe").addEventListener("click", function () {
-                        // let input = document.querySelector("input#iframe-visualizer");
-                        // input.select();
-                        // document.execCommand("copy");
+                    document.querySelector("#visualizer-iframe-copy button.copy-iframe").addEventListener("click", function () {
                         navigator.clipboard.writeText(res.panelURL);
 
-                        document.querySelector("#iframe-visualizer").classList.add("copied");
-                        // window.getSelection().removeAllRanges();
+                        document.querySelector("#visualizer-iframe-copy .copy-iframe>i").className = "fas fa-check";
+                        document.querySelector("#visualizer-iframe-copy .iframe-copier").classList.add("copied");
                         setTimeout(function () {
-                            document.querySelector("#iframe-visualizer").classList.remove("copied");
+                            document.querySelector("#visualizer-iframe-copy .copy-iframe>i").className = "far fa-copy";
+                            document.querySelector("#visualizer-iframe-copy .iframe-copier").classList.remove("copied");
                         }, 1000);
                     });
                     let { $img, rectBackground, updateBackgroundStyle } = generateImageOn(
                         document.querySelector("canvas#export-image"),
-                        document.querySelector("img#exported-img")
+                        document.querySelector("img#exported-img"),
+                        document.querySelector("img#exported-img").parentElement
                     );
+
                     Swal.hideLoading();
                 }
-            })
+            });
         })
 
 

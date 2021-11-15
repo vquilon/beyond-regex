@@ -45,7 +45,7 @@ var config_completely = {
 
 
 var auto_regex = completely(
-    document.getElementById('container-input'),
+    document.getElementById('editor-input'),
     config_completely
 );
 
@@ -104,7 +104,7 @@ auto_regex.options = regex_syntax;
 
 var prevText = "";
 auto_regex.onChange = function (text) {
-    let [preCaret, postCaret] = getCaretIndex(document.querySelector("#container-input").childNodes[0].childNodes[2])
+    let [preCaret, postCaret] = getCaretIndex(document.querySelector("#editor-input").childNodes[0].childNodes[2])
     
     auto_regex.startFrom = postCaret;
     // auto_regex.startFrom = text.lastIndexOf(' ') + 1;

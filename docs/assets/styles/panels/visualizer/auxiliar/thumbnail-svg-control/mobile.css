@@ -1,4 +1,4 @@
-#graphCt {
+#visualizer-graph {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -14,12 +14,12 @@
     align-items: stretch;
 }
 
-#graphCt>*:not(.control-panel), #graphCt:after, #graphCt:before {
+#visualizer-graph>*:not(.control-panel), #visualizer-graph:after, #visualizer-graph:before {
     height: calc(80% - 20px) !important;
     min-height: calc(80% - 20px) !important;
 }
 
-#graphCt .control-panel {
+#visualizer-graph .control-panel {
     opacity: 1;
     transform: unset;
     transition: none;
@@ -35,18 +35,18 @@
     align-items: flex-end;
 }
 
-#graphCt:hover .control-panel {
+#visualizer-graph:hover .control-panel {
     opacity: 1;
     transition: none;
     transform: unset;
 }
 
-#graphCt #graph-loader {
+#visualizer-graph #graph-loader {
     height: calc(80% - 20px);
     min-height: calc(80% - 20px);
 }
 
-#graphCtView {
+#visualizer-graphView {
     width: 100%;
     height: calc(80% - 20px);
     min-height: calc(80% - 20px);
@@ -54,7 +54,7 @@
     /* display: inline; */
 }
 
-#graphCtSVG {
+#visualizer-graphSVG {
     overflow: hidden;
     position: static !important;
     /* DISABLED SCROLL WHOLE PAGE */

@@ -3,10 +3,12 @@
         <!-- <script>
             window.history.replaceState('', document.title, window.location.pathname.slice(0, window.location.pathname.length - "index.html"));
         </script> -->
-    <div id="inputCt">
+    <div id="beyond-editor">
         {% include editor/editor.html %}
-        {% include panels/visualizer/visualizer.html %}
-        
-        {% include editor/debug/debug.html %}
+        <div id="beyond-panels">
+            {% include panels/visualizer/visualizer.html %}
+        </div>
+
+        <!-- {% include editor/debug/debug.html %} -->
     </div>
 </div>

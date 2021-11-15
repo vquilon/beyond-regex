@@ -1,6 +1,6 @@
 // Agrupar todos los elementos un elemento g
 function groupRaphItems() {
-    parentSVG = document.querySelectorAll("#graphCtView svg");
+    parentSVG = document.querySelectorAll("#visualizer-graphView svg");
     // Solo deberia haber uno
     parentSVG = parentSVG[0];
 

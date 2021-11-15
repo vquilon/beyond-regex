@@ -1,6 +1,6 @@
 /* UBICAR AQUI TODOS LOS ESTILOS DE LOS PANELES CONTENEDORES */
 
-#graphCt i.disabledJS-JS {
+#visualizer-graph i.disabledJS-JS {
     margin-left: -100%;
     width: 100%;
     text-align: center;
@@ -16,7 +16,7 @@
     align-items: center;
 }
 
-#graphCt i.disabledJS-JS:before {
+#visualizer-graph i.disabledJS-JS:before {
     width: 100%;
     background: linear-gradient( 360deg, #03a9f4, #ff0058);
     -webkit-background-clip: text;
@@ -24,7 +24,7 @@
     -webkit-text-fill-color: #47474700;
 }
 
-#graphCt i.disabledJS-JS i.disabledJS-ban {
+#visualizer-graph i.disabledJS-JS i.disabledJS-ban {
     font-size: 150%;
     width: 100%;
     margin-left: -100%;

@@ -11,12 +11,12 @@
 	align-items: flex-end;
 }
 
-#graphCt .control-panel {
+#visualizer-graph .control-panel {
 	opacity: 0;
 	transition: opacity 0.5s ease, transform 0.5s ease;
 	transform: translateY(85px);
 }
-#graphCt:hover .control-panel {
+#visualizer-graph:hover .control-panel {
 	opacity: 1;
 	transform: translateY(-15px);
 }

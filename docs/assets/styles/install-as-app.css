@@ -56,9 +56,11 @@ button#btn-close-install {
     border-radius: 50%;
     padding: 0.25em;
     color: #959595;
+    background: transparent;
+}
+button#btn-close-install:hover {
     background: #ffffff1f;
 }
-
 button#btn-install-app {
     font-size: 1em;
     font-weight: bold;

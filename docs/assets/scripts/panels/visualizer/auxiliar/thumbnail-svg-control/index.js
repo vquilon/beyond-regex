@@ -4,7 +4,7 @@
  */
  window.onload = function() {
 	ThumbnailSVGControl({
-		mainViewId: 'graphCtView',
+		mainViewId: 'visualizer-graphView',
 		mainSVGId: 'mainSVG',
 		thumbContainerId: 'thumbViewContainer',
 	});			

@@ -3,7 +3,7 @@
 *::-webkit-scrollbar-track {
 	/* -webkit-box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa;
     box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa; */
-	background-color: #ffffff26;
+	background-color: #282828;
 }
 
 /* *::-webkit-scrollbar-track:hover {
@@ -35,6 +35,6 @@
 * {
 	scrollbar-width: thin;
 	/* "auto" or "thin" */
-	scrollbar-color: #555 #ffffff4f;
+	scrollbar-color: #555 #282828;
 	/* scroll thumb and track */
 }

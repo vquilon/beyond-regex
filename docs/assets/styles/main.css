@@ -25,6 +25,7 @@ body {
     /* Only for background 100% height */
     position: relative;
 }
+
 @media (max-width: 800px) {
     body {
         min-width: 300px;
@@ -94,7 +95,6 @@ h2#noscript {
     height: 100%;
     background: #0000008f;
     backdrop-filter: unset;
-    cursor: pointer;
     opacity: 0;
     visibility: hidden;
     transition: opacity 1s, visibility 0s 1s, backdrop-filter 0.5s;
@@ -476,7 +476,6 @@ h2#noscript {
     margin: 40px 0;
     width: 100%;
     box-sizing: border-box;
-
     /* CARD STYLE */
     /* margin: 100px auto 50px;
     width: 60vw;
@@ -503,7 +502,7 @@ h2#noscript {
     transform: translateX(350px);
 } */
 
-#inputCt {
+#beyond-editor {
     display: flex;
     margin: 20px 10px;
     flex-wrap: nowrap;
@@ -513,7 +512,7 @@ h2#noscript {
     align-content: center;
 }
 
-#inputCt div.re {
+#beyond-editor div.container-editor {
     width: 100%;
     font-size: 24px;
     background: #e2e2e2;
@@ -530,20 +529,31 @@ h2#noscript {
     grid-template-columns: auto minmax(0, 1fr);
 }
 
-#inputCt div.re>div {
-    grid-row: 1;
-}
-
-#inputCt div.re div#langRegex {
+#beyond-editor .container-editor #editor-language {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
     padding: 10px 20px;
+    grid-row: 2;
 }
 
-#inputCt div.re #container-input {
+#beyond-editor .container-editor #editor-actions {
+    grid-row: 1;
+    grid-column: 1/4;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom: 2px #0000003d;
+    border-bottom-style: dashed;
+    background: #d2d2d2;
+}
+
+#beyond-editor .container-editor #editor-input {
     /* flex-grow: 1; */
     padding: 10px 0px;
     display: flex;
@@ -553,51 +563,194 @@ h2#noscript {
     /* border-top: 1px #ababab solid; */
     align-items: center;
     justify-content: space-between;
+    grid-row: 2;
 }
 
-#inputCt div.re .input {
+#beyond-editor .container-editor #editor-flags {
     font-family: "VictorMono", monospace;
-    font-size: 24px;
-    color: #3030C0;
+    padding: 10px 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    grid-row: 2;
+}
+
+#beyond-editor div.container-editor .input {
+    font-family: "VictorMono", monospace;
+    color: #4b0082;
     padding: 0 2px;
     border: none;
     background: #e2e2e2;
-    font-variant-ligatures: none;
-    line-height: 1.4em;
     height: 1.4em;
-    font-weight: bold;
-    word-break: break-all;
-    word-wrap: break-word;
     margin: 0;
     width: auto;
 }
 
-#inputCt div.re #flagBox {
+#beyond-editor div.container-editor .input, #beyond-editor .container-editor .errorBox, #beyond-editor .container-editor .errorDef {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1.4em;
+    white-space: pre;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-variant-ligatures: none;
+}
+
+#beyond-editor .container-editor #editor-actions #iframeIt {
+    font-size: 0.6em;
+    font-weight: bold;
+    background: #e9e9e9;
+    border: none;
+    border-radius: 0.5em;
+    padding: 0.5em 1em;
+    margin: 0.5em;
+    cursor: pointer;
+    box-shadow: inset 0.2rem 0.2rem 0.8rem #fafafa, inset -0.2rem -0.2rem 0.8rem #7b7b7b, inset -1px -1px 2px #838383, 1px 1px 0.5px #838383, 3px 3px 5px #838383, -0.2rem -0.2rem 0.5rem #ffffff;
+}
+#beyond-editor .container-editor #editor-actions #iframeIt:active {
+    box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa, -0.2rem -0.2rem 0.5rem #ffffff6f;
+}
+
+
+#beyond-editor div.container-editor #flagBox {
     width: 3em;
     /* border: 1px solid; */
     cursor: pointer;
 }
 
-#inputCt div.re #flagBox:active {
+#beyond-editor div.container-editor #flagBox:active {
     width: 3em;
     border: 1px solid;
     cursor: pointer;
 }
 
-#inputCt div.re #flagBox #flags {
+#beyond-editor div.container-editor #flagBox #flags {
     opacity: 0;
 }
 
-#inputCt div.re #flagBox:active #flags {
+#beyond-editor div.container-editor #flagBox:active #flags {
     opacity: 1;
 }
 
-#inputCt div.re #input {
+/* START FLAGS CHECKBOX */
+
+.checkbox input {
+    display: none;
+}
+
+.checkbox__1, .checkbox__2 {
+    /* display: inline-flex;
+    justify-content: center; */
+    height: 35px;
+    width: 35px;
+    /* margin: 10px;
+    margin-left: 0; */
+}
+
+.checkbox__1 label i, .checkbox__2 label i {
+    user-select: none;
+}
+
+.checkbox__1 label, .checkbox__2 label {
+    background: #e2e2e2;
+    box-shadow: inset 0.2rem 0.2rem 0.8rem #fafafa, inset -0.2rem -0.2rem 0.8rem #7b7b7b, inset -1px -1px 2px #838383, 1px 1px 0.5px #838383, 3px 3px 5px #838383, -0.2rem -0.2rem 0.5rem #ffffff;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    border-radius: 0.5rem;
+    padding: 2px;
+    width: 30px;
+    text-align: center;
+    height: 30px;
+    transition: 0.3s ease;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.checkbox__1 label:hover i, .checkbox__2 label:hover i {
+    color: white;
+    text-shadow: 0 0 10px white, 0 0 2px #c81aff, 0 0 10px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
+    text-shadow: 0 0 10px #ffffff, -1px 0px 2px #03a9f4, 1px 0px 2px #ff0058, -1px 0px 4px #03a9f4, 1px 0px 4px #ff0058, -4px 0px 8px #03a9f4, 4px 0px 8px #ff0058;
+    -webkit-text-fill-color: white;
+}
+
+.checkbox__1 label i, .checkbox__2 label i {
+    font-family: "VictorMono", monospace;
+    font-weight: 400;
+    color: #313030c2;
+    background: linear-gradient(90deg, #03a9f4, #ff0058);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: #47474700;
+    /* transition: 0.3s ease; */
+}
+
+.checkbox__1 input:checked~label, .checkbox__2 input:checked~label {
+    box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa, -0.2rem -0.2rem 0.5rem #ffffff;
+}
+
+.checkbox__1 input:checked~label i, .checkbox__2 input:checked~label i {
+    font-weight: 500;
+    font-size: 85% !important;
+    color: white;
+    -webkit-text-fill-color: white;
+    text-shadow: 0 0 10px white, 0 0 2px #c81aff, 0 0 10px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
+    text-shadow: 0 0 10px #ffffff, -1px 0px 4px #03a9f4, 1px 0px 4px #ff0058, -4px 0px 8px #03a9f4, 4px 0px 8px #ff0058;
+}
+
+/* END FLAGS CHECKBOX */
+
+#beyond-editor div.container-editor #input {
     display: table;
     width: 100%;
 }
 
-#inputCt #actionButtons {
+/* ERROR BOX */
+
+#editor-error {
+    display: none;
+    padding: 16px;
+    /* overflow: auto; */
+    grid-row: 3;
+    grid-column: 1/4;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background: linear-gradient(145deg, #3b3b3b, #242424);
+}
+
+#editor-error .errorBox {
+    --position-error-ch: 0ch;
+    position: relative;
+    /* text-shadow: 0 0 10px #f6cfd9, 0 0 5px #f82161, 0 0 10px #f82161, 0 0 20px #f82161; */
+    color: #339eef;
+    overflow-x: scroll;
+    display: block;
+    padding-bottom: 1em;
+}
+
+p.errorBox:after {
+    content: "";
+    width: 1.5ch;
+    top: 0;
+    left: calc(var(--position-error-ch) - 0.25ch);
+    height: 1.4em;
+    background: #ff00002e;
+    border: 1px solid red;
+    position: absolute;
+}
+
+#beyond-editor .container-editor .errorDef {
+    margin-top: 1em;
+    color: #ff0058;
+}
+
+/* ERROR BOX END */
+
+#beyond-editor #actionButtons {
     width: 100%;
     display: flex;
     grid-column-gap: 10px;
@@ -694,7 +847,7 @@ h2#noscript {
 
 /* } */
 
-#parseClick, #visualizeClick, #embedIt, #exportIt {
+.button-panel {
     font-family: "VictorMono", monospace;
     user-select: none;
     outline: none;
@@ -714,91 +867,15 @@ h2#noscript {
     text-decoration: none;
 }
 
-#parseClick:hover, #visualizeClick:hover, #embedIt:hover, #exportIt:hover {
+.button-panel:hover {
     color: #FFF;
     /* font-size: 95%; */
     /* background: #3498DF; */
     /* text-decoration: none; */
 }
 
-#parseClick:active, #visualizeClick:active, #embedIt:active, #exportIt:active {
+.button-panel:active {
     font-size: 95%;
-}
-
-#checkflags {
-    font-family: "VictorMono", monospace;
-    padding: 10px 10px;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: center;
-}
-
-.checkbox input {
-    display: none;
-}
-
-.checkbox__1, .checkbox__2 {
-    /* display: inline-flex;
-    justify-content: center; */
-    height: 35px;
-    width: 35px;
-    /* margin: 10px;
-    margin-left: 0; */
-}
-
-.checkbox__1 label i, .checkbox__2 label i {
-    user-select: none;
-}
-
-.checkbox__1 label, .checkbox__2 label {
-    background: #e2e2e2;
-    box-shadow: inset 0.2rem 0.2rem 0.8rem #fafafa, inset -0.2rem -0.2rem 0.8rem #7b7b7b, inset -1px -1px 2px #838383, 1px 1px 0.5px #838383, 3px 3px 5px #838383, -0.2rem -0.2rem 0.5rem #ffffff;
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    border-radius: 0.5rem;
-    padding: 2px;
-    width: 30px;
-    text-align: center;
-    height: 30px;
-    transition: 0.3s ease;
-    justify-content: center;
-    align-items: flex-end;
-}
-
-.checkbox__1 label:hover i, .checkbox__2 label:hover i {
-    color: white;
-    text-shadow: 0 0 10px white, 0 0 2px #c81aff, 0 0 10px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
-    text-shadow: 0 0 10px #ffffff, -1px 0px 2px #03a9f4, 1px 0px 2px #ff0058, -1px 0px 4px #03a9f4, 1px 0px 4px #ff0058, -4px 0px 8px #03a9f4, 4px 0px 8px #ff0058;
-    -webkit-text-fill-color: white;
-}
-
-.checkbox__1 label i, .checkbox__2 label i {
-    font-family: "VictorMono", monospace;
-    font-weight: 400;
-    color: #313030c2;
-    background: linear-gradient(90deg, #03a9f4, #ff0058);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: #47474700;
-    /* transition: 0.3s ease; */
-}
-
-.checkbox__1 input:checked~label, .checkbox__2 input:checked~label {
-    box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa, -0.2rem -0.2rem 0.5rem #ffffff;
-}
-
-.checkbox__1 input:checked~label i, .checkbox__2 input:checked~label i {
-    font-weight: 500;
-    font-size: 85% !important;
-    color: white;
-    -webkit-text-fill-color: white;
-    text-shadow: 0 0 10px white, 0 0 2px #c81aff, 0 0 10px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
-    text-shadow: 0 0 10px #ffffff, -1px 0px 4px #03a9f4, 1px 0px 4px #ff0058, -4px 0px 8px #03a9f4, 4px 0px 8px #ff0058;
 }
 
 footer {
@@ -831,13 +908,13 @@ body.embed {
     background: #e2e2e2;
 }
 
-body.embed, body.embed #graphCt {
+body.embed, body.embed #visualizer-graph {
     margin: 0;
     padding: 0;
     border: none;
 }
 
-body.embed h1, body.embed #inputCt, body.embed #github {
+body.embed h1, body.embed #beyond-editor, body.embed #github {
     display: none !important;
 }
 
@@ -870,7 +947,7 @@ body.embed {
     height: 100%;
 }
 
-body.embed #graphCt {
+body.embed #visualizer-graph {
     height: 100vh;
 }
 
@@ -880,31 +957,11 @@ body.embed #graphCt {
     image-rendering: pixelated;
 }
 
-#graphCt, #errorBox {
+/* #visualizer-graph, #errorBox {
     border: solid 1px black;
     box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
     border-radius: 10px;
     font-variant-ligatures: none;
-}
-
-#errorBox {
-    width: calc(100% - 32px);
-    background: linear-gradient(145deg, #3b3b3b, #242424);
-    text-shadow: 0 0 10px #f6cfd9, 0 0 5px #f82161, 0 0 10px #f82161, 0 0 20px #f82161;
-    font-size: 18px;
-    /* line-height: 1.4em; */
-    padding: 16px;
-    margin: 10px 0px;
-    color: white;
-    white-space: pre;
-    word-wrap: normal;
-    word-break: keep-all;
-    display: none;
-    overflow: auto;
-}
-
-/* .code, .code * {
-    font-family: "VictorMono", monospace;
 } */
 
 /* ==================== */
@@ -1228,59 +1285,56 @@ select:focus>option:checked {
 
 /*  DUE TO A BUG FOR OVERFLOW VISIBLE INSIDE CUSTOM HTML */
 
+.swal2-title {
+    padding: .8em 0.5em 0;
+}
+
 .swal2-html-container {
     overflow: unset;
 }
 
-div#iframe-visualizer {
+.container-copy {
+    margin-bottom: 1em;
+}
+
+.iframe-copier {
     background: #ffffff1f;
     position: relative;
+}
+
+.iframe-content {
     padding: 1em;
+    overflow-y: scroll;
+    height: 4em;
     text-align: left;
 }
 
-#wrap-copy-iframe {
+.wrap-copy-iframe {
     position: absolute;
     top: 0.5em;
-    right: 0.5em;
+    right: 1em;
     opacity: 0;
     visibility: hidden;
     transition: transform 0.2s, opacity 0.5s, visibility 0s 0.8s;
 }
 
-button#copy-iframe {
-    background: #0000009c;
-    border: none;
-    box-sizing: content-box;
-    border-radius: 0.5em;
-    padding: 0.25em;
-    width: 2em;
-    cursor: pointer;
-    height: 2em;
-}
-
-button#copy-iframe>i {
-    font-size: 1.5em;
-    color: #bcbcbc;
-}
-
-#iframe-visualizer:hover>#wrap-copy-iframe, #iframe-visualizer.copied>#wrap-copy-iframe {
+.iframe-copier:hover>.wrap-copy-iframe, .iframe-copier.copied>.wrap-copy-iframe {
     opacity: 1;
     visibility: visible;
     transition: opacity 0.5s, visibility 0s;
 }
 
-button#copy-iframe:hover {
+button.copy-iframe:hover {
     transform: scale(1.1);
 }
 
-#iframe-visualizer.copied>#wrap-copy-iframe:before {
+.iframe-copier.copied>.wrap-copy-iframe:before {
     content: "Copied";
     position: absolute;
     top: -45px;
     right: -15px;
     width: max-content;
-    background: #5c81dc;
+    background: linear-gradient(180deg, #5c81dc91, #5c81dc);
     padding: 8px 10px;
     border-radius: 20px;
     font-size: 15px;
@@ -1288,7 +1342,7 @@ button#copy-iframe:hover {
     pointer-events: none;
 }
 
-#iframe-visualizer.copied>#wrap-copy-iframe:after {
+.iframe-copier.copied>.wrap-copy-iframe:after {
     content: "";
     position: absolute;
     top: -15px;
@@ -1301,6 +1355,64 @@ button#copy-iframe:hover {
     pointer-events: none;
 }
 
-#iframe-visualizer.copied:hover>#wrap-copy-iframe:before, #iframe-visualizer.copied:hover>#wrap-copy-iframe:after {
+.iframe-copier.copied:hover>.wrap-copy-iframe:before, .iframe-copier.copied:hover>.wrap-copy-iframe:after {
     display: block;
+}
+
+.iframe-copier.copied>.iframe-content>span {
+    animation: bounce-scale-copy 0.5s ease-in-out alternate;
+}
+
+button.copy-iframe {
+    background: #0000009c;
+    border: none;
+    box-sizing: content-box;
+    border-radius: 0.5em;
+    padding: 0.25em;
+    width: 2em;
+    cursor: pointer;
+    height: 2em;
+}
+
+button.copy-iframe>i {
+    font-size: 1.5em;
+    color: #bcbcbc;
+}
+
+button.copy-iframe>i.fa-check {
+    color: #5c81dc;
+}
+
+.anchor-export-img {
+    display: inline-block;
+    position: relative;
+    display: flex;
+}
+
+.anchor-export-img>span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    cursor: pointer;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, background 0.2s;
+}
+
+.anchor-export-img:hover>span {
+    background: #0000009c;
+    color: white;
+}
+
+.anchor-export-img>span>i {
+    margin-right: 1em;
+}
+
+.anchor-export-img>img {
+    width: 100%;
 }

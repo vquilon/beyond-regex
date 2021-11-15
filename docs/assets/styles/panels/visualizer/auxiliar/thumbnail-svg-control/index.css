@@ -1,4 +1,4 @@
-#graphCt {
+#visualizer-graph {
     /* padding: 4px; */
     /* border: 1px solid black; */
     /* background: #e2e2e2; */
@@ -14,16 +14,16 @@
     max-height: 500px; */
 }
 
-#graphCt:active, div#graphCtView:active {
+#visualizer-graph:active, div#visualizer-graphView:active {
     cursor: grabbing;
 }
 
-/* #graphCt svg {
+/* #visualizer-graph svg {
     display: block;
     margin: 0 auto;
 } */
 
-#graphCt {
+#visualizer-graph {
     /* max-width: 80vw; */
     max-height: 50vw;
     width: 100%;
@@ -38,7 +38,7 @@
     box-shadow: none;
 }
 
-#graphCt {
+#visualizer-graph {
     display: flex;
     position: relative;
     flex-direction: row;
@@ -46,7 +46,7 @@
     align-items: flex-end;
 }
 
-#graphCt:before {
+#visualizer-graph:before {
     content: "";
     z-index: -1;
     width: 100%;
@@ -58,7 +58,7 @@
     border-radius: 10px;
 }
 
-#graphCt:after {
+#visualizer-graph:after {
     content: "";
     z-index: 1;
     width: 100%;
@@ -69,17 +69,17 @@
     box-shadow: inset 4px 4px 5px #00000099, inset -10px -10px 15px -15px #ffffff3b, 10px 10px 15px -15px #ffffff24;
 }
 
-#graphCt>* {
+#visualizer-graph>* {
     flex: none;
     position: relative;
     width: 100%;
 }
 
-#graphCt>div:not(:nth-child(1)) {
+#visualizer-graph>div:not(:nth-child(1)) {
     margin-left: -100%;
 }
 
-#graphCtView {
+#visualizer-graphView {
     width: 100%;
     height: 100%;
     min-height: 100%;
@@ -91,7 +91,7 @@
     position: relative;
 }
 
-#graphCtSVG {
+#visualizer-graphSVG {
     height: 100%;
     width: 100%;
     display: inline;

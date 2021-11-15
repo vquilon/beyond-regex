@@ -1,11 +1,11 @@
-<div class="re code">
-    <div id="langRegex">
+<div class="container-editor">
+    <div id="editor-language">
         <div class="select-box">
             <div class="select-box__current" tabindex="1">
                 <div class="select-box__value">
-                    <input class="select-box__input" type="radio" id="0" value="python" name="languageRegex"
-                        checked>
-                    <p class="select-box__input-text"><i class="fab fa-python code-icon"></i><i class="code-version">Python</i>
+                    <input class="select-box__input" type="radio" id="0" value="python" name="languageRegex" checked>
+                    <p class="select-box__input-text"><i class="fab fa-python code-icon"></i><i
+                            class="code-version">Python</i>
                     </p>
                 </div>
                 <div class="select-box__value">
@@ -53,13 +53,19 @@
             </div>
         </div>
     </div>
-    <div id="container-input">
+
+    <div id="editor-actions">
+        <button title="Get the link" id="iframeIt">Link!</button>
+    </div>
+
+    <div id="editor-input">
         <span style="margin-left: 5px;">/</span>
         <input id="input" class="input"
             value="^BEYOND ReGex(?P<TOOLS>builder|[bv]isualize|(?=de)bugger) Born to be a RegEx editor$" />
         <span style="margin-right: 5px;">/</span>
     </div>
-    <div id="checkflags">
+    
+    <div id="editor-flags">
         <div class="checkbox checkbox__1">
             <input id="checkbox-ignorecase" type="checkbox" name="flag" value="i">
             <label for="checkbox-ignorecase"><i>i</i></label>
@@ -75,5 +81,8 @@
 
     </div>
 
+    <div id="editor-error">
+        <p class="errorBox"></p>
+        <p class="errorDef"></p>
+    </div>
 </div>
-<p id="errorBox" class="code"></p>
