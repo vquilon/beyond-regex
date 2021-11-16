@@ -1,17 +1,6 @@
-/**
- * Raphael.Export https://github.com/ElbertF/Raphael.Export
- *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/mit-license.php
- *
- */
+
 
  (function(R) {
-	/**
-	* Escapes string for XML interpolation
-	* @param value string or number value to escape
-	* @returns string escaped
-	*/
 	function escapeXML(s) {
 		if ( typeof s === 'number' ) return s.toString();
 
@@ -23,19 +12,10 @@
 
 		return s;
 	}
-
-	/**
-	* Generic map function
-	* @param iterable the array or object to be mapped
-	* @param callback the callback function(element, key)
-	* @returns array
-	*/
 	function map(iterable, callback) {
 		var mapped = [],
 			undef = 'undefined',
 			i;
-
-		// use an index iteration if we're dealing with an array
 		if( typeof iterable.unshift != 'undefined'){
 			var l = iterable.length;
 			for ( i = 0; i < l; i++ ) {
@@ -55,14 +35,6 @@
 
 		return mapped;
 	}
-
-	/**
-	* Generic reduce function
-	* @param iterable array or object to be reduced
-	* @param callback the callback function(initial, element, i)
-	* @param initial the initial value
-	* @return the reduced value
-	*/
 	function reduce(iterable, callback, initial) {
 		for ( var i in iterable ) {
 			if ( iterable.hasOwnProperty(i) ) {
@@ -72,15 +44,6 @@
 
 		return initial;
 	}
-
-	/**
-	* Utility method for creating a tag
-	* @param name the tag name, e.g., 'text'
-	* @param attrs the attribute string, e.g., name1="val1" name2="val2"
-	* or attribute map, e.g., { name1 : 'val1', name2 : 'val2' }
-	* @param content the content string inside the tag
-	* @returns string of the tag
-	*/
 	function tag(name, attrs, matrix, content) {
 		if ( typeof content === 'undefined' || content === null ) {
 			content = '';
@@ -108,10 +71,6 @@
 
 		return '<' + name + ( matrix ? ' transform="matrix(' + matrix.toString().replace(/^matrix\(|\)$/g, '') + ')" ' : ' ' ) + attrs + '>' +  content + '</' + name + '>';
 	}
-
-	/**
-	* @return object the style object
-	*/
 	function extractStyle(node) {
 		return {
 			font: {
@@ -123,32 +82,17 @@
 			anchor: typeof node.attrs['text-anchor'] === 'undefined' ? null : node.attrs['text-anchor']
 		};
 	}
-
-	/**
-	* @param style object from style()
-	* @return string
-	*/
 	function styleToString(style) {
-		// TODO figure out what is 'normal'
-		// Tyler: it refers to the default inherited from CSS. Order of terms here:
-		// 		  http://www.w3.org/TR/SVG/text.html#FontProperty
 		var norm = 'normal',
 			textAnchor = 'text-anchor: ' + ( style.anchor || 'middle' ) + '; ',
 			font = style.font;
-		// return 'font: normal normal normal 10px/normal ' + style.font.family + ( style.font.size === null ? '' : '; font-size: ' + style.font.size + 'px' );
 		return textAnchor + [ 'font:',
-		         (font.style || norm), // font-style (e.g. italic)
-		         norm, // font-variant
-		         (font.weight || norm), // font-weight (e.g. bold)
-		         (font.size ? font.size + 'px' : '10px') + '/normal', // font-size/IGNORED line-height!
+		         (font.style || norm), 
+		         norm, 
+		         (font.weight || norm), 
+		         (font.size ? font.size + 'px' : '10px') + '/normal', 
 		         font.family ].join(' ');
 	}
-	
-	/**
-	 * repairs the hex color which missed the '#'
-	 * @param any string
-	 * @return hexvalue of rgb
-	 */
 	function convertToHexColor(value) {
 		
 		if(/^[0-9A-F]{6}$/i.test(value)){
@@ -157,17 +101,8 @@
 		
 		return value;
 	}
-
-	/**
-	* Computes tspan dy using font size. This formula was empircally determined
-	* using a best-fit line. Works well in both VML and SVG browsers.
-	* @param fontSize number
-	* @return number
-	*/
 	function computeTSpanDy(fontSize, line, lines) {
 		if ( fontSize === null ) fontSize = 10;
-
-		//return fontSize * 4.5 / 13
 		return fontSize * 4.5 / 13 * ( line - .2 - lines / 2 ) * 3.5;
 	}
 
@@ -196,9 +131,6 @@
 					},
 					{ style: styleToString(style) + ';' }
 				);
-				/**
-				 * if text node has a class set, apply it to the attrs object
-				*/
 				if (node.node.className.baseVal != "" && node.node.className.baseVal !== undefined) {
 					attrs["class"] = node.node.className.baseVal;
 				}
@@ -236,7 +168,6 @@
 				node.matrix
 				);
 		}
-		// Other serializers should go here
 	};
 
 	R.fn.toSVG = function() {
@@ -253,8 +184,6 @@
 			if ( node.node.style.display === 'none' ) continue;
 
 			var attrs = '';
-
-			// Use serializer
 			if ( typeof serializer[node.type] === 'function' ) {
 				svg += serializer[node.type](node);
 
@@ -273,21 +202,12 @@
 
 				switch ( i ) {
 					case 'r':
-						// see https://github.com/ElbertF/Raphael.Export/issues/40
 						if (node.type != "rect") {
 							break;
 						}
-						
-						/**
-						 * set 'rx' and 'ry' to 'r'
-						*/
 						value = node.attrs.r;
 						node.attrs.rx = value;
 						node.attrs.ry = value;
-						
-						/**
-						 * skip adding the 'r' attribute
-						*/
 						continue;
 					
 					case 'src':
@@ -300,12 +220,10 @@
 						break;
 
 					case 'fill':
-						//skip if there is any gradient
 						if(node.attrs.gradient)
 							continue;
 						break;
 					case 'gradient':
-						//radial gradient
 						var id = node.id;
 						var gradient = node.attrs.gradient;
 						var fx = 0.5, fy=0.5;
@@ -333,7 +251,6 @@
 
 							for(var di = 0; di < dots.length; di++){
 								var offset = (di/(dots.length-1) * 100)+'%';
-								//if dot has an offset
 								if(dots[di].offset)							
 									offset = dots[di].offset;
 								svg +=  '<stop stop-color="'+dots[di].color+'" offset="'+offset+'"/>';
@@ -344,9 +261,7 @@
 							name = 'fill';
 							value = 'url(#radialgradient'+id+')';
 
-						}else{//linear gradient
-
-							//assuming gradient is validated already!!
+						}else{
 							var angle = gradient.shift();
 							angle = parseFloat(angle)*-1;
 			                if (isNaN(angle)) {
@@ -374,7 +289,6 @@
 
 							for(var di = 0; di < dots.length; di++){
 								var offset = (di/(dots.length-1) * 100)+'%';
-								//if dot has an offset
 								if(dots[di].offset)							
 									offset = dots[di].offset;
 								svg +=  '<stop stop-color="'+dots[di].color+'" offset="'+offset+'"/>';
@@ -403,10 +317,6 @@
 						attrs += ' ' + name + '="' + escapeXML(node.attrs[i].toString()) + '"';
 				}
 			}
-
-			/**
-			 * if node has a class set, append it to the attrs string
-		    */
 			if (node.node.className.baseVal != "") {
 				attrs += ' ' + 'class="' + node.node.className.baseVal + '"';
 			}

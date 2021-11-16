@@ -1,7 +1,3 @@
-/*!
-* sweetalert2 v11.1.10
-* Released under the MIT License.
-*/
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -17,10 +13,6 @@
   });
 
   const consolePrefix = 'SweetAlert2:';
-  /**
-   * Filter the unique values into a new array
-   * @param arr
-   */
 
   const uniqueArray = arr => {
     const result = [];
@@ -33,45 +25,20 @@
 
     return result;
   };
-  /**
-   * Capitalize the first letter of a string
-   * @param str
-   */
 
   const capitalizeFirstLetter = str => str.charAt(0).toUpperCase() + str.slice(1);
-  /**
-   * Convert NodeList to Array
-   * @param nodeList
-   */
 
   const toArray = nodeList => Array.prototype.slice.call(nodeList);
-  /**
-   * Standardise console warnings
-   * @param message
-   */
 
   const warn = message => {
     console.warn("".concat(consolePrefix, " ").concat(typeof message === 'object' ? message.join(' ') : message));
   };
-  /**
-   * Standardise console errors
-   * @param message
-   */
 
   const error = message => {
     console.error("".concat(consolePrefix, " ").concat(message));
   };
-  /**
-   * Private global state for `warnOnce`
-   * @type {Array}
-   * @private
-   */
 
   const previousWarnOnceMessages = [];
-  /**
-   * Show a console warning, but only if it hasn't already been shown
-   * @param message
-   */
 
   const warnOnce = message => {
     if (!previousWarnOnceMessages.includes(message)) {
@@ -79,18 +46,10 @@
       warn(message);
     }
   };
-  /**
-   * Show a one-time console warning about deprecated params/methods
-   */
 
   const warnAboutDeprecation = (deprecatedParam, useInstead) => {
     warnOnce("\"".concat(deprecatedParam, "\" is deprecated and will be removed in the next major release. Please use \"").concat(useInstead, "\" instead."));
   };
-  /**
-   * If `arg` is a function, call it (with no arguments or context) and return the result.
-   * Otherwise, just pass the value through
-   * @param arg
-   */
 
   const callIfFunction = arg => typeof arg === 'function' ? arg() : arg;
   const hasToPromiseFn = arg => arg && typeof arg.toPromise === 'function';
@@ -159,11 +118,11 @@
   const getActions = () => elementByClass(swalClasses.actions);
   const getFooter = () => elementByClass(swalClasses.footer);
   const getTimerProgressBar = () => elementByClass(swalClasses['timer-progress-bar']);
-  const getCloseButton = () => elementByClass(swalClasses.close); // https://github.com/jkup/focusable/blob/master/index.js
+  const getCloseButton = () => elementByClass(swalClasses.close); 
 
   const focusable = "\n  a[href],\n  area[href],\n  input:not([disabled]),\n  select:not([disabled]),\n  textarea:not([disabled]),\n  button:not([disabled]),\n  iframe,\n  object,\n  embed,\n  [tabindex=\"0\"],\n  [contenteditable],\n  audio[controls],\n  video[controls],\n  summary\n";
   const getFocusableElements = () => {
-    const focusableElementsWithTabindex = toArray(getPopup().querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])')) // sort according to tabindex
+    const focusableElementsWithTabindex = toArray(getPopup().querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])')) 
     .sort((a, b) => {
       a = parseInt(a.getAttribute('tabindex'));
       b = parseInt(b.getAttribute('tabindex'));
@@ -193,7 +152,6 @@
     previousBodyPadding: null
   };
   const setInnerHtml = (elem, html) => {
-    // #1926
     elem.textContent = '';
 
     if (html) {
@@ -267,10 +225,9 @@
     }
   };
   const focusInput = input => {
-    input.focus(); // place cursor at end of text in text input
+    input.focus(); 
 
     if (input.type !== 'file') {
-      // http://stackoverflow.com/a/2345915
       const val = input.value;
       input.value = '';
       input.value = val;
@@ -335,11 +292,11 @@
   };
   const toggle = (elem, condition, display) => {
     condition ? show(elem, display) : hide(elem);
-  }; // borrowed from jquery $(elem).is(':visible') implementation
+  }; 
 
   const isVisible = elem => !!(elem && (elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length));
   const allButtonsAreHidden = () => !isVisible(getConfirmButton()) && !isVisible(getDenyButton()) && !isVisible(getCancelButton());
-  const isScrollable = elem => !!(elem.scrollHeight > elem.clientHeight); // borrowed from https://stackoverflow.com/a/46352119
+  const isScrollable = elem => !!(elem.scrollHeight > elem.clientHeight); 
 
   const hasCssAnimation = elem => {
     const style = window.getComputedStyle(elem);
@@ -373,8 +330,6 @@
     timerProgressBar.style.removeProperty('transition');
     timerProgressBar.style.width = "".concat(timerProgressBarPercent, "%");
   };
-
-  // Detect Node env
   const isNodeEnv = () => typeof window === 'undefined' || typeof document === 'undefined';
 
   const sweetHTML = "\n <div aria-labelledby=\"".concat(swalClasses.title, "\" aria-describedby=\"").concat(swalClasses['html-container'], "\" class=\"").concat(swalClasses.popup, "\" tabindex=\"-1\">\n   <button type=\"button\" class=\"").concat(swalClasses.close, "\"></button>\n   <ul class=\"").concat(swalClasses['progress-steps'], "\"></ul>\n   <div class=\"").concat(swalClasses.icon, "\"></div>\n   <img class=\"").concat(swalClasses.image, "\" />\n   <h2 class=\"").concat(swalClasses.title, "\" id=\"").concat(swalClasses.title, "\"></h2>\n   <div class=\"").concat(swalClasses['html-container'], "\" id=\"").concat(swalClasses['html-container'], "\"></div>\n   <input class=\"").concat(swalClasses.input, "\" />\n   <input type=\"file\" class=\"").concat(swalClasses.file, "\" />\n   <div class=\"").concat(swalClasses.range, "\">\n     <input type=\"range\" />\n     <output></output>\n   </div>\n   <select class=\"").concat(swalClasses.select, "\"></select>\n   <div class=\"").concat(swalClasses.radio, "\"></div>\n   <label for=\"").concat(swalClasses.checkbox, "\" class=\"").concat(swalClasses.checkbox, "\">\n     <input type=\"checkbox\" />\n     <span class=\"").concat(swalClasses.label, "\"></span>\n   </label>\n   <textarea class=\"").concat(swalClasses.textarea, "\"></textarea>\n   <div class=\"").concat(swalClasses['validation-message'], "\" id=\"").concat(swalClasses['validation-message'], "\"></div>\n   <div class=\"").concat(swalClasses.actions, "\">\n     <div class=\"").concat(swalClasses.loader, "\"></div>\n     <button type=\"button\" class=\"").concat(swalClasses.confirm, "\"></button>\n     <button type=\"button\" class=\"").concat(swalClasses.deny, "\"></button>\n     <button type=\"button\" class=\"").concat(swalClasses.cancel, "\"></button>\n   </div>\n   <div class=\"").concat(swalClasses.footer, "\"></div>\n   <div class=\"").concat(swalClasses['timer-progress-bar-container'], "\">\n     <div class=\"").concat(swalClasses['timer-progress-bar'], "\"></div>\n   </div>\n </div>\n").replace(/(^|\n)\s*/g, '');
@@ -440,15 +395,10 @@
       addClass(getContainer(), swalClasses.rtl);
     }
   };
-  /*
-   * Add modal + backdrop to DOM
-   */
 
 
   const init = params => {
-    // Clean up the old popup container if it exists
     const oldContainerExisted = resetOldContainer();
-    /* istanbul ignore if */
 
     if (isNodeEnv()) {
       error('SweetAlert2 requires document to initialize');
@@ -471,20 +421,18 @@
   };
 
   const parseHtmlToContainer = (param, target) => {
-    // DOM element
     if (param instanceof HTMLElement) {
-      target.appendChild(param); // Object
+      target.appendChild(param); 
     } else if (typeof param === 'object') {
-      handleObject(param, target); // Plain string
+      handleObject(param, target); 
     } else if (param) {
       setInnerHtml(target, param);
     }
   };
 
   const handleObject = (param, target) => {
-    // JQuery element(s)
     if (param.jquery) {
-      handleJqueryElem(target, param); // For other objects use their string representation
+      handleJqueryElem(target, param); 
     } else {
       setInnerHtml(target, param.toString());
     }
@@ -503,9 +451,6 @@
   };
 
   const animationEndEvent = (() => {
-    // Prevent run in Node env
-
-    /* istanbul ignore if */
     if (isNodeEnv()) {
       return false;
     }
@@ -526,8 +471,6 @@
     return false;
   })();
 
-  // https://github.com/twbs/bootstrap/blob/master/js/src/modal.js
-
   const measureScrollbar = () => {
     const scrollDiv = document.createElement('div');
     scrollDiv.className = swalClasses['scrollbar-measure'];
@@ -539,18 +482,18 @@
 
   const renderActions = (instance, params) => {
     const actions = getActions();
-    const loader = getLoader(); // Actions (buttons) wrapper
+    const loader = getLoader(); 
 
     if (!params.showConfirmButton && !params.showDenyButton && !params.showCancelButton) {
       hide(actions);
     } else {
       show(actions);
-    } // Custom class
+    } 
 
 
-    applyCustomClass(actions, params, 'actions'); // Render all the buttons
+    applyCustomClass(actions, params, 'actions'); 
 
-    renderButtons(actions, loader, params); // Loader
+    renderButtons(actions, loader, params); 
 
     setInnerHtml(loader, params.loaderHtml);
     applyCustomClass(loader, params, 'loader');
@@ -559,7 +502,7 @@
   function renderButtons(actions, loader, params) {
     const confirmButton = getConfirmButton();
     const denyButton = getDenyButton();
-    const cancelButton = getCancelButton(); // Render buttons
+    const cancelButton = getCancelButton(); 
 
     renderButton(confirmButton, 'confirm', params);
     renderButton(denyButton, 'deny', params);
@@ -583,7 +526,7 @@
       return removeClass([confirmButton, denyButton, cancelButton], swalClasses.styled);
     }
 
-    addClass([confirmButton, denyButton, cancelButton], swalClasses.styled); // Buttons background colors
+    addClass([confirmButton, denyButton, cancelButton], swalClasses.styled); 
 
     if (params.confirmButtonColor) {
       confirmButton.style.backgroundColor = params.confirmButtonColor;
@@ -603,10 +546,9 @@
 
   function renderButton(button, buttonType, params) {
     toggle(button, params["show".concat(capitalizeFirstLetter(buttonType), "Button")], 'inline-block');
-    setInnerHtml(button, params["".concat(buttonType, "ButtonText")]); // Set caption text
+    setInnerHtml(button, params["".concat(buttonType, "ButtonText")]); 
 
-    button.setAttribute('aria-label', params["".concat(buttonType, "ButtonAriaLabel")]); // ARIA label
-    // Add buttons custom classes
+    button.setAttribute('aria-label', params["".concat(buttonType, "ButtonAriaLabel")]); 
 
     button.className = swalClasses[buttonType];
     applyCustomClass(button, params, "".concat(buttonType, "Button"));
@@ -649,20 +591,10 @@
 
     handleBackdropParam(container, params.backdrop);
     handlePositionParam(container, params.position);
-    handleGrowParam(container, params.grow); // Custom class
+    handleGrowParam(container, params.grow); 
 
     applyCustomClass(container, params, 'container');
   };
-
-  /**
-   * This module contains `WeakMap`s for each effectively-"private  property" that a `Swal` has.
-   * For example, to set the private property "foo" of `this` to "bar", you can `privateProps.foo.set(this, 'bar')`
-   * This is the approach that Babel will probably take to implement private methods/fields
-   *   https://github.com/tc39/proposal-private-methods
-   *   https://github.com/babel/babel/pull/7555
-   * Once we have the changes from that PR in Babel, and our core class fits reasonable in *one module*
-   *   then we can use that language feature.
-   */
   var privateProps = {
     awaitingPromise: new WeakMap(),
     promise: new WeakMap(),
@@ -677,9 +609,9 @@
     const rerender = !innerParams || params.input !== innerParams.input;
     inputTypes.forEach(inputType => {
       const inputClass = swalClasses[inputType];
-      const inputContainer = getChildByClass(popup, inputClass); // set attributes
+      const inputContainer = getChildByClass(popup, inputClass); 
 
-      setAttributes(inputType, params.inputAttributes); // set class
+      setAttributes(inputType, params.inputAttributes); 
 
       inputContainer.className = inputClass;
 
@@ -691,7 +623,7 @@
     if (params.input) {
       if (rerender) {
         showInput(params);
-      } // set custom class
+      } 
 
 
       setCustomClass(params);
@@ -705,7 +637,7 @@
 
     const inputContainer = getInputContainer(params.input);
     const input = renderInputType[params.input](inputContainer, params);
-    show(input); // input autofocus
+    show(input); 
 
     setTimeout(() => {
       focusInput(input);
@@ -838,9 +770,7 @@
     const getMargin = el => parseInt(window.getComputedStyle(el).marginLeft) + parseInt(window.getComputedStyle(el).marginRight);
 
     setTimeout(() => {
-      // #2291
       if ('MutationObserver' in window) {
-        // #1699
         const initialPopupWidth = parseInt(window.getComputedStyle(getPopup()).width);
 
         const textareaResizeHandler = () => {
@@ -864,14 +794,14 @@
 
   const renderContent = (instance, params) => {
     const htmlContainer = getHtmlContainer();
-    applyCustomClass(htmlContainer, params, 'htmlContainer'); // Content as HTML
+    applyCustomClass(htmlContainer, params, 'htmlContainer'); 
 
     if (params.html) {
       parseHtmlToContainer(params.html, htmlContainer);
-      show(htmlContainer, 'block'); // Content as plain text
+      show(htmlContainer, 'block'); 
     } else if (params.text) {
       htmlContainer.textContent = params.text;
-      show(htmlContainer, 'block'); // No content
+      show(htmlContainer, 'block'); 
     } else {
       hide(htmlContainer);
     }
@@ -885,7 +815,7 @@
 
     if (params.footer) {
       parseHtmlToContainer(params.footer, footer);
-    } // Custom class
+    } 
 
 
     applyCustomClass(footer, params, 'footer');
@@ -893,7 +823,7 @@
 
   const renderCloseButton = (instance, params) => {
     const closeButton = getCloseButton();
-    setInnerHtml(closeButton, params.closeButtonHtml); // Custom class
+    setInnerHtml(closeButton, params.closeButtonHtml); 
 
     applyCustomClass(closeButton, params, 'closeButton');
     toggle(closeButton, params.showCloseButton);
@@ -902,10 +832,9 @@
 
   const renderIcon = (instance, params) => {
     const innerParams = privateProps.innerParams.get(instance);
-    const icon = getIcon(); // if the given icon already rendered, apply the styling without re-rendering the icon
+    const icon = getIcon(); 
 
     if (innerParams && params.icon === innerParams.icon) {
-      // Custom or default content
       setContent(icon, params);
       applyStyles(icon, params);
       return;
@@ -920,10 +849,10 @@
       return hide(icon);
     }
 
-    show(icon); // Custom or default content
+    show(icon); 
 
     setContent(icon, params);
-    applyStyles(icon, params); // Animate icon
+    applyStyles(icon, params); 
 
     addClass(icon, params.showClass.icon);
   };
@@ -935,14 +864,14 @@
       }
     }
 
-    addClass(icon, iconTypes[params.icon]); // Icon color
+    addClass(icon, iconTypes[params.icon]); 
 
-    setColor(icon, params); // Success icon background color
+    setColor(icon, params); 
 
-    adjustSuccessIconBackgoundColor(); // Custom class
+    adjustSuccessIconBackgoundColor(); 
 
     applyCustomClass(icon, params, 'icon');
-  }; // Adjust success icon background color to match the popup background color
+  }; 
 
 
   const adjustSuccessIconBackgoundColor = () => {
@@ -998,13 +927,13 @@
       return hide(image);
     }
 
-    show(image, ''); // Src, alt
+    show(image, ''); 
 
     image.setAttribute('src', params.imageUrl);
-    image.setAttribute('alt', params.imageAlt); // Width, height
+    image.setAttribute('alt', params.imageAlt); 
 
     applyNumericalStyle(image, 'width', params.imageWidth);
-    applyNumericalStyle(image, 'height', params.imageHeight); // Class
+    applyNumericalStyle(image, 'height', params.imageHeight); 
 
     image.className = swalClasses.image;
     applyCustomClass(image, params, 'image');
@@ -1067,7 +996,7 @@
 
     if (params.titleText) {
       title.innerText = params.titleText;
-    } // Custom class
+    } 
 
 
     applyCustomClass(title, params, 'title');
@@ -1075,31 +1004,29 @@
 
   const renderPopup = (instance, params) => {
     const container = getContainer();
-    const popup = getPopup(); // Width
+    const popup = getPopup(); 
 
     if (params.toast) {
-      // #2170
       applyNumericalStyle(container, 'width', params.width);
       popup.style.width = '100%';
       popup.insertBefore(getLoader(), getIcon());
     } else {
       applyNumericalStyle(popup, 'width', params.width);
-    } // Padding
+    } 
 
 
-    applyNumericalStyle(popup, 'padding', params.padding); // Background
+    applyNumericalStyle(popup, 'padding', params.padding); 
 
     if (params.background) {
       popup.style.background = params.background;
     }
 
-    hide(getValidationMessage()); // Classes
+    hide(getValidationMessage()); 
 
     addClasses(popup, params);
   };
 
   const addClasses = (popup, params) => {
-    // Default Class + showClass when updating Swal.update({})
     popup.className = "".concat(swalClasses.popup, " ").concat(isVisible(popup) ? params.showClass.popup : '');
 
     if (params.toast) {
@@ -1107,14 +1034,14 @@
       addClass(popup, swalClasses.toast);
     } else {
       addClass(popup, swalClasses.modal);
-    } // Custom class
+    } 
 
 
     applyCustomClass(popup, params, 'popup');
 
     if (typeof params.customClass === 'string') {
       addClass(popup, params.customClass);
-    } // Icon class (#1842)
+    } 
 
 
     if (params.icon) {
@@ -1139,26 +1066,13 @@
     }
   };
 
-  /*
-   * Global function to determine if SweetAlert2 popup is shown
-   */
-
   const isVisible$1 = () => {
     return isVisible(getPopup());
   };
-  /*
-   * Global function to click 'Confirm' button
-   */
 
   const clickConfirm = () => getConfirmButton() && getConfirmButton().click();
-  /*
-   * Global function to click 'Deny' button
-   */
 
   const clickDeny = () => getDenyButton() && getDenyButton().click();
-  /*
-   * Global function to click 'Cancel' button
-   */
 
   const clickCancel = () => getCancelButton() && getCancelButton().click();
 
@@ -1171,25 +1085,6 @@
 
     return new Swal(...args);
   }
-
-  /**
-   * Returns an extended version of `Swal` containing `params` as defaults.
-   * Useful for reusing Swal configuration.
-   *
-   * For example:
-   *
-   * Before:
-   * const textPromptOptions = { input: 'text', showCancelButton: true }
-   * const {value: firstName} = await Swal.fire({ ...textPromptOptions, title: 'What is your first name?' })
-   * const {value: lastName} = await Swal.fire({ ...textPromptOptions, title: 'What is your last name?' })
-   *
-   * After:
-   * const TextPrompt = Swal.mixin({ input: 'text', showCancelButton: true })
-   * const {value: firstName} = await TextPrompt('What is your first name?')
-   * const {value: lastName} = await TextPrompt('What is your last name?')
-   *
-   * @param mixinParams
-   */
   function mixin(mixinParams) {
     class MixinSwal extends this {
       _main(params, priorityMixinParams) {
@@ -1200,11 +1095,6 @@
 
     return MixinSwal;
   }
-
-  /**
-   * Shows loader (spinner), this is useful with AJAX requests.
-   * By default the loader be shown instead of the "Confirm" button.
-   */
 
   const showLoading = buttonToReplace => {
     let popup = getPopup();
@@ -1258,7 +1148,7 @@
     } else if (document.body) {
       document.body.focus();
     }
-  }; // Restore previous active (focused) element
+  }; 
 
 
   const restoreActiveElement = returnFocus => {
@@ -1272,24 +1162,15 @@
       globalState.restoreFocusTimeout = setTimeout(() => {
         focusPreviousActiveElement();
         resolve();
-      }, RESTORE_FOCUS_TIMEOUT); // issues/900
+      }, RESTORE_FOCUS_TIMEOUT); 
 
       window.scrollTo(x, y);
     });
   };
 
-  /**
-   * If `timer` parameter is set, returns number of milliseconds of timer remained.
-   * Otherwise, returns undefined.
-   */
-
   const getTimerLeft = () => {
     return globalState.timeout && globalState.timeout.getTimerLeft();
   };
-  /**
-   * Stop timer. Returns number of milliseconds of timer remained.
-   * If `timer` parameter isn't set, returns undefined.
-   */
 
   const stopTimer = () => {
     if (globalState.timeout) {
@@ -1297,10 +1178,6 @@
       return globalState.timeout.stop();
     }
   };
-  /**
-   * Resume timer. Returns number of milliseconds of timer remained.
-   * If `timer` parameter isn't set, returns undefined.
-   */
 
   const resumeTimer = () => {
     if (globalState.timeout) {
@@ -1309,19 +1186,11 @@
       return remaining;
     }
   };
-  /**
-   * Resume timer. Returns number of milliseconds of timer remained.
-   * If `timer` parameter isn't set, returns undefined.
-   */
 
   const toggleTimer = () => {
     const timer = globalState.timeout;
     return timer && (timer.running ? stopTimer() : resumeTimer());
   };
-  /**
-   * Increase timer. Returns number of milliseconds of an updated timer.
-   * If `timer` parameter isn't set, returns undefined.
-   */
 
   const increaseTimer = n => {
     if (globalState.timeout) {
@@ -1330,11 +1199,6 @@
       return remaining;
     }
   };
-  /**
-   * Check if timer is running. Returns true if timer is running
-   * or false if timer is paused or stopped.
-   * If `timer` parameter isn't set, returns undefined
-   */
 
   const isTimerRunning = () => {
     return globalState.timeout && globalState.timeout.isRunning();
@@ -1458,26 +1322,14 @@
   const updatableParams = ['allowEscapeKey', 'allowOutsideClick', 'background', 'buttonsStyling', 'cancelButtonAriaLabel', 'cancelButtonColor', 'cancelButtonText', 'closeButtonAriaLabel', 'closeButtonHtml', 'confirmButtonAriaLabel', 'confirmButtonColor', 'confirmButtonText', 'currentProgressStep', 'customClass', 'denyButtonAriaLabel', 'denyButtonColor', 'denyButtonText', 'didClose', 'didDestroy', 'footer', 'hideClass', 'html', 'icon', 'iconColor', 'iconHtml', 'imageAlt', 'imageHeight', 'imageUrl', 'imageWidth', 'preConfirm', 'preDeny', 'progressSteps', 'returnFocus', 'reverseButtons', 'showCancelButton', 'showCloseButton', 'showConfirmButton', 'showDenyButton', 'text', 'title', 'titleText', 'willClose'];
   const deprecatedParams = {};
   const toastIncompatibleParams = ['allowOutsideClick', 'allowEnterKey', 'backdrop', 'focusConfirm', 'focusDeny', 'focusCancel', 'returnFocus', 'heightAuto', 'keydownListenerCapture'];
-  /**
-   * Is valid parameter
-   * @param {String} paramName
-   */
 
   const isValidParameter = paramName => {
     return Object.prototype.hasOwnProperty.call(defaultParams, paramName);
   };
-  /**
-   * Is valid parameter for Swal.update() method
-   * @param {String} paramName
-   */
 
   const isUpdatableParameter = paramName => {
     return updatableParams.indexOf(paramName) !== -1;
   };
-  /**
-   * Is deprecated parameter
-   * @param {String} paramName
-   */
 
   const isDeprecatedParameter = paramName => {
     return deprecatedParams[paramName];
@@ -1500,11 +1352,6 @@
       warnAboutDeprecation(param, isDeprecatedParameter(param));
     }
   };
-  /**
-   * Show relevant warnings for given params
-   *
-   * @param params
-   */
 
 
   const showWarningsForParams = params => {
@@ -1525,7 +1372,7 @@
 
 
 
-  var staticMethods = /*#__PURE__*/Object.freeze({
+  var staticMethods = Object.freeze({
     isValidParameter: isValidParameter,
     isUpdatableParameter: isUpdatableParameter,
     isDeprecatedParameter: isDeprecatedParameter,
@@ -1565,12 +1412,7 @@
     bindClickHandler: bindClickHandler
   });
 
-  /**
-   * Hides loader and shows back the button which was hidden by .showLoading()
-   */
-
   function hideLoading() {
-    // do nothing if popup is closed
     const innerParams = privateProps.innerParams.get(this);
 
     if (!innerParams) {
@@ -1618,14 +1460,12 @@
   }
 
   const fixScrollbar = () => {
-    // for queues, do not do this more than once
     if (states.previousBodyPadding !== null) {
       return;
-    } // if the body has overflow
+    } 
 
 
     if (document.body.scrollHeight > window.innerHeight) {
-      // add padding so the content doesn't shift after removal of scrollbar
       states.previousBodyPadding = parseInt(window.getComputedStyle(document.body).getPropertyValue('padding-right'));
       document.body.style.paddingRight = "".concat(states.previousBodyPadding + measureScrollbar(), "px");
     }
@@ -1637,8 +1477,6 @@
     }
   };
 
-  /* istanbul ignore file */
-
   const iOSfix = () => {
     const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
 
@@ -1647,7 +1485,7 @@
       document.body.style.top = "".concat(offset * -1, "px");
       addClass(document.body, swalClasses.iosfix);
       lockBodyScroll();
-      addBottomPaddingForTallPopups(); // #1948
+      addBottomPaddingForTallPopups(); 
     }
   };
 
@@ -1664,7 +1502,6 @@
   };
 
   const lockBodyScroll = () => {
-    // #1246
     const container = getContainer();
     let preventTouchMove;
 
@@ -1692,9 +1529,9 @@
       return true;
     }
 
-    if (!isScrollable(container) && target.tagName !== 'INPUT' && // #1603
-    target.tagName !== 'TEXTAREA' && // #2266
-    !(isScrollable(getHtmlContainer()) && // #1944
+    if (!isScrollable(container) && target.tagName !== 'INPUT' && 
+    target.tagName !== 'TEXTAREA' && 
+    !(isScrollable(getHtmlContainer()) && 
     getHtmlContainer().contains(target))) {
       return true;
     }
@@ -1703,12 +1540,10 @@
   };
 
   const isStylys = event => {
-    // #1786
     return event.touches && event.touches.length && event.touches[0].touchType === 'stylus';
   };
 
   const isZoom = event => {
-    // #1891
     return event.touches && event.touches.length > 1;
   };
 
@@ -1720,10 +1555,6 @@
       document.body.scrollTop = offset * -1;
     }
   };
-
-  // Adding aria-hidden="true" to elements outside of the active modal dialog ensures that
-  // elements not within the active modal dialog will not be surfaced if a user opens a screen
-  // reader’s list of elements (headings, form controls, landmarks, etc.) in the document.
 
   const setAriaHidden = () => {
     const bodyChildren = toArray(document.body.children);
@@ -1750,24 +1581,10 @@
       }
     });
   };
-
-  /**
-   * This module contains `WeakMap`s for each effectively-"private  property" that a `Swal` has.
-   * For example, to set the private property "foo" of `this` to "bar", you can `privateProps.foo.set(this, 'bar')`
-   * This is the approach that Babel will probably take to implement private methods/fields
-   *   https://github.com/tc39/proposal-private-methods
-   *   https://github.com/babel/babel/pull/7555
-   * Once we have the changes from that PR in Babel, and our core class fits reasonable in *one module*
-   *   then we can use that language feature.
-   */
   var privateMethods = {
     swalPromiseResolve: new WeakMap(),
     swalPromiseReject: new WeakMap()
   };
-
-  /*
-   * Instance method to close sweetAlert
-   */
 
   function removePopupAndResetState(instance, container, returnFocus, didClose) {
     if (isToast()) {
@@ -1780,8 +1597,7 @@
       globalState.keydownHandlerAdded = false;
     }
 
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent); // workaround for #2088
-    // for some reason removing the container in Safari will scroll the document to bottom
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent); 
 
     if (isSafari) {
       container.setAttribute('style', 'display:none !important');
@@ -1810,13 +1626,11 @@
     const didClose = triggerClosePopup(this);
 
     if (this.isAwaitingPromise()) {
-      // A swal awaiting for a promise (after a click on Confirm or Deny) cannot be dismissed anymore #2335
       if (!resolveValue.isDismissed) {
         handleAwaitingPromise(this);
         swalPromiseResolve(resolveValue);
       }
     } else if (didClose) {
-      // Resolve Swal promise
       swalPromiseResolve(resolveValue);
     }
   }
@@ -1851,14 +1665,13 @@
     handleAwaitingPromise(this);
 
     if (rejectPromise) {
-      // Reject Swal promise
       rejectPromise(error);
     }
   }
 
   const handleAwaitingPromise = instance => {
     if (instance.isAwaitingPromise()) {
-      privateProps.awaitingPromise.delete(instance); // The instance might have been previously partly destroyed, we must resume the destroy process in this case #2335
+      privateProps.awaitingPromise.delete(instance); 
 
       if (!privateProps.innerParams.get(instance)) {
         instance._destroy();
@@ -1867,7 +1680,6 @@
   };
 
   const prepareResolveValue = resolveValue => {
-    // When user calls Swal.close()
     if (typeof resolveValue === 'undefined') {
       return {
         isConfirmed: false,
@@ -1884,7 +1696,7 @@
   };
 
   const handlePopupAnimation = (instance, popup, innerParams) => {
-    const container = getContainer(); // If animation is supported, animate
+    const container = getContainer(); 
 
     const animationIsSupported = animationEndEvent && hasCssAnimation(popup);
 
@@ -1895,7 +1707,6 @@
     if (animationIsSupported) {
       animatePopup(instance, popup, container, innerParams.returnFocus, innerParams.didClose);
     } else {
-      // Otherwise, remove immediately
       removePopupAndResetState(instance, container, innerParams.returnFocus, innerParams.didClose);
     }
   };
@@ -1976,7 +1787,7 @@
       focusInput(input);
       addClass(input, swalClasses.inputerror);
     }
-  } // Hide block with validation message
+  } 
 
   function resetValidationMessage$1() {
     const domCache = privateProps.domCache.get(this);
@@ -2063,13 +1874,11 @@
       return /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]{2,24}$/.test(string) ? Promise.resolve() : Promise.resolve(validationMessage || 'Invalid email address');
     },
     url: (string, validationMessage) => {
-      // taken from https://stackoverflow.com/a/3809435 with a small change from #1306 and #2013
       return /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,63}\b([-a-zA-Z0-9@:%_+.~#?&/=]*)$/.test(string) ? Promise.resolve() : Promise.resolve(validationMessage || 'Invalid URL');
     }
   };
 
   function setDefaultInputValidators(params) {
-    // Use default `inputValidator` for supported input types if not provided
     if (!params.inputValidator) {
       Object.keys(defaultInputValidators).forEach(key => {
         if (params.input === key) {
@@ -2080,28 +1889,21 @@
   }
 
   function validateCustomTargetElement(params) {
-    // Determine if the custom target element is valid
     if (!params.target || typeof params.target === 'string' && !document.querySelector(params.target) || typeof params.target !== 'string' && !params.target.appendChild) {
       warn('Target parameter is not valid, defaulting to "body"');
       params.target = 'body';
     }
   }
-  /**
-   * Set type, text and actions on popup
-   *
-   * @param params
-   * @returns {boolean}
-   */
 
 
   function setParameters(params) {
-    setDefaultInputValidators(params); // showLoaderOnConfirm && preConfirm
+    setDefaultInputValidators(params); 
 
     if (params.showLoaderOnConfirm && !params.preConfirm) {
       warn('showLoaderOnConfirm is set to true, but preConfirm is not defined.\n' + 'showLoaderOnConfirm should be used together with preConfirm, see usage example:\n' + 'https://sweetalert2.github.io/#ajax-request');
     }
 
-    validateCustomTargetElement(params); // Replace newlines with <br> in title
+    validateCustomTargetElement(params); 
 
     if (typeof params.title === 'string') {
       params.title = params.title.split('\n').join('<br />');
@@ -2283,11 +2085,6 @@
   };
 
   const SHOW_CLASS_TIMEOUT = 10;
-  /**
-   * Open popup, add necessary classes and styles, fix scrollbar
-   *
-   * @param params
-   */
 
   const openPopup = params => {
     const container = getContainer();
@@ -2299,7 +2096,7 @@
 
     const bodyStyles = window.getComputedStyle(document.body);
     const initialBodyOverflow = bodyStyles.overflowY;
-    addClasses$1(container, popup, params); // scrolling is 'hidden' until animation is done, after that 'auto'
+    addClasses$1(container, popup, params); 
 
     setTimeout(() => {
       setScrollingVisibility(container, popup);
@@ -2347,7 +2144,7 @@
 
     if (scrollbarPadding && initialBodyOverflow !== 'hidden') {
       fixScrollbar();
-    } // sweetalert2/issues/1247
+    } 
 
 
     setTimeout(() => {
@@ -2356,16 +2153,15 @@
   };
 
   const addClasses$1 = (container, popup, params) => {
-    addClass(container, params.showClass.backdrop); // the workaround with setting/unsetting opacity is needed for #2019 and 2059
+    addClass(container, params.showClass.backdrop); 
 
     popup.style.setProperty('opacity', '0', 'important');
     show(popup, 'grid');
     setTimeout(() => {
-      // Animate popup right after showing it
-      addClass(popup, params.showClass.popup); // and remove the opacity workaround
+      addClass(popup, params.showClass.popup); 
 
       popup.style.removeProperty('opacity');
-    }, SHOW_CLASS_TIMEOUT); // 10ms in order to fix #2062
+    }, SHOW_CLASS_TIMEOUT); 
 
     addClass([document.documentElement, document.body], swalClasses.shown);
 
@@ -2459,21 +2255,16 @@
 
       inputOptions.forEach(inputOption => {
         const optionValue = inputOption[0];
-        const optionLabel = inputOption[1]; // <optgroup> spec:
-        // https://www.w3.org/TR/html401/interact/forms.html#h-17.6
-        // "...all OPTGROUP elements must be specified directly within a SELECT element (i.e., groups may not be nested)..."
-        // check whether this is a <optgroup>
+        const optionLabel = inputOption[1]; 
 
         if (Array.isArray(optionLabel)) {
-          // if it is an array, then it is an <optgroup>
           const optgroup = document.createElement('optgroup');
           optgroup.label = optionValue;
-          optgroup.disabled = false; // not configurable for now
+          optgroup.disabled = false; 
 
           select.appendChild(optgroup);
           optionLabel.forEach(o => renderOption(optgroup, o[1], o[0]));
         } else {
-          // case of <option>
           renderOption(select, optionLabel, optionValue);
         }
       });
@@ -2508,10 +2299,6 @@
       }
     }
   };
-  /**
-   * Converts `inputOptions` into an array of `[value, label]`s
-   * @param inputOptions
-   */
 
   const formatInputOptions = inputOptions => {
     const result = [];
@@ -2521,7 +2308,6 @@
         let valueFormatted = value;
 
         if (typeof valueFormatted === 'object') {
-          // case of <optgroup>
           valueFormatted = formatInputOptions(valueFormatted);
         }
 
@@ -2532,7 +2318,6 @@
         let valueFormatted = inputOptions[key];
 
         if (typeof valueFormatted === 'object') {
-          // case of <optgroup>
           valueFormatted = formatInputOptions(valueFormatted);
         }
 
@@ -2573,7 +2358,6 @@
   };
 
   const handleConfirmOrDenyWithInput = (instance, type
-  /* 'confirm' | 'deny' */
   ) => {
     const innerParams = privateProps.innerParams.get(instance);
     const inputValue = getInputValue(instance, innerParams);
@@ -2591,7 +2375,6 @@
   };
 
   const handleInputValidator = (instance, inputValue, type
-  /* 'confirm' | 'deny' */
   ) => {
     const innerParams = privateProps.innerParams.get(instance);
     instance.disableInput();
@@ -2618,7 +2401,7 @@
     }
 
     if (innerParams.preDeny) {
-      privateProps.awaitingPromise.set(instance || undefined, true); // Flagging the instance as awaiting a promise so it's own promise's reject/resolve methods doesnt get destroyed until the result from this preDeny's promise is received
+      privateProps.awaitingPromise.set(instance || undefined, true); 
 
       const preDenyPromise = Promise.resolve().then(() => asPromise(innerParams.preDeny(value, innerParams.validationMessage)));
       preDenyPromise.then(preDenyValue => {
@@ -2659,7 +2442,7 @@
 
     if (innerParams.preConfirm) {
       instance.resetValidationMessage();
-      privateProps.awaitingPromise.set(instance || undefined, true); // Flagging the instance as awaiting a promise so it's own promise's reject/resolve methods doesnt get destroyed until the result from this preConfirm's promise is received
+      privateProps.awaitingPromise.set(instance || undefined, true); 
 
       const preConfirmPromise = Promise.resolve().then(() => asPromise(innerParams.preConfirm(value, innerParams.validationMessage)));
       preConfirmPromise.then(preConfirmValue => {
@@ -2692,22 +2475,22 @@
       });
       globalState.keydownHandlerAdded = true;
     }
-  }; // Focus handling
+  }; 
 
   const setFocus = (innerParams, index, increment) => {
-    const focusableElements = getFocusableElements(); // search for visible elements and select the next possible match
+    const focusableElements = getFocusableElements(); 
 
     if (focusableElements.length) {
-      index = index + increment; // rollover to first item
+      index = index + increment; 
 
       if (index === focusableElements.length) {
-        index = 0; // go to last item
+        index = 0; 
       } else if (index === -1) {
         index = focusableElements.length - 1;
       }
 
       return focusableElements[index].focus();
-    } // no visible focusable elements, focus the popup
+    } 
 
 
     getPopup().focus();
@@ -2719,34 +2502,33 @@
     const innerParams = privateProps.innerParams.get(instance);
 
     if (!innerParams) {
-      return; // This instance has already been destroyed
+      return; 
     }
 
     if (innerParams.stopKeydownPropagation) {
       e.stopPropagation();
-    } // ENTER
+    } 
 
 
     if (e.key === 'Enter') {
-      handleEnter(instance, e, innerParams); // TAB
+      handleEnter(instance, e, innerParams); 
     } else if (e.key === 'Tab') {
-      handleTab(e, innerParams); // ARROWS - switch focus between buttons
+      handleTab(e, innerParams); 
     } else if ([...arrowKeysNextButton, ...arrowKeysPreviousButton].includes(e.key)) {
-      handleArrows(e.key); // ESC
+      handleArrows(e.key); 
     } else if (e.key === 'Escape') {
       handleEsc(e, innerParams, dismissWith);
     }
   };
 
   const handleEnter = (instance, e, innerParams) => {
-    // #720 #721
     if (e.isComposing) {
       return;
     }
 
     if (e.target && instance.getInput() && e.target.outerHTML === instance.getInput().outerHTML) {
       if (['textarea', 'file'].includes(innerParams.input)) {
-        return; // do not submit
+        return; 
       }
 
       clickConfirm();
@@ -2767,10 +2549,8 @@
     }
 
     if (!e.shiftKey) {
-      // Cycle to the next button
       setFocus(innerParams, btnIndex, 1);
     } else {
-      // Cycle to the prev button
       setFocus(innerParams, btnIndex, -1);
     }
 
@@ -2808,9 +2588,7 @@
     if (innerParams.toast) {
       handleToastClick(instance, domCache, dismissWith);
     } else {
-      // Ignore click events that had mousedown on the popup but mouseup on the container
-      // This can happen when the user drags a slider
-      handleModalMousedown(domCache); // Ignore click events that had mousedown on the container but mouseup on the popup
+      handleModalMousedown(domCache); 
 
       handleContainerMousedown(domCache);
       handleModalClick(instance, domCache, dismissWith);
@@ -2818,7 +2596,6 @@
   };
 
   const handleToastClick = (instance, domCache, dismissWith) => {
-    // Closing toast by internal click
     domCache.popup.onclick = () => {
       const innerParams = privateProps.innerParams.get(instance);
 
@@ -2835,8 +2612,7 @@
   const handleModalMousedown = domCache => {
     domCache.popup.onmousedown = () => {
       domCache.container.onmouseup = function (e) {
-        domCache.container.onmouseup = undefined; // We only check if the mouseup target is the container because usually it doesn't
-        // have any other direct children aside of the popup
+        domCache.container.onmouseup = undefined; 
 
         if (e.target === domCache.container) {
           ignoreOutsideClick = true;
@@ -2848,7 +2624,7 @@
   const handleContainerMousedown = domCache => {
     domCache.container.onmousedown = () => {
       domCache.popup.onmouseup = function (e) {
-        domCache.popup.onmouseup = undefined; // We also need to check if the mouseup target is a child of the popup
+        domCache.popup.onmouseup = undefined; 
 
         if (e.target === domCache.popup || domCache.popup.contains(e.target)) {
           ignoreOutsideClick = true;
@@ -2887,12 +2663,12 @@
     globalState.currentInstance = this;
     const innerParams = prepareParams(userParams, mixinParams);
     setParameters(innerParams);
-    Object.freeze(innerParams); // clear the previous timer
+    Object.freeze(innerParams); 
 
     if (globalState.timeout) {
       globalState.timeout.stop();
       delete globalState.timeout;
-    } // clear the restore focus timeout
+    } 
 
 
     clearTimeout(globalState.restoreFocusTimeout);
@@ -2904,7 +2680,7 @@
 
   const prepareParams = (userParams, mixinParams) => {
     const templateParams = getTemplateParams(userParams);
-    const params = Object.assign({}, defaultParams, mixinParams, templateParams, userParams); // precedence is described in #2131
+    const params = Object.assign({}, defaultParams, mixinParams, templateParams, userParams); 
 
     params.showClass = Object.assign({}, defaultParams.showClass, params.showClass);
     params.hideClass = Object.assign({}, defaultParams.hideClass, params.hideClass);
@@ -2913,7 +2689,6 @@
 
   const swalPromise = (instance, domCache, innerParams) => {
     return new Promise((resolve, reject) => {
-      // functions to handle all closings/dismissals
       const dismissWith = dismiss => {
         instance.closePopup({
           isDismissed: true,
@@ -2937,7 +2712,7 @@
       handleInputOptionsAndValue(instance, innerParams);
       openPopup(innerParams);
       setupTimer(globalState, innerParams, dismissWith);
-      initFocus(domCache, innerParams); // Scroll container to top on open (#1247, #1946)
+      initFocus(domCache, innerParams); 
 
       setTimeout(() => {
         domCache.container.scrollTop = 0;
@@ -2976,7 +2751,6 @@
         show(timerProgressBar);
         setTimeout(() => {
           if (globalState$$1.timeout && globalState$$1.timeout.running) {
-            // timer can be already stopped or unset at this point
             animateTimerProgressBar(innerParams.timer);
           }
         });
@@ -3023,10 +2797,6 @@
     }
   };
 
-  /**
-   * Updates popup parameters.
-   */
-
   function update(params) {
     const popup = getPopup();
     const innerParams = privateProps.innerParams.get(this);
@@ -3035,7 +2805,7 @@
       return warn("You're trying to update the closed or closing popup, that won't work. Use the update() method in preConfirm parameter or show a new popup.");
     }
 
-    const validUpdatableParams = {}; // assign valid params from `params` to `defaults`
+    const validUpdatableParams = {}; 
 
     Object.keys(params).forEach(param => {
       if (Swal.isUpdatableParameter(param)) {
@@ -3061,16 +2831,16 @@
     const innerParams = privateProps.innerParams.get(this);
 
     if (!innerParams) {
-      disposeWeakMaps(this); // The WeakMaps might have been partly destroyed, we must recall it to dispose any remaining weakmaps #2335
+      disposeWeakMaps(this); 
 
-      return; // This instance has already been destroyed
-    } // Check if there is another Swal closing
+      return; 
+    } 
 
 
     if (domCache.popup && globalState.swalCloseEventFinishedCallback) {
       globalState.swalCloseEventFinishedCallback();
       delete globalState.swalCloseEventFinishedCallback;
-    } // Check if there is a swal disposal defer timer
+    } 
 
 
     if (globalState.deferDisposalTimer) {
@@ -3086,18 +2856,17 @@
   }
 
   const disposeSwal = instance => {
-    disposeWeakMaps(instance); // Unset this.params so GC will dispose it (#1569)
+    disposeWeakMaps(instance); 
 
-    delete instance.params; // Unset globalState props so GC will dispose globalState (#1569)
+    delete instance.params; 
 
     delete globalState.keydownHandler;
-    delete globalState.keydownTarget; // Unset currentInstance
+    delete globalState.keydownTarget; 
 
     delete globalState.currentInstance;
   };
 
   const disposeWeakMaps = instance => {
-    // If the current instance is awaiting a promise result, we keep the privateMethods to call them once the promise result is retrieved #2335
     if (instance.isAwaitingPromise()) {
       unsetWeakMaps(privateProps, instance);
       privateProps.awaitingPromise.set(instance, true);
@@ -3115,7 +2884,7 @@
 
 
 
-  var instanceMethods = /*#__PURE__*/Object.freeze({
+  var instanceMethods = Object.freeze({
     hideLoading: hideLoading,
     disableLoading: hideLoading,
     getInput: getInput$1,
@@ -3141,7 +2910,6 @@
 
   class SweetAlert {
     constructor() {
-      // Prevent run in Node env
       if (typeof window === 'undefined') {
         return;
       }
@@ -3165,7 +2933,7 @@
       const promise = this._main(this.params);
 
       privateProps.promise.set(this, promise);
-    } // `catch` cannot be the name of a module export, so we define our thenable methods here instead
+    } 
 
 
     then(onFulfilled) {
@@ -3178,12 +2946,12 @@
       return promise.finally(onFinally);
     }
 
-  } // Assign instance methods from src/instanceMethods/*.js to prototype
+  } 
 
 
-  Object.assign(SweetAlert.prototype, instanceMethods); // Assign static methods from src/staticMethods/*.js to constructor
+  Object.assign(SweetAlert.prototype, instanceMethods); 
 
-  Object.assign(SweetAlert, staticMethods); // Proxy to instance methods to constructor, for now, for backwards compatibility
+  Object.assign(SweetAlert, staticMethods); 
 
   Object.keys(instanceMethods).forEach(key => {
     SweetAlert[key] = function () {
