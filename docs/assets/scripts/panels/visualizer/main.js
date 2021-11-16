@@ -400,8 +400,12 @@ var RegexVisualizerPanel = function (options) {
                         document.querySelector("#visualizer-iframe-copy .copy-iframe>i").className = "fas fa-check";
                         document.querySelector("#visualizer-iframe-copy .iframe-copier").classList.add("copied");
                         setTimeout(function () {
-                            document.querySelector("#visualizer-iframe-copy .copy-iframe>i").className = "far fa-copy";
-                            document.querySelector("#visualizer-iframe-copy .iframe-copier").classList.remove("copied");
+                            let icon_copy = document.querySelector("#visualizer-iframe-copy .copy-iframe>i");
+                            let iframe_copier = document.querySelector("#visualizer-iframe-copy .iframe-copier");
+                            if (icon_copy && iframe_copier) {
+                                icon_copy = "far fa-copy";
+                                iframe_copier.classList.remove("copied");
+                            }
                         }, 1000);
                     });
                     let { $img, rectBackground, updateBackgroundStyle } = generateImageOn(
