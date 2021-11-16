@@ -3,7 +3,7 @@
 
 <head>
     {% include head/meta.html %}
-    {% include head/base_styles_scripts.html %}
+    {% include head/base_styles.html %}
 
     <!-- STYLES -->
     {% if page.includes_head %}
@@ -28,7 +28,9 @@
         {% endfor %}
     {% endif %}
     
-    
+    <!-- VENDORS SCRIPTS -->
+    {% include head/base_scripts.html %}
+
     <!-- SCRIPTS -->
     {% include editor/scripts.html %}
 

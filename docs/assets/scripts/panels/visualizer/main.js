@@ -214,7 +214,7 @@ var RegexVisualizerPanel = function (options) {
         return "data:image/png," + encodeURIComponent(svgAsXML);
     }
 
-    const generateImageOn = async ($canvas, $img, $anchor) => {
+    const generateImageOn = async ($canvas, $img, $anchor, imageType="svg") => {
         //Use raphael.export to fetch the SVG from the paper
         // let svg = paper.toSVG();
         let $svg = paper.canvas.cloneNode(true);
@@ -230,7 +230,7 @@ var RegexVisualizerPanel = function (options) {
         let rectBackground = svgViewContainer.firstElementChild;
         rectBackground.style.stroke = "none";
         rectBackground.style.strokeWidth = "";
-        const updateBackgroundStyle = (rectBack, fill = "", stroke = "", strokeWidth = "") => {
+        const updateBackgroundStyle = (rectBack, _imageType, fill = "", stroke = "", strokeWidth = "") => {
             rectBack.style.fill = fill || rectBack.style.fill || rectBack.getAttribute("fill");
             rectBack.style.stroke = stroke || rectBack.style.stroke || rectBack.getAttribute("stroke");
             rectBack.style.strokeWidth = strokeWidth || rectBack.style.strokeWidth || rectBack.getAttribute("stroke-width");
@@ -242,44 +242,68 @@ var RegexVisualizerPanel = function (options) {
             // Due to a bug because is duplicated
             $svg.removeAttribute("xmlns:xlink");
 
-            let svgOuter = $svg.outerHTML;
-            //Use canvg to draw the SVG onto the empty canvas
-            // Legacy Version
-            // canvgv2($canvas, svgOuter, {
-            //     ignoreAnimation: freeze,
-            //     ignoreMouse: freeze,
-            //     // renderCallback() {
-            //     //     renderSource(svg);
-            //     // }
-            // });
 
-            // New version
-            // const canVinst = await canvg.Canvg.from(ctx, svgOuter);
-            // canVinst.resize(w * ratio, h * ratio, custom.preserveAspectRatio.value);
-            // // With Animations elements from the SVG
-            // // await v.start();
-            // // No animations (Normal render)
-            // await canVinst.render();
+            // Choose the image extension
+            if (_imageType === "svg") {
+                let url_blob = _exportAsImgSVG($svg)
+                $img.setAttribute('src', url_blob);
+                $anchor.setAttribute('href', url_blob);
+            }
+            if (_imageType === "png") {
+                // Old Method
+                // let img = new Image;
+                // img.width = w;
+                // img.height = h;
+                // img.setAttribute('src', _exportAsImgSVG($svg));
 
-            // //fetch the dataURL from the canvas and set it as src on the image
-            // let dataURL = $canvas.toDataURL("image/png");
-            // $img.setAttribute("src", dataURL);
+                let svgOuter = $svg.outerHTML;
 
-            // Old Method
-            let img = new Image;
-            img.width = w;
-            img.height = h;
+                //Use canvg to draw the SVG onto the empty canvas
+                // Legacy Version
+                canvgv2($canvas, svgOuter, {
+                    ignoreAnimation: true,
+                    ignoreMouse: true,
+                    // renderCallback() {
+                    //     renderSource(svg);
+                    // }
+                });
+                
 
-            var ctx = $canvas.getContext("2d");
-            ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-            img.onload = function () {
-                ctx.drawImage(img, 0, 0);
-            };
-            let url_blob = _exportAsImgSVG($svg)
-            $img.setAttribute('src', url_blob);
-            $anchor.setAttribute('href', url_blob);
+                // var ctx = $canvas.getContext("2d");
+                // ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+                // img.onload = function () {
+                //     ctx.drawImage(img, 0, 0);
+                // };
+
+                // New version
+                const getPng = async () => {
+                    var ctx = $canvas.getContext("2d");
+                    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+                    const canVinst = await canvg.Canvg.from(ctx, svgOuter);
+                    canVinst.resize(w * ratio, h * ratio, "xMidYMid meet");
+                    // With Animations elements from the SVG
+                    // await v.start();
+                    // No animations (Normal render)
+                    await canVinst.render();
+
+                    // Get the image data
+                    //fetch the dataURL from the canvas and set it as src on the image
+                    let url_blob = $canvas.toDataURL("image/png");
+                    // let url_blob = _exportAsImgPNG($svg)
+                    $img.setAttribute('src', url_blob);
+                    $anchor.setAttribute('href', url_blob);
+                }
+
+
+                // Get the image data
+                //fetch the dataURL from the canvas and set it as src on the image
+                let url_blob = $canvas.toDataURL("image/png");
+                // let url_blob = _exportAsImgPNG($svg)
+                $img.setAttribute('src', url_blob);
+                $anchor.setAttribute('href', url_blob);
+            }
         }
-        updateBackgroundStyle(rectBackground);
+        updateBackgroundStyle(rectBackground, imageType);
 
         return {
             $img: $img,
@@ -295,6 +319,36 @@ var RegexVisualizerPanel = function (options) {
             }
         });
 
+        exportBtn.addEventListener("click", (event) => {
+
+            Swal.fire({
+                title: 'Share the Image Graph (PNG)!',
+                icon: "info",
+                iconHtml: `<span class="sweetalert-icon material-icons">share</span>`,
+                html: `
+                <canvas style="display:none; width: 100%; height: unset;" id="export-image"></canvas>
+                
+                <a class="anchor-export-img" href="" download="graph-regex.png"><img id="exported-img" src=""><span><i class="fas fa-download"></i>PNG</span></a>
+                `,
+                showCancelButton: true,
+                showConfirmButton: false,
+                showCloseButton: true,
+                cancelButtonText: 'Close',
+                didOpen: () => {
+                    Swal.showLoading();
+
+                    let { $img, rectBackground, updateBackgroundStyle } = generateImageOn(
+                        document.querySelector("canvas#export-image"),
+                        document.querySelector("img#exported-img"),
+                        document.querySelector("img#exported-img").parentElement,
+                        imageType="png"
+                    );
+
+                    Swal.hideLoading();
+                }
+            });
+
+        }); 
         // dragGraphListeners(document.getElementById('visualizer-graph'));
 
         // exportBtn.addEventListener('click', function () {
@@ -330,11 +384,11 @@ var RegexVisualizerPanel = function (options) {
                 </div>
                 <canvas style="display:none; width: 100%; height: unset;" id="export-image"></canvas>
                 
-                <a class="anchor-export-img" href="" download="graph-regex.png"><img id="exported-img" src=""><span><i class="fas fa-download"></i>PNG</span></a>
+                <a class="anchor-export-img" href="" download="graph-regex.png"><img id="exported-img" src=""><span><i class="fas fa-download"></i>SVG</span></a>
                 `,
                 showCancelButton: true,
                 showConfirmButton: false,
-                // showCloseButton: true,
+                showCloseButton: true,
                 cancelButtonText: 'Close',
                 didOpen: () => {
                     Swal.showLoading();
@@ -353,7 +407,8 @@ var RegexVisualizerPanel = function (options) {
                     let { $img, rectBackground, updateBackgroundStyle } = generateImageOn(
                         document.querySelector("canvas#export-image"),
                         document.querySelector("img#exported-img"),
-                        document.querySelector("img#exported-img").parentElement
+                        document.querySelector("img#exported-img").parentElement,
+                        imageType="svg"
                     );
 
                     Swal.hideLoading();

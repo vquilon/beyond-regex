@@ -250,7 +250,7 @@ var EditorParser = (options) => {
             Swal.fire({
                 title: 'Share your visual regex',
                 html: `
-                <div id="visualizer-iframe-copy" class="container-copy">
+                <div id="beyond-regex-iframe-copy" class="container-copy">
                     <div class="iframe-copier">
                         <div class="iframe-content">
                             <span>${iframeLinkLiteral}</span>
@@ -265,8 +265,25 @@ var EditorParser = (options) => {
                 iconHtml: `<span class="sweetalert-icon material-icons">share</span>`,
                 showCancelButton: true,
                 showConfirmButton: false,
-                // showCloseButton: true,
+                showCloseButton: true,
                 cancelButtonText: 'Close',
+                didOpen: () => {
+                    Swal.showLoading();
+
+                    // Listeners button copy
+                    document.querySelector("#beyond-regex-iframe-copy button.copy-iframe").addEventListener("click", function () {
+                        navigator.clipboard.writeText(iframeLink);
+
+                        document.querySelector("#beyond-regex-iframe-copy .copy-iframe>i").className = "fas fa-check";
+                        document.querySelector("#beyond-regex-iframe-copy .iframe-copier").classList.add("copied");
+                        setTimeout(function () {
+                            document.querySelector("#beyond-regex-iframe-copy .copy-iframe>i").className = "far fa-copy";
+                            document.querySelector("#beyond-regex-iframe-copy .iframe-copier").classList.remove("copied");
+                        }, 1000);
+                    });
+
+                    Swal.hideLoading();
+                }
             });
         });
 
@@ -294,10 +311,10 @@ var EditorParser = (options) => {
             document.body.className += " embed";
         }
 
-        if (params.embed || params.cmd === "export") {
-            var embedFooterLink = document.getElementById("embedFooterLink");
-            embedFooterLink.href = `${document.location.origin}${document.location.pathname}` + location.hash.replace(/\bembed=true\b/ig, "").replace(/\bcmd=export\b/ig, '');
-        }
+        // if (params.embed || params.cmd === "export") {
+        //     var embedFooterLink = document.getElementById("embedFooterLink");
+        //     embedFooterLink.href = `${document.location.origin}${document.location.pathname}` + location.hash.replace(/\bembed=true\b/ig, "").replace(/\bcmd=export\b/ig, '');
+        // }
 
         if (params.flags) {
             setFlags(params.flags);

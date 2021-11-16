@@ -1,5 +1,5 @@
 <div id="sidebar-overlay"></div>
-<span id="close-side"></span>
+
 <div id="sidebar">
     <div class="container-heading">
         <div class="heading">
@@ -8,46 +8,25 @@
                 <span class="version">alpha</span>
                 <em>Born to Be a RegEx editor or Beyond</em>
             </div>
-            <!-- social icons -->
-            <div class="social-icons">
-                <a href="https://codepen.io/vquilon" class="social-icon social-icon--codepen">
-                    <i class="fab fa-codepen"></i>
-                    <div class="tooltip">Codepen</div>
-                </a>
-                <a href="https://github.com/vquilon" class="social-icon social-icon--github">
-                    <i class="fab fa-github"></i>
-                    <div class="tooltip">Github</div>
-                </a>
-                <!-- <a class="social-icon social-icon--twitter">
-                    <i class="fab fa-twitter"></i>
-                    <div class="tooltip">Twitter</div>
-                </a>
-                <a class="social-icon social-icon--dribbble">
-                    <i class="fab fa-dribbble"></i>
-                    <div class="tooltip">Dribbble</div>
-                </a>
-                <a class="social-icon social-icon--instagram">
-                    <i class="fab fa-instagram"></i>
-                    <div class="tooltip">Instagram</div>
-                </a> -->
-                <a href="https://www.linkedin.com/in/vquilonr-291194/" class="social-icon social-icon--linkedin">
-                    <i class="fab fa-linkedin-in"></i>
-                    <div class="tooltip">LinkedIn</div>
-                </a>
-                <!-- <a class="social-icon social-icon--facebook">
-                    <i class="fab fa-facebook"></i>
-                    <div class="tooltip">Facebook</div>
-                </a> -->
-            </div>
-
-            <section id="sections">
-                <a href="{{ site.baseurl }}/" id="main-editor"><img src="{{ site.baseurl }}/assets/images/logo.png"></img></a>
-                <a href="{{ site.baseurl }}/building" id="account" class="building"><i class="fas fa-laptop-code"></i></a>
-                <a href="{{ site.baseurl }}/building" id="library" class="building"><i class="fas fa-laptop-code"></i></a>
-                <a href="{{ site.baseurl }}/building" id="builder" class="building"><i class="fas fa-laptop-code"></i></a>
-            </section>
-
-            {% include sidebar/footer.html %}
         </div>
+
+        <section id="sections">
+            <a title="Beyond Regex" href="{{ site.baseurl }}/" id="main-editor">
+                <img src="{{ site.baseurl }}/assets/images/logo.png"></img>
+            </a>
+            <a title="Regex Builder" id="account" class="building">
+                <i class="fas fa-hammer"></i>
+            </a>
+            <a title="Regex Library" id="library" class="building">
+                <i class="fas fa-book-open"></i>
+            </a>
+            <a title="Account" id="builder" class="building">
+                <i class="fas fa-user-circle"></i>
+            </a>
+        </section>
+
+        {% include sidebar/footer.html %}
+
     </div>
+    <span title="Toogle sidebar" id="close-side"></span>
 </div>
