@@ -78,11 +78,35 @@ h2#noscript {
 
 #close-side {
     width: 0.5em;
+    position: relative;
     flex: none;
     height: 100vh;
+    overflow: visible;
     z-index: 300;
     cursor: pointer;
+    transition: transform 0.3s;
+}
+
+span#close-side:after {
+    content: "(.*)";
+    position: absolute;
+    color: white;
+    z-index: 1;
+}
+
+#close-side:before {
+    content: "";
     background: linear-gradient( 315deg, #03a9f4, #ff0058);
+    width: 0.5em;
+    height: 100vh;
+    position: absolute;
+    z-index: -1;
+    transition: transform 0.3s;
+}
+
+#container-main:not(.menu-open) span#close-side:hover:before {
+    transform: scaleX(5);
+    transform-origin: left;
 }
 
 #container-main>#sidebar-overlay {
@@ -115,7 +139,7 @@ h2#noscript {
     backdrop-filter: blur(10px);
     /* border-right: solid 5px white; */
     box-shadow: 0 5px 25px 5px black;
-    overflow: hidden;
+    /* overflow: hidden; */
     z-index: 50;
     display: flex;
     flex-direction: row;
@@ -266,7 +290,6 @@ h2#noscript {
     font-size: 3em;
     color: white;
 }
-
 
 #sidebar .container-heading section#sections a img {
     width: 100%;
@@ -493,7 +516,9 @@ h2#noscript {
     transform: translateX(-100px);
     transition: transform 0.5s cubic-bezier(0.3, 0.3, 0.6, 1.4);
 }
+
 /* FIXING SCREENS LESS OF MAX SIZE SIDEBAR */
+
 @media (max-width: 450px) {
     #container-main.menu-open #sidebar {
         left: 0;
