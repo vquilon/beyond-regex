@@ -1,1 +1,135 @@
-#connection-status-box{--normal-height:50px;--minimized-height:30px;--padding-sides:20px;position:fixed;width:100%;height:calc(var(--normal-height) + var(--minimized-height));bottom:0;box-sizing:border-box;padding:0 var(--padding-sides);background:#00000080;color:#fff;font-family:VictorMono;font-size:20px;line-height:20px;font-weight:700;display:flex;flex-wrap:nowrap;flex-direction:column;align-items:stretch;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(10px);z-index:201;transform:translateY(calc(var(--normal-height) + var(--minimized-height)));transition:background .2s linear,transform .2s linear,padding .2s linear}#connection-status-box #box-connect{display:flex;flex-wrap:nowrap;flex-direction:row;align-content:center;align-items:center}#connection-status-box #box-minimized{display:flex;flex-direction:row;flex-wrap:nowrap;justify-content:flex-end}#connection-status-box #box-minimized button#connection-arrow{margin:0;padding:0;width:var(--minimized-height);height:var(--minimized-height);font-size:var(--minimized-height);transition:transform .2s linear}#connection-status-box #box-connect #box-show #offline-button:disabled{background:linear-gradient(315deg,#7a7a7a,grey)}#connection-status-box #box-connect #box-info{height:100%;width:60%;padding-left:var(--padding-sides);display:flex;align-items:center}#connection-status-box #box-connect #box-show button#offline-button{padding:0;margin:0;font-size:30px;height:40px;width:40px;color:#fff;background:linear-gradient(315deg,#03a9f4,#ff0058);border-radius:50%}#connection-status-box #offline-info,#connection-status-box #online-info{display:none}#connection-status-box.offline{transform:translateY(0);background:#ff006690}#connection-status-box.offline #box-connect #box-show{opacity:1}#connection-status-box.offline #offline-info{display:block}#connection-status-box.offline #online-info{display:none}#connection-status-box.online{transform:translateY(0);background:#00ffa090}#connection-status-box.online #online-info{display:block}#connection-status-box.online #offline-info{display:none}#connection-status-box.offline.minimized,#connection-status-box.online.minimized{transform:translateY(calc(var(--normal-height)))}#connection-status-box.minimized #connection-arrow{transform:rotate(180deg)}
+#connection-status-box {
+    --normal-height: 50px;
+    --minimized-height: 30px;
+    --padding-sides: 20px;
+
+    position: fixed;
+    width: 100%;
+    height: calc(var(--normal-height) + var(--minimized-height));
+    bottom: 0;
+    box-sizing: border-box;
+    padding: 0 var(--padding-sides);
+
+    background: #00000080;
+    color: white;
+
+    font-family: VictorMono;
+    font-size: 20px;
+    line-height: 20px;
+    font-weight: bold;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: stretch;
+
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(10px);
+
+    z-index: 201;
+
+    transform: translateY(calc(var(--normal-height) + var(--minimized-height)));
+
+    transition: background 0.2s linear, transform 0.2s linear, padding 0.2s linear;
+}
+
+#connection-status-box #box-connect {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+
+}
+#connection-status-box #box-minimized {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+}
+#connection-status-box #box-minimized button#connection-arrow {
+    margin: 0;
+    padding: 0;
+    width: var(--minimized-height);
+    height: var(--minimized-height);
+    font-size: var(--minimized-height);
+
+    transition: transform 0.2s linear;
+
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+#connection-status-box #box-connect #box-show #offline-button:disabled {
+    background: linear-gradient(315deg, #7a7a7a, #808080);
+    cursor: not-allowed;
+}
+
+#connection-status-box #box-connect #box-info {
+    height: 100%;
+    width: 60%;
+
+    padding-left: var(--padding-sides);;
+
+    display: flex;
+    align-items: center;
+}
+
+#connection-status-box #box-connect #box-show button#offline-button {
+    padding: 0;
+    margin: 0;
+
+    font-size: 30px;
+    height: 40px;
+    width: 40px;
+    border: none;
+    cursor: pointer;
+
+    color: white;
+    background: linear-gradient(315deg, #03a9f4, #ff0058);
+    border-radius: 50%;
+}
+
+
+#connection-status-box #offline-info, #connection-status-box #online-info {
+    display: none;
+}
+
+#connection-status-box.offline {
+    transform: translateY(0);
+
+    background: #ff006690;
+}
+#connection-status-box.offline #box-connect #box-show {
+    opacity: 1;
+}
+#connection-status-box.offline #offline-info {
+    display: block;
+}
+#connection-status-box.offline #online-info {
+    display: none;
+}
+
+
+#connection-status-box.online {
+    transform: translateY(0);
+
+    background: #00ffa090;
+}
+
+#connection-status-box.online #online-info {
+    display: block;
+}
+#connection-status-box.online #offline-info {
+    display: none;
+}
+
+#connection-status-box.offline.minimized, #connection-status-box.online.minimized{
+    transform: translateY(calc(var(--normal-height)));
+}
+
+#connection-status-box.minimized #connection-arrow{
+    transform: rotate(180deg);
+}

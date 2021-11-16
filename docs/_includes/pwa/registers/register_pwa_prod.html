@@ -4,40 +4,54 @@
 
     if ('serviceWorker' in navigator) {
         function createUIPrompt(opts) {
-            Swal.fire({
-                title: 'New version available!',
-                text: "A new update is available. Do you want to update now?",
-                icon: 'info',
-                showCancelButton: true,
-                showCloseButton: true,
-                confirmButtonText: 'Yes, update it!',
-                cancelButtonText: 'No, cancel!',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    opts.onAccept();
-                    Swal.fire(
-                        'Updated',
-                        'Beyond Regex will be updated.',
-                        'success'
-                    )
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    const showCancelInfo = async () => {
-                        const swVersion = await wb.messageSW({ type: 'GET_VERSION' });
+            const showUpdateOption = async () => {
+                const swChangelogNotes = await wb.messageSW({ type: 'GET_CHANGELOG_NEW' });
+                const swActualVersion = await wb.messageSW({ type: 'GET_VERSION' });
+                const swNewVersion = await wb.messageSW({ type: 'GET_VERSION_NEW' });
+                Swal.fire({
+                    title: 'New version available!',
+                    html: `
+                        <p><span style="font-style: italic">Do you want to update now?</span>, <strong>We keep your data saved.</strong></p>
+                        <div style="text-align: left;margin-top: 20px;">
+                            <p>Your version: <span style="text-decoration: line-through; text-decoration-color: red;">${swActualVersion}</span></p>
+                            <p>New version: <span style="text-decoration: underline;">${swNewVersion}</span></p>    
+                        </div>
+                        <div style="text-align: left; background: #80808033; margin-top: 20px; padding: 10px 20px; border-radius: 5px">
+                            Changelog:
+                            <ul style="list-style-position: inside;">
+                                <li>${swChangelogNotes.join("<li>")}
+                            </ul>
+                        </div>
+                    `,
+                    icon: 'question',
+                    showCancelButton: true,
+                    showCloseButton: true,
+                    confirmButtonText: 'Yes, update it!',
+                    cancelButtonText: 'No, cancel!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        opts.onAccept();
                         Swal.fire(
-                            'Cancelled',
-                            `Your Beyond Regex version is ${swVersion}.`,
-                            'info'
+                            'Updating...',
+                            'Beyond Regex will be updated when the page reload, now!',
+                            'success'
                         )
-                    }
-                    showCancelInfo();
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        const showCancelInfo = async () => {
+                            const swVersion = await wb.messageSW({ type: 'GET_VERSION' });
+                            Swal.fire(
+                                'Cancelled',
+                                `Your Service Worker version is ${swVersion}.`,
+                                'info'
+                            )
+                        }
+                        showCancelInfo();
 
-                }
-            });
-        }
-        let actual_url = location.href;
-        if (actual_url.lastIndexOf("index.html") !== -1) {
-            actual_url = actual_url.slice(0, actual_url.length - "index.html".length)
+                    }
+                })
+            }
+            showUpdateOption();
         }
         // const wb = new Workbox(`${actual_url}sw_ga.js`);
         const wb = new Workbox("{{ site.baseurl }}/sw_ga.js");
@@ -80,9 +94,16 @@
                     // that will reload the page as soon as the previously waiting
                     // service worker has taken control.
                     wb.addEventListener('controlling', (event) => {
+                        // En este momento podemos borrar toda la cache
+                        caches.keys().then(cacheNames => {
+                            cacheNames.forEach(cacheName => {
+                                if (!cacheName.endsWith("images") && !cacheName.endsWith("fonts")) {
+                                    caches.delete(cacheName);
+                                }
+                            });
+                        });
                         window.location.reload();
                     });
-
                     wb.messageSkipWaiting();
                 },
 

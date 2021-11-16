@@ -1,0 +1,243 @@
+---
+---
+
+
+#sidebar .container-heading section#sections a.building {
+  position: relative;
+  cursor: wait;
+}
+
+#sidebar .container-heading section#sections a.building:before {
+  content: "";
+  width: 1em;
+  height: 100%;
+  border-radius: 5px;
+  position: absolute;
+  background: linear-gradient(135deg, #ff0 0px, #ff0 10px, #000 10px, #000 20px, #ff0 20px, #ff0 30px, #000 30px, #000 40px, #ff0 40px, #ff0 50px, #000 50px, #000 60px, #ff0 60px, #ff0 70px, #000 70px, #000 80px, #00000000 80px);
+  transform: rotate(45deg);
+
+  background-size: 100px 100px;
+
+  background-position: 100% 50%;
+  transition: background-position 1s;
+  // animation: building 2s ease forwards;
+}
+#sidebar .container-heading section#sections a.building:hover:before {
+  background-position: 0% 50%;
+  // animation: unbuilding 1s ease forwards;
+}
+
+
+#sidebar .container-heading section#sections a.building:after {
+  content: "";
+  width: 1.4em;
+  height: 1.4em;
+  border-radius: 5px;
+  position: absolute;
+  background: repeating-linear-gradient(135deg, #ff0 0px, #ff0 10px, #000 10px, #000 20px);
+  box-shadow: 0 0 10px 2px black;
+  background-size: 100px 100px;
+  transform: rotate(45deg) translateY(-180%);
+
+  background-position: 100% 50%;
+  transition: transform 1s, background-position 1s;
+}
+#sidebar .container-heading section#sections a.building:hover:after {
+  background-position: 0% 50%;
+}
+
+// @keyframes unbuilding {
+// 	from {
+//     background-position: 100% 50%;
+// 	}
+// 	to {
+// 		background-position: 0% 50%;
+// 	}
+// }
+
+// @keyframes building {
+// 	from {
+// 		background-position: 0% 50%;
+// 	}
+// 	to {
+// 		background-position: 100% 50%;
+// 	}
+// }
+
+
+// $bow-top: 50%;
+// $bow-left: 50%;
+
+// @mixin ribbon($dx, $dy, $outer: true) {
+//   $width: 10%;
+//   $hw: $width / 2;
+//   $left: $bow-left;
+//   $top: $bow-top;
+
+//   $bgcoords: (
+//     $left - $hw $dy,
+//     $left + $hw $dy,
+//     $left + $hw $top - $hw,
+//     100% - $dx $top - $hw,
+//     100% - $dx $top + $hw,
+//     $left + $hw $top + $hw,
+//     $left + $hw 100% - $dy,
+//     $left - $hw 100% - $dy,
+//     $left - $hw $top + $hw,
+//     $dx $top + $hw,
+//     $dx $top - $hw,
+//     $left - $hw $top - $hw
+//   );
+
+//   $dy-top-inner: ($dy / $top) * ($dy + 5%);
+//   $dy-bottom-inner: 100% - $dy - ($dy / $top) * (100% - $top - $dy + 5%);
+
+//   $dx-left-inner: ($dx / $left) * (100% - $dx + 5%);
+//   $dx-right-inner: (1 - $dx / $left) * (100% - $dx);
+
+//   $coords: (
+//     $left - $hw $dy + $dy-top-inner,
+//     nth($bgcoords, 1),
+//     nth($bgcoords, 2),
+//     $left + $hw $dy + $dy-top-inner,
+//     $dx-right-inner $top - $hw,
+//     nth($bgcoords, 4),
+//     nth($bgcoords, 5),
+//     $dx-right-inner $top + $hw,
+//     $left + $hw $dy-bottom-inner,
+//     nth($bgcoords, 7),
+//     nth($bgcoords, 8),
+//     $left - $hw $dy-bottom-inner,
+//     $dx-left-inner $top + $hw,
+//     nth($bgcoords, 10),
+//     nth($bgcoords, 11),
+//     $dx-left-inner $top - $hw,
+//     $left - $hw $dy + $dy-top-inner,
+//     $dx-left-inner $top - $hw,
+//     $dx-left-inner $top + $hw,
+//     $left - $hw $dy-bottom-inner,
+//     $left + $hw $dy-bottom-inner,
+//     $dx-right-inner $top + $hw,
+//     $dx-right-inner $top - $hw,
+//     $left + $hw $dy + $dy-top-inner
+//   );
+
+//   @if not $outer {
+//     clip-path: polygon(#{join($bgcoords, (), comma)});
+//   } @else {
+//     clip-path: polygon(#{join($coords, (), comma)});
+//   }
+// }
+
+
+// $button-width: 5em;
+// $button-height: 5em;
+
+// $wrap-width: 32%;
+// $wrap-height: 18%;
+
+
+// $wrap-duration: 0.3s;
+// $ribbon-delay: $wrap-duration / 3;
+// $wrap-delay: $wrap-duration * 1.2;
+// $easing: cubic-bezier(0.77, 0, 0.175, 1);
+
+// $ribbon-color-foreground: #fed531;
+// $ribbon-color-background: #db8b22;
+
+// section#sections a.building {
+//   width: $button-width + $button-height;
+//   height: $button-width + $button-height;
+//   top: calc(50% - #{($button-width + $button-height) / 2});
+
+//   &:before,
+//   &:after {
+//     // display: none;
+//     display: block;
+//     content: "";
+//     position: absolute;
+//     width: $button-width + $button-height;
+//     height: $button-width + $button-height;
+//     top: 0;
+//     left: 0;
+//   }
+
+//   &:before {
+//     @include ribbon($wrap-height, $wrap-width, false);
+//     background: $ribbon-color-background;
+//     z-index: -1;
+//   }
+
+//   &:after {
+//     @include ribbon($wrap-height, $wrap-width, true);
+//     background: $ribbon-color-foreground;
+//     z-index: 2;
+//   }
+//   &:before {
+//     animation: ribbon-before $wrap-duration $ribbon-delay $easing both;
+//   }
+//   &:after {
+//     animation: ribbon-after $wrap-duration $ribbon-delay $easing both;
+//   }
+// }
+
+// section#sections a.building:hover {
+//   // .bow {
+//   //   animation: debow 0.3s 0s cubic-bezier(0.175, 0.885, 0.32, 1.65) both;
+//   // }
+
+//   &:before {
+//     animation: unribbon-before $wrap-duration $easing both;
+//   }
+//   &:after {
+//     animation: unribbon-after $wrap-duration $easing both;
+//   }
+// }
+
+// @keyframes unribbon-before {
+//   0% {
+//     @include ribbon($wrap-height, $wrap-width, false);
+//   }
+//   50% {
+//     @include ribbon(0%, 0%, false);
+//   }
+//   100% {
+//     @include ribbon($wrap-height + 5%, $wrap-width + 5%, false);
+//     display: none;
+//   }
+// }
+
+// @keyframes unribbon-after {
+//   0% {
+//     @include ribbon($wrap-height, $wrap-width, true);
+//   }
+//   50%,
+//   100% {
+//     @include ribbon(0%, 0%, true);
+//     display: none;
+//   }
+// }
+
+// @keyframes ribbon-before {
+//   0% {
+//     @include ribbon($wrap-height + 5%, $wrap-width + 5%, false);
+//     display: none;
+//   }
+//   50% {
+//     @include ribbon(0%, 0%, false);
+//   }
+//   100% {
+//     @include ribbon($wrap-height, $wrap-width, false);
+//   }
+// }
+
+// @keyframes ribbon-after {
+//   0%,
+//   50% {
+//     @include ribbon(0%, 0%, true);
+//     display: none;
+//   }
+//   100% {
+//     @include ribbon($wrap-height, $wrap-width, true);
+//   }
+// }

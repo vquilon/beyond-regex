@@ -75,11 +75,12 @@ feed:
 theme: minima
 plugins:
   - jekyll-sitemap # Create a sitemap using the official Jekyll sitemap gem
-  - jekyll-feed # Create an Atom feed using the official Jekyll feed gem
-  - jekyll-seo-tag
+  # - jekyll-feed # Create an Atom feed using the official Jekyll feed gem
+  # - jekyll-seo-tag
   - jekyll-coffeescript
   - jekyll-github-metadata
   - jekyll-minifier
+  - jekyll-redirect-from
 
 environment: "development"
 

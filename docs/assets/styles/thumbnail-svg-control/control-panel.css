@@ -1,1 +1,0 @@
-.control-panel{pointer-events:none;z-index:10;display:flex;top:-15px;position:relative;margin-left:10px;margin-right:10px;height:20%;column-gap:10px;justify-content:space-between;align-items:flex-end}#graphCt .control-panel{opacity:0;transition:opacity .5s ease,transform .5s ease;transform:translate(0,100px)}#graphCt:hover .control-panel{opacity:1;transform:none}
