@@ -1,16 +1,13 @@
 <!-- Install the PWA Locally -->
 <script type="module" src="https://cdn.jsdelivr.net/npm/@pwabuilder/pwainstall"></script>
-
 <div id="install-popup">
-    <span id="close-install" onclick="document.getElementById('close-install').parentNode.remove(); return false;">
-        <i class="fa fa-times" aria-hidden="true"></i>
-    </span>
-    <!-- <pwa-install id="installComponent" manifestpath="manifest.json"></pwa-install> -->
+<span id="close-install" onclick="document.getElementById('close-install').parentNode.remove(); return false;">
+<i class="fa fa-times" aria-hidden="true"></i>
+</span>
+<!-- <pwa-install id="installComponent" manifestpath="manifest.json"></pwa-install> -->
 </div>
-
-
 <script>
-    window.addEventListener('load', () => {
+window.addEventListener('load', () => {
         // Check to see if the API is supported.
         if ('getInstalledRelatedApps' in navigator) {
             // const {num_apps, app_info} = checkForRelatedApps();

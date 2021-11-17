@@ -1,30 +1,21 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  {% include head/meta.html %}
-  {% include head/base_styles.html %}
-
-  {% include mobile/styles.html %}
-
-  <!-- VENDORS SCRIPTS -->
-  {% include head/base_scripts.html %}
-
-  <!-- SEO tags -->
-  {% seo %}
-
-  <noscript>
-    <h2 id="noscript">Please enable JavaScript in order to use all features</h2>
-  </noscript>
+{% include head/meta.html %} {% include head/base_styles.html %} {% include mobile/styles.html %}
+<!-- VENDORS SCRIPTS -->
+{% include head/base_scripts.html %}
+<!-- SEO tags -->
+{% seo %}
+<noscript>
+<h2 id="noscript">Please enable JavaScript in order to use all features</h2>
+</noscript>
 </head>
-
 <body>
-  <script defer>
-    document.body.classList.add("js-enabled");
-  </script>
-  <div id="container-main">
-    {{ content }}
-  </div>
+<script defer="defer">
+document.body.classList.add("js-enabled");
+</script>
+<div id="container-main">
+{{ content }}
+</div>
 </body>
-
 </html>

@@ -21,9 +21,9 @@ module.exports = function (grunt) {
                 },
                 files: [{
                     expand: true,
-                    // src: ['docs/**/*.html', 'docs/*.html'],
+                    src: ['docs/**/*.html', '!docs/*.html', '!docs/panels/**/*.html'],
                     cwd: '.',
-                    src: ['docs/_includes/scripts.html'],
+                    // src: ['docs/_includes/scripts.html'],
                     // The dest value should be whatever the src glob
                     // pattern is, without the trailing /**/*.html part 
                     dest: 'docs',
@@ -68,7 +68,7 @@ module.exports = function (grunt) {
             prod: { // <-- include a target object
                 files: [{
                     expand: true,
-                    src: ['docs/*.js', 'docs/assets/scripts/**/*.js', '!docs/**/*.min.js'],
+                    src: ['docs/*.js', 'docs/assets/**/*.js', '!docs/**/*.min.js'],
 
                     // The dest value should be whatever the src glob
                     // pattern is, without the trailing /**/*.js part 
@@ -86,7 +86,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '.',
-                    src: ['docs/assets/styles/**/*.css', '!docs/assets/styles/**/*.min.css'],
+                    src: ['docs/assets/**/*.css', '!docs/assets/**/*.min.css'],
                     // The dest value should be whatever the src glob
                     // pattern is, without the trailing /**/*.js part 
                     dest: 'docs',

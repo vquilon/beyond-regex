@@ -12,12 +12,7 @@
     });
   }
 </script> -->
-
-{% if site.environment == "production" %}
-  {% include pwa/registers/register_pwa_prod.html %}
-
-{% else %}
-  {% include pwa/registers/register_pwa_dev.html %}
+{% if site.environment == "production" %} {% include pwa/registers/register_pwa_prod.html %} {% else %} {% include pwa/registers/register_pwa_dev.html %}
 <!-- <script type="module">
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {
@@ -33,7 +28,6 @@
     }
 </script> -->
 {% endif %}
-
 <!-- Registry and Update the PWA -->
 <!-- <script type="module">
   import { pwaupdate } from 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate';

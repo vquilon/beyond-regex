@@ -1,73 +1,47 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <!-- ORDEN CORRECTO DE LAS ETIQUETAS DENTRO DEL HEAD -->
-  <!-- meta charset|http-equiv|viewport -->
-  <!-- title -->
-  <!-- preconnect -->
-  <!-- scripts src="" async -->
-  <!-- css with @import -->
-  <!-- sync js -->
-  <!-- sync css -->
-  <!-- preload -->
-  <!-- script src="" defer -->
-  <!-- prefetch / prerender -->
-  <!-- seo tags (meta, icons, Open graph, etc) -->
-  <!-- noscript -->
-  <!-- template -->
-
-  {% include head/meta.html %}
-
-  {% include head/base_styles.html %}
-  {% include head/building-styles.html %}
-
-  <!-- Estilos propios del PWA -->
-  <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/pwa.css">
-  <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/install-as-app.css">
-
-  {% include panels/visualizer/auxiliar/thumbnail-svg-control/styles.html %}
-  {% include panels/visualizer/styles.html %}
-  {% include editor/circle-selector/styles.html %}
-
-  {% include mobile/styles.html %}
-
-  <!-- VENDORS SCRIPTS -->
-  {% include head/base_scripts.html %}
-
-  <!-- Scripts para el control de la barra de conexion -->
-  {% include offline-status/scripts.html %}
-
-  {% include editor/scripts.html %}
-  <!-- {% include dom-physics-engine/styles.html %} -->
-  {% include panels/visualizer/scripts.html %}
-  {% include panels/visualizer/auxiliar/thumbnail-svg-control/scripts.html %}
-  <!-- {% include dom-physics-engine/scripts.html %} -->
-
-  <script defer src="{{ site.baseurl }}/assets/scripts/init_listeners.js"></script>
-
-  <!-- SEO tags -->
-  {% seo %}
-
-  <noscript>
-    <h2 id="noscript">Please enable JavaScript in order to use all features</h2>
-  </noscript>
+<!-- ORDEN CORRECTO DE LAS ETIQUETAS DENTRO DEL HEAD -->
+<!-- meta charset|http-equiv|viewport -->
+<!-- title -->
+<!-- preconnect -->
+<!-- scripts src="" async -->
+<!-- css with @import -->
+<!-- sync js -->
+<!-- sync css -->
+<!-- preload -->
+<!-- script src="" defer -->
+<!-- prefetch / prerender -->
+<!-- seo tags (meta, icons, Open graph, etc) -->
+<!-- noscript -->
+<!-- template -->
+{% include head/meta.html %} {% include head/base_styles.html %} {% include head/building-styles.html %}
+<!-- Estilos propios del PWA -->
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/pwa.css">
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/install-as-app.css">
+{% include panels/visualizer/auxiliar/thumbnail-svg-control/styles.html %} {% include panels/visualizer/styles.html %} {% include editor/circle-selector/styles.html %} {% include mobile/styles.html %}
+<!-- VENDORS SCRIPTS -->
+{% include head/base_scripts.html %}
+<!-- Scripts para el control de la barra de conexion -->
+{% include offline-status/scripts.html %} {% include editor/scripts.html %}
+<!-- {% include dom-physics-engine/styles.html %} -->
+{% include panels/visualizer/scripts.html %} {% include panels/visualizer/auxiliar/thumbnail-svg-control/scripts.html %}
+<!-- {% include dom-physics-engine/scripts.html %} -->
+<script defer="defer" src="{{ site.baseurl }}/assets/scripts/init_listeners.js"></script>
+<!-- SEO tags -->
+{% seo %}
+<noscript>
+<h2 id="noscript">Please enable JavaScript in order to use all features</h2>
+</noscript>
 </head>
-
 <body>
-  <script defer>
-    document.body.classList.add("js-enabled");
-  </script>
-
-  {% include pwa/register_pwa.html %}
-  {% include pwa/install_as_app.html %}
-
-  {% include svg-utils/svg-filters.html %}
-  <div id="container-main">
-    {{ content }}
-  </div>
-
-  {% include offline-status/connection-box.html %}
+<script defer="defer">
+document.body.classList.add("js-enabled");
+</script>
+{% include pwa/register_pwa.html %} {% include pwa/install_as_app.html %} {% include svg-utils/svg-filters.html %}
+<div id="container-main">
+{{ content }}
+</div>
+{% include offline-status/connection-box.html %}
 </body>
-
 </html>
