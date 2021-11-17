@@ -7,7 +7,7 @@ var EditorParser = (options) => {
     var $flags = document.getElementsByName('flag');
 
     var $iframeBtn = document.querySelector('#iframeIt');
-    
+
     let raphaelJSONId = options.raphaelJSONId || "raphael-json";
     let regexSONId = options.regexSONId || "regex-json";
 
@@ -18,6 +18,24 @@ var EditorParser = (options) => {
         $editorError.style.display = 'none';
     }
     var showError = function (re, err) {
+        const fireError = async () => {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-right',
+                iconColor: 'white',
+                customClass: {
+                    popup: 'colored-toast'
+                },
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true
+            })
+            await Toast.fire({
+                icon: 'error',
+                title: 'Error: See the editor console error!'
+            });
+        }
+        fireError();
         $editorError.style.display = 'block';
         var msg_re = [];
         var msg_def = [];
@@ -28,7 +46,7 @@ var EditorParser = (options) => {
         msg_def.push("Error:" + err.message);
         msg_def.push("");
         $editorError.querySelector(".errorBox").style.setProperty("--position-error-ch", `${err.lastIndex}ch`)
-        
+
         setInnerText($editorError.querySelector(".errorBox"), msg_re.join("\n"));
         setInnerText($editorError.querySelector(".errorDef"), msg_def.join("\n"));
     }
@@ -156,7 +174,7 @@ var EditorParser = (options) => {
         return regEXSON
     };
 
-    const parseSharedRegex = (regExpresion, language_selected="python") => {
+    const parseSharedRegex = (regExpresion, language_selected = "python") => {
         // Aqui se realiza el parseo
         var skipError = false;
         // if ( !NONEDITOR ) hideError();
@@ -244,7 +262,7 @@ var EditorParser = (options) => {
             <iframe frameborder="0" width="500px" height="300px"
             src="${src}#!embed=true&flags=${getFlags()}&re=${encodeURIComponent(re)}">
             </iframe>`
-            ;
+                ;
 
             const iframeLinkLiteral = escapeHTML(iframeLink);
             Swal.fire({
@@ -307,7 +325,7 @@ var EditorParser = (options) => {
             }
         }
     }
-    if ( !NONEDITOR ) {
+    if (!NONEDITOR) {
         initEventsListener();
 
         var params = getParams();
@@ -327,7 +345,7 @@ var EditorParser = (options) => {
             setInputValue(params.re);
         }
     }
-    
+
 
     return {
         parseSharedRegex: parseSharedRegex,
