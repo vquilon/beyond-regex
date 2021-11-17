@@ -8,14 +8,20 @@
                 const swChangelogNotes = await wb.messageSW({ type: 'GET_CHANGELOG_NEW' });
                 const swActualVersion = await wb.messageSW({ type: 'GET_VERSION' });
                 const swNewVersion = await wb.messageSW({ type: 'GET_VERSION_NEW' });
+                
+                let versionDiff = `
+                <div style="text-align: left;margin-top: 20px;">
+                    <p>Your version: <span style="text-decoration: line-through; text-decoration-color: red;">${swActualVersion}</span></p>
+                    <p>New version: <span style="text-decoration: underline;">${swNewVersion}</span></p>    
+                </div>`
+                if ( swActualVersion === swNewVersion ) {
+                    versionDiff = ``;
+                }
                 Swal.fire({
                     title: 'New version available!',
                     html: `
                         <p><span style="font-style: italic">Do you want to update now?</span>, <strong>We keep your data saved.</strong></p>
-                        <div style="text-align: left;margin-top: 20px;">
-                            <p>Your version: <span style="text-decoration: line-through; text-decoration-color: red;">${swActualVersion}</span></p>
-                            <p>New version: <span style="text-decoration: underline;">${swNewVersion}</span></p>    
-                        </div>
+                        ${versionDiff}
                         <div style="text-align: left; background: #80808033; margin-top: 20px; padding: 10px 20px; border-radius: 5px">
                             Changelog:
                             <ul style="list-style-position: inside;">
@@ -53,7 +59,7 @@
             }
             showUpdateOption();
         }
-        // const wb = new Workbox(`${actual_url}sw_ga.js`);
+
         const wb = new Workbox("{{ site.baseurl }}/sw_ga.js");
         let registration;
 

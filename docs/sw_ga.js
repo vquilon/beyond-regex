@@ -7,15 +7,13 @@ importScripts('./changelog.js');
 const SW_VERSION = '0.0.alpha';
 const SW_BUILD = '14'
 
-const CACHE_IMAGES = "pwa-beyond_regex-images";
-const CACHE_FONTS = "pwa-beyond_regex-fonts";
-const CACHE_VERSIONED = `pwa-beyond_regex-v${SW_VERSION}`;
-// const urlsToCache = [
+const CACHE_IMAGES = "beyond_regex-images";
+const CACHE_FONTS = "beyond_regex-fonts";
+const CACHE_VERSIONED = `beyond_regex-v${SW_VERSION}.${SW_BUILD}`;
 
-// ];
 
-// Force production builds
-workbox.setConfig({ debug: false });
+// Force development  builds
+workbox.setConfig({ debug: true });
 
 workbox.core.setCacheNameDetails({
   prefix: 'beyond-regex',
@@ -33,43 +31,43 @@ self.addEventListener("message", (event) => {
     event.ports[0].postMessage(`${SW_VERSION}.${SW_BUILD}`);
   }
   if (event.data && event.data.type === 'GET_VERSION_NEW') {
-    let lastVersion = Object.keys(CHANGELOG).sort(function(a, b) {
+    let lastVersion = Object.keys(CHANGELOG).sort(function (a, b) {
       return parseInt(a) - parseInt(b);
     });
     // Ultima version
     lastVersion = lastVersion[lastVersion.length - 1]
-    let lastBuild = Object.keys(CHANGELOG[lastVersion]).sort(function(a, b) {
+    let lastBuild = Object.keys(CHANGELOG[lastVersion]).sort(function (a, b) {
       return parseInt(a) - parseInt(b);
     });
 
     // Ultimo build
     lastBuild = lastBuild[lastBuild.length - 1]
-    
+
     event.ports[0].postMessage(`${lastVersion}.${lastBuild}`);
   }
   if (event.data && event.data.type === 'GET_CHANGELOG') {
     event.ports[0].postMessage(CHANGELOG[SW_VERSION][SW_BUILD]);
   }
   if (event.data && event.data.type === 'GET_CHANGELOG_NEW') {
-    let lastVersion = Object.keys(CHANGELOG).sort(function(a, b) {
+    let lastVersion = Object.keys(CHANGELOG).sort(function (a, b) {
       return parseInt(a) - parseInt(b);
     });
     // Ultima version
     lastVersion = lastVersion[lastVersion.length - 1]
-    let lastBuild = Object.keys(CHANGELOG[lastVersion]).sort(function(a, b) {
+    let lastBuild = Object.keys(CHANGELOG[lastVersion]).sort(function (a, b) {
       return parseInt(a) - parseInt(b);
     });
 
     // Ultimo build
     lastBuild = lastBuild[lastBuild.length - 1]
-    
+
     event.ports[0].postMessage(CHANGELOG[lastVersion][lastBuild]);
   }
   if (event.data && event.data.type === "SKIP_WAITING") {
     self.skipWaiting();
   }
   if (event.data && event.data.type === 'CACHE_UPDATED') {
-    const {updatedURL} = event.data.payload;
+    const { updatedURL } = event.data.payload;
     console.log(`A newer version of ${updatedURL} is available!`);
   }
 });
@@ -85,9 +83,11 @@ self.addEventListener("message", (event) => {
 //   );
 // });
 
-if (workbox.navigationPreload.isSupported()) {
-  workbox.navigationPreload.enable();
-}
+// Developers who are already handling navigations by responding with precached HTML
+// We use the local cache to handle the differents versions
+// if (workbox.navigationPreload.isSupported()) {
+//   workbox.navigationPreload.enable();
+// }
 
 
 // PRECACHING DE ENLACES EXTERNOS
@@ -99,7 +99,6 @@ const regexChangelog = "/changelog\\.js"
 const regexBeyondFiles = "/beyond-regex/(.+\\.html|(?!changelog).+\\.js|.+\\.css)"
 const regexFonts = "/fonts/.*\\.svg|.*\\.(?:eot|otf|ttf|woff|woff2)"
 const regexImages = "/.+\\.(png|jpe?g|svg|ico)"
-const regexRemaining = `(?!${regexChangelog}|${regexBeyondFiles}|${regexFonts}|${regexImages}).+`
 
 // MANTENDREMOS EL CHANGELOG ACTUALIZADO
 workbox.routing.registerRoute(
@@ -118,7 +117,7 @@ workbox.routing.registerRoute(
 );
 
 // CON STALE WITH REVALIDATE COMPROBAREMOS SI HAY QUE ACTUALIZAR A UNA NUEVA VERSION
-// ESTRATEGIA NETWORK FIRST, DESPUES TIRARIA DEL CACHE DE ARRIBA StaleWithRevalidate
+// ESTRATEGIA NETWORK FIRST, DESPUES TIRARIA DEL CACHE VERSIONADO DE ARRIBA StaleWithRevalidate
 workbox.routing.registerRoute(
   new RegExp(`.+${regexBeyondFiles}$`),
   new workbox.strategies.StaleWhileRevalidate({
@@ -170,8 +169,8 @@ workbox.routing.registerRoute(
 
 // CACHEO EL RESTO DE URLS A MI CACHE VERSIONADA
 // LA CUAL SE BORRARA CADA VEZ QUE SE ACTUALICE
-workbox.routing.registerRoute(
-  new RegExp(`.+${regexRemaining}$`),
+// NEW
+workbox.routing.setDefaultHandler(({ url, event, params }) => {
   new workbox.strategies.CacheFirst({
     cacheName: CACHE_VERSIONED,
     plugins: [
@@ -183,7 +182,22 @@ workbox.routing.registerRoute(
       }),
     ],
   })
-);
+});
+// OLD
+// workbox.routing.registerRoute(
+//   new RegExp(`.+${regexRemaining}$`),
+//   new workbox.strategies.CacheFirst({
+//     cacheName: CACHE_VERSIONED,
+//     plugins: [
+//       new workbox.cacheableResponse.CacheableResponsePlugin({
+//         statuses: [0, 200],
+//       }),
+//       new workbox.expiration.ExpirationPlugin({
+//         maxAgeSeconds: 365 * 24 * 60 * 60, // 1 año
+//       }),
+//     ],
+//   })
+// );
 
 // self.addEventListener('fetch', function(event) {
 //   event.respondWith(

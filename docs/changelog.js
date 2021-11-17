@@ -12,7 +12,7 @@ const CHANGELOG = {
             "New sidebar layout with information about page, configuration and social author links",
             "Show Changelog in update message",
             "Fancy Border Radius visualizer loading panel",
-            
+            "Share your graph in png, svg and iframe tag",
         ],
     }
 }
