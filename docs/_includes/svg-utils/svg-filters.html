@@ -45,6 +45,12 @@
     </radialGradient>
 
     <defs>
+        <filter id="goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -5" result="goo">
+            </feColorMatrix>
+            <feComposite in="SourceGraphic" in2="goo"></feComposite>
+        </filter>
         <filter id="shadow" width="1.5" height="1.5" x="-.25" y="-.25">
             <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur"></feGaussianBlur>
             <feColorMatrix result="bluralpha" type="matrix" values="1 0 0 0   0

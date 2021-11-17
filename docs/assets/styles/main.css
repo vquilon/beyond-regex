@@ -89,14 +89,30 @@ h2#noscript {
 
 span#close-side:after {
     content: "(.*)";
+    height: 2.5em;
+    width: 2.5em;
+    font-size: 1.5em;
     position: absolute;
     color: white;
+    text-align: center;
     z-index: 1;
+    border-radius: 50%;
+    top: 0.5em;
+    left: -3.5em;
+    line-height: 2.5em;
+
+    transition: transform 0.3s background-position 1s;
+}
+
+span#close-side:hover:after {
+    background-position: 0% 50%;
+    background: linear-gradient(135deg, #03a9f4, #ff0058, #d61c71, #f9005c);
+    background-size: 200px 200px;
 }
 
 #close-side:before {
     content: "";
-    background: linear-gradient( 315deg, #03a9f4, #ff0058);
+    background: linear-gradient(315deg, #03a9f4, #ff0058);
     width: 0.5em;
     height: 100vh;
     position: absolute;
@@ -104,9 +120,33 @@ span#close-side:after {
     transition: transform 0.3s;
 }
 
+#container-main:not(.menu-open) span#close-side {
+    filter: url(#goo);
+}
+
 #container-main:not(.menu-open) span#close-side:hover:before {
     transform: scaleX(5);
     transform-origin: left;
+}
+
+#container-main:not(.menu-open) span#close-side:after {
+    opacity: 0;
+    visibility: hidden;
+
+    background: linear-gradient(315deg, #d61c71, #f9005c);
+    /* background: linear-gradient(135deg, #03a9f4, #ff0058, #d61c71, #f9005c); */
+    background-position: 100% 50%;
+    
+    
+    transition: opacity 0.3s, visibility 0s 0.3s, transform 0.5s, background-position 1s;
+}
+
+#container-main:not(.menu-open) span#close-side:hover:after {
+    opacity: 1;
+    visibility: visible;
+
+    transform: translateX(4em);
+    transition: opacity 0.3s, visibility 0s, transform 0.5s, background-position 1s;
 }
 
 #container-main>#sidebar-overlay {
@@ -144,7 +184,7 @@ span#close-side:after {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    transition: transform 0.4s cubic-bezier(0.3, -0.6, 0.6, 0.3);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 1, 1);
 }
 
 #sidebar .container-heading {
@@ -261,11 +301,12 @@ span#close-side:after {
 
 #sidebar .container-heading section#sections {
     display: flex;
-    grid-gap: 20px;
+    grid-gap: 1em;
     flex-wrap: wrap;
     width: 100%;
     justify-content: center;
-    padding: 1em 0;
+    padding: 1em 5em;
+    box-sizing: border-box;
 }
 
 #sidebar .container-heading section#sections a {
@@ -514,7 +555,7 @@ span#close-side:after {
 
 #container-main.menu-open #sidebar {
     transform: translateX(-100px);
-    transition: transform 0.5s cubic-bezier(0.3, 0.3, 0.6, 1.4);
+    transition: transform 0.5s cubic-bezier(0, 0, 0.65, 1.3);
 }
 
 /* FIXING SCREENS LESS OF MAX SIZE SIDEBAR */
