@@ -68,7 +68,7 @@ module.exports = function (grunt) {
             prod: { // <-- include a target object
                 files: [{
                     expand: true,
-                    src: ['docs/*.js', 'docs/assets/**/*.js', '!docs/**/*.min.js'],
+                    src: ['docs/*.js', 'docs/assets/**/*.js', '!docs/sw.js', '!docs/sw_ga.js' ,'!docs/**/*.min.js'],
 
                     // The dest value should be whatever the src glob
                     // pattern is, without the trailing /**/*.js part 
@@ -110,6 +110,7 @@ module.exports = function (grunt) {
 
     // Task definitions
     // grunt.registerTask('default', ['concat']);
-    grunt.registerTask('prod', ['htmlmin:prod', 'remove_comments:prod_js', 'remove_comments:prod_css', 'uglify:prod', 'cssmin:prod']);
+    // grunt.registerTask('prod', ['htmlmin:prod', 'remove_comments:prod_js', 'remove_comments:prod_css', 'uglify:prod', 'cssmin:prod']);
+    grunt.registerTask('prod', ['htmlmin:prod', 'remove_comments:prod_js', 'remove_comments:prod_css', 'cssmin:prod']);
 
 };

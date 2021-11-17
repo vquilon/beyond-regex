@@ -1,1 +1,143 @@
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js"),importScripts("./changelog.js");const SW_VERSION="0.0.alpha",SW_BUILD="14",CACHE_IMAGES="pwa-beyond_regex-images",CACHE_FONTS="pwa-beyond_regex-fonts",CACHE_VERSIONED=`pwa-beyond_regex-v${SW_VERSION}`;workbox.setConfig({debug:!1}),workbox.core.setCacheNameDetails({prefix:"beyond-regex",suffix:`v${SW_VERSION}.${SW_BUILD}`,precache:"precache",runtime:"runtime",googleAnalytics:"google-analytics"}),self.addEventListener("message",e=>{var o,a;e.data&&"GET_VERSION"===e.data.type&&e.ports[0].postMessage(`${SW_VERSION}.${SW_BUILD}`),e.data&&"GET_VERSION_NEW"===e.data.type&&(o=(o=Object.keys(CHANGELOG).sort(function(e,o){return parseInt(e)-parseInt(o)}))[o.length-1],a=(a=Object.keys(CHANGELOG[o]).sort(function(e,o){return parseInt(e)-parseInt(o)}))[a.length-1],e.ports[0].postMessage(`${o}.${a}`)),e.data&&"GET_CHANGELOG"===e.data.type&&e.ports[0].postMessage(CHANGELOG[SW_VERSION][SW_BUILD]),e.data&&"GET_CHANGELOG_NEW"===e.data.type&&(o=(o=Object.keys(CHANGELOG).sort(function(e,o){return parseInt(e)-parseInt(o)}))[o.length-1],a=(a=Object.keys(CHANGELOG[o]).sort(function(e,o){return parseInt(e)-parseInt(o)}))[a.length-1],e.ports[0].postMessage(CHANGELOG[o][a])),e.data&&"SKIP_WAITING"===e.data.type&&self.skipWaiting(),e.data&&"CACHE_UPDATED"===e.data.type&&(e=e.data.payload.updatedURL,console.log(`A newer version of ${e} is available!`))}),workbox.navigationPreload.isSupported()&&workbox.navigationPreload.enable();const regexChangelog="/changelog\\.js",regexBeyondFiles="/beyond-regex/(.+\\.html|(?!changelog).+\\.js|.+\\.css)",regexFonts="/fonts/.*\\.svg|.*\\.(?:eot|otf|ttf|woff|woff2)",regexImages="/.+\\.(png|jpe?g|svg|ico)",regexRemaining=`(?!${regexChangelog}|${regexBeyondFiles}|${regexFonts}|${regexImages}).+`;workbox.routing.registerRoute(new RegExp(`.+${regexChangelog}$`),new workbox.strategies.NetworkFirst({cacheName:CACHE_VERSIONED,plugins:[new workbox.cacheableResponse.CacheableResponsePlugin({statuses:[0,200]}),new workbox.expiration.ExpirationPlugin({maxAgeSeconds:10368e3})]})),workbox.routing.registerRoute(new RegExp(`.+${regexBeyondFiles}$`),new workbox.strategies.StaleWhileRevalidate({cacheName:CACHE_VERSIONED,plugins:[new workbox.cacheableResponse.CacheableResponsePlugin({statuses:[0,200]}),new workbox.expiration.ExpirationPlugin({maxAgeSeconds:10368e3})]})),workbox.routing.registerRoute(new RegExp(`.+${regexImages}$`),new workbox.strategies.CacheFirst({cacheName:CACHE_IMAGES,plugins:[new workbox.cacheableResponse.CacheableResponsePlugin({statuses:[0,200]}),new workbox.expiration.ExpirationPlugin({maxEntries:60,maxAgeSeconds:10368e3})]})),workbox.routing.registerRoute(new RegExp(`.+${regexFonts}$`),new workbox.strategies.CacheFirst({cacheName:CACHE_FONTS,plugins:[new workbox.cacheableResponse.CacheableResponsePlugin({statuses:[0,200]}),new workbox.expiration.ExpirationPlugin({maxEntries:30,maxAgeSeconds:31536e3})]})),workbox.routing.registerRoute(new RegExp(`.+${regexRemaining}$`),new workbox.strategies.CacheFirst({cacheName:CACHE_VERSIONED,plugins:[new workbox.cacheableResponse.CacheableResponsePlugin({statuses:[0,200]}),new workbox.expiration.ExpirationPlugin({maxAgeSeconds:31536e3})]})),workbox.googleAnalytics.initialize({parameterOverrides:{cd1:"offline"},hitFilter:e=>{var o=Math.round(e.get("qt")/1e3);e.set("cm1",o)}});
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js');
+importScripts('./changelog.js');
+
+const SW_VERSION = '0.0.alpha';
+const SW_BUILD = '14'
+
+const CACHE_IMAGES = "beyond_regex-images";
+const CACHE_FONTS = "beyond_regex-fonts";
+const CACHE_VERSIONED = `beyond_regex-v${SW_VERSION}.${SW_BUILD}`;
+workbox.setConfig({ debug: true });
+
+workbox.core.setCacheNameDetails({
+  prefix: 'beyond-regex',
+  suffix: `v${SW_VERSION}.${SW_BUILD}`,
+  precache: 'precache',
+  runtime: 'runtime',
+  googleAnalytics: 'google-analytics'
+});
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === 'GET_VERSION') {
+    event.ports[0].postMessage(`${SW_VERSION}.${SW_BUILD}`);
+  }
+  if (event.data && event.data.type === 'GET_VERSION_NEW') {
+    let lastVersion = Object.keys(CHANGELOG).sort(function (a, b) {
+      return parseInt(a) - parseInt(b);
+    });
+    lastVersion = lastVersion[lastVersion.length - 1]
+    let lastBuild = Object.keys(CHANGELOG[lastVersion]).sort(function (a, b) {
+      return parseInt(a) - parseInt(b);
+    });
+    lastBuild = lastBuild[lastBuild.length - 1]
+
+    event.ports[0].postMessage(`${lastVersion}.${lastBuild}`);
+  }
+  if (event.data && event.data.type === 'GET_CHANGELOG') {
+    event.ports[0].postMessage(CHANGELOG[SW_VERSION][SW_BUILD]);
+  }
+  if (event.data && event.data.type === 'GET_CHANGELOG_NEW') {
+    let lastVersion = Object.keys(CHANGELOG).sort(function (a, b) {
+      return parseInt(a) - parseInt(b);
+    });
+    lastVersion = lastVersion[lastVersion.length - 1]
+    let lastBuild = Object.keys(CHANGELOG[lastVersion]).sort(function (a, b) {
+      return parseInt(a) - parseInt(b);
+    });
+    lastBuild = lastBuild[lastBuild.length - 1]
+
+    event.ports[0].postMessage(CHANGELOG[lastVersion][lastBuild]);
+  }
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+  if (event.data && event.data.type === 'CACHE_UPDATED') {
+    const { updatedURL } = event.data.payload;
+    console.log(`A newer version of ${updatedURL} is available!`);
+  }
+});
+
+const regexChangelog = "/changelog\\.js"
+const regexBeyondFiles = "/beyond-regex/(.+\\.html|(?!changelog).+\\.js|.+\\.css)"
+const regexFonts = "/fonts/.*\\.svg|.*\\.(?:eot|otf|ttf|woff|woff2)"
+const regexImages = "/.+\\.(png|jpe?g|svg|ico)"
+workbox.routing.registerRoute(
+  new RegExp(`.+${regexChangelog}$`),
+  new workbox.strategies.NetworkFirst({
+    cacheName: CACHE_VERSIONED,
+    plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.ExpirationPlugin({
+        maxAgeSeconds: 4 * 30 * 24 * 60 * 60, 
+      }),
+    ],
+  })
+);
+workbox.routing.registerRoute(
+  new RegExp(`.+${regexBeyondFiles}$`),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: CACHE_VERSIONED,
+    plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.ExpirationPlugin({
+        maxAgeSeconds: 4 * 30 * 24 * 60 * 60, 
+      }),
+    ]
+  })
+);
+workbox.routing.registerRoute(
+  new RegExp(`.+${regexImages}$`),
+  new workbox.strategies.CacheFirst({
+    cacheName: CACHE_IMAGES,
+    plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 4 * 30 * 24 * 60 * 60, 
+      }),
+    ],
+  }),
+);
+workbox.routing.registerRoute(
+  new RegExp(`.+${regexFonts}$`),
+  new workbox.strategies.CacheFirst({
+    cacheName: CACHE_FONTS,
+    plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 30,
+        maxAgeSeconds: 365 * 24 * 60 * 60, 
+      }),
+    ],
+  }),
+);
+workbox.routing.setDefaultHandler(({ url, event, params }) => {
+  new workbox.strategies.CacheFirst({
+    cacheName: CACHE_VERSIONED,
+    plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.ExpirationPlugin({
+        maxAgeSeconds: 365 * 24 * 60 * 60, 
+      }),
+    ],
+  })
+});
+workbox.googleAnalytics.initialize({
+  parameterOverrides: {
+    cd1: 'offline',
+  },
+  hitFilter: (params) => {
+    const queueTimeInSeconds = Math.round(params.get('qt') / 1000);
+    params.set('cm1', queueTimeInSeconds);
+  },
+});
