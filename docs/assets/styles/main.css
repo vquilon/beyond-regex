@@ -28,7 +28,7 @@ body {
 
 @media (max-width: 800px) {
     body {
-        min-width: 300px;
+        min-width: 400px;
     }
 }
 
