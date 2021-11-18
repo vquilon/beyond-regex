@@ -457,6 +457,7 @@ var RegexVisualizerPanel = function (options) {
         initEventsListener();
 
         // Una vez todo cargado y configurado, parseamos la de ejemplo
+        // IMPACTA MUCHO AL ESTAR MODIFICANDO ELEMENTOS DEL DOM EN LA CARGA INICIAL
         visualizeRegex();
     }
 

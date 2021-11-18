@@ -84,6 +84,7 @@ h2#noscript {
     overflow: visible;
     z-index: 300;
     cursor: pointer;
+
     transition: transform 0.3s;
 
     font-family: "Font Awesome 5 Free";
@@ -565,7 +566,7 @@ span#close-side:hover:after {
 
 @media (max-width: 450px) {
     #container-main.menu-open #sidebar {
-        transform: translateX(calc(-450px + 100vw + -100px + 0.5em)) !important;
+        transform: translateX(calc(-450px + 100vw + -100px)) !important;
     }
     #container-main:not(menu-open) #sidebar {
         left: calc(450px - 100vw);
@@ -597,7 +598,7 @@ span#close-side:hover:after {
 #beyond-editor div.container-editor {
     width: 100%;
     font-size: 24px;
-    background: #e2e2e2;
+    /* background: #e2e2e2; */
     line-height: 1.4em;
     color: #333;
     border: 1px solid black;
@@ -611,6 +612,7 @@ span#close-side:hover:after {
     grid-template-columns: auto minmax(0, 1fr);
 }
 
+
 #beyond-editor .container-editor #editor-language {
     display: flex;
     flex-direction: row;
@@ -619,6 +621,8 @@ span#close-side:hover:after {
     justify-content: center;
     padding: 10px 20px;
     grid-row: 2;
+
+    background: #e2e2e2;
 }
 
 #beyond-editor .container-editor #editor-actions {
@@ -646,6 +650,8 @@ span#close-side:hover:after {
     align-items: center;
     justify-content: space-between;
     grid-row: 2;
+
+    background: #e2e2e2;
 }
 
 #beyond-editor .container-editor #editor-flags {
@@ -658,6 +664,8 @@ span#close-side:hover:after {
     align-items: center;
     justify-content: center;
     grid-row: 2;
+
+    background: #e2e2e2;
 }
 
 #beyond-editor div.container-editor .input {
@@ -796,7 +804,7 @@ span#close-side:hover:after {
 #editor-error {
     display: none;
     padding: 16px;
-    /* overflow: auto; */
+    overflow: auto;
     grid-row: 3;
     grid-column: 1/4;
     border-bottom-right-radius: 10px;
@@ -809,7 +817,7 @@ span#close-side:hover:after {
     position: relative;
     /* text-shadow: 0 0 10px #f6cfd9, 0 0 5px #f82161, 0 0 10px #f82161, 0 0 20px #f82161; */
     color: #339eef;
-    overflow-x: scroll;
+    overflow: auto;
     display: block;
     padding-bottom: 1em;
 }
