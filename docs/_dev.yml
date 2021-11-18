@@ -95,9 +95,9 @@ sass:
 # --- Web Statistics Section --- #
 # Fill in your Google Analytics gtag.js ID to track your website using gtag
 # Universal Anaytics
-gtag: "UA-150279803-2"
+# gtag: "UA-150279803-2"
 # Data flow ID
-# gtag: "G-005J77BYYB"
+gtag: "G-005J77BYYB"
 
 # Fill in your Google Analytics ID to track your website using GA
 #google_analytics: ""

@@ -13,7 +13,7 @@ const CACHE_VERSIONED = `beyond_regex-v${SW_VERSION}.${SW_BUILD}`;
 
 
 // Force development  builds
-workbox.setConfig({ debug: true });
+workbox.setConfig({ debug: false });
 
 workbox.core.setCacheNameDetails({
   prefix: 'beyond-regex',
@@ -99,6 +99,13 @@ const regexChangelog = "/changelog\\.js"
 const regexBeyondFiles = "/beyond-regex/(.+\\.html|(?!changelog).+\\.js|.+\\.css)"
 const regexFonts = "/fonts/.*\\.svg|.*\\.(?:eot|otf|ttf|woff|woff2)"
 const regexImages = "/.+\\.(png|jpe?g|svg|ico)"
+
+// jGOOGLE ANALYTICS
+workbox.routing.registerRoute(
+  new RegExp(`^https://www\.google-analytics\.com/.+`),
+  new workbox.strategies.NetworkOnly({}),
+  'GET',
+);
 
 // MANTENDREMOS EL CHANGELOG ACTUALIZADO
 workbox.routing.registerRoute(
@@ -247,6 +254,7 @@ workbox.routing.setDefaultHandler(({ url, event, params }) => {
 //     cd1: 'offline',
 //   },
 // });
+
 // With time consumed offline mode
 workbox.googleAnalytics.initialize({
   parameterOverrides: {
