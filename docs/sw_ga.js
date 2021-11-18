@@ -97,10 +97,10 @@ self.addEventListener("message", (event) => {
 
 const regexChangelog = "/changelog\\.js"
 const regexBeyondFiles = "/beyond-regex/(.+\\.html|(?!changelog).+\\.js|.+\\.css)"
-const regexFonts = "/fonts/.*\\.svg|.*\\.(?:eot|otf|ttf|woff|woff2)"
+const regexFonts = "/fonts/.*\\.svg|.*\\.(?:eot|otf|ttf|woff|woff2)|^https://unpkg.com/ionicons.+|^https://fonts.googleapis.com/.+"
 const regexImages = "/.+\\.(png|jpe?g|svg|ico)"
 
-// jGOOGLE ANALYTICS
+// GOOGLE ANALYTICS
 workbox.routing.registerRoute(
   new RegExp(`^https://www\.google-analytics\.com/.+`),
   new workbox.strategies.NetworkOnly({}),

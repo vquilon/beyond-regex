@@ -15,8 +15,9 @@
 }
 
 #visualizer-graph>*:not(.control-panel), #visualizer-graph:after, #visualizer-graph:before {
-    height: calc(80% - 20px) !important;
-    min-height: calc(80% - 20px) !important;
+    height: 80% !important;
+    min-height: 80% !important;
+    border-radius: unset !important;
 }
 
 #visualizer-graph .control-panel {
@@ -33,6 +34,11 @@
     column-gap: 10px;
     justify-content: space-between;
     align-items: flex-end;
+    background: linear-gradient(145deg, #3b3b3b, #242424);
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding: 1em;
+    box-sizing: border-box;
 }
 
 #visualizer-graph:hover .control-panel {

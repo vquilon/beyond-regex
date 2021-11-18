@@ -97,7 +97,7 @@ self.addEventListener("message", (event) => {
 
 const regexChangelog = "/changelog\\.js"
 const regexBeyondFiles = "/beyond-regex/(.+\\.html|(?!changelog).+\\.js|.+\\.css)"
-const regexFonts = "/fonts/.*\\.svg|.*\\.(?:eot|otf|ttf|woff|woff2)"
+const regexFonts = "/fonts/.*\\.svg|.*\\.(?:eot|otf|ttf|woff|woff2)|^https://unpkg.com/ionicons.+|^https://fonts.googleapis.com/.+"
 const regexImages = "/.+\\.(png|jpe?g|svg|ico)"
 
 // MANTENDREMOS EL CHANGELOG ACTUALIZADO

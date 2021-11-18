@@ -13,6 +13,7 @@ const CHANGELOG = {
             "Show Changelog in update message",
             "Fancy Border Radius visualizer loading panel",
             "Share your graph in png, svg and iframe tag",
+            
         ],
     }
 }

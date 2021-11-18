@@ -69,7 +69,7 @@
     box-shadow: inset 4px 4px 5px #00000099, inset -10px -10px 15px -15px #ffffff3b, 10px 10px 15px -15px #ffffff24;
 }
 
-#visualizer-graph > *, #visualizer-graph:before, #visualizer-graph:after {
+#visualizer-graph > *, #visualizer-graph i.disabledJS-JS, #visualizer-graph:before, #visualizer-graph:after {
     border-top-right-radius: unset;
     border-top-left-radius: unset;
 }
