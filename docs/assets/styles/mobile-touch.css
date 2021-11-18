@@ -1,0 +1,1 @@
+#close-side{width:.5em!important}#container-main:not(.menu-open) span#close-side:after{opacity:1;visibility:visible;transform:translateX(3.5em)!important}#container-main:not(.menu-open) span#close-side:before{transform:unset!important}#close-side:before{width:.5em!important}#container-main.menu-open span#close-side:before{width:1em!important}

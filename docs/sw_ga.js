@@ -7,9 +7,6 @@ const SW_BUILD = '14'
 const CACHE_IMAGES = "beyond_regex-images";
 const CACHE_FONTS = "beyond_regex-fonts";
 const CACHE_VERSIONED = `beyond_regex-v${SW_VERSION}.${SW_BUILD}`;
-
-
-// Force development  builds
 workbox.setConfig({ debug: false });
 
 workbox.core.setCacheNameDetails({
@@ -62,17 +59,13 @@ self.addEventListener("message", (event) => {
 
 const regexChangelog = "/changelog\\.js"
 const regexBeyondFiles = "/beyond-regex/(.+\\.html|(?!changelog).+\\.js|.+\\.css)"
-const regexFonts = "/fonts/.*\\.svg|.*\\.(?:eot|otf|ttf|woff|woff2)"
+const regexFonts = "/fonts/.*\\.svg|.*\\.(?:eot|otf|ttf|woff|woff2)|^https://unpkg.com/ionicons.+|^https://fonts.googleapis.com/.+"
 const regexImages = "/.+\\.(png|jpe?g|svg|ico)"
-
-// jGOOGLE ANALYTICS
 workbox.routing.registerRoute(
   new RegExp(`^https://www\.google-analytics\.com/.+`),
   new workbox.strategies.NetworkOnly({}),
   'GET',
 );
-
-// MANTENDREMOS EL CHANGELOG ACTUALIZADO
 workbox.routing.registerRoute(
   new RegExp(`.+${regexChangelog}$`),
   new workbox.strategies.NetworkFirst({
@@ -144,72 +137,6 @@ workbox.routing.setDefaultHandler(({ url, event, params }) => {
     ],
   })
 });
-// OLD
-// workbox.routing.registerRoute(
-//   new RegExp(`.+${regexRemaining}$`),
-//   new workbox.strategies.CacheFirst({
-//     cacheName: CACHE_VERSIONED,
-//     plugins: [
-//       new workbox.cacheableResponse.CacheableResponsePlugin({
-//         statuses: [0, 200],
-//       }),
-//       new workbox.expiration.ExpirationPlugin({
-//         maxAgeSeconds: 365 * 24 * 60 * 60, // 1 año
-//       }),
-//     ],
-//   })
-// );
-
-// self.addEventListener('fetch', function(event) {
-//   event.respondWith(
-//     caches.match(event.request)
-//       .then(function(response) {
-//         // Cache hit - return response
-//         if (response) {
-//           return response;
-//         }
-
-//         // IMPORTANT: Clone the request. A request is a stream and
-//         // can only be consumed once. Since we are consuming this
-//         // once by cache and once by the browser for fetch, we need
-//         // to clone the response.
-//         var fetchRequest = event.request.clone();
-
-//         return fetch(fetchRequest).then(
-//           function(response) {
-//             // Check if we received a valid response
-//             if(!response || response.status !== 200 || response.type !== 'basic') {
-//               return response;
-//             }
-
-//             // IMPORTANT: Clone the response. A response is a stream
-//             // and because we want the browser to consume the response
-//             // as well as the cache consuming the response, we need
-//             // to clone it so we have two streams.
-//             var responseToCache = response.clone();
-
-//             caches.open(CACHE)
-//               .then(function(cache) {
-//                 cache.put(event.request, responseToCache);
-//               });
-
-//             return response;
-//           }
-//         );
-//       })
-//     );
-// });
-
-
-// Google Analytics Service Worker
-// Base Initialize with dimension
-// workbox.googleAnalytics.initialize({
-//   parameterOverrides: {
-//     cd1: 'offline',
-//   },
-// });
-
-// With time consumed offline mode
 workbox.googleAnalytics.initialize({
   parameterOverrides: {
     cd1: 'offline',
