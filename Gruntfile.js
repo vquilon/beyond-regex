@@ -111,6 +111,6 @@ module.exports = function (grunt) {
     // Task definitions
     // grunt.registerTask('default', ['concat']);
     // grunt.registerTask('prod', ['htmlmin:prod', 'remove_comments:prod_js', 'remove_comments:prod_css', 'uglify:prod', 'cssmin:prod']);
-    grunt.registerTask('prod', ['htmlmin:prod', 'remove_comments:prod_js', 'remove_comments:prod_css', 'cssmin:prod']);
+    grunt.registerTask('prod', ['htmlmin:prod', 'remove_comments:prod_css', 'cssmin:prod']);
 
 };

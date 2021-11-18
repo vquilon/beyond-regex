@@ -1,24 +1,25 @@
 <!-- Font Awesome 5 -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/vendor/font-awesome/css/all.min.css">
+<!-- <link rel="stylesheet" href="{{ site.baseurl }}/assets/vendor/font-awesome/css/brands.min.css"> -->
+<!-- <link rel="stylesheet" href="{{ site.baseurl }}/assets/vendor/font-awesome/css/regular.min.css"> -->
+<!-- <link rel="stylesheet" href="{{ site.baseurl }}/assets/vendor/font-awesome/css/solid.min.css"> -->
 <!-- Optional: include a polyfill for ES6 Promises for IE11 -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script> -->
 {% if site.environment == "production" %} {% include analytics.html %} {% endif %}
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/vendor/material-icons/material_icons.css">
+<!-- <link rel="stylesheet" href="{{ site.baseurl }}/assets/vendor/material-icons/material_icons_round.css"> -->
 <!-- FONTS -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/fonts.css">
 <!-- Sweet Alert CSS [preload] -->
-<link class="sweetalert-theme" id="sweetalert-default" rel="preload" as="style" onload="this.rel='stylesheet alternate'" href="{{ site.baseurl }}/assets/vendor/sweetalert2/sweetalert2.min.css">
-<link class="sweetalert-theme" id="sweetalert-dark" rel="preload" as="style" onload="this.rel='stylesheet'" href="{{ site.baseurl }}/assets/vendor/sweetalert2/sweetalert2-dark.min.css">
+<link rel="preload" as="style" onload="this.rel='stylesheet alternate'" class="sweetalert-theme" id="sweetalert-default" href="{{ site.baseurl }}/assets/vendor/sweetalert2/sweetalert2.min.css">
+<link rel="preload" as="style" onload="this.rel='stylesheet'" class="sweetalert-theme" id="sweetalert-dark" href="{{ site.baseurl }}/assets/vendor/sweetalert2/sweetalert2-dark.min.css">
 <!-- Modifications on Vendors styles -->
 <link rel="preload" as="style" onload="this.rel='stylesheet'" href="{{ site.baseurl }}/assets/styles/vendors-ext.css">
+<!-- OFFLINE CONNECTION BOX STYLES -->
+<link rel="preload" as="style" onload="this.rel='stylesheet'" href="{{ site.baseurl }}/assets/styles/offline-styles.css">
 <!-- ESTILOS PRINCIPALES -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/main.css">
 <!-- ESTILOS PANELES -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/panels/panels.css">
 <!-- SCROLLBARS -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/scrollbars.css">
-<!-- OFFLINE CONNECTION BOX STYLES -->
-<link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/offline-styles.css">
-<!-- MEASURE PERFORMANCE CSS -->
-<!-- <link rel="stylesheet" href="https://csswizardry.com/ct/ct.css" class="ct" /> -->

@@ -15,7 +15,9 @@
 <!-- seo tags (meta, icons, Open graph, etc) -->
 <!-- noscript -->
 <!-- template -->
-{% include head/meta.html %} {% include head/base_styles.html %} {% include head/building-styles.html %}
+{% include head/meta.html %}
+<!-- SEO tags -->
+{% seo %} {% include head/base_styles.html %} {% include head/building-styles.html %}
 <!-- Estilos propios del PWA -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/pwa.css">
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/install-as-app.css">
@@ -28,11 +30,11 @@
 {% include panels/visualizer/scripts.html %} {% include panels/visualizer/auxiliar/thumbnail-svg-control/scripts.html %}
 <!-- {% include dom-physics-engine/scripts.html %} -->
 <script defer="defer" src="{{ site.baseurl }}/assets/scripts/init_listeners.js"></script>
-<!-- SEO tags -->
-{% seo %}
 <noscript>
 <h2 id="noscript">Please enable JavaScript in order to use all features</h2>
 </noscript>
+<!-- MEASURE PERFORMANCE CSS -->
+<!-- <link rel="stylesheet" href="https://csswizardry.com/ct/ct.css" class="ct" /> -->
 </head>
 <body>
 <script defer="defer">
