@@ -814,8 +814,18 @@ span#close-side:hover:after {
     border-bottom: 2px solid#ffffff17;
     background: #282828;
 }
-#terminal-stats .stats {
+
+#terminal-stats label[for="real-time-check"] {
+    border-right: 1px solid grey;
+    padding-right: 0.5em;
+}
+
+#terminal-stats .stats, #terminal-stats label[for="real-time-check"] {
     font-size: 0.8em;
+}
+.stats {
+    float: right;
+    margin-left: 0.5em;
 }
 
 #terminal-error {

@@ -3,6 +3,7 @@ var EditorParser = (options) => {
     const DEBUG = options.debug || false;
 
     var $inputRegex = document.querySelector('#input');
+    var $realTimeCheck = document.querySelector('#real-time-check');
     var $terminalError = document.querySelector('#terminal-error');
     var $errorDef = $terminalError.querySelector("#errorDef");
     var $errorBox = $terminalError.querySelector('#errorBox');
@@ -220,7 +221,7 @@ var EditorParser = (options) => {
         return s.replace(/^\s+/, '').replace(/\s+$/, '');
     }
     var getInputValue = function () {
-        return trim($inputRegex.value);
+        return $inputRegex.value;
     };
     var setInputValue = function (v) {
         return $inputRegex.value = trim(v);
@@ -263,7 +264,10 @@ var EditorParser = (options) => {
 
     function initEventsListener() {
         $inputRegex.addEventListener('input', function (event) {
-            parseRegex();
+            if ($realTimeCheck.checked) {
+                parseRegex($inputRegex.value);
+            }
+
             window.hasChanges = true;
             visualBtn.disabled = false;
             // hideError();
