@@ -1,5 +1,5 @@
 #beyond-editor div.container-editor {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr;
 }
 
 #beyond-editor div.container-editor>div#editor-language {

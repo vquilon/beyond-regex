@@ -166,7 +166,7 @@ span#close-side:hover:after {
 }
 
 #container-main.menu-open>#sidebar-overlay {
-    backdrop-filter: saturate(0.5);
+    /* backdrop-filter: saturate(0.5); */
     opacity: 1;
     visibility: visible;
     transition: opacity 1s 0.1s, visibility 0s, backdrop-filter 0.5s 0.5s;
@@ -180,7 +180,7 @@ span#close-side:hover:after {
     padding-left: 100px;
     box-sizing: content-box;
     background: #000000ba;
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); */
     /* border-right: solid 5px white; */
     box-shadow: 0 5px 25px 5px black;
     /* overflow: hidden; */
@@ -601,12 +601,10 @@ span#close-side:hover:after {
     /* background: #e2e2e2; */
     line-height: 1.4em;
     color: #333;
-    border: 1px solid black;
     font-weight: bold;
     word-break: break-all;
     word-wrap: break-word;
-    border: solid 1px black;
-    box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c;
+    box-shadow: 0 0 1rem #0a0a0a;
     border-radius: 10px;
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
@@ -679,11 +677,11 @@ span#close-side:hover:after {
     width: auto;
 }
 
-#beyond-editor div.container-editor .input, #beyond-editor .container-editor .errorBox, #beyond-editor .container-editor .errorDef {
+#beyond-editor div.container-editor .input, #beyond-editor .container-editor #errorBox, #beyond-editor .container-editor #errorDef {
     font-size: 24px;
     font-weight: bold;
-    line-height: 1.4em;
     white-space: pre;
+    line-height: 1;
     word-wrap: break-word;
     word-break: break-all;
     font-variant-ligatures: none;
@@ -801,41 +799,82 @@ span#close-side:hover:after {
 
 /* ERROR BOX */
 
-#editor-error {
-    display: none;
-    padding: 16px;
-    overflow: auto;
+#editor-terminal {
     grid-row: 3;
     grid-column: 1/4;
+
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     background: linear-gradient(145deg, #3b3b3b, #242424);
 }
 
-#editor-error .errorBox {
+#terminal-stats {
+    padding: 0 16px;
+    color: grey;
+    border-bottom: 2px solid#ffffff17;
+    background: #282828;
+}
+#terminal-stats .stats {
+    font-size: 0.8em;
+}
+
+#terminal-error {
+    padding: 16px;
+    overflow: auto;
+}
+
+#terminal-error #errorBox {
     --position-error-ch: 0ch;
     position: relative;
     /* text-shadow: 0 0 10px #f6cfd9, 0 0 5px #f82161, 0 0 10px #f82161, 0 0 20px #f82161; */
     color: #339eef;
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
     display: block;
-    padding-bottom: 1em;
+    height: 1.8em;
 }
 
-p.errorBox:after {
+#terminal-error #errorDef {
+    height: 1em;
+    margin-top: 1em;
+    margin-left: 1em;
+    overflow-x: hidden;
+    overflow-y: auto;
+    color: #ff0058;
+}
+#terminal-error.correct-syntax #errorBox {
+    overflow: visible;
+}
+
+#terminal-error.correct-syntax #errorDef {
+    color: grey;
+}
+
+#terminal-error #errorBox:after {
     content: "";
     width: 1.5ch;
+    height: 2ch;
     top: 0;
     left: calc(var(--position-error-ch) - 0.25ch);
-    height: 1.4em;
+    
     background: #ff00002e;
     border: 1px solid red;
     position: absolute;
+
+    transition: height 0.5s, left 0.5s 0.5s, top 0.5s, border 0.5s, border-radius 0.5s, background 0.5s;
 }
 
-#beyond-editor .container-editor .errorDef {
-    margin-top: 1em;
-    color: #ff0058;
+#terminal-error.correct-syntax #errorBox:after {
+    --position-error-ch: 0ch;
+
+    width: 1.5ch;
+    height: 1.5ch;
+    border-radius: 50%;
+    background: #00800057;
+    border: 1px solid green;
+    top: calc(100% + 1em);
+
+    transition: height 0.5s, border 0.5s, border-radius 0.5s, background 0.5s;
 }
 
 /* ERROR BOX END */
@@ -852,6 +891,7 @@ p.errorBox:after {
     flex-wrap: wrap;
     align-items: center;
     background: linear-gradient(145deg, #3b3b3b, #242424);
+    box-shadow: 0 0 1rem #0a0a0a;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
 }

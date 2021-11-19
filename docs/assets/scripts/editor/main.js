@@ -3,7 +3,13 @@ var EditorParser = (options) => {
     const DEBUG = options.debug || false;
 
     var $inputRegex = document.querySelector('#input');
-    var $editorError = document.querySelector('#editor-error');
+    var $terminalError = document.querySelector('#terminal-error');
+    var $errorDef = $terminalError.querySelector("#errorDef");
+    var $errorBox = $terminalError.querySelector('#errorBox');
+    var $editorTerminal = document.querySelector('#editor-terminal');
+
+    var $terminalStats = $editorTerminal.querySelector('#terminal-stats');
+
     var $flags = document.getElementsByName('flag');
 
     var $iframeBtn = document.querySelector('#iframeIt');
@@ -14,10 +20,21 @@ var EditorParser = (options) => {
     var visualBtn = document.querySelector('#visualizeClick');
     var $loader_view = document.querySelector(`#${options.loader_view_id}`);
 
+    var updateStats = function (regExpresion, regexSON) {
+        let reLen = `${regExpresion.length}`;
+        let reGroups = `${regexSON.groupCount}`;
+        setInnerText($terminalStats.querySelector("#re-len .stat-value"), reLen);
+        setInnerText($terminalStats.querySelector("#re-groups .stat-value"), reGroups);
+    }
     var hideError = function () {
-        $editorError.style.display = 'none';
+        setInnerText($errorBox, "");
+        setInnerText($errorDef, "Correct syntax");
+        $terminalError.classList.add("correct-syntax");
+        // $editorError.style.display = 'none';
     }
     var showError = function (re, err) {
+        $terminalError.classList.remove("correct-syntax");
+        
         const fireError = async () => {
             const Toast = Swal.mixin({
                 toast: true,
@@ -36,19 +53,19 @@ var EditorParser = (options) => {
             });
         }
         fireError();
-        $editorError.style.display = 'block';
+        $terminalError.style.display = 'block';
         var msg_re = [];
         var msg_def = [];
         if (typeof err.lastIndex === 'number') {
-            msg_re.push(re);
+            msg_re.push(` ${re}`);
             // msg_re.push(Kit().repeats('-', err.lastIndex) + "^");
         }
         msg_def.push("Error:" + err.message);
         msg_def.push("");
-        $editorError.querySelector(".errorBox").style.setProperty("--position-error-ch", `${err.lastIndex}ch`)
+        $errorBox.style.setProperty("--position-error-ch", `${err.lastIndex + 1}ch`)
 
-        setInnerText($editorError.querySelector(".errorBox"), msg_re.join("\n"));
-        setInnerText($editorError.querySelector(".errorDef"), msg_def.join("\n"));
+        setInnerText($errorBox, msg_re.join("\n"));
+        setInnerText($errorDef, msg_def.join("\n"));
     }
     var getFlags = function () {
         var fg = '';
@@ -157,6 +174,8 @@ var EditorParser = (options) => {
             var init_parse = RegexParser();
             var language_selected = getReLanguage();
             regEXSON = init_parse(regExpresion, null, language_selected);
+
+            updateStats(regExpresion, regEXSON);
         } catch (e) {
             if (e instanceof init_parse.RegexSyntaxError) {
                 if (!skipError) {
@@ -244,9 +263,10 @@ var EditorParser = (options) => {
 
     function initEventsListener() {
         $inputRegex.addEventListener('input', function (event) {
-            // parseEvent();
+            parseRegex();
             window.hasChanges = true;
             visualBtn.disabled = false;
+            // hideError();
         });
 
         $iframeBtn.addEventListener('click', function () {
@@ -308,6 +328,13 @@ var EditorParser = (options) => {
                 }
             });
         });
+
+        // Scroll on terminal
+        $errorBox.addEventListener("scroll", (ev) => {
+            $inputRegex.scrollLeft = ev.currentTarget.scrollLeft;
+        });
+
+
 
         // parseBtn.addEventListener("click", (event) => {
         //     var regExpresion = inputRegex.value;

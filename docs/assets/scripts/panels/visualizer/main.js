@@ -1,5 +1,6 @@
 var RegexVisualizerPanel = function (options) {
     var inputRegex = document.getElementById('input');
+    var terminalError = document.getElementById('terminal-error .errorBox');
     var visualBtn = document.getElementById('visualizeClick');
     var exportBtn = document.getElementById('exportIt');
 
@@ -205,13 +206,9 @@ var RegexVisualizerPanel = function (options) {
             .replace(/'/g, "&#039;");
     }
 
-    const _exportAsImgSVG = function (svg) {
+    const _serializeSVG2Text = function (svg) {
         var svgAsXML = (new XMLSerializer).serializeToString(svg);
-        return "data:image/svg+xml," + encodeURIComponent(svgAsXML);
-    }
-    const _exportAsImgPNG = function (svg) {
-        var svgAsXML = (new XMLSerializer).serializeToString(svg);
-        return "data:image/png," + encodeURIComponent(svgAsXML);
+        return svgAsXML;
     }
 
     const generateImageOn = async ($canvas, $img, $anchor, imageType="svg") => {
@@ -236,8 +233,8 @@ var RegexVisualizerPanel = function (options) {
             rectBack.style.strokeWidth = strokeWidth || rectBack.style.strokeWidth || rectBack.getAttribute("stroke-width");
 
             let ratio = window.devicePixelRatio || 1;
-            let w = $svg.clientWidth || parseInt(getComputedStyle($svg).width);
-            let h = $svg.clientHeight || parseInt(getComputedStyle($svg).height);
+            let w = parseFloat(rectBack.getAttribute("width"));
+            let h = parseFloat(rectBack.getAttribute("height"));
 
             // Due to a bug because is duplicated
             $svg.removeAttribute("xmlns:xlink");
@@ -245,63 +242,50 @@ var RegexVisualizerPanel = function (options) {
 
             // Choose the image extension
             if (_imageType === "svg") {
-                let url_blob = _exportAsImgSVG($svg)
+                let url_blob = `data:image/svg+xml,${encodeURIComponent(_serializeSVG2Text($svg))}`
                 $img.setAttribute('src', url_blob);
                 $anchor.setAttribute('href', url_blob);
             }
             if (_imageType === "png") {
-                // Old Method
-                // let img = new Image;
-                // img.width = w;
-                // img.height = h;
-                // img.setAttribute('src', _exportAsImgSVG($svg));
-
                 let svgOuter = $svg.outerHTML;
 
                 //Use canvg to draw the SVG onto the empty canvas
                 // Legacy Version
-                canvgv2($canvas, svgOuter, {
-                    ignoreAnimation: true,
-                    ignoreMouse: true,
-                    // renderCallback() {
-                    //     renderSource(svg);
-                    // }
-                });
+                // canvgv2($canvas, svgOuter, {
+                //     ignoreAnimation: true,
+                //     ignoreMouse: true,
+                //     // renderCallback() {
+                //     //     renderSource(svg);
+                //     // }
+                // });
                 
+                // Automcompleted version (Github Copilot)
+                
+                $canvas.width = w * ratio;
+                $canvas.height = h * ratio;
+                // $canvas.style.width = w+"px";
+                // $canvas.style.height = h+"px";
 
-                // var ctx = $canvas.getContext("2d");
-                // ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-                // img.onload = function () {
-                //     ctx.drawImage(img, 0, 0);
-                // };
-
-                // New version
-                const getPng = async () => {
-                    var ctx = $canvas.getContext("2d");
-                    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-                    const canVinst = await canvg.Canvg.from(ctx, svgOuter);
-                    canVinst.resize(w * ratio, h * ratio, "xMidYMid meet");
-                    // With Animations elements from the SVG
-                    // await v.start();
-                    // No animations (Normal render)
-                    await canVinst.render();
-
+                let ctx = $canvas.getContext("2d");
+                ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+                let svgString = _serializeSVG2Text($svg);
+                let DOMURL = self.URL || self.webkitURL || self;
+                let _img = new Image();
+                let _svg = new Blob([svgOuter], { type: "image/svg+xml;charset=utf-8" });
+                let _imgURL = DOMURL.createObjectURL(_svg);
+                _img.onload = function () {
+                    ctx.drawImage(_img, 0, 0, w, h);
                     // Get the image data
                     //fetch the dataURL from the canvas and set it as src on the image
-                    let url_blob = $canvas.toDataURL("image/png");
-                    // let url_blob = _exportAsImgPNG($svg)
-                    $img.setAttribute('src', url_blob);
-                    $anchor.setAttribute('href', url_blob);
-                }
-
-
-                // Get the image data
-                //fetch the dataURL from the canvas and set it as src on the image
-                let url_blob = $canvas.toDataURL("image/png");
-                // let url_blob = _exportAsImgPNG($svg)
-                $img.setAttribute('src', url_blob);
-                $anchor.setAttribute('href', url_blob);
+                    let pngEnconded = $canvas.toDataURL("image/png");
+                    DOMURL.revokeObjectURL(_imgURL);
+                    $img.setAttribute('src', pngEnconded);
+                    $anchor.setAttribute('href', pngEnconded);
+                };
+                _img.src = _imgURL;
             }
+        
+                
         }
         updateBackgroundStyle(rectBackground, imageType);
 
@@ -324,7 +308,7 @@ var RegexVisualizerPanel = function (options) {
             Swal.fire({
                 title: 'Share the Image Graph (PNG)!',
                 icon: "info",
-                iconHtml: `<span class="sweetalert-icon material-icons">share</span>`,
+                iconHtml: `<span class="sweetalert-icon material-icons">image</span>`,
                 html: `
                 <canvas style="display:none; width: 100%; height: unset;" id="export-image"></canvas>
                 
@@ -372,7 +356,7 @@ var RegexVisualizerPanel = function (options) {
             Swal.fire({
                 title: 'Share the interactive graph!',
                 icon: "info",
-                iconHtml: `<span class="sweetalert-icon material-icons">share</span>`,
+                iconHtml: `<span class="sweetalert-icon material-icons">image</span>`,
                 html: `
                 <div id="visualizer-iframe-copy" class="container-copy">
                     <div class="iframe-copier">
