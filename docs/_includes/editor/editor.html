@@ -9,7 +9,7 @@
 </div>
 <div class="select-box__value">
 <input class="select-box__input" type="radio" id="1" value="javascript6" name="languageRegex">
-<p class="select-box__input-text"><i class="fab fa-js-square code-icon"></i><i class="code-version">ECMAS6</i></p>
+<p class="select-box__input-text"><i class="fab fa-js-square code-icon"></i><i class="code-version">JavaScript</i></p>
 </div>
 <!-- <div class="select-box__value">
                             <input class="select-box__input" type="radio" id="1" value="javascript5" name="languageRegex">
@@ -51,6 +51,10 @@
 </div>
 <div id="editor-actions">
 <button title="Get the link" id="iframeIt"><i class="fas fa-link"></i></button>
+<div title="Activate real time check syntax" class="checkbox checkbox__1">
+<input id="real-time-check" type="checkbox">
+<label for="real-time-check"><span class="material-icons">spellcheck</span></label>
+</div>
 </div>
 <div id="editor-input">
 <span style="margin-left: 5px;">/</span>
@@ -58,23 +62,38 @@
 <span style="margin-right: 5px;">/</span>
 </div>
 <div id="editor-flags">
-<div class="checkbox checkbox__1">
-<input id="checkbox-ignorecase" type="checkbox" name="flag" value="i">
-<label for="checkbox-ignorecase"><i>i</i></label>
+<div id="container-input" class="checkbox__2">
+<div id="container-show">
+<span id="input-show" class="material-icons">flag</span>
 </div>
-<div class="checkbox checkbox__1">
-<input id="checkbox-multiline" type="checkbox" name="flag" value="m">
-<label for="checkbox-multiline"><i>m</i></label>
+<div id="overlay-show"></div>
+<input id="flag-i" type="checkbox" value="i" name="flag">
+<label class="label-input" for="flag-i">i</label>
+<input id="flag-m" type="checkbox" value="m" name="flag">
+<label class="label-input" for="flag-m">m</label>
+<input id="flag-g" type="checkbox" value="g" name="flag">
+<label class="label-input" for="flag-g">g</label>
+<div id="container-values">
+<span class="show-values" id="check-i">i</span>
+<span class="show-values" id="check-m">m</span>
+<span class="show-values" id="check-g">g</span>
 </div>
-<div class="checkbox checkbox__1">
-<input id="checkbox-globalmatch" type="checkbox" name="flag" value="g">
-<label for="checkbox-globalmatch"><i>g</i></label>
 </div>
+<!-- <div class="checkbox checkbox__1">
+            <input id="checkbox-ignorecase" type="checkbox" name="flag" value="i">
+            <label for="checkbox-ignorecase"><i>i</i></label>
+        </div>
+        <div class="checkbox checkbox__1">
+            <input id="checkbox-multiline" type="checkbox" name="flag" value="m">
+            <label for="checkbox-multiline"><i>m</i></label>
+        </div>
+        <div class="checkbox checkbox__1">
+            <input id="checkbox-globalmatch" type="checkbox" name="flag" value="g">
+            <label for="checkbox-globalmatch"><i>g</i></label>
+        </div> -->
 </div>
 <div id="editor-terminal">
 <div id="terminal-stats">
-<input id="real-time-check" type="checkbox">
-<label for="real-time-check" title="Activate if want real time check syntax">input syntax check</label>
 <span title="Regex length" class="stats" id="re-len">len:<span class="stat-value"></span></span>
 <span title="Group count" class="stats" id="re-groups">#groups:<span class="stat-value"></span></span>
 </div>
