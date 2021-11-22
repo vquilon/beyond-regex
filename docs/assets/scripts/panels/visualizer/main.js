@@ -181,7 +181,7 @@ var RegexVisualizerPanel = function (options) {
         // Elimino del href si hay parametros
         let indexHashParams = src.indexOf('#');
         src = indexHashParams > 0 ? src.slice(0, indexHashParams) : src;
-        src = `${src}/panels/visualizer`;
+        src = `${src}panels/visualizer`;
 
         const iframeLink = `<iframe frameborder="0" 
             width="500px" height="300px" 
