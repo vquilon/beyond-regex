@@ -7,7 +7,6 @@ var RegexVisualizerPanel = function (options) {
     const isPanelShared = !inputRegex && !visualBtn;
     if (isPanelShared) {
         // ES UN SHARED
-        var params = options.editorParser.getParams();
         var parseRegex = options.editorParser.parseSharedRegex;
     }
     else {
@@ -15,10 +14,9 @@ var RegexVisualizerPanel = function (options) {
     }
 
     const trim = options.editorParser.trim;
-    const getReLanguage = options.editorParser.getReLanguage;
-    const getFlags = options.editorParser.getFlags;
-    const setFlags = options.editorParser.setFlags;
-    const getInputValue = options.editorParser.getInputValue;
+    const getCorrectedReLanguage = options.editorParser.getCorrectedReLanguage;
+    const getCorrectedFlags = options.editorParser.getCorrectedFlags;
+    const getCorrectedRegex = options.editorParser.getCorrectedRegex;
     const _updateRaphaelItemsJSON = options.editorParser._updateRaphaelItemsJSON;
 
     var $loader_view = document.querySelector(`#${options.loader_view_id}`);
@@ -105,7 +103,7 @@ var RegexVisualizerPanel = function (options) {
 
             window.setTimeout(() => {
 
-                raphael_items = RegexVisualizer(regEXSON, getFlags(), paper, $progress_bar);
+                raphael_items = RegexVisualizer(regEXSON, getCorrectedFlags(), paper, $progress_bar);
                 _updateRaphaelItemsJSON(raphael_items);
                 // Una vez que se pinta actualizar el plugin de visualizador SVG
                 // if (!svg_graph_controller && !svg_thumb_controller && !destroyAllHandler_ThumbnailSVGControl) {
@@ -139,8 +137,8 @@ var RegexVisualizerPanel = function (options) {
     };
 
     const visualizeSharedRegex = () => {
-        var regExpresion = params.re;
-        var regEXSON = parseRegex(regExpresion, language_selected = params.reLang);
+        var regExpresion = getCorrectedRegex();
+        var regEXSON = parseRegex(regExpresion, language_selected = getCorrectedReLanguage());
         if (regEXSON) {
             $loader_view.classList.add("loading");
             let updateProgressBar = function (newValue) {
@@ -158,7 +156,7 @@ var RegexVisualizerPanel = function (options) {
                 $progress_bar.style.transform = "";
             }
 
-            raphael_items = RegexVisualizer(regEXSON, getFlags(), paper, $progress_bar);
+            raphael_items = RegexVisualizer(regEXSON, getCorrectedFlags(), paper, $progress_bar);
             [svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl] = CustomThumbnailSVGControl({
                 mainViewId: 'visualizer-graphView',
                 mainSVGId: 'visualizer-graphSVG',
@@ -175,20 +173,16 @@ var RegexVisualizerPanel = function (options) {
     }
 
     const generatePanelURL = function () {
-        let re = "";
-        let flags = "";
-        let reLang = "";
-        if (isPanelShared) {
-            re = params.re;
-            flags = params.flags;
-            reLang = params.reLang;
-        }
-        else {
-            re = getInputValue();
-            flags = getFlags();
-            reLang = getReLanguage();
-        }
-        const src = `${location.href}/panels/visualizer`
+        let re = getCorrectedRegex();
+        let flags = getCorrectedFlags();
+        let reLang = getCorrectedReLanguage();
+
+        let src = location.href;
+        // Elimino del href si hay parametros
+        let indexHashParams = src.indexOf('#');
+        src = indexHashParams > 0 ? src.slice(0, indexHashParams) : src;
+        src = `${src}/panels/visualizer`;
+
         const iframeLink = `<iframe frameborder="0" 
             width="500px" height="300px" 
             src="${src}#!embed=true&flags=${flags}&re=${encodeURIComponent(re)}&reLang=${reLang}">

@@ -109,6 +109,7 @@ function RegexParser() {
         }
     }
     function load_NFA_Parser(language = "javascript6") {
+        // TODO: Check no existing language
         var selected_language_validStructs = validStructs[language];
         return NFAparser || (NFAparser = new NFA(selected_language_validStructs)), NFAparser
     }

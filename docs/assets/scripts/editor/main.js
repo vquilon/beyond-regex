@@ -3,22 +3,38 @@ var EditorParser = (options) => {
     const DEBUG = options.debug || false;
 
     var $inputRegex = document.querySelector('#input');
-    var $realTimeCheck = document.querySelector('#real-time-check');
-    var $terminalError = document.querySelector('#terminal-error');
-    var $errorDef = $terminalError.querySelector("#errorDef");
-    var $errorBox = $terminalError.querySelector('#errorBox');
-    var $editorTerminal = document.querySelector('#editor-terminal');
+    
+    var correctParams = {
+        re: "",
+        reLang: "",
+        flags: ""
+    }
+    if (NONEDITOR) {
+        // ES UN SHARED
+        let params = getParams();
+        correctParams = {
+            re: params.re,
+            reLang: params.reLang,
+            flags: params.flags
+        }
+    }
+    else {
+        var $editorTerminal = document.querySelector('#editor-terminal');
+        var $terminalStats = $editorTerminal.querySelector('#terminal-stats');
+        var $realTimeCheck = document.querySelector('#real-time-check');
+        var $terminalError = document.querySelector('#terminal-error');
+        var $errorDef = $terminalError.querySelector("#errorDef");
+        var $errorBox = $terminalError.querySelector('#errorBox');
+        
 
-    var $terminalStats = $editorTerminal.querySelector('#terminal-stats');
+        var $flags = document.getElementsByName('flag');
+        var $iframeBtn = document.querySelector('#iframeIt');
+        var visualBtn = document.querySelector('#visualizeClick');
+        
+        var raphaelJSONId = options.raphaelJSONId || "raphael-json";
+        var regexSONId = options.regexSONId || "regex-json";
+    }
 
-    var $flags = document.getElementsByName('flag');
-
-    var $iframeBtn = document.querySelector('#iframeIt');
-
-    let raphaelJSONId = options.raphaelJSONId || "raphael-json";
-    let regexSONId = options.regexSONId || "regex-json";
-
-    var visualBtn = document.querySelector('#visualizeClick');
     var $loader_view = document.querySelector(`#${options.loader_view_id}`);
 
     var updateStats = function (regExpresion, regexSON) {
@@ -68,27 +84,7 @@ var EditorParser = (options) => {
         setInnerText($errorBox, msg_re.join("\n"));
         setInnerText($errorDef, msg_def.join("\n"));
     }
-    var getFlags = function () {
-        var fg = '';
-        for (var i = 0, l = $flags.length; i < l; i++) {
-            if ($flags[i].checked)
-                fg += $flags[i].value;
-        }
-        return fg;
-    }
-    var setFlags = function (fg) {
-        for (var i = 0, l = fg.length; i < l; i++) {
-            if (~fg.indexOf($flags[i].value))
-                $flags[i].checked = true;
-            else
-                $flags[i].checked = false;
-        }
-        // setInnerText(flagBox, fg);
-    }
-
-    const getReLanguage = () => {
-        return document.querySelector("[name='languageRegex']:checked").value;
-    };
+    
 
     var getInnerText = function (ele) {
         if (!ele)
@@ -177,6 +173,13 @@ var EditorParser = (options) => {
             regEXSON = init_parse(regExpresion, null, language_selected);
 
             updateStats(regExpresion, regEXSON);
+
+            // Actualizo los valores correctos parseados
+            correctParams = {
+                re: regExpresion,
+                reLang: language_selected,
+                flags: getFlags()
+            }
         } catch (e) {
             if (e instanceof init_parse.RegexSyntaxError) {
                 if (!skipError) {
@@ -194,6 +197,50 @@ var EditorParser = (options) => {
         return regEXSON
     };
 
+    const showErrorShared = (regExpresion, err) => {
+        let msg_error = "";
+        if (typeof err.lastIndex === 'number') {
+            let previousPart = escapeHTML(regExpresion.slice(0, err.lastIndex));
+            let wrongPart = escapeHTML(regExpresion[err.lastIndex]);
+            let postPart = escapeHTML(regExpresion.slice(err.lastIndex + 1));
+            
+            let src = `${location.origin}/beyond-regex/`;
+            editLink = `${src}#!flags=${getCorrectedFlags()}&re=${encodeURIComponent(getCorrectedRegex())}&reLang=${getCorrectedReLanguage()}"`
+            msg_error = `
+                <p style="text-align: left;">Regex Flags: <strong>${getCorrectedFlags()}</strong></p>        
+                <p style="text-align: left;">Regex Language syntax: <strong>${getCorrectedReLanguage()}</strong></p>    
+                <p style="text-align:left; margin-top: 1em">${err.message}</p>
+                <div style="overflow-x: auto; overflow-y: hidden; white-space: nowrap; margin-top: 1em;">${previousPart}<strong style="
+                    color: red;
+                    text-decoration: underline 1px wavy;">${wrongPart}</strong>${postPart}</div>
+            `;
+        }
+        Swal.fire({
+            title: "Shared regex is wrong",
+            icon: "error",
+            html: `
+            <style>
+            a.cool-anchor {
+                color: white;
+                height: 1em;
+                display: block;
+                margin-top: 1em;
+                padding: 0.5em;
+                border-radius: 0.5em;
+                text-decoration: none;
+                line-height: 1;
+                background: linear-gradient(45deg, #03a9f4, #ff0058);
+            }
+            </style>
+            ${msg_error}<a target="_black" class="cool-anchor" href="${editLink}">Correct with the editor!</a>
+            `,
+            showCancelButton: true,
+            showConfirmButton: false,
+            showCloseButton: true,
+            cancelButtonText: 'Close'
+        });
+    }
+
     const parseSharedRegex = (regExpresion, language_selected = "python") => {
         // Aqui se realiza el parseo
         var skipError = false;
@@ -204,9 +251,9 @@ var EditorParser = (options) => {
             regEXSON = init_parse(regExpresion, null, language_selected);
         } catch (e) {
             if (e instanceof init_parse.RegexSyntaxError) {
-                // if (!skipError) {
-                //     if ( !NONEDITOR ) showError(regExpresion, e);
-                // }
+                if (!skipError) {
+                    if ( NONEDITOR ) showErrorShared(regExpresion, e);
+                }
             } else {
                 throw e;
             }
@@ -220,11 +267,44 @@ var EditorParser = (options) => {
     function trim(s) {
         return s.replace(/^\s+/, '').replace(/\s+$/, '');
     }
-    var getInputValue = function () {
-        return $inputRegex.value;
+    // Getters input
+    const getCorrectedRegex = () => {
+        return correctParams.re;
     };
-    var setInputValue = function (v) {
-        return $inputRegex.value = trim(v);
+    const getRegex = () => {
+        return $inputRegex.value;
+    }
+    var setRegexValue = function (v) {
+        $inputRegex.value = v;
+    };
+
+    const getFlags = function () {
+        var fg = '';
+        for (var i = 0, l = $flags.length; i < l; i++) {
+            if ( $flags[i].checked ) fg += $flags[i].value;
+        }
+        return fg;
+    }
+    const getCorrectedFlags = () => {
+        return correctParams.flags;
+    }
+    const setFlags = function (fg) {
+        for (var i = 0; i < $flags.length; i++) {
+            if (~fg.indexOf($flags[i].value))
+                $flags[i].checked = true;
+            else
+                $flags[i].checked = false;
+        }
+    }
+
+    const getReLanguage = () => {
+        return document.querySelector("[name='languageRegex']:checked").value;
+    };
+    const getCorrectedReLanguage = () => {
+        return correctParams.reLang;
+    }
+    var setRegexLanguage = function (v) {
+        document.querySelector(`[value="${v}"]`).checked = true;
     };
 
     function getParams() {
@@ -254,7 +334,7 @@ var EditorParser = (options) => {
 
 
     const generateURL = function (params) {
-        var re = getInputValue();
+        var re = getCorrectedRegex();
         var flags = getFlags();
         return "#!" + (params.debug ? "debug=true&" : "") + (params.cmd ? "cmd=" + params.cmd + "&" : "") + (params.embed ? "embed=true&" : "") + "flags=" + flags + "&re=" + encodeURIComponent(params.re = re);
     }
@@ -265,7 +345,7 @@ var EditorParser = (options) => {
     function initEventsListener() {
         $inputRegex.addEventListener('input', function (event) {
             if ($realTimeCheck.checked) {
-                parseRegex($inputRegex.value);
+                parseRegex(getRegex());
             }
 
             window.hasChanges = true;
@@ -274,19 +354,18 @@ var EditorParser = (options) => {
         });
 
         $iframeBtn.addEventListener('click', function () {
-            if (!parseRegex($inputRegex.value)) return false;
+            if (!parseRegex(getRegex())) return false;
 
             var src = location.href;
-            var i = src.indexOf('#');
-            src = i > 0 ? src.slice(0, i) : src;
-            var re = getInputValue();
+            var indexHashParams = src.indexOf('#');
+            src = indexHashParams > 0 ? src.slice(0, indexHashParams) : src;
+            var re = getCorrectedRegex();
             // window.prompt("Copy the html code:", html);
 
             const iframeLink = `
             <iframe frameborder="0" width="500px" height="300px"
             src="${src}#!embed=true&flags=${getFlags()}&re=${encodeURIComponent(re)}">
-            </iframe>`
-                ;
+            </iframe>`;
 
             const iframeLinkLiteral = escapeHTML(iframeLink);
             Swal.fire({
@@ -371,22 +450,30 @@ var EditorParser = (options) => {
 
         if (params.flags) {
             setFlags(params.flags);
+        } else{
+            setFlags("g");
         }
         if (params.re) {
-            setInputValue(params.re);
+            setRegexValue(params.re);
+        } else{
+            setRegexValue("^BEYOND ReGex(?P<TOOLS>builder|[bv]isualize|(?=de)bugger) Born to be a RegEx editor$");
+        }
+        if (params.reLang) {
+            setRegexLanguage(params.reLang);
+        } else {
+            setRegexLanguage("python");
         }
     }
 
 
     return {
         parseSharedRegex: parseSharedRegex,
-        getParams: getParams,
         trim: trim,
+        getParams: getParams,
         parseRegex: parseRegex,
-        getFlags: getFlags,
-        setFlags: setFlags,
-        getReLanguage: getReLanguage,
-        getInputValue: getInputValue,
+        getCorrectedFlags: getCorrectedFlags,
+        getCorrectedReLanguage: getCorrectedReLanguage,
+        getCorrectedRegex: getCorrectedRegex,
         _updateRaphaelItemsJSON: _updateRaphaelItemsJSON
     }
 }
