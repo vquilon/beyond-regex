@@ -25,6 +25,7 @@
     border-top-right-radius: 10px;
     border-bottom: 2px #0000003d;
     border-bottom-style: dashed;
+    justify-content: center;
 }
 
 #beyond-editor div.container-editor>div#editor-input {
@@ -34,6 +35,9 @@
 
 
 /* FLAGS */
+#editor-flags #container-input {
+    grid-template-columns: 1fr;
+}
 #beyond-editor .container-editor #editor-flags {
     width: unset;
 }

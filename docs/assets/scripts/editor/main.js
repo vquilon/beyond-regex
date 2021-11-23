@@ -80,9 +80,39 @@ var EditorParser = (options) => {
         msg_def.push("Error:" + err.message);
         msg_def.push("");
         $errorBox.style.setProperty("--position-error-ch", `${err.lastIndex + 1}ch`)
+        
+        let prevScrollLeft = 0;
+        prevScrollLeft = $errorBox.scrollLeft;
 
         setInnerText($errorBox, msg_re.join("\n"));
         setInnerText($errorDef, msg_def.join("\n"));
+
+        $errorBox.scrollLeft = prevScrollLeft;
+
+        const animateScroll = (absScroll) => {
+            if (absScroll < 0 ) absScroll = 0;
+            let magScroll = 10;
+            if ( Math.abs( $errorBox.scrollLeft - maxScrollLeft ) < 10 ) {
+                magScroll = Math.abs( $errorBox.scrollLeft - maxScrollLeft );
+                $errorBox.scrollLeft = absScroll;
+            }
+            else {
+                let relScroll = absScroll - $errorBox.scrollLeft
+                let dirScroll = relScroll / Math.abs(relScroll);
+                
+                $errorBox.scrollLeft += dirScroll*magScroll;
+
+                if ( dirScroll * (absScroll - $errorBox.scrollLeft) > 0 ) {
+                    requestAnimationFrame(() => {
+                        animateScroll(absScroll);
+                    });
+                }
+            }
+        };
+        var maxScrollLeft = ( $errorBox.scrollWidth - $errorBox.clientWidth );
+        let boxErrorScrollLeft = (( $errorBox.scrollWidth / $errorBox.textContent.length ) * (err.lastIndex + 1)) - $errorBox.clientWidth/2;
+        // animateScroll(boxErrorScrollLeft);
+        $errorBox.scrollLeft = boxErrorScrollLeft;
     }
     
 
@@ -343,9 +373,14 @@ var EditorParser = (options) => {
     }
 
     function initEventsListener() {
+        let timeoutInputId = null;
         $inputRegex.addEventListener('input', function (event) {
+            if (timeoutInputId) clearTimeout(timeoutInputId);
             if ($realTimeCheck.checked) {
-                parseRegex(getRegex());
+                timeoutInputId = setTimeout( () => {
+                    parseRegex(getRegex());
+                }, 500);
+                
             }
 
             window.hasChanges = true;
