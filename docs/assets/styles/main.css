@@ -742,6 +742,18 @@ span#close-side:hover:after {
 
 .checkbox__1 label>* {
     user-select: none;
+
+    background: linear-gradient(0deg, #03a9f4, #ff0058);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: #47474700;
+}
+
+.checkbox__1 input:checked~label>* {
+    color: white;
+    -webkit-text-fill-color: white;
+    text-shadow: 0 0 10px #ffffff, -1px 0px 5px #03a9f4, 1px 0px 5px #ff0058;
 }
 
 .checkbox__1 label {
@@ -775,11 +787,6 @@ span#close-side:hover:after {
     font-weight: 500;
     line-height: 1;
     color: #313030c2;
-    background: linear-gradient(0deg, #03a9f4, #ff0058);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: #47474700;
     /* transition: 0.3s ease; */
 }
 
@@ -790,9 +797,6 @@ span#close-side:hover:after {
 .checkbox__1 input:checked~label {
     font-weight: 500;
     font-size: 85% !important;
-    color: white;
-    -webkit-text-fill-color: white;
-    text-shadow: 0 0 10px #ffffff, -1px 0px 5px #03a9f4, 1px 0px 5px #ff0058;
 }
 
 /* END FLAGS CHECKBOX */

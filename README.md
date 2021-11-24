@@ -22,3 +22,11 @@ Por otra parte, se desarrollan herramientas que ayuden a la comprension y aprove
 - [x] Compartir paneles de visualizacion como iframes interactivos.
 - [ ] Optimizacion de carga independiente entre los diferentes scripts y styles.
 - [x] Separacion de los diferentes paneles y editor.
+
+# IMPROVES
+- B[V]isualizer
+  - [ ] Select path of every branch to visualize the match tokens.
+  - [ ] Visualize every single branch in graph.
+  - [ ] If touch box token makr in editor.
+- Editor  
+  - [ ] List all possible matches
