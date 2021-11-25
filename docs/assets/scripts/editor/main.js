@@ -349,9 +349,10 @@ var EditorParser = (options) => {
             };
         } else {
             params = params.slice(2);
-            params = params.split("&").reduce(function (p, a) {
-                a = a.split("=");
-                p[a[0]] = a[1];
+            params = params.split("&").reduce(function (p, indvParam) {
+                let val = indvParam.substring(indvParam.indexOf("=")+1);
+                let key = indvParam.substring(0, indvParam.indexOf("="));
+                p[key] = val;
                 return p;
             }, {});
             params.raLang = params.reLang;
