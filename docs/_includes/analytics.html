@@ -3,14 +3,6 @@
 <!-- <link rel="preconnect" as="script" href="https://www.googletagmanager.com/gtag/js?id={{ site.gtag }}"> -->
 <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.gtag }}"></script>
 <scrip asynct>
-	window.dataLayer = window.dataLayer || [];
-	function gtag() { dataLayer.push(arguments); }
-	gtag('js', new Date());
+window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); // gtag('config', '{{ site.gtag }}'); // Set default value of custom dimension 1 to 'online' gtag('config', "{{ site.gtag }}", { 'custom_map': { 'dimension1': 'online' } });
 
-	// gtag('config', '{{ site.gtag }}');
-	// Set default value of custom dimension 1 to 'online'
-	gtag('config', "{{ site.gtag }}", {
-		'custom_map': { 'dimension1': 'online' }
-	});
-</script>
-{% endif %}
+{% endif %}</scrip>
