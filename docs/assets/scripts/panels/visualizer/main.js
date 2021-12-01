@@ -362,7 +362,7 @@ var RegexVisualizerPanel = function (options) {
                 </div>
                 <canvas style="display:none; width: 100%; height: unset;" id="export-image"></canvas>
                 
-                <a class="anchor-export-img" href="" download="graph-regex.png"><img id="exported-img" src=""><span><i class="fas fa-download"></i>SVG</span></a>
+                <a class="anchor-export-img" href="" download="graph-regex.svg"><img id="exported-img" src=""><span><i class="fas fa-download"></i>SVG</span></a>
                 `,
                 showCancelButton: true,
                 showConfirmButton: false,

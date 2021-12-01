@@ -18,6 +18,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Thin') format('svg'); /* Legacy iOS */
     font-style: normal;
     font-weight: 100;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -30,6 +31,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-ExtraLight') format('svg'); /* Legacy iOS */
     font-style: normal;
     font-weight: 200;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -42,6 +44,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Light') format('svg'); /* Legacy iOS */
     font-style: normal;
     font-weight: 300;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -54,6 +57,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Regular') format('svg'); /* Legacy iOS */
     font-style: normal;
     font-weight: 400;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -66,6 +70,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Medium') format('svg'); /* Legacy iOS */
     font-style: normal;
     font-weight: 500;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -78,6 +83,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-SemiBold') format('svg'); /* Legacy iOS */
     font-style: normal;
     font-weight: 600;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -90,6 +96,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Bold') format('svg'); /* Legacy iOS */
     font-style: normal;
     font-weight: 700;
+    font-display: swap;
 }
 
 /* OBLIQUE */
@@ -104,6 +111,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-ThinOblique') format('svg'); /* Legacy iOS */
     font-style: oblique;
     font-weight: 100;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -116,6 +124,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-ExtraLightOblique') format('svg'); /* Legacy iOS */
     font-style: oblique;
     font-weight: 200;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -128,6 +137,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-LightOblique') format('svg'); /* Legacy iOS */
     font-style: oblique;
     font-weight: 300;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -140,6 +150,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Oblique') format('svg'); /* Legacy iOS */
     font-style: oblique;
     font-weight: 400;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -152,6 +163,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-MediumOblique') format('svg'); /* Legacy iOS */
     font-style: oblique;
     font-weight: 500;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -164,6 +176,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-SemiBoldOblique') format('svg'); /* Legacy iOS */
     font-style: oblique;
     font-weight: 600;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -176,6 +189,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-BoldOblique') format('svg'); /* Legacy iOS */
     font-style: oblique;
     font-weight: 700;
+    font-display: swap;
 }
 
 /* ITALIC */
@@ -190,6 +204,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-ThinItalic') format('svg'); /* Legacy iOS */
     font-style: italic;
     font-weight: 100;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -202,6 +217,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-ExtraLightItalic') format('svg'); /* Legacy iOS */
     font-style: italic;
     font-weight: 200;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -214,6 +230,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-LightItalic') format('svg'); /* Legacy iOS */
     font-style: italic;
     font-weight: 300;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -226,6 +243,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Italic') format('svg'); /* Legacy iOS */
     font-style: italic;
     font-weight: 400;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -238,6 +256,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-MediumItalic') format('svg'); /* Legacy iOS */
     font-style: italic;
     font-weight: 500;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -250,6 +269,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-SemiBoldItalic') format('svg'); /* Legacy iOS */
     font-style: italic;
     font-weight: 600;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono";
@@ -262,6 +282,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-BoldItalic') format('svg'); /* Legacy iOS */
     font-style: italic;
     font-weight: 700;
+    font-display: swap;
 }
 
 
@@ -277,6 +298,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-ThinOblique') format('svg'); /* Legacy iOS */
     font-style: oblique;
     font-weight: 100;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono Oblique";
@@ -289,6 +311,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-ExtraLightOblique') format('svg'); /* Legacy iOS */
     font-style: oblique;
     font-weight: 200;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono Oblique";
@@ -301,6 +324,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-LightOblique') format('svg'); /* Legacy iOS */
     font-style: oblique;
     font-weight: 300;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono Oblique";
@@ -313,6 +337,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-Oblique') format('svg'); /* Legacy iOS */
     font-style: oblique;
     font-weight: 400;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono Oblique";
@@ -325,6 +350,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-MediumOblique') format('svg'); /* Legacy iOS */
     font-style: oblique;
     font-weight: 500;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono Oblique";
@@ -337,6 +363,7 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-SemiBoldOblique') format('svg'); /* Legacy iOS */
     font-style: oblique;
     font-weight: 600;
+    font-display: swap;
 }
 @font-face {
     font-family: "VictorMono Oblique";
@@ -349,4 +376,5 @@
     url('../fonts/VictorMono/SVG/VictorMono.svg#VictorMono-BoldOblique') format('svg'); /* Legacy iOS */
     font-style: oblique;
     font-weight: 700;
+    font-display: swap;
 }

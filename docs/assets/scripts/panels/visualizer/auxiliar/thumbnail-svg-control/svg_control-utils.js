@@ -33,31 +33,31 @@ let Utils = {
     }
 
     /**
-* Checks if an object is an Object
-*
-* @param  {Object}  o Object
-* @return {Boolean}   returns true if object is an Object
-*/
+    * Checks if an object is an Object
+    *
+    * @param  {Object}  o Object
+    * @return {Boolean}   returns true if object is an Object
+    */
     , isObject: function (o) {
         return Object.prototype.toString.call(o) === '[object Object]';
     }
 
     /**
-* Checks if variable is Number
-*
-* @param  {Integer|Float}  n
-* @return {Boolean}   returns true if variable is Number
-*/
+    * Checks if variable is Number
+    *
+    * @param  {Integer|Float}  n
+    * @return {Boolean}   returns true if variable is Number
+    */
     , isNumber: function (n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
     /**
-* Search for an SVG element
-*
-* @param  {Object|String} elementOrSelector DOM Element or selector String
-* @return {Object|Null}                   SVG or null
-*/
+    * Search for an SVG element
+    *
+    * @param  {Object|String} elementOrSelector DOM Element or selector String
+    * @return {Object|Null}                   SVG or null
+    */
     , getSvg: function (elementOrSelector) {
         var element
             , svg;
@@ -103,11 +103,11 @@ let Utils = {
     }
 
     /**
-* Attach a given context to a function
-* @param  {Function} fn      Function
-* @param  {Object}   context Context
-* @return {Function}           Function with certain context
-*/
+    * Attach a given context to a function
+    * @param  {Function} fn      Function
+    * @param  {Object}   context Context
+    * @return {Function}           Function with certain context
+    */
     , proxy: function (fn, context) {
         return function () {
             return fn.apply(context, arguments)
@@ -115,23 +115,23 @@ let Utils = {
     }
 
     /**
-* Returns object type
-* Uses toString that returns [object SVGPoint]
-* And than parses object type from string
-*
-* @param  {Object} o Any object
-* @return {String}   Object type
-*/
+    * Returns object type
+    * Uses toString that returns [object SVGPoint]
+    * And than parses object type from string
+    *
+    * @param  {Object} o Any object
+    * @return {String}   Object type
+    */
     , getType: function (o) {
         return Object.prototype.toString.apply(o).replace(/^\[object\s/, '').replace(/\]$/, '')
     }
 
     /**
-* If it is a touch event than add clientX and clientY to event object
-*
-* @param  {Event} evt
-* @param  {SVGSVGElement} svg
-*/
+    * If it is a touch event than add clientX and clientY to event object
+    *
+    * @param  {Event} evt
+    * @param  {SVGSVGElement} svg
+    */
     , mouseAndTouchNormalize: function (evt, svg) {
         // If no clientX then fallback
         if (evt.clientX === void 0 || evt.clientX === null) {
@@ -161,14 +161,14 @@ let Utils = {
     }
 
     /**
-* Check if an event is a double click/tap
-* TODO: For touch gestures use a library (hammer.js) that takes in account other events
-* (touchmove and touchend). It should take in account tap duration and traveled distance
-*
-* @param  {Event}  evt
-* @param  {Event}  prevEvt Previous Event
-* @return {Boolean}
-*/
+    * Check if an event is a double click/tap
+    * TODO: For touch gestures use a library (hammer.js) that takes in account other events
+    * (touchmove and touchend). It should take in account tap duration and traveled distance
+    *
+    * @param  {Event}  evt
+    * @param  {Event}  prevEvt Previous Event
+    * @return {Boolean}
+    */
     , isDblClick: function (evt, prevEvt) {
         // Double click detected by browser
         if (evt.detail === 2) {
@@ -187,10 +187,10 @@ let Utils = {
     }
 
     /**
-* Returns current timestamp as an integer
-*
-* @return {Number}
-*/
+    * Returns current timestamp as an integer
+    *
+    * @return {Number}
+    */
     , now: Date.now || function () {
         return new Date().getTime();
     }
@@ -237,11 +237,11 @@ let Utils = {
     // jscs:enable
 
     /**
-* Create a requestAnimationFrame simulation
-*
-* @param  {Number|String} refreshRate
-* @return {Function}
-*/
+    * Create a requestAnimationFrame simulation
+    *
+    * @param  {Number|String} refreshRate
+    * @return {Function}
+    */
     , createRequestAnimationFrame: function (refreshRate) {
         var timeout = null
 
@@ -283,11 +283,11 @@ let SVGUtils = {
     evNS: 'http://www.w3.org/2001/xml-events',
 
     /**
-* Get svg dimensions: width and height
-*
-* @param  {SVGSVGElement} svg
-* @return {Object}     {width: 0, height: 0}
-*/
+    * Get svg dimensions: width and height
+    *
+    * @param  {SVGSVGElement} svg
+    * @return {Object}     {width: 0, height: 0}
+    */
     getBoundingClientRectNormalized: function (svg) {
         if (svg.clientWidth && svg.clientHeight) {
             return { width: svg.clientWidth, height: svg.clientHeight }
@@ -300,11 +300,11 @@ let SVGUtils = {
     },
 
     /**
-* Gets g element with class of "viewport" or creates it if it doesn't exist
-*
-* @param  {SVGSVGElement} svg
-* @return {SVGElement}     g (group) element
-*/
+    * Gets g element with class of "viewport" or creates it if it doesn't exist
+    *
+    * @param  {SVGSVGElement} svg
+    * @return {SVGElement}     g (group) element
+    */
     getOrCreateViewport: function (svg, selector) {
         var viewport = null
 
@@ -362,10 +362,10 @@ let SVGUtils = {
     },
 
     /**
-* Set SVG attributes
-*
-* @param  {SVGSVGElement} svg
-*/
+    * Set SVG attributes
+    *
+    * @param  {SVGSVGElement} svg
+    */
     setupSvgAttributes: function (svg) {
         // Setting default attributes
         svg.setAttribute('xmlns', this.svgNS);
@@ -382,8 +382,8 @@ let SVGUtils = {
     },
 
     /**
-* How long Internet Explorer takes to finish updating its display (ms).
-*/
+    * How long Internet Explorer takes to finish updating its display (ms).
+    */
     internetExplorerRedisplayInterval: 300,
 
     /**
@@ -429,7 +429,7 @@ let SVGUtils = {
         // IE has a bug that makes markers disappear on zoom (when the matrix "a" and/or "d" elements change)
         // see http://stackoverflow.com/questions/17654578/svg-marker-does-not-work-in-ie9-10
         // and http://srndolha.wordpress.com/2013/11/25/svg-line-markers-may-disappear-in-internet-explorer-11/
-        
+
         if (_browser === 'ie' && !!defs) {
             // this refresh is intended for redisplaying the SVG during zooming
             defs.parentNode.insertBefore(defs, defs);
@@ -443,12 +443,12 @@ let SVGUtils = {
     },
 
     /**
-* Instantiate an SVGPoint object with given event coordinates
-*
-* @param {Event} evt
-* @param  {SVGSVGElement} svg
-* @return {SVGPoint}     point
-*/
+    * Instantiate an SVGPoint object with given event coordinates
+    *
+    * @param {Event} evt
+    * @param  {SVGSVGElement} svg
+    * @return {SVGPoint}     point
+    */
     getEventPoint: function (evt, svg) {
         var point = svg.createSVGPoint()
 
@@ -461,23 +461,23 @@ let SVGUtils = {
     },
 
     /**
-* Get SVG center point
-*
-* @param  {SVGSVGElement} svg
-* @return {SVGPoint}
-*/
+    * Get SVG center point
+    *
+    * @param  {SVGSVGElement} svg
+    * @return {SVGPoint}
+    */
     getSvgCenterPoint: function (svg, width, height) {
         return this.createSVGPoint(svg, width / 2, height / 2)
     },
 
     /**
-* Create a SVGPoint with given x and y
-*
-* @param  {SVGSVGElement} svg
-* @param  {Number} x
-* @param  {Number} y
-* @return {SVGPoint}
-*/
+    * Create a SVGPoint with given x and y
+    *
+    * @param  {SVGSVGElement} svg
+    * @param  {Number} x
+    * @param  {Number} y
+    * @return {SVGPoint}
+    */
     createSVGPoint: function (svg, x, y) {
         var point = svg.createSVGPoint()
         point.x = x
