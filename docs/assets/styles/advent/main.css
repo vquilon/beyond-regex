@@ -1,0 +1,153 @@
+div#advent {
+    margin: 2em;
+    font-size: 30px;
+    font-style: italic;
+}
+
+#advent h2 {
+    background: linear-gradient(90deg, #03a9f4, #ff0058);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: #47474700;
+}
+
+div#advent-challenges {
+    display: grid;
+    width: 100%;
+    max-width: calc(1em * 6 + 6em * 7);
+    margin: 1em auto;
+    grid-template-columns: repeat(auto-fill, minmax(6em, 1fr));
+    grid-gap: 0.5em;
+    font-size: 24px;
+}
+
+article.challenge {
+    height: 6em;
+    padding: 0.25em;
+    border: 0.1em dashed #ffffff63;
+    word-break: break-word;
+    position: relative;
+}
+
+article.challenge:not(.uknown):hover {
+    cursor: pointer;
+}
+article.challenge > * {
+    z-index: 2
+}
+article.challenge:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: #424242d4;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+article.challenge:hover:before {
+    background: #282828d4;
+}
+article.challenge:after {
+    counter-reset: variable var(--monthday);
+    content: counter(variable);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    color: #00000061;
+    top: 0;
+    left: 0;
+    display: flex;
+    font-size: 5em;
+    font-style: normal;
+    word-break: normal;
+    font-weight: bold;
+    line-height: 1;
+    align-items: center;
+    justify-content: center;
+    z-index: -1;
+}
+
+article.challenge:not(.uknown):hover:after {
+    background: linear-gradient(315deg, #03a9f4, #ff0058);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: #47474700;
+}
+
+article.challenge header {
+    height: 80%;
+}
+
+article.challenge.uknown {
+    border: 0.1em dashed #ffffff40;
+    cursor: not-allowed;
+}
+
+header h3#challenge-title {
+    color: white;
+    line-height: 1;
+}
+
+.challenge.uknown h3#challenge-title {
+    color: #979797;
+}
+
+article.challenge footer {
+    height: 20%;
+    font-size: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    position: relative;
+    box-shadow: none;
+    background: transparent;
+}
+
+article.challenge.completed footer:after {
+    content: "O";
+    color: white;
+    right: 0em;
+    background: green;
+    position: absolute;
+    width: 2em;
+    display: flex;
+    bottom: 0;
+    border-radius: 50%;
+    height: 2em;
+    align-items: center;
+    justify-content: center;
+}
+
+.badge {
+    background: #666666;
+    padding: 0 0.5em;
+    border-radius: 1em;
+    font-style: normal;
+}
+
+.badge-easy {
+    background: #00b4ff;
+}
+
+.badge-medium {
+    background: yellow;
+}
+
+.badge-hard {
+    background: orange;
+}
+
+.badge-extreme {
+    background: red;
+}
+
+.badge-insane {
+    background: purple;
+}
+
+.badge-noway {
+    background: linear-gradient(45deg, black, transparent);
+}

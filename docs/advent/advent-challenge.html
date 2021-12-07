@@ -1,0 +1,6 @@
+<p id="{{ forloop.index }}-tags">
+    {% assign tags = challenge.tags | split: "," %}
+    {%- for tag in tags -%}
+    <span class="badge badge-pill">{{ tag }}</span>
+    {%- endfor -%}
+</p>

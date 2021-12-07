@@ -1,0 +1,360 @@
+- title: Catch the thiefs
+  weekday: Wed
+  tags: match,characterclass
+  difficult: easy
+  referer: adventJS
+  tests:
+    - input:
+        - "barcelona"
+        - "Barcelona"
+    - result:
+        - ""
+        - "Barcelona"
+  description: Match all words contains the letters `a` and `n`
+
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+  
+- title: Cooking...
+  weekday: Fri
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+  
+- title: Cooking...
+  weekday: Sat
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+- title: Cooking...
+  weekday: Sun
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+- title: Cooking...
+  weekday: Mon
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+- title: Cooking...
+  weekday: Tue
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+- title: Cooking...
+  weekday: Wed
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+  
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+  
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+  
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+  
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+  
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow
+
+  
+- title: Cooking...
+  weekday: Thu
+  tags: regex
+  difficult: "uknown"
+  referer: ...
+  tests:
+  - input:
+      - "barcelona"
+      - "Barcelona"
+  - result:
+      - ""
+      - "Barcelona"
+  description: Comming Tomorrow

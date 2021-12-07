@@ -2,7 +2,11 @@
 <html>
 
 <head>
+  
   {% include head/meta.html %}
+  <!-- SEO tags -->
+  {% seo %}
+
   {% include head/base_styles.html %}
   {% include head/building-styles.html %}
 
@@ -18,15 +22,26 @@
   <!-- Scripts para el control de la barra de conexion -->
   {% include offline-status/scripts.html %}
 
-  <script defer src="{{ site.baseurl }}/assets/scripts/main.js"></script>
+  <!-- DEFINE / INITIALIZE LISTENERS -->
+  <script defer src="{{ site.baseurl }}/assets/scripts/switch_theme.js"></script>
+  <script defer src="{{ site.baseurl }}/assets/scripts/menu_listeners.js"></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      changeDark2LightTheme();
+      init_menu_listeners();
+    };
+  </script>
 
-  <!-- SEO tags -->
-  {% seo %}
-
+  <noscript>
+    <h2 id="noscript">Please enable JavaScript in order to use all features</h2>
+  </noscript>
 </head>
 
 <body>
-  {% include pwa/register_pwa.html %}
+  <script defer>
+    document.body.classList.add("js-enabled");
+  </script>
+  {% include svg-utils/svg-filters.html %}
   <div id="container-main">
     {{ content }}
   </div>

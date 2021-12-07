@@ -568,37 +568,37 @@ function RegexParser() {
                 a.chars = a.chars.slice(0, -4),
                 a.chars += e
         }
-        function f_charsetRangeEnd(t, e, r, n, i) {
-            var a = t[0]
-                , s = a.chars.slice(-2);
-            s = [s[0], e],
-                s.lastIndex = r,
-                a.ranges.push(s),
-                a.chars = a.chars.slice(0, -2)
+        function f_charsetRangeEnd(lastStack, actualChar, lastIndex, n, i) {
+            let actualToken = lastStack[0];
+            let charRangeStart = actualToken.chars.slice(-2);
+            charRangeStart = [charRangeStart[0], actualChar],
+            charRangeStart.lastIndex = lastIndex;
+            actualToken.ranges.push(charRangeStart);
+            actualToken.chars = actualToken.chars.slice(0, -2);
         }
         function f_charsetRangeEndNormalEscape(t, e) {
             specialChars.hasOwnProperty(e) && (e = specialChars[e]),
                 f_charsetRangeEnd.apply(this, arguments)
         }
-        function f_charsetRangeEndUnicodeEscape(t, e, r) {
-            var n = t[0]
-                , i = n.chars.slice(-3) + e;
-            n.chars = n.chars.slice(0, -3);
-            var a = n.ranges.pop();
-            e = String.fromCharCode(parseInt(i, 16)),
-                a = [a[0], e],
-                a.lastIndex = r,
-                n.ranges.push(a)
+        function f_charsetRangeEndUnicodeEscape(lastStack, actualChar, lastIndex) {
+            let actualToken = lastStack[0];
+            let charsRangeEnd = actualToken.chars.slice(-3) + actualChar;
+            actualToken.chars = actualToken.chars.slice(0, -3);
+            var charsRangeStart = actualToken.ranges.pop();
+            actualChar = String.fromCharCode(parseInt(charsRangeEnd, 16));
+            charsRangeStart = [charsRangeStart[0], actualChar];
+            charsRangeStart.lastIndex = lastIndex;
+            actualToken.ranges.push(charsRangeStart);
         }
-        function f_charsetRangeEndHexEscape(t, e, r) {
-            var n = t[0]
-                , i = n.chars.slice(-1) + e;
-            n.chars = n.chars.slice(0, -1);
-            var a = n.ranges.pop();
-            e = String.fromCharCode(parseInt(i, 16)),
-                a = [a[0], e],
-                a.lastIndex = r,
-                n.ranges.push(a)
+        function f_charsetRangeEndHexEscape(lastStack, actualChar, lastIndex) {
+            var actualToken = lastStack[0];
+            let charsRangeEnd = actualToken.chars.slice(-1) + actualChar;
+            actualToken.chars = actualToken.chars.slice(0, -1);
+            var charsRangeStart = actualToken.ranges.pop();
+            actualChar = String.fromCharCode(parseInt(charsRangeEnd, 16));
+            charsRangeStart = [charsRangeStart[0], actualChar];
+            charsRangeStart.lastIndex = lastIndex;
+            actualToken.ranges.push(charsRangeStart);
         }
         function f_backref(t, e, r, n) {
             function i(t, e) {
