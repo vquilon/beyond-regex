@@ -41,7 +41,7 @@ body, html, * {
 body:before {
     content: "";
     position: absolute;
-    background-image: url(../images/background_repeat_2.png);
+    background-image: url(../images/background_repeat_3.png);
     opacity: 0.1;
     background-repeat: repeat;
     width: 100%;
@@ -304,12 +304,14 @@ span#close-side:hover:after {
 }
 
 #sidebar .container-heading section#sections {
-    display: flex;
-    grid-gap: 1em;
-    flex-wrap: wrap;
-    width: 100%;
+    display: grid;
+    grid-gap: 2em;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: 5em 5em;
     justify-content: center;
-    padding: 1em 5em;
+    width: 100%;
+    padding: 1em 4em;
     box-sizing: border-box;
 }
 
@@ -328,7 +330,7 @@ span#close-side:hover:after {
 
 #sidebar .container-heading section#sections a:hover {
     /* background: #ffffff70; */
-    box-shadow: inset 0 0 10px 0px white, inset -5px 0px 10px 0 #ff00581f, inset 5px 0px 10px 0 #03a9f421, 0 0 32px 0px #ffffff, 5px 8px 32px -5px #ff0058b8, -5px 8px 32px -5px #03a9f4;
+    box-shadow: inset 0 0 10px -4px white, inset -5px 0px 10px 0 #ff00581f, inset 5px 0px 10px 0 #03a9f421, 0 0 10px -4px #ffffff, 5px 8px 32px -5px #ff0058b8, -5px 8px 32px -5px #03a9f4;
 }
 
 #sidebar .container-heading section#sections a i {

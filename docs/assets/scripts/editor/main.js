@@ -162,7 +162,7 @@ var EditorParser = (options) => {
     // }
 
     const _updateJSONViewer = function ($elem, jsonData) {
-        if (DEBUG) {
+        if (DEBUG && window.hasOwnProperty("JsonView")) {
             $elem.innerHTML = "";
             window.setTimeout(() => JsonView.renderJSON(jsonData, $elem), 50);
         }
