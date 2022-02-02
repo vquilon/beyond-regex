@@ -7,19 +7,21 @@
 <!-- Estilos propios del PWA -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/pwa.css">
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/install-as-app.css">
-{% include mobile/styles.html %}
-<!-- VENDORS SCRIPTS -->
-{% include head/base_scripts.html %}
+{% include editor/circle-selector/styles.html %} {% include editor/flag-selector/styles.html %} {% include mobile/styles.html %} {% include advent/styles.html %}
 <!-- Scripts para el control de la barra de conexion -->
 {% include offline-status/scripts.html %}
+<!-- VENDORS SCRIPTS -->
+{% include head/base_scripts.html %} {% include editor/scripts.html %}
 <!-- DEFINE / INITIALIZE LISTENERS -->
 <script defer="defer" src="{{ site.baseurl }}/assets/scripts/switch_theme.js"></script>
 <script defer="defer" src="{{ site.baseurl }}/assets/scripts/menu_listeners.js"></script>
+<script defer="defer" src="{{ site.baseurl }}/assets/scripts/advent/advent_listeners.js"></script>
 <script type="text/javascript">
 window.onload = function() {
-      changeDark2LightTheme();
-      init_menu_listeners();
-    };
+        changeDark2LightTheme();
+        init_menu_listeners();
+        advent_listeners();
+        };
 </script>
 <noscript>
 <h2 id="noscript">Please enable JavaScript in order to use all features</h2>
@@ -29,7 +31,7 @@ window.onload = function() {
 <script defer="defer">
 document.body.classList.add("js-enabled");
 </script>
-{% include svg-utils/svg-filters.html %}
+{% include pwa/register_pwa.html %} {% include pwa/install_as_app.html %} {% include svg-utils/svg-filters.html %}
 <div id="container-main">
 {{ content }}
 </div>

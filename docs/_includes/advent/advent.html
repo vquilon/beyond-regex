@@ -1,0 +1,18 @@
+<div id="advent">
+<h2>Complete all Regex-Challenges!</h2>
+<div id="advent-challenges">
+{% for challenge in include.source %}
+<article ch-title="{{ challenge.title }}" ch-description="{{ challenge.description }}" ch-tests="{{ challenge.tests.intput }}" ch-tags="{{ challenge.tags }}" class="challenge {{ challenge.difficult }}" style="--monthday: {{ forloop.index }}">
+<header>
+<h3 id="challenge-title">{{ challenge.title }}</h3>
+</header>
+<footer>
+<span id="challenge-difficult" class="badge badge-{{ challenge.difficult }}">{{ challenge.difficult }}</span>
+</footer>
+</article>
+{% endfor %}
+</div>
+</div>
+<div id="editor" style="visibility: hidden; display: none;">
+{% include editor/editor.html %}
+</div>

@@ -1,0 +1,1 @@
+const init_menu_listeners=()=>{document.querySelector("#close-side").addEventListener("click",e=>{document.querySelector("#container-main").classList.toggle("menu-open")}),document.querySelector("#container-main > #sidebar-overlay").addEventListener("click",e=>{document.querySelector("#container-main").classList.remove("menu-open")})};
