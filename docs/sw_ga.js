@@ -2,7 +2,7 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox
 importScripts('./changelog.js');
 
 const SW_VERSION = '0.0.alpha';
-const SW_BUILD = '14'
+const SW_BUILD = '15'
 
 const CACHE_IMAGES = "beyond_regex-images";
 const CACHE_FONTS = "beyond_regex-fonts";
