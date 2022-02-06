@@ -1118,10 +1118,13 @@ var ThumbnailSVGControl = function (options) {
     }
 
     // Preparacion inicial del estado de zoom
-    animateZoom(main_svg, 0.9 * main_svg.getZoom(), animationTime = 1, fps = 60, callback = function () {
-        initialState.pan = main_svg.getPan();
-        initialState.zoom = main_svg.getZoom();
-    });
+    // animateZoom(main_svg, 0.9 * main_svg.getZoom(), animationTime = 0.5, fps = 60, callback = function () {
+    //     initialState.pan = main_svg.getPan();
+    //     initialState.zoom = main_svg.getZoom();
+    // });
+    main_svg.zoomBy(0.95);
+    initialState.pan = main_svg.getPan();
+    initialState.zoom = main_svg.getZoom();
 
     thumb_svg.zoomBy(0.9);
     thumb_svg.updateThumbScope();

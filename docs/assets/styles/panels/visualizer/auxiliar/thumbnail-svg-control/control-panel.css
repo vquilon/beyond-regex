@@ -20,3 +20,7 @@
 	opacity: 1;
 	transform: translateY(-15px);
 }
+
+#visualizer-graph .control-panel .hide-button {
+	display: none;
+}

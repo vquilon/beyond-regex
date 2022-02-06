@@ -15,9 +15,11 @@
 }
 
 #visualizer-graph>*:not(.control-panel), #visualizer-graph:after, #visualizer-graph:before {
-    height: 80% !important;
-    min-height: 80% !important;
+    height: calc(100% - 8em) !important;
+    min-height: calc(100% - 8em) !important;
     border-radius: unset !important;
+
+    transition: height 0.5s ease;
 }
 
 #visualizer-graph .control-panel {
@@ -27,25 +29,60 @@
     pointer-events: none;
     z-index: 10;
     display: flex;
-    top: 80%;
+    top: calc(100% - 8em);
     position: relative;
     margin-left: 10px;
-    height: 20%;
+    height: 8em;
     column-gap: 10px;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: flex-start;
     background: linear-gradient(145deg, #3b3b3b, #242424);
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     padding: 1em;
     box-sizing: border-box;
+
+    transition: transform 0.5s ease;
 }
 
 #visualizer-graph:hover .control-panel {
     opacity: 1;
-    transition: none;
+    /* transition: none; */
     transform: unset;
 }
+
+#visualizer-graph .control-panel .hide-button  {
+    color: white;
+    display: block;
+    position: absolute;
+    top: -0.8em;
+    width: 100%;
+    left: 0;
+    height: 1em;
+    background: #1f1f1f;
+    text-align: center;
+    pointer-events: all;
+
+    transform: none;
+}
+
+#visualizer-graph {
+    overflow: hidden;
+}
+
+#visualizer-graph.hide-control>*:not(.control-panel), #visualizer-graph.hide-control:after, #visualizer-graph.hide-control:before {
+    height: calc(100%) !important;
+    max-height: calc(100%) !important;
+}
+
+#visualizer-graph.hide-control .control-panel {
+    transform: translateY(calc(100% - 0.4em)) !important;
+}
+
+#visualizer-graph.hide-control .control-panel .hide-button {
+    transform: rotate(180deg);
+}
+
 
 #visualizer-graph #graph-loader {
     height: calc(80% - 20px);
@@ -131,9 +168,11 @@
 }
 
 .icon {
-    background: rgb(255 255 255 / 30%);
-    box-shadow: inset 0 0 10px 0px #ffffff4d, 0 0 5px 0px #ffffffb3;
+    /* background: rgb(255 255 255 / 30%); */
+    /* box-shadow: inset 0 0 10px 0px #ffffff4d, 0 0 5px 0px #ffffffb3; */
     /* box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c; */
+    background: #00000042;
+    box-shadow: none;
 }
 
 .icon svg circle {
@@ -154,11 +193,13 @@
 }
 
 .icon:hover {
-    box-shadow: inset 0 0 20px 0px #efefef, 0 0 15px 0px #ffffff;
+    /* box-shadow: inset 0 0 20px 0px #efefef, 0 0 15px 0px #ffffff; */
+    box-shadow: none;
 }
 
 .icon:active {
-    box-shadow: inset 0 0 20px 0px #efefef, 0 0 15px 0px #ffffff, inset 5px 0px 20px -5px #ff0058, inset -5px 0px 20px -5px #03a9f4;
+    /* box-shadow: inset 0 0 20px 0px #efefef, 0 0 15px 0px #ffffff, inset 5px 0px 20px -5px #ff0058, inset -5px 0px 20px -5px #03a9f4; */
+    box-shadow: none;
 }
 
 .icon#zoom-in:hover {
@@ -179,6 +220,10 @@
     margin-right: 0px;
 }
 
+
+.icon .lens g.gradient path {
+    fill: url(#gradient);;
+}
 /* 
 .icon .lens g.shine-accent-dark path {
     fill: url(#shine-accent-dark) !important;

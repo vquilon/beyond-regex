@@ -15,5 +15,11 @@ const CHANGELOG = {
             "Share your graph in png, svg and iframe tag",
             
         ],
+        "15": [
+            "Draggable Sidebar",
+            "Full-Screen mode in the visualizer panel",
+            "Hide controls in the visualizer panel",
+            "Fixing some interface bugs",
+        ],
     }
 }

@@ -8,13 +8,16 @@
     transform: translateX(3.5em) !important;
 }
 
+#close-side:before {
+    /* width: 0.5em !important; */
+    transform: translateX(-0.5em) !important;
+}
+/* 
 #container-main:not(.menu-open) span#close-side:before {
     transform: unset !important;
-}
+} */
 
-#close-side:before {
-    width: 0.5em !important;
-}
+
 
 #container-main.menu-open span#close-side:before {
     width: 1em !important;

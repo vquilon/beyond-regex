@@ -33,9 +33,25 @@
     <script defer src="{{ site.baseurl }}/assets/scripts/advent/advent_listeners.js"></script>
     <script type="text/javascript">
         window.onload = function() {
-        changeDark2LightTheme();
-        init_menu_listeners();
-        advent_listeners();
+            changeDark2LightTheme();
+            let [sidebarMove, sidebarUp] = init_menu_listeners();
+            document.addEventListener('mousemove', e => {
+                sidebarMove(e, touch=false);
+
+            });
+            document.addEventListener('touchmove', e => {
+                sidebarMove(e, touch=true);
+
+            });
+            document.addEventListener('mouseUp', e => {
+                sidebarUp(e, touch=false);
+
+            });
+            document.addEventListener('touchend', e => {
+                sidebarUp(e, touch=true);
+                
+            });
+            advent_listeners();
         };
     </script>
 

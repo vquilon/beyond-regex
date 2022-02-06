@@ -1,4 +1,17 @@
 /* UBICAR AQUI TODOS LOS ESTILOS DE LOS PANELES CONTENEDORES */
+#visualizer-graph.full-screen {
+    position: fixed;
+    top: 0;
+    left: 0px;
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    z-index: 40;
+}
+
+#visualizer-graph.full-screen #thumbViewContainer {
+    margin-left: 40px;
+}
 
 #visualizer-graph i.disabledJS-JS {
     margin-left: -100%;
@@ -21,6 +34,7 @@
     background: linear-gradient( 360deg, #03a9f4, #ff0058);
     -webkit-background-clip: text;
     -moz-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: #47474700;
 }
 

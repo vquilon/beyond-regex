@@ -427,6 +427,21 @@ var RegexVisualizerPanel = function (options) {
         // })
     });
 
+    document.querySelector("#full-screen").addEventListener("click", (event) => {
+        let vizGraph = document.querySelector("#visualizer-graph");
+        vizGraph.classList.toggle("full-screen");
+        if ( vizGraph.classList.contains("full-screen") ) {
+            document.querySelector("#full-screen").textContent = "close_fullscreen";
+        } else {
+            document.querySelector("#full-screen").textContent = "open_in_full";
+        }
+    });
+
+
+    // TODO: En un futuro deberian ser todo clases y aplicar listeners a cada uno de ellos, porque podria haber mas de un panel
+    document.querySelector("#visualizer-graph .control-panel .hide-button").addEventListener("click", (event) => {
+        document.querySelector("#visualizer-graph").classList.toggle("hide-control");
+    });
 
     if (isPanelShared) {
         visualizeSharedRegex();

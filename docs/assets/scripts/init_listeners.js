@@ -11,7 +11,24 @@ window.onbeforeunload = function (e) {
 
 window.onload = function () {
     changeDark2LightTheme();
-    init_menu_listeners();
+
+    let [sidebarMove, sidebarUp] = init_menu_listeners();
+    document.addEventListener('mousemove', e => {
+        sidebarMove(e, touch=false);
+
+    });
+    document.addEventListener('touchmove', e => {
+        sidebarMove(e, touch=true);
+
+    }, {passive: false});
+    document.addEventListener('mouseup', e => {
+        sidebarUp(e, touch=false);
+
+    });
+    document.addEventListener('touchend', e => {
+        sidebarUp(e, touch=true);
+
+    });
 
     // UBICAR TODOS LOS SCRIPTS QUE NECESITEN ESPERAR A LA CARGA DEL DOM
 

@@ -61,7 +61,6 @@ label.label-input {
     line-height: 1;
     font-size: 1em;
     height: 1em;
-    background: #0000002b;
     box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa, -0.2rem -0.2rem 0.5rem #ffffff;
     border-radius: 0.5em;
     padding: 0.2em 0.5em;
@@ -83,6 +82,15 @@ label.label-input {
 div#container-show {
     grid-row: 1;
     grid-column: 2;
+}
+
+#container-input:hover #container-show #input-show {
+    text-shadow: -10px -10px 30px #ffffff82;
+    background: linear-gradient(90deg, #03a9f4, #ff0058);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: #47474700;
 }
 
 label.label-input,

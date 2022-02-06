@@ -23,15 +23,15 @@
 	box-shadow: inset 0 0 10px 5px #ffffffbf, inset -5px 0px 10px 0 #ff00581f, inset 5px 0px 10px 0 #03a9f421, 0 0 32px 0px #ffffff, 5px 8px 32px -5px #ff0058b8, -5px 8px 32px -5px #03a9f4;
 }
 .icon#zoom-in:hover{
-	transform: translate(0px, -50%) scale(2);
+	transform: scale(2);
     margin: 0 22.5px;
 }
 .icon#zoom-out:hover{
-	transform: translate(0px, -50%) scale(2);
+	transform: scale(2);
     margin: 0 22.5px;
 }
 .icon#zoom-reset:hover{
-	transform: translate(0px, -50%) scale(2);
+	transform: scale(2);
     margin: 0 22.5px;
 }
 
@@ -54,18 +54,21 @@
 	background: linear-gradient(135deg, #f1f6fc 0%, #c7cae9 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f6fc', endColorstr='#c7cae9', GradientType-1); */
 
-    backdrop-filter: blur( 2px );
-    -webkit-backdrop-filter: blur( 2px );
+    /* backdrop-filter: blur( 2px );
+    -webkit-backdrop-filter: blur( 2px ); */
     /* border: 1px solid rgba( 255, 255, 255, 0.18 ); */
 
 	/* background: rgba( 255, 255, 255, 0.30 ); */
     /* box-shadow: 0 8px 32px 0 rgb(31 38 135 / 37%); */
-	background: rgb(0 0 0 / 20%);
+	/* background: rgb(0 0 0 / 20%); */
     /* box-shadow: inset 0 0 15px -2px white, inset 0 0 10px 0px #0000004d, 0 0 5px 0px #000000b3; */
 
-	background: rgb(81 81 81 / 6%);
+	/* background: rgb(81 81 81 / 6%); */
     box-shadow: inset 0 0 15px -2px white, 0 8px 32px 0 rgb(31 38 135 / 37%);
 
+	background: linear-gradient(315deg, #cecece6b, #ffffffbd);
+
+	transform-origin: bottom;
 }
 
 .icon svg {
@@ -124,7 +127,8 @@
 }
 */
 .icon .lens g.gradient path{
-	fill: url(#gradient) !important;
+	/* fill: url(#gradient) !important; */
+	fill: #404040;
 }
 .icon:hover .lens g.gradient path{
 	fill: url(#gradient-accent) !important;
@@ -141,12 +145,13 @@
 	
 }
 
-.icon .lens g.main {
+/* .icon .lens g.main { */
 	/* transform: scale(0.55); */
     /* filter: url(#dropshadow);
 	filter: url(#glow); */
     /* transform-origin: center; */
-	fill: #37c1ff;
-    stroke: black;
-    stroke-width: 10px;
-}
+	
+	/* fill: #37c1ff; */
+    /* stroke: black; */
+    /* stroke-width: 10px; */
+/* } */

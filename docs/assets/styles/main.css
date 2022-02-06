@@ -101,7 +101,7 @@ span#close-side:after {
     text-align: center;
     z-index: 1;
     border-radius: 50%;
-    top: 0.5em;
+    top: 0.8em;
     left: -3.5em;
     line-height: 2.5em;
     transition: transform 0.3s, background-position 1s;
@@ -120,7 +120,8 @@ span#close-side:hover:after {
     height: 100vh;
     position: absolute;
     z-index: -1;
-    transform: scaleX(1.5);
+    transform: translateX(0.5em);
+    transform-origin: left;
     transition: transform 0.3s;
 }
 
@@ -132,14 +133,14 @@ span#close-side:hover:after {
     filter: url(#goo);
 }
 
-#container-main:not(.menu-open) span#close-side:hover:before {
+/* #container-main:not(.menu-open) span#close-side:hover:before {
     transform: scaleX(2.5);
-    transform-origin: left;
-}
+} */
 
 #container-main:not(.menu-open) span#close-side:after {
-    opacity: 0;
-    visibility: hidden;
+    /* opacity: 0; */
+    /* visibility: hidden; */
+    transform: translateX(4em);
     background: linear-gradient(315deg, #d61c71, #f9005c);
     /* background: linear-gradient(135deg, #03a9f4, #ff0058, #d61c71, #f9005c); */
     background-position: 100% 50%;
@@ -538,7 +539,7 @@ span#close-side:hover:after {
 }
 
 #main {
-    padding: 40px 20px 0px;
+    padding: 40px 20px 0 40px;
     margin: 40px 0;
     width: 100%;
     box-sizing: border-box;
@@ -567,6 +568,9 @@ span#close-side:hover:after {
 /* FIXING SCREENS LESS OF MAX SIZE SIDEBAR */
 
 @media (max-width: 450px) {
+    #main {
+        padding: 40px 0px 0 10px;
+    }
     #container-main.menu-open #sidebar {
         transform: translateX(calc(-450px + 100vw + -100px)) !important;
     }

@@ -28,7 +28,23 @@
   <script type="text/javascript">
     window.onload = function() {
       changeDark2LightTheme();
-      init_menu_listeners();
+      let [sidebarMove, sidebarUp] = init_menu_listeners();
+      document.addEventListener('mousemove', e => {
+          sidebarMove(e, touch=false);
+
+      });
+      document.addEventListener('touchmove', e => {
+          sidebarMove(e, touch=true);
+
+      });
+      document.addEventListener('mouseUp', e => {
+          sidebarUp(e, touch=false);
+
+      });
+      document.addEventListener('touchend', e => {
+          sidebarUp(e, touch=true);
+          
+      });
     };
   </script>
 
