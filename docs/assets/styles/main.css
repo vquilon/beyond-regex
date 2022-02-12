@@ -120,13 +120,13 @@ span#close-side:hover:after {
     height: 100vh;
     position: absolute;
     z-index: -1;
-    transform: translateX(0.5em);
+    transform: scaleX(1.5);
     transform-origin: left;
-    transition: transform 0.3s;
+    transition: width 0.3s;
 }
 
 #container-main.menu-open span#close-side:before {
-    width: 0.5em;
+    transform: none;
 }
 
 #container-main:not(.menu-open) span#close-side {
