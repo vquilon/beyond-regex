@@ -6,6 +6,8 @@ window.onbeforeunload = function (e) {
         (e || window.event).returnValue = confirmationMessage; //Gecko + IE
         return confirmationMessage; //Webkit, Safari, Chrome
     }
+    // var data = JSON.stringify( graph.serialize() );
+	// localStorage.setItem("litegraphg demo backup", data );
 }
 
 

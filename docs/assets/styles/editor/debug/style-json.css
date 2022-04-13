@@ -5,7 +5,7 @@
 .json-container {
     margin: 20px 0;
     font-size: 16px;
-    max-height: 200px;
+    max-height: 400px;
     /* border: 1px groove #e2e2e2; */
     color: #e4e4e4;
     overflow: auto;
@@ -63,12 +63,13 @@
     display: inline-block;
     width: 0;
     height: 0;
-    /* border-style: solid;  */
+    border-style: solid; 
 }
 .json-container .fa-caret-down {
     border-width: 6px 5px 0 5px;
-    border-color: #808080 transparent; }
+    border-color: #e4e4e4 transparent;
+}
 .json-container .fa-caret-right {
     border-width: 5px 0 5px 6px;
-    border-color: transparent transparent transparent #808080; 
+    border-color: transparent transparent transparent #e4e4e4; 
 }

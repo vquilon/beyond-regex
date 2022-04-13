@@ -29,12 +29,18 @@ var EditorParser = (options) => {
 
         var $flags = document.getElementsByName('flag');
         var $iframeBtn = document.querySelector('#iframeIt');
+
+        // En un futuro tiene que desaparecer, cuando se puedan editar los paneles, esta interaccion de desactivarlos
+        // Tiene que venir por configuracion maestra.
+        // Es decir la regex el editor, en este caso uno o dos, desactiva aquellos paneles a los que este unido,
+        // Por lo que el Editor debera tener unos diccionarios en los que le diga los IDs que tiene asociado este editor Regex
         var visualBtn = document.querySelector('#visualizeClick');
         
         var raphaelJSONId = options.raphaelJSONId || "raphael-json";
         var regexSONId = options.regexSONId || "regex-json";
     }
 
+    // De igual forma esto debera desaparecer
     var $loader_view = document.querySelector(`#${options.loader_view_id}`);
 
     var updateStats = function (regExpresion, regexSON) {
@@ -375,7 +381,13 @@ var EditorParser = (options) => {
 
     function initEventsListener() {
         let timeoutInputId = null;
-        $inputRegex.addEventListener('input', function (event) {
+        $inputRegex.addEventListener('keydown', (event) => {
+            let keyDownLabel = event.key.toLowerCase();
+            if(keyDownLabel === "enter") {
+                parseRegex(getRegex());
+            }
+        });
+        $inputRegex.addEventListener('input', (event) => {
             if (timeoutInputId) clearTimeout(timeoutInputId);
             if ($realTimeCheck.checked) {
                 timeoutInputId = setTimeout( () => {
@@ -385,10 +397,12 @@ var EditorParser = (options) => {
             }
 
             window.hasChanges = true;
-            visualBtn.disabled = false;
+            if (visualBtn !== null) {
+                visualBtn.disabled = false;
+            }
             // hideError();
         });
-
+    
         $iframeBtn.addEventListener('click', function () {
             if (!parseRegex(getRegex())) return false;
 
@@ -463,9 +477,13 @@ var EditorParser = (options) => {
         let langs = document.querySelectorAll("[name='languageRegex']");
         for (var i = 0, max = langs.length; i < max; i++) {
             langs[i].onclick = function () {
-                if (!$loader_view.classList.contains("loading")) {
-                    if (visualBtn.disabled) {
-                        visualBtn.disabled = false;
+                if ($loader_view !== null) {
+                    if (!$loader_view.classList.contains("loading")) {
+                        if (visualBtn !== null) {
+                            if (visualBtn.disabled) {
+                                visualBtn.disabled = false;
+                            }
+                        }
                     }
                 }
             }

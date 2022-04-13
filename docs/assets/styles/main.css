@@ -87,11 +87,11 @@ h2#noscript {
 
     transition: transform 0.3s;
 
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
+    /* font-family: "Font Awesome 5 Free"; */
+    /* font-weight: 900; */
 }
 
-span#close-side:after {
+/* span#close-side:after {
     content: "\f069";
     height: 2.5em;
     width: 2.5em;
@@ -105,9 +105,57 @@ span#close-side:after {
     left: -3.5em;
     line-height: 2.5em;
     transition: transform 0.3s, background-position 1s;
+} */
+
+span#close-side .burger {
+    /* content: "\f069"; */
+    height: 2.5em;
+    width: 2.5em;
+    font-size: 1.5em;
+    position: absolute;
+    color: white;
+    text-align: center;
+    z-index: 1;
+    border-radius: 50%;
+    top: 0.8em;
+    left: -3.5em;
+    line-height: 2.5em;
+    transition: transform 0.3s, background-position 1s;
+    /* transition: all .5s ease; */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+span#close-side .strip {
+    font-size: 0.75em;
+}
+span#close-side .strip div {
+    height: 0.2em;
+    background: white;
+    margin: 0.4em;
+    transition: transform .65s cubic-bezier(0.075, 0.82, 0.165, 1), margin .65s cubic-bezier(0.075, 0.82, 0.165, 1);
+    width: 1.5em;
+}
+span#close-side .burger:hover .strip div:first-child, #container-main.menu-open span#close-side .burger .strip div:first-child{
+    transform: translateY(0.2em) rotate(-15deg);
+    margin: 0;
+}
+span#close-side .burger:hover .strip div:nth-child(2), #container-main.menu-open span#close-side .burger .strip div:nth-child(2) {
+    transform: rotate(45deg) ;
+    margin: 0;
+}
+span#close-side .burger:hover .strip div:last-child, #container-main.menu-open span#close-side .burger .strip div:last-child {
+    transform: translateY(-0.2em) rotate(105deg);
+    margin: 0;
+}
+span#close-side .burger:hover .strip, #container-main.menu-open span#close-side .burger .strip {
+    transform: rotate(45deg);
+    transition: transform .25s ease .05s;
 }
 
-span#close-side:hover:after {
+/* span#close-side:hover:after { */
+    span#close-side:hover .burger {
     background-position: 0% 50%;
     background: linear-gradient(135deg, #03a9f4, #ff0058, #d61c71, #f9005c);
     background-size: 200px 200px;
@@ -137,7 +185,8 @@ span#close-side:hover:after {
     transform: scaleX(2.5);
 } */
 
-#container-main:not(.menu-open) span#close-side:after {
+/* #container-main:not(.menu-open) span#close-side:after { */
+#container-main:not(.menu-open) span#close-side .burger {
     /* opacity: 0; */
     /* visibility: hidden; */
     transform: translateX(4em);
@@ -147,7 +196,8 @@ span#close-side:hover:after {
     transition: opacity 0.3s, visibility 0s 0.3s, transform 0.5s, background-position 1s;
 }
 
-#container-main:not(.menu-open) span#close-side:hover:after {
+/* #container-main:not(.menu-open) span#close-side:hover:after { */
+#container-main:not(.menu-open) span#close-side:hover .burger {
     opacity: 1;
     visibility: visible;
     transform: translateX(4em);
@@ -288,8 +338,8 @@ span#close-side:hover:after {
 
 #sidebar .container-heading .heading #title em {
     -webkit-text-stroke-width: 0px;
-    text-shadow: 0 0 10px #e9cff6, 0 0 5px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff;
-    text-shadow: 0 0 10px #ffffff78, 10px 0 5px #03a9f4, -10px 0 5px #ff0058, 0 0 10px #03a9f4, 0 0 20px #03a9f4;
+    /* text-shadow: 0 0 10px #e9cff6, 0 0 5px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff; */
+    /* text-shadow: 0 0 10px #ffffff78, 10px 0 5px #03a9f4, -10px 0 5px #ff0058, 0 0 10px #03a9f4, 0 0 20px #03a9f4; */
     color: white;
     font-family: "VictorMono", monospace;
     font-size: 20px;
