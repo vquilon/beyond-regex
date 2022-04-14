@@ -745,7 +745,7 @@ span#close-side .burger:hover .strip, #container-main.menu-open span#close-side 
     font-variant-ligatures: none;
 }
 
-#beyond-editor .container-editor #editor-actions #iframeIt {
+#beyond-editor .container-editor #editor-actions #shareIt {
     font-size: 0.6em;
     font-weight: bold;
     background: #e9e9e9;
@@ -757,7 +757,7 @@ span#close-side .burger:hover .strip, #container-main.menu-open span#close-side 
     box-shadow: inset 0.2rem 0.2rem 0.8rem #fafafa, inset -0.2rem -0.2rem 0.8rem #7b7b7b, inset -1px -1px 2px #838383, 1px 1px 0.5px #838383, 3px 3px 5px #838383, -0.2rem -0.2rem 0.5rem #ffffff;
 }
 
-#beyond-editor .container-editor #editor-actions #iframeIt:active {
+#beyond-editor .container-editor #editor-actions #shareIt:active {
     box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa, -0.2rem -0.2rem 0.5rem #ffffff6f;
 }
 
@@ -876,7 +876,7 @@ span#close-side .burger:hover .strip, #container-main.menu-open span#close-side 
 #terminal-stats {
     padding: 0 16px;
     color: grey;
-    border-bottom: 2px solid#ffffff17;
+    border-bottom: 2px solid #ffffff17;
     background: #282828;
 }
 
@@ -1459,19 +1459,19 @@ select:focus>option:checked {
     margin-bottom: 1em;
 }
 
-.iframe-copier {
+.copy-container {
     background: #ffffff1f;
     position: relative;
 }
 
-.iframe-content {
+.copy-content {
     padding: 1em;
     overflow-y: scroll;
     height: 4em;
     text-align: left;
 }
 
-.wrap-copy-iframe {
+.wrap-copy-btn {
     position: absolute;
     top: 0.5em;
     right: 1em;
@@ -1480,23 +1480,24 @@ select:focus>option:checked {
     transition: transform 0.2s, opacity 0.5s, visibility 0s 0.8s;
 }
 
-.iframe-copier:hover>.wrap-copy-iframe, .iframe-copier.copied>.wrap-copy-iframe {
+.copy-container:hover .wrap-copy-btn, .copy-container.copied .wrap-copy-btn {
     opacity: 1;
     visibility: visible;
     transition: opacity 0.5s, visibility 0s;
 }
 
-button.copy-iframe:hover {
+button.copy-btn:hover {
     transform: scale(1.1);
 }
 
-.iframe-copier.copied>.wrap-copy-iframe:before {
+.copy-container.copied .wrap-copy-btn button.copied:before {
     content: "Copied";
     position: absolute;
     top: -45px;
     right: -15px;
     width: max-content;
     background: linear-gradient(180deg, #5c81dc91, #5c81dc);
+    color: white;
     padding: 8px 10px;
     border-radius: 20px;
     font-size: 15px;
@@ -1504,7 +1505,7 @@ button.copy-iframe:hover {
     pointer-events: none;
 }
 
-.iframe-copier.copied>.wrap-copy-iframe:after {
+.copy-container.copied .wrap-copy-btn button.copied:after {
     content: "";
     position: absolute;
     top: -15px;
@@ -1517,15 +1518,73 @@ button.copy-iframe:hover {
     pointer-events: none;
 }
 
-.iframe-copier.copied:hover>.wrap-copy-iframe:before, .iframe-copier.copied:hover>.wrap-copy-iframe:after {
+.copy-container.copied:hover .wrap-copy-btn button.copied:before, .copy-container.copied:hover .wrap-copy-btn button.copied:after {
     display: block;
 }
 
-.iframe-copier.copied>.iframe-content>span {
-    animation: bounce-scale-copy 0.5s ease-in-out alternate;
+button.copy-btn.copied span.confetti-container {
+    position: absolute;
+    transform: rotate(-45deg);
+    top: 50%;
+    left: 45%;
+    opacity: 0;
+    animation: confetti-container 0.5s;
+}
+button.copy-btn.copied span.confetti-container .confetti {
+    position: absolute;
+    width: 0.2em;
+    height: 0.4em;
+    background: #5c81dc;
+    animation: confetti 0.5s;
+}
+button.copy-btn.copied span.confetti-container .confetti:nth-child(1) {
+    top: 1em;
+    left: 1em;
+}
+button.copy-btn.copied span.confetti-container .confetti:nth-child(2) {
+    top: -1em;
+    left: -1em;
+}
+button.copy-btn.copied span.confetti-container .confetti:nth-child(3) {
+    top: -1em;
+    left: 0em;
+}
+button.copy-btn.copied span.confetti-container .confetti:nth-child(4) {
+    top: 1em;
+    left: 0em;
+}
+button.copy-btn.copied span.confetti-container .confetti:nth-child(5) {
+    top: 0em;
+    left: 1em;
+}
+button.copy-btn.copied span.confetti-container .confetti:nth-child(6) {
+    top: 0em;
+    left: -1em;
 }
 
-button.copy-iframe {
+@keyframes confetti {
+    from {
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: rotate(360deg) scale(0);
+    }
+    
+}
+@keyframes confetti-container {
+    from {
+        opacity: 1;
+        transform: rotate(-45deg) scale(1);
+    }
+    to {
+        transform: rotate(-45deg) scale(2);
+    }
+}
+
+button.copy-btn {
+    position: relative;
     background: #0000009c;
     border: none;
     box-sizing: content-box;
@@ -1536,12 +1595,12 @@ button.copy-iframe {
     height: 2em;
 }
 
-button.copy-iframe>i {
+button.copy-btn>i {
     font-size: 1.5em;
     color: #bcbcbc;
 }
 
-button.copy-iframe>i.fa-check {
+button.copy-btn>i.fa-check {
     color: #5c81dc;
 }
 

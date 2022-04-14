@@ -28,7 +28,7 @@ var EditorParser = (options) => {
         
 
         var $flags = document.getElementsByName('flag');
-        var $iframeBtn = document.querySelector('#iframeIt');
+        var $shareBtn = document.querySelector('#shareIt');
 
         // En un futuro tiene que desaparecer, cuando se puedan editar los paneles, esta interaccion de desactivarlos
         // Tiene que venir por configuracion maestra.
@@ -55,7 +55,7 @@ var EditorParser = (options) => {
         $terminalError.classList.add("correct-syntax");
         // $editorError.style.display = 'none';
     }
-    var showError = function (re, err) {
+    var showError = function (regular_exp, err) {
         $terminalError.classList.remove("correct-syntax");
         
         const fireError = async () => {
@@ -80,7 +80,7 @@ var EditorParser = (options) => {
         var msg_re = [];
         var msg_def = [];
         if (typeof err.lastIndex === 'number') {
-            msg_re.push(` ${re}`);
+            msg_re.push(` ${regular_exp}`);
             // msg_re.push(Kit().repeats('-', err.lastIndex) + "^");
         }
         msg_def.push("Error:" + err.message);
@@ -207,6 +207,15 @@ var EditorParser = (options) => {
             var init_parse = RegexParser();
             var language_selected = getReLanguage();
             regEXSON = init_parse(regExpresion, null, language_selected);
+
+            let errors = init_parse.RegexSyntaxThrows;
+            if (errors.length !== 0 && !skipError) {
+                errors.forEach((error) => {
+                    // if (error instanceof init_parse.RegexSyntaxError) {
+                        showError(regExpresion, error);
+                    // }
+                });
+            }
 
             updateStats(regExpresion, regEXSON);
 
@@ -403,7 +412,7 @@ var EditorParser = (options) => {
             // hideError();
         });
     
-        $iframeBtn.addEventListener('click', function () {
+        $shareBtn.addEventListener('click', function () {
             if (!parseRegex(getRegex())) return false;
 
             var src = location.href;
@@ -411,22 +420,45 @@ var EditorParser = (options) => {
             src = indexHashParams > 0 ? src.slice(0, indexHashParams) : src;
             var re = getCorrectedRegex();
             // window.prompt("Copy the html code:", html);
-
+            const urlLink = `${src}#!embed=true&flags=${getFlags()}&re=${encodeURIComponent(re)}`;
             const iframeLink = `
             <iframe frameborder="0" width="500px" height="300px"
-            src="${src}#!embed=true&flags=${getFlags()}&re=${encodeURIComponent(re)}">
+            src="${urlLink}">
             </iframe>`;
 
             const iframeLinkLiteral = escapeHTML(iframeLink);
             Swal.fire({
                 title: 'Share your visual regex',
                 html: `
-                <div id="beyond-regex-iframe-copy" class="container-copy">
-                    <div class="iframe-copier">
-                        <div class="iframe-content">
-                            <span>${iframeLinkLiteral}</span>
+                <div id="beyond-regex-editor-copy" class="container-copy">
+                    <div class="copy-container">
+                        <div class="copy-content">
+                            <span>${urlLink}</span>
                         </div>
-                        <div class="wrap-copy-iframe"><button class="copy-iframe"><i class="far fa-copy"></i></button></div>
+                        <div class="wrap-copy-btn">
+                            <button title="Copy link" data-copy="${urlLink}" class="copy-btn">
+                                <i class="far fa-copy"></i>
+                                <span class="confetti-container">
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                </span>
+                            </button>
+                            <button title="Copy iframe" data-copy="${iframeLinkLiteral}" class="copy-btn">
+                                <i class="far fa-code"></i>
+                                <span class="confetti-container">
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                </span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 `,
@@ -442,20 +474,26 @@ var EditorParser = (options) => {
                     Swal.showLoading();
 
                     // Listeners button copy
-                    document.querySelector("#beyond-regex-iframe-copy button.copy-iframe").addEventListener("click", function () {
-                        navigator.clipboard.writeText(iframeLink);
-
-                        document.querySelector("#beyond-regex-iframe-copy .copy-iframe>i").className = "fas fa-check";
-                        document.querySelector("#beyond-regex-iframe-copy .iframe-copier").classList.add("copied");
-                        setTimeout(function () {
-                            let icon_copy = document.querySelector("#beyond-regex-iframe-copy .copy-iframe>i");
-                            let iframe_copier = document.querySelector("#beyond-regex-iframe-copy .iframe-copier");
-                            if (icon_copy && iframe_copier) {
-                                icon_copy = "far fa-copy";
-                                iframe_copier.classList.remove("copied");
-                            }
-                        }, 1000);
-                    });
+                    document.querySelectorAll("#beyond-regex-editor-copy button.copy-btn").forEach(($itemBtn) =>{
+                        $itemBtn.addEventListener("click", (event) => {
+                            const link = $itemBtn.dataset.copy
+                            navigator.clipboard.writeText(link);
+                            
+                            let $iconCopy = $itemBtn.querySelector("i");
+                            let prevIconClass = $iconCopy.className;
+                            $iconCopy.className = "fas fa-check";
+                            document.querySelector("#beyond-regex-editor-copy .copy-container").classList.add("copied");
+                            $itemBtn.classList.add("copied");
+                            setTimeout(function () {
+                                let $copyContainer = document.querySelector("#beyond-regex-editor-copy .copy-container");
+                                if ($iconCopy && $copyContainer) {
+                                    $iconCopy.className = prevIconClass;
+                                    $copyContainer.classList.remove("copied");
+                                    $itemBtn.classList.remove("copied");
+                                }
+                            }, 1000);
+                        });
+                    })
 
                     Swal.hideLoading();
                 }

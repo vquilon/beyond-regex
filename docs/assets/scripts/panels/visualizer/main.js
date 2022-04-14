@@ -172,7 +172,7 @@ var RegexVisualizerPanel = function (options) {
         }
     }
 
-    const generatePanelURL = function () {
+    const generatePanelURL = function (iframe=false) {
         let re = getCorrectedRegex();
         let flags = getCorrectedFlags();
         let reLang = getCorrectedReLanguage();
@@ -183,12 +183,18 @@ var RegexVisualizerPanel = function (options) {
         src = indexHashParams > 0 ? src.slice(0, indexHashParams) : src;
         src = `${src}panels/visualizer`;
 
-        const iframeLink = `<iframe frameborder="0" 
-            width="500px" height="300px" 
-            src="${src}#!embed=true&flags=${flags}&re=${encodeURIComponent(re)}&reLang=${reLang}">
-            </iframe>`;
+        let link = "";
+        if (iframe) {
+            link = `<iframe frameborder="0" 
+                width="500px" height="300px" 
+                src="${src}#!embed=true&flags=${flags}&re=${encodeURIComponent(re)}&reLang=${reLang}">
+                </iframe>`;
+        }
+        else {
+            link = `${src}#!embed=true&flags=${flags}&re=${encodeURIComponent(re)}&reLang=${reLang}`
+        }
 
-        return iframeLink;
+        return link;
     }
 
     const escapeHTML = (unsafe) => {
@@ -342,7 +348,8 @@ var RegexVisualizerPanel = function (options) {
         // OPEN SWAL WITH IFRAME LINK AND IMAGE EXPORT
         const exportedIframeURL = new Promise((resolve) => {
             resolve({
-                panelURL: generatePanelURL()
+                panelIframeURL: generatePanelURL(iframe=true),
+                panelURL: generatePanelURL(iframe=false)
             });
         });
 
@@ -352,12 +359,35 @@ var RegexVisualizerPanel = function (options) {
                 icon: "info",
                 iconHtml: `<span class="sweetalert-icon material-icons">image</span>`,
                 html: `
-                <div id="visualizer-iframe-copy" class="container-copy">
-                    <div class="iframe-copier">
-                        <div class="iframe-content">
+                <div id="visualizer-copy" class="container-copy">
+                    <div class="copy-container">
+                        <div class="copy-content">
                             <span>${escapeHTML(res.panelURL)}</span>
                         </div>
-                        <div class="wrap-copy-iframe"><button class="copy-iframe"><i class="far fa-copy"></i></button></div>
+                        <div class="wrap-copy-btn">
+                            <button title="Copy link" data-copy="${res.panelURL}" class="copy-btn">
+                                <i class="far fa-copy"></i>
+                                <span class="confetti-container">
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                </span>
+                            </button>
+                            <button title="Copy iframe" data-copy="${escapeHTML(res.panelIframeURL)}" class="copy-btn">
+                                <i class="far fa-code"></i>
+                                <span class="confetti-container">
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                </span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <canvas style="display:none; width: 100%; height: unset;" id="export-image"></canvas>
@@ -372,20 +402,26 @@ var RegexVisualizerPanel = function (options) {
                     Swal.showLoading();
 
                     // Listeners button copy
-                    document.querySelector("#visualizer-iframe-copy button.copy-iframe").addEventListener("click", function () {
-                        navigator.clipboard.writeText(res.panelURL);
-
-                        document.querySelector("#visualizer-iframe-copy .copy-iframe>i").className = "fas fa-check";
-                        document.querySelector("#visualizer-iframe-copy .iframe-copier").classList.add("copied");
-                        setTimeout(function () {
-                            let icon_copy = document.querySelector("#visualizer-iframe-copy .copy-iframe>i");
-                            let iframe_copier = document.querySelector("#visualizer-iframe-copy .iframe-copier");
-                            if (icon_copy && iframe_copier) {
-                                icon_copy = "far fa-copy";
-                                iframe_copier.classList.remove("copied");
-                            }
-                        }, 1000);
-                    });
+                    document.querySelectorAll("#visualizer-copy button.copy-btn").forEach(($itemBtn) =>{
+                        $itemBtn.addEventListener("click", function () {
+                            const link = $itemBtn.dataset.copy
+                            navigator.clipboard.writeText(link);
+                            
+                            let $iconCopy = $itemBtn.querySelector("i");
+                            let prevIconClass = $iconCopy.className;
+                            $iconCopy.className = "fas fa-check";
+                            document.querySelector("#visualizer-copy .copy-container").classList.add("copied");
+                            $itemBtn.classList.add("copied");
+                            setTimeout(function () {
+                                let $copyContainer = document.querySelector("#visualizer-copy .copy-container");
+                                if ($iconCopy && $copyContainer) {
+                                    $iconCopy.className = prevIconClass;
+                                    $copyContainer.classList.remove("copied");
+                                    $itemBtn.classList.remove("copied");
+                                }
+                            }, 1000);
+                        });
+                    })
                     let { $img, rectBackground, updateBackgroundStyle } = generateImageOn(
                         document.querySelector("canvas#export-image"),
                         document.querySelector("img#exported-img"),
