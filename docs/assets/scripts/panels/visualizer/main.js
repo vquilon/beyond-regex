@@ -1,16 +1,14 @@
 var RegexVisualizerPanel = function (options) {
-    var inputRegex = document.getElementById('input');
+    let $containerEditor = options.editorParser.$containerEditor;
+    var $inputRegex = $containerEditor.querySelector('#input');
     var terminalError = document.getElementById('terminal-error .errorBox');
     var visualBtn = document.getElementById('visualizeClick');
     var exportBtn = document.getElementById('exportIt');
 
-    const isPanelShared = !inputRegex && !visualBtn;
+    const isPanelShared = !$inputRegex && !visualBtn;
     if (isPanelShared) {
         // ES UN SHARED
         var parseRegex = options.editorParser.parseSharedRegex;
-    }
-    else {
-        var parseRegex = options.editorParser.parseRegex;
     }
 
     const trim = options.editorParser.trim;
@@ -66,9 +64,11 @@ var RegexVisualizerPanel = function (options) {
 
     // FUNCIONES DE VISUALIZACION
     const visualizeRegex = () => {
-        var regExpresion = inputRegex.value;
-        var regEXSON = parseRegex(regExpresion);
-        if (regEXSON) {
+        if (!$containerEditor.regexson) {
+            options.editorParser.parseRegex(options.editorParser.getRegex());
+        }
+        var regexson = $containerEditor.regexson;
+        if (regexson) {
             // Se desactiva el boton
             visualBtn.disabled = true;
 
@@ -103,7 +103,7 @@ var RegexVisualizerPanel = function (options) {
 
             window.setTimeout(() => {
 
-                raphael_items = RegexVisualizer(regEXSON, getCorrectedFlags(), paper, $progress_bar);
+                raphael_items = RegexVisualizer(regexson, getCorrectedFlags(), paper, $progress_bar);
                 _updateRaphaelItemsJSON(raphael_items);
                 // Una vez que se pinta actualizar el plugin de visualizador SVG
                 // if (!svg_graph_controller && !svg_thumb_controller && !destroyAllHandler_ThumbnailSVGControl) {
@@ -489,9 +489,6 @@ var RegexVisualizerPanel = function (options) {
         // IMPACTA MUCHO AL ESTAR MODIFICANDO ELEMENTOS DEL DOM EN LA CARGA INICIAL
         visualizeRegex();
     }
-
-
-
 
     return {
         generatePanelURL: generatePanelURL

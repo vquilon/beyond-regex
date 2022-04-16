@@ -64,8 +64,16 @@
 
     <div id="editor-input">
         <span style="margin-left: 5px;">/</span>
-        <input id="input" class="input"
-            value="" />
+        <!-- <input id="input" class="input" value="" /> -->
+        <div class="input">
+            <div class="input-carets"></div>
+            <div class="input-editor">
+                <pre class="editor" spellcheck="false" contenteditable="true"></pre>
+            </div>
+            <div class="input-syntax">
+                <div class="regex syntax"></div>
+            </div>
+        </div>
         <span style="margin-right: 5px;">/</span>
     </div>
 

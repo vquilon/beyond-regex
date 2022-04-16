@@ -38,22 +38,11 @@ window.onload = function () {
     offlineHandler();
 
 
-    let editorParser = EditorParser({
-        debug: true,
-        regexSONId: "regex-json",
-        raphaelJSONId: "raphael-json",
-
-        loader_view_id: "graph-loader",
-    });
+    let beyondEditor = Editor();
+    let beyondEditorIns = beyondEditor.init();
 
     // VISUALIZER PANEL
-    RegexVisualizerPanel({
-        editorParser: editorParser,
-
-        loader_view_id: "graph-loader",
-        progress_bar_class: "progress"
-    });
-
+    panelVisualizer({editorParser: beyondEditorIns.editorParser}).init();
 }
 
 

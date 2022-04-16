@@ -2,8 +2,6 @@ var EditorParser = (options) => {
     const NONEDITOR = options.noneditor || false
     const DEBUG = options.debug || false;
 
-    var $inputRegex = document.querySelector('#input');
-    
     var correctParams = {
         re: "",
         reLang: "",
@@ -19,22 +17,29 @@ var EditorParser = (options) => {
         }
     }
     else {
-        var $editorTerminal = document.querySelector('#editor-terminal');
+        var $containerEditor = document.querySelector(options.containerSelector);
+        var $inputRegex = $containerEditor.querySelector('.editor');
+
+        var syntaxProcessor = EditorSyntaxis({
+            $containerEditor: $containerEditor,
+            $inputRegex: $inputRegex,
+            $syntaxRegex: $containerEditor.querySelector('.syntax')
+        });
+
+        var $editorTerminal = $containerEditor.querySelector('#editor-terminal');
         var $terminalStats = $editorTerminal.querySelector('#terminal-stats');
-        var $realTimeCheck = document.querySelector('#real-time-check');
-        var $terminalError = document.querySelector('#terminal-error');
+        var $realTimeCheck = $containerEditor.querySelector('#real-time-check');
+        var $terminalError = $containerEditor.querySelector('#terminal-error');
         var $errorDef = $terminalError.querySelector("#errorDef");
         var $errorBox = $terminalError.querySelector('#errorBox');
-        
-
-        var $flags = document.getElementsByName('flag');
-        var $shareBtn = document.querySelector('#shareIt');
+        var $flags = $containerEditor.querySelectorAll('input[name="flag"]');
+        var $shareBtn = $containerEditor.querySelector('#shareIt');
 
         // En un futuro tiene que desaparecer, cuando se puedan editar los paneles, esta interaccion de desactivarlos
         // Tiene que venir por configuracion maestra.
         // Es decir la regex el editor, en este caso uno o dos, desactiva aquellos paneles a los que este unido,
         // Por lo que el Editor debera tener unos diccionarios en los que le diga los IDs que tiene asociado este editor Regex
-        var visualBtn = document.querySelector('#visualizeClick');
+        var $visualBtn = document.querySelector('#visualizeClick');
         
         var raphaelJSONId = options.raphaelJSONId || "raphael-json";
         var regexSONId = options.regexSONId || "regex-json";
@@ -43,24 +48,26 @@ var EditorParser = (options) => {
     // De igual forma esto debera desaparecer
     var $loader_view = document.querySelector(`#${options.loader_view_id}`);
 
-    var updateStats = function (regExpresion, regexSON) {
+    const updateStats = function (regExpresion, regexSON) {
         let reLen = `${regExpresion.length}`;
         let reGroups = `${regexSON.groupCount}`;
         setInnerText($terminalStats.querySelector("#re-len .stat-value"), reLen);
         setInnerText($terminalStats.querySelector("#re-groups .stat-value"), reGroups);
     }
-    var hideError = function () {
+    const hideError = function () {
         setInnerText($errorBox, "");
         setInnerText($errorDef, "Correct syntax");
         $terminalError.classList.add("correct-syntax");
         // $editorError.style.display = 'none';
     }
-    var showError = function (regular_exp, err) {
+    const showError = function (regular_exp, err) {
         $terminalError.classList.remove("correct-syntax");
         
-        const fireError = async () => {
-            const Toast = Swal.mixin({
+        const fireError = () => {
+            Swal.fire({
                 toast: true,
+                icon: 'error',
+                title: 'Error: See the editor console error!',
                 position: 'top-right',
                 iconColor: 'white',
                 customClass: {
@@ -70,10 +77,6 @@ var EditorParser = (options) => {
                 timer: 1500,
                 timerProgressBar: true
             })
-            await Toast.fire({
-                icon: 'error',
-                title: 'Error: See the editor console error!'
-            });
         }
         fireError();
         $terminalError.style.display = 'block';
@@ -122,7 +125,7 @@ var EditorParser = (options) => {
     }
     
 
-    var getInnerText = function (ele) {
+    const getInnerText = function (ele) {
         if (!ele)
             return '';
         var node = ele.firstChild
@@ -136,7 +139,7 @@ var EditorParser = (options) => {
                 results.push(getInnerText(node));
         } while (node = node.nextSibling); return results.join('');
     }
-    var setInnerText = function (ele, s) {
+    const setInnerText = function (ele, s) {
         ele.innerHTML = '';
         var t = document.createTextNode('');
         t.nodeValue = s;
@@ -152,7 +155,7 @@ var EditorParser = (options) => {
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
     }
-    // var clearSelect = function () {
+    // const clearSelect = function () {
     //     if (window.getSelection) {
     //         if (window.getSelection().empty) {
     //             // Chrome
@@ -178,7 +181,7 @@ var EditorParser = (options) => {
         _updateJSONViewer($elemRaphael, _raphaelItems)
     }
 
-    const _updateREGEXSON = (_regexTree) => {
+    const _updateRegexson = (_regexTree) => {
         function escapteHTML(inHTMLtext) {
             return inHTMLtext.replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
@@ -202,11 +205,11 @@ var EditorParser = (options) => {
 
         // updateLocationURL();
         hideError();
-        var regEXSON = null;
+        var regexson = null;
         try {
             var init_parse = RegexParser();
             var language_selected = getReLanguage();
-            regEXSON = init_parse(regExpresion, null, language_selected);
+            regexson = init_parse(regExpresion, null, language_selected);
 
             let errors = init_parse.RegexSyntaxThrows;
             if (errors.length !== 0 && !skipError) {
@@ -217,7 +220,7 @@ var EditorParser = (options) => {
                 });
             }
 
-            updateStats(regExpresion, regEXSON);
+            updateStats(regExpresion, regexson);
 
             // Actualizo los valores correctos parseados
             correctParams = {
@@ -233,13 +236,15 @@ var EditorParser = (options) => {
             } else {
                 throw e;
             }
-            // return false;
+            return false;
         }
-        if (regEXSON) {
-            _updateREGEXSON(regEXSON);
+        if (regexson) {
+            _updateRegexson(regexson);
         }
 
-        return regEXSON
+        $containerEditor.regexson = regexson;
+        syntaxProcessor.onInput(regexson, { target: $inputRegex });
+        return true;
     };
 
     const showErrorShared = (regExpresion, err) => {
@@ -288,28 +293,23 @@ var EditorParser = (options) => {
 
     const parseSharedRegex = (regExpresion, language_selected = "python") => {
         // Aqui se realiza el parseo
-        var skipError = false;
-        // if ( !NONEDITOR ) hideError();
         var regEXSON = null;
         try {
             var init_parse = RegexParser();
             regEXSON = init_parse(regExpresion, null, language_selected);
         } catch (e) {
             if (e instanceof init_parse.RegexSyntaxError) {
-                if (!skipError) {
-                    if ( NONEDITOR ) showErrorShared(regExpresion, e);
-                }
+                showErrorShared(regExpresion, e);
             } else {
                 throw e;
             }
-            // return false;
         }
 
         return regEXSON
     };
 
 
-    function trim(s) {
+    const trim = (s) => {
         return s.replace(/^\s+/, '').replace(/\s+$/, '');
     }
     // Getters input
@@ -317,10 +317,10 @@ var EditorParser = (options) => {
         return correctParams.re;
     };
     const getRegex = () => {
-        return $inputRegex.value;
+        return $inputRegex.innerText;
     }
-    var setRegexValue = function (v) {
-        $inputRegex.value = v;
+    const setRegexValue = function (v) {
+        $inputRegex.innerText = v;
     };
 
     const getFlags = function () {
@@ -348,11 +348,11 @@ var EditorParser = (options) => {
     const getCorrectedReLanguage = () => {
         return correctParams.reLang;
     }
-    var setRegexLanguage = function (v) {
+    const setRegexLanguage = function (v) {
         document.querySelector(`[value="${v}"]`).checked = true;
     };
 
-    function getParams() {
+    const getParams = () => {
         var params = location.hash;
         if (!params || params.length < 2) {
             params = {
@@ -378,7 +378,6 @@ var EditorParser = (options) => {
         return params;
     }
 
-
     const generateURL = function (params) {
         var re = getCorrectedRegex();
         var flags = getFlags();
@@ -388,12 +387,20 @@ var EditorParser = (options) => {
         location.hash = generateURL(params);
     }
 
-    function initEventsListener() {
+    const initEventsListener = () => {
+        let regexParsed = false;
         let timeoutInputId = null;
         $inputRegex.addEventListener('keydown', (event) => {
             let keyDownLabel = event.key.toLowerCase();
-            if(keyDownLabel === "enter") {
+            if(keyDownLabel === "enter" && event.ctrlKey) {
                 parseRegex(getRegex());
+                regexParsed = true;
+            }
+        });
+        $inputRegex.addEventListener("blur", (event) => {
+            if (!regexParsed) {
+                parseRegex(getRegex());
+                regexParsed = true;
             }
         });
         $inputRegex.addEventListener('input', (event) => {
@@ -401,13 +408,17 @@ var EditorParser = (options) => {
             if ($realTimeCheck.checked) {
                 timeoutInputId = setTimeout( () => {
                     parseRegex(getRegex());
+                    regexParsed = true;
                 }, 500);
                 
             }
+            else {
+                regexParsed = false;
+            }
 
             window.hasChanges = true;
-            if (visualBtn !== null) {
-                visualBtn.disabled = false;
+            if ($visualBtn !== null) {
+                $visualBtn.disabled = false;
             }
             // hideError();
         });
@@ -515,11 +526,15 @@ var EditorParser = (options) => {
         let langs = document.querySelectorAll("[name='languageRegex']");
         for (var i = 0, max = langs.length; i < max; i++) {
             langs[i].onclick = function () {
+                parseRegex(getRegex())
+                regexParsed = true;
+                // Aqui deberia notificar al resto de paneles que la regex se ha parseado
+                // Puede que utilizando los message de javascript y cada panel tiene un listener de escucha
                 if ($loader_view !== null) {
                     if (!$loader_view.classList.contains("loading")) {
-                        if (visualBtn !== null) {
-                            if (visualBtn.disabled) {
-                                visualBtn.disabled = false;
+                        if ($visualBtn !== null) {
+                            if ($visualBtn.disabled) {
+                                $visualBtn.disabled = false;
                             }
                         }
                     }
@@ -555,17 +570,21 @@ var EditorParser = (options) => {
         } else {
             setRegexLanguage("python");
         }
+
+        parseRegex(getRegex());
     }
 
 
     return {
+        parseRegex: parseRegex,
+        getRegex: getRegex,
         parseSharedRegex: parseSharedRegex,
         trim: trim,
         getParams: getParams,
-        parseRegex: parseRegex,
         getCorrectedFlags: getCorrectedFlags,
         getCorrectedReLanguage: getCorrectedReLanguage,
         getCorrectedRegex: getCorrectedRegex,
-        _updateRaphaelItemsJSON: _updateRaphaelItemsJSON
+        _updateRaphaelItemsJSON: _updateRaphaelItemsJSON,
+        $containerEditor: $containerEditor
     }
 }

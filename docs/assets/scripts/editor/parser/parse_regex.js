@@ -1422,7 +1422,25 @@
           "charsetRangeEndUnicodeEscape1,charsetRangeEndUnicodeEscape2,charsetRangeEndUnicodeEscape3,charsetRangeEndUnicodeEscape4" +
           ">exact",
           "]"
-        ]
+        ],
+        // Grupos con nombre en Javascript
+        ["groupQualify>groupNamedStart", "<"],
+        [
+          "groupNamedStart,groupNamedContent>groupNamedContent",
+          "0-9a-zA-Z_",
+          elementsCallback.groupNamedContent
+        ],
+        [
+          "groupNamedContent,groupNamedBadName>groupNamedBadName",
+          "^0-9a-zA-Z_>",
+          elementsCallback.groupNamedBadName
+        ],
+        [
+          "groupNamedBadName>groupNamedContent",
+          "0-9a-zA-Z_",
+          elementsCallback.groupNamedContent
+        ],
+        ["groupNamedBadName,groupNamedContent>groupQualifiedStart", ">"]
       ]),
       unexpectedToken: elementsCallback.unexpectedChar,
       unexpectedRouter: {
