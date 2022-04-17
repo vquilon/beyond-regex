@@ -70,6 +70,20 @@ function EditorSyntaxis(options = {}) {
         return [prePosition, postPosition];
     };
 
+    const getTextNodePos = (caretPos, $parent) => {
+        let textNodes = $parent.childNodes;
+        let offsetStart = 0;
+        let offsetEnd = 0;
+        for (tIndex in textNodes) {
+            let tNode = textNodes[tIndex];
+            offsetEnd += tNode.textContent.length;
+            if (caretPos <= offsetEnd) {
+                return [tNode, caretPos-offsetStart];
+            }
+            offsetStart += tNode.textContent.length;
+        }
+    }
+
     // Catch Listeners
     const init_listeners = () => {
         // HANDLE MULTIEDIT
@@ -98,31 +112,29 @@ function EditorSyntaxis(options = {}) {
             // sel.addRange(range);
         }, true);
         $syntax.addEventListener("mouseup", (event) => {
-            let [caretStart, caretEnd] = getCaretIndex($syntax);
-            caretStart = caretStart > $editor.innerText.length ? $editor.innerText.length : caretStart;
-            caretEnd = caretEnd > $editor.innerText.length ? $editor.innerText.length : caretEnd;
+            var [caretStart, caretEnd] = getCaretIndex($syntax);
+            var [$tNodeStart, caretStart] = getTextNodePos(caretStart, $editor);
+            var [$tNodeEnd, caretEnd] = getTextNodePos(caretEnd, $editor);
+
+            caretStart = caretStart > $tNodeStart.textContent.length ? $tNodeStart.textContent.length : caretStart;
+            caretEnd = caretEnd > $tNodeEnd.textContent.length ? $tNodeEnd.textContent.length : caretEnd;
             let range = document.createRange();
             let sel = window.getSelection();
-            if ($editor.childNodes.length !== 1) $editor.normalize();
             
             sel.removeAllRanges();
             
             if (caretStart > caretEnd ) {
-                range.setStart($editor.childNodes[0], caretEnd);
-                range.setEnd($editor.childNodes[0], caretStart);
+                range.setStart($tNodeEnd, caretEnd);
+                range.setEnd($tNodeStart, caretStart);
                 range.collapse(false);
                 sel.addRange(range);
-                sel.extend($editor.childNodes[0], caretEnd);
-
+                sel.extend($tNodeEnd, caretEnd);
             }
             else {
-                range.setStart($editor.childNodes[0], caretStart);
-                range.setEnd($editor.childNodes[0], caretEnd);
+                range.setStart($tNodeStart, caretStart);
+                range.setEnd($tNodeEnd, caretEnd);
                 sel.addRange(range);
             }
-            
-            
-            
         }, true);
 
         $editor.addEventListener("focus", (event) => {
@@ -216,15 +228,9 @@ function EditorSyntaxis(options = {}) {
             }
 
             // synxtaxHighlighter.onInput($containerEditor.regexson, { target: $editor });
-            if ($editor.childNodes.length !== 1) {
-                $editor.normalize();
-            }
         });
 
         $editor.addEventListener('keyup', (event) => {
-            if ($editor.childNodes.length !== 1) {
-                $editor.normalize();
-            }
         });
     }
 
