@@ -1,17 +1,13 @@
 var RegexVisualizerPanel = function (options) {
-    let $containerEditor = options.editorParser.$containerEditor;
-    var $inputRegex = $containerEditor.querySelector('#input');
-    var terminalError = document.getElementById('terminal-error .errorBox');
     var visualBtn = document.getElementById('visualizeClick');
     var exportBtn = document.getElementById('exportIt');
-
-    const isPanelShared = !$inputRegex && !visualBtn;
+    let $containerEditor = options.editorParser.$containerEditor;
+    const isPanelShared = !$containerEditor && !visualBtn;
     if (isPanelShared) {
         // ES UN SHARED
         var parseRegex = options.editorParser.parseSharedRegex;
     }
 
-    const trim = options.editorParser.trim;
     const getCorrectedReLanguage = options.editorParser.getCorrectedReLanguage;
     const getCorrectedFlags = options.editorParser.getCorrectedFlags;
     const getCorrectedRegex = options.editorParser.getCorrectedRegex;
@@ -68,7 +64,7 @@ var RegexVisualizerPanel = function (options) {
             options.editorParser.parseRegex(options.editorParser.getRegex());
         }
         var regexson = $containerEditor.regexson;
-        if (regexson) {
+        if (regexson && regexson.errors.length === 0) {
             // Se desactiva el boton
             visualBtn.disabled = true;
 

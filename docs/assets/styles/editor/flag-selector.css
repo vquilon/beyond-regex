@@ -57,6 +57,8 @@ label.label-input {
 }
 
 #container-values {
+    /* Se oculta ya que no aporta mucha mas informacion y queda la interfaz mas limpia */
+    display: none;
     width: 3em;
     line-height: 1;
     font-size: 1em;
@@ -72,7 +74,8 @@ label.label-input {
 /* FUNCTIONALITY */
 #container-input {
     display: grid;
-    grid-template-columns: 3em 1fr;
+    grid-template-columns: 1fr;
+    /* grid-template-columns: 3em 1fr; */
     justify-items: center;
     align-items: center;
     height: 2em;

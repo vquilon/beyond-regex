@@ -2,6 +2,36 @@ var EditorParser = (options) => {
     const NONEDITOR = options.noneditor || false
     const DEBUG = options.debug || false;
 
+    const trim = (s) => {
+        return s.replace(/^\s+/, '').replace(/\s+$/, '');
+    }
+
+    const getParams = () => {
+        var params = location.hash;
+        if (!params || params.length < 2) {
+            params = {
+                reLang: "python",
+                embed: false,
+                re: "",
+                highlight: true,
+                flags: ''
+            };
+        } else {
+            params = params.slice(2);
+            params = params.split("&").reduce(function (p, indvParam) {
+                let val = indvParam.substring(indvParam.indexOf("=")+1);
+                let key = indvParam.substring(0, indvParam.indexOf("="));
+                p[key] = val;
+                return p;
+            }, {});
+            params.raLang = params.reLang;
+            params.embed = params.embed === 'true';
+            params.flags = params.flags || '';
+            params.re = params.re ? trim(decodeURIComponent(params.re)) : '';
+        }
+        return params;
+    }
+
     var correctParams = {
         re: "",
         reLang: "",
@@ -211,7 +241,7 @@ var EditorParser = (options) => {
             var language_selected = getReLanguage();
             regexson = init_parse(regExpresion, null, language_selected);
 
-            let errors = init_parse.RegexSyntaxThrows;
+            let errors = regexson.errors;
             if (errors.length !== 0 && !skipError) {
                 errors.forEach((error) => {
                     // if (error instanceof init_parse.RegexSyntaxError) {
@@ -240,9 +270,9 @@ var EditorParser = (options) => {
         }
         if (regexson) {
             _updateRegexson(regexson);
+            $containerEditor.regexson = regexson;
         }
 
-        $containerEditor.regexson = regexson;
         syntaxProcessor.onInput(regexson, { target: $inputRegex });
         return true;
     };
@@ -308,10 +338,6 @@ var EditorParser = (options) => {
         return regEXSON
     };
 
-
-    const trim = (s) => {
-        return s.replace(/^\s+/, '').replace(/\s+$/, '');
-    }
     // Getters input
     const getCorrectedRegex = () => {
         return correctParams.re;
@@ -352,32 +378,6 @@ var EditorParser = (options) => {
         document.querySelector(`[value="${v}"]`).checked = true;
     };
 
-    const getParams = () => {
-        var params = location.hash;
-        if (!params || params.length < 2) {
-            params = {
-                reLang: "python",
-                embed: false,
-                re: "",
-                highlight: true,
-                flags: ''
-            };
-        } else {
-            params = params.slice(2);
-            params = params.split("&").reduce(function (p, indvParam) {
-                let val = indvParam.substring(indvParam.indexOf("=")+1);
-                let key = indvParam.substring(0, indvParam.indexOf("="));
-                p[key] = val;
-                return p;
-            }, {});
-            params.raLang = params.reLang;
-            params.embed = params.embed === 'true';
-            params.flags = params.flags || '';
-            params.re = params.re ? trim(decodeURIComponent(params.re)) : '';
-        }
-        return params;
-    }
-
     const generateURL = function (params) {
         var re = getCorrectedRegex();
         var flags = getFlags();
@@ -393,34 +393,37 @@ var EditorParser = (options) => {
         $inputRegex.addEventListener('keydown', (event) => {
             let keyDownLabel = event.key.toLowerCase();
             if(keyDownLabel === "enter" && event.ctrlKey) {
-                parseRegex(getRegex());
-                regexParsed = true;
-            }
-        });
-        $inputRegex.addEventListener("blur", (event) => {
-            if (!regexParsed) {
-                parseRegex(getRegex());
-                regexParsed = true;
+                if ($visualBtn !== null) {
+                    $visualBtn.disabled = false;
+                }
+                $visualBtn.click();
             }
         });
         $inputRegex.addEventListener('input', (event) => {
-            if (timeoutInputId) clearTimeout(timeoutInputId);
-            if ($realTimeCheck.checked) {
-                timeoutInputId = setTimeout( () => {
-                    parseRegex(getRegex());
-                    regexParsed = true;
-                }, 500);
-                
-            }
-            else {
-                regexParsed = false;
-            }
-
+            parseRegex(getRegex());
+            regexParsed = true;
             window.hasChanges = true;
             if ($visualBtn !== null) {
                 $visualBtn.disabled = false;
             }
-            // hideError();
+
+            // Ejecucion de los paneles
+            if (timeoutInputId) clearTimeout(timeoutInputId);
+            if ($realTimeCheck.checked) {
+                timeoutInputId = setTimeout( () => {
+                    $visualBtn.click();
+                }, 500);
+            }
+        });
+
+        // Prevent of paste non raw elements in contenteditable
+        $inputRegex.addEventListener('paste', (event) => {
+            event.preventDefault();
+            let clipboardData = event.clipboardData || window.clipboardData;
+            let pastedData = clipboardData.getData('Text');
+            document.execCommand('insertText', false, pastedData);
+            parseRegex(getRegex());
+            regexParsed = true;
         });
     
         $shareBtn.addEventListener('click', function () {
@@ -516,8 +519,6 @@ var EditorParser = (options) => {
             $inputRegex.scrollLeft = ev.currentTarget.scrollLeft;
         });
 
-
-
         // parseBtn.addEventListener("click", (event) => {
         //     var regExpresion = inputRegex.value;
         //     _parseRegex(regExpresion);
@@ -526,16 +527,17 @@ var EditorParser = (options) => {
         let langs = document.querySelectorAll("[name='languageRegex']");
         for (var i = 0, max = langs.length; i < max; i++) {
             langs[i].onclick = function () {
-                parseRegex(getRegex())
+                parseRegex(getRegex());
                 regexParsed = true;
                 // Aqui deberia notificar al resto de paneles que la regex se ha parseado
                 // Puede que utilizando los message de javascript y cada panel tiene un listener de escucha
                 if ($loader_view !== null) {
                     if (!$loader_view.classList.contains("loading")) {
                         if ($visualBtn !== null) {
-                            if ($visualBtn.disabled) {
+                            if ($visualBtn !== null) {
                                 $visualBtn.disabled = false;
                             }
+                            $visualBtn.click();
                         }
                     }
                 }

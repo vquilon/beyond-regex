@@ -16,7 +16,8 @@ html, body {
 }
 
 html {
-    background: linear-gradient(145deg, #3b3b3b, #242424);
+    /* background: linear-gradient(145deg, #3b3b3b, #242424); */
+    background: #2f2f2f;
 }
 
 body {
@@ -133,7 +134,7 @@ span#close-side .strip {
 span#close-side .strip div {
     height: 0.2em;
     background: white;
-    margin: 0.4em;
+    margin: 0.3em;
     transition: transform .65s cubic-bezier(0.075, 0.82, 0.165, 1), margin .65s cubic-bezier(0.075, 0.82, 0.165, 1);
     width: 1.5em;
 }
@@ -146,7 +147,7 @@ span#close-side .burger:hover .strip div:nth-child(2), #container-main.menu-open
     margin: 0;
 }
 span#close-side .burger:hover .strip div:last-child, #container-main.menu-open span#close-side .burger .strip div:last-child {
-    transform: translateY(-0.2em) rotate(105deg);
+    transform: translateY(-0.2em) rotate(-75deg);
     margin: 0;
 }
 span#close-side .burger:hover .strip, #container-main.menu-open span#close-side .burger .strip {
@@ -674,7 +675,7 @@ span#close-side .burger:hover .strip, #container-main.menu-open span#close-side 
     flex-wrap: nowrap;
     align-items: flex-start;
     justify-content: center;
-    padding: 10px 20px;
+    padding: 10px;
     grid-row: 2;
 
     background: #e2e2e2;
@@ -708,7 +709,7 @@ span#close-side .burger:hover .strip, #container-main.menu-open span#close-side 
 
 #beyond-editor .container-editor #editor-flags {
     font-family: "VictorMono", monospace;
-    padding: 10px 10px;
+    padding: 10px;
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -718,13 +719,14 @@ span#close-side .burger:hover .strip, #container-main.menu-open span#close-side 
     grid-row: 2;
     background: #e2e2e2;
     z-index: 1;
-    width: 5em;
+    /* Solo para mostrar los flags a la izquierda no se necesita */
+    /* width: 5em; */
 }
 
 #beyond-editor div.container-editor #editor-input .input {
     font-family: "VictorMono", monospace;
     color: #4b0082;
-    padding: 0;
+    padding: 0 10px;
     border: none;
     background: #e2e2e2;
     margin: 0;
@@ -807,9 +809,10 @@ span#close-side .burger:hover .strip, #container-main.menu-open span#close-side 
 }
 
 .checkbox__1 input:checked~label>* {
-    color: white;
+    /* color: white;
     -webkit-text-fill-color: white;
-    text-shadow: 0 0 10px #ffffff, -1px 0px 5px #03a9f4, 1px 0px 5px #ff0058;
+    text-shadow: 0 0 10px #ffffff, -1px 0px 5px #03a9f4, 1px 0px 5px #ff0058; */
+    text-shadow: 0 0 20px #00000087;
 }
 
 .checkbox__1 label {

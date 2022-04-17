@@ -48,7 +48,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $prog
 
 
         // Se procesa el regexson para generar los items con formato json que despues procesara Raphael
-        var raphael_items = generateRaphaelSVGItems(regexson_tree.tree, 0, 0);
+        var raphael_items = generateRaphaelSVGItems([...regexson_tree.tree], 0, 0);
 
         max_item_height = Math.max(raphael_items.height + 3 * ITEMS_MARGIN + sizeTextItem.height, max_item_height);
         max_item_width = Math.max(raphael_items.width + 2 * ITEMS_MARGIN, max_item_width);

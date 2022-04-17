@@ -9,7 +9,7 @@ function EditorSyntaxis(options = {}) {
         if (document.caretRangeFromPoint) { // Chrome
             onRange = document.caretRangeFromPoint(event.clientX, event.clientY);
         }
-        else if (e.rangeParent) { // Firefox
+        else if (event.rangeParent) { // Firefox
             onRange = document.createRange();
             onRange.setStart(event.rangeParent, event.rangeOffset);
         }
@@ -73,14 +73,58 @@ function EditorSyntaxis(options = {}) {
     // Catch Listeners
     const init_listeners = () => {
         // HANDLE MULTIEDIT
-        // click - Save the position of caret
+        // mouseup - Get caret positions from $syntax to $editor
         // input - If ctrl pressed saved in queue the position of caret
         // input - Control updates of caret with arrow keys
-        $editor.addEventListener("click", (event) => {
-            let that = event.target;
-            let focusRange = getRangeFromMouse(event);
-            // console.log(focusRange);
+
+        $syntax.addEventListener("mousedown", (event) => {
+            // let [caretStart, caretEnd] = getCaretIndex($syntax);
+            // let range = document.createRange();
+            // let sel = window.getSelection();
+            // range.setStart($editor.childNodes[0], caretStart);
+            // range.setEnd($editor.childNodes[0], caretEnd);
+            // // range.collapse(true);
+            // sel.removeAllRanges();
+            // sel.addRange(range);
         }, true);
+        $syntax.addEventListener("mousemove", (event) => {
+            // let [caretStart, caretEnd] = getCaretIndex($syntax);
+            // let range = document.createRange();
+            // let sel = window.getSelection();
+            // range.setStart($editor.childNodes[0], caretStart);
+            // range.setEnd($editor.childNodes[0], caretEnd);
+            // // range.collapse(true);
+            // sel.removeAllRanges();
+            // sel.addRange(range);
+        }, true);
+        $syntax.addEventListener("mouseup", (event) => {
+            let [caretStart, caretEnd] = getCaretIndex($syntax);
+            caretStart = caretStart > $editor.innerText.length ? $editor.innerText.length : caretStart;
+            caretEnd = caretEnd > $editor.innerText.length ? $editor.innerText.length : caretEnd;
+            let range = document.createRange();
+            let sel = window.getSelection();
+            if ($editor.childNodes.length !== 1) $editor.normalize();
+            
+            sel.removeAllRanges();
+            
+            if (caretStart > caretEnd ) {
+                range.setStart($editor.childNodes[0], caretEnd);
+                range.setEnd($editor.childNodes[0], caretStart);
+                range.collapse(false);
+                sel.addRange(range);
+                sel.extend($editor.childNodes[0], caretEnd);
+
+            }
+            else {
+                range.setStart($editor.childNodes[0], caretStart);
+                range.setEnd($editor.childNodes[0], caretEnd);
+                sel.addRange(range);
+            }
+            
+            
+            
+        }, true);
+
         $editor.addEventListener("focus", (event) => {
             let that = event.target;
             let [caretStart, caretEnd] = getCaretIndex(that);
@@ -108,9 +152,9 @@ function EditorSyntaxis(options = {}) {
             });
         });
 
-        $editor.addEventListener('input', (event) => {
-            synxtaxHighlighter.onInput($containerEditor.regexson, event)
-        });
+        // $editor.addEventListener('input', (event) => {
+        //     synxtaxHighlighter.onInput($containerEditor.regexson, event);
+        // });
         $editor.addEventListener('keydown', (event) => {
             let that = event.target;
             // Ctrl
@@ -171,18 +215,17 @@ function EditorSyntaxis(options = {}) {
                 that.shift_pressed = !that.shift_pressed;
             }
 
-            synxtaxHighlighter.onInput($containerEditor.regexson, { target: $editor });
+            // synxtaxHighlighter.onInput($containerEditor.regexson, { target: $editor });
+            if ($editor.childNodes.length !== 1) {
+                $editor.normalize();
+            }
         });
 
-        // Prevent of paste non raw elements in contenteditable
-        $editor.addEventListener('paste', (event) => {
-            event.preventDefault();
-            let clipboardData = event.clipboardData || window.clipboardData;
-            let pastedData = clipboardData.getData('Text');
-            document.execCommand('insertText', false, pastedData);
-            $syntax.innerHTML = parseRegexToHTML($containerEditor.regexson, $editor.textContent);
+        $editor.addEventListener('keyup', (event) => {
+            if ($editor.childNodes.length !== 1) {
+                $editor.normalize();
+            }
         });
-
     }
 
     init_listeners();

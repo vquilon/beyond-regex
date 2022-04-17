@@ -353,25 +353,29 @@ function RegexHighlighter($editor, $syntax) {
         // Tests if its generated well
         let $testDiv = document.createElement("div");
         $testDiv.innerHTML = htmlParsed;
-        if ($testDiv.innerText === regexRaw) {
-            return htmlParsed;
+        
+        
+        if ($testDiv.innerText !== regexRaw) {
+            // showErrorsParser("Cannot render well that regex!");
+            let noParsed = regexRaw.slice($testDiv.innerText.length,);
+            htmlParsed = `<span>${htmlParsed}</span><span>${expandHtmlEntities(noParsed)}</span>`;
         }
 
-        // showErrorsParser("Cannot render well that regex!");
-        return `<span>${escapeHTMLChars(regexRaw)}</span><span style="display: none">${htmlParsed}</span>`;
+        return htmlParsed;
     }
 
     // Event Input Listener
     const onInput = (regexson, { target: $elm }) => {
         // Parse Content
-        if (lastRegex !== $editor.textContent) {
-            lastRegex = $editor.textContent;
-
-            // Size Change
-            if ($elm.nodeName == 'TEXTAREA') {
-                // var syntaxHTML = convertRawToHTMLResult($editor.value);
-                // var syntaxHTML = RegexColorizer.colorizeText($editor.value);
-                var syntaxHTML = parseRegexToHTML(regexson, $editor.value);
+        // Size Change
+        if ($elm.nodeName == 'TEXTAREA') {
+            if (lastRegex === $elm.value) {
+                lastRegex = $elm.value;
+            }
+            else {
+                // var syntaxHTML = convertRawToHTMLResult($elm.value);
+                // var syntaxHTML = RegexColorizer.colorizeText($elm.value);
+                var syntaxHTML = parseRegexToHTML(regexson, $elm.value);
 
                 const changeTextareaSize = ($textarea) => {
                     const getScrollHeight = ($txtNode) => {
@@ -391,13 +395,20 @@ function RegexHighlighter($editor, $syntax) {
                 };
                 changeTextareaSize($elm);
             }
+        }
+        else {
+            if (lastRegex === $elm.textContent) {
+                lastRegex = $elm.textContent;
+            }
             else {
                 // var syntaxHTML = convertRawToHTMLResult($editor.textContent);
                 // var syntaxHTML = RegexColorizer.colorizeText($editor.textContent);
                 var syntaxHTML = parseRegexToHTML(regexson, $editor.textContent);
+        
             }
-            $syntax.innerHTML = syntaxHTML;
         }
+
+        $syntax.innerHTML = syntaxHTML;
 
 
     };

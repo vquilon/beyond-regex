@@ -20,6 +20,7 @@
       this.raw = _regexObject.raw;
       this.tree = _regexObject.tree;
       this.groupCount = _regexObject.groupCount;
+      this.errors = init_object.RegexSyntaxThrows;
     }
     function init_object(raw_regex_input, e, language) {
       init_object.RegexSyntaxThrows = [];
