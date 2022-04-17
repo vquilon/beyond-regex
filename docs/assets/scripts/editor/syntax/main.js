@@ -74,7 +74,7 @@ function EditorSyntaxis(options = {}) {
         let textNodes = $parent.childNodes;
         let offsetStart = 0;
         let offsetEnd = 0;
-        for (tIndex in textNodes) {
+        for (let tIndex=0; tIndex<textNodes.length;tIndex++) {
             let tNode = textNodes[tIndex];
             offsetEnd += tNode.textContent.length;
             if (caretPos <= offsetEnd) {
@@ -113,6 +113,10 @@ function EditorSyntaxis(options = {}) {
         }, true);
         $syntax.addEventListener("mouseup", (event) => {
             var [caretStart, caretEnd] = getCaretIndex($syntax);
+
+            caretStart = caretStart > $editor.innerText.length ? $editor.innerText.length : caretStart;
+            caretEnd = caretEnd > $editor.innerText.length ? $editor.innerText.length : caretEnd;
+
             var [$tNodeStart, caretStart] = getTextNodePos(caretStart, $editor);
             var [$tNodeEnd, caretEnd] = getTextNodePos(caretEnd, $editor);
 
