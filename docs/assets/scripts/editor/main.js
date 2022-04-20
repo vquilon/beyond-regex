@@ -202,8 +202,10 @@ var EditorParser = (options) => {
 
     const _updateJSONViewer = function ($elem, jsonData) {
         if (DEBUG && window.hasOwnProperty("JsonView")) {
-            $elem.innerHTML = "";
-            window.setTimeout(() => JsonView.renderJSON(jsonData, $elem), 50);
+            window.setTimeout(() =>{
+                $elem.innerHTML = "";
+                JsonView.renderJSON(jsonData, $elem);
+            }, 50);
         }
     }
     const _updateRaphaelItemsJSON = (_raphaelItems) => {

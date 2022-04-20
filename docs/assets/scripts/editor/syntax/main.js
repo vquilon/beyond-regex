@@ -113,31 +113,42 @@ function EditorSyntaxis(options = {}) {
         }, true);
         $syntax.addEventListener("mouseup", (event) => {
             var [caretStart, caretEnd] = getCaretIndex($syntax);
+            if (caretStart === 0  && caretEnd === 0) {
+                let range = document.createRange();
+                let sel = window.getSelection();
+                
+                sel.removeAllRanges();
 
-            caretStart = caretStart > $editor.innerText.length ? $editor.innerText.length : caretStart;
-            caretEnd = caretEnd > $editor.innerText.length ? $editor.innerText.length : caretEnd;
-
-            var [$tNodeStart, caretStart] = getTextNodePos(caretStart, $editor);
-            var [$tNodeEnd, caretEnd] = getTextNodePos(caretEnd, $editor);
-
-            caretStart = caretStart > $tNodeStart.textContent.length ? $tNodeStart.textContent.length : caretStart;
-            caretEnd = caretEnd > $tNodeEnd.textContent.length ? $tNodeEnd.textContent.length : caretEnd;
-            let range = document.createRange();
-            let sel = window.getSelection();
-            
-            sel.removeAllRanges();
-            
-            if (caretStart > caretEnd ) {
-                range.setStart($tNodeEnd, caretEnd);
-                range.setEnd($tNodeStart, caretStart);
-                range.collapse(false);
+                range.setStart($editor, caretStart);
+                range.setEnd($editor, caretEnd);
                 sel.addRange(range);
-                sel.extend($tNodeEnd, caretEnd);
             }
-            else {
-                range.setStart($tNodeStart, caretStart);
-                range.setEnd($tNodeEnd, caretEnd);
-                sel.addRange(range);
+            else{
+                caretStart = caretStart > $editor.innerText.length ? $editor.innerText.length : caretStart;
+                caretEnd = caretEnd > $editor.innerText.length ? $editor.innerText.length : caretEnd;
+    
+                var [$tNodeStart, caretStart] = getTextNodePos(caretStart, $editor);
+                var [$tNodeEnd, caretEnd] = getTextNodePos(caretEnd, $editor);
+    
+                caretStart = caretStart > $tNodeStart.textContent.length ? $tNodeStart.textContent.length : caretStart;
+                caretEnd = caretEnd > $tNodeEnd.textContent.length ? $tNodeEnd.textContent.length : caretEnd;
+                let range = document.createRange();
+                let sel = window.getSelection();
+                
+                sel.removeAllRanges();
+                
+                if (caretStart > caretEnd ) {
+                    range.setStart($tNodeEnd, caretEnd);
+                    range.setEnd($tNodeStart, caretStart);
+                    range.collapse(false);
+                    sel.addRange(range);
+                    sel.extend($tNodeEnd, caretEnd);
+                }
+                else {
+                    range.setStart($tNodeStart, caretStart);
+                    range.setEnd($tNodeEnd, caretEnd);
+                    sel.addRange(range);
+                }
             }
         }, true);
 

@@ -208,13 +208,9 @@ function RegexHighlighter($editor, $syntax) {
     // Parser Regex to JSON Object
 
     const parseRegexToHTML = (regexson, regexRaw) => {
-        const _parseDefault = (reToken, raw, extraClass = "", extraAttributes = "", closeTag = true) => {
-            let quant = "";
-            if (reToken.repeat) {
-                quant = `<i>${reToken.raw.slice(reToken.repeat.beginIndex)}</i>`
-            }
-            let regexTag = `<span class="${reToken.type} ${extraClass}" tokenId="${reToken.id}" tokenIndices="${reToken.indices.join(",")}" ${extraAttributes}>${raw}${quant}`;
-            if (closeTag) regexTag += "</span>";
+        const _parseDefault = (reToken, htmlRaw, extraClass = "", extraAttributes = "", closeTag = true) => {
+            let regexTag = `<span class="${reToken.type} ${extraClass}" tokenId="${reToken.id}" tokenIndices="${reToken.indices.join(',')}" ${extraAttributes}>${htmlRaw}`;
+            if (closeTag) regexTag += `</span>`;
 
             return regexTag;
         }
@@ -237,18 +233,21 @@ function RegexHighlighter($editor, $syntax) {
                     subTokens += _parseRegexSON(subToken);
                 });
             }
-            return _parseDefault(
-                reToken,
-                `${assertMap[reToken.assertionType][0]}${subTokens}${assertMap[reToken.assertionType][1]}`,
-                reToken.assertionType
-            );
+
+            let assertHTML = `${assertMap[reToken.assertionType][0]}${subTokens}${assertMap[reToken.assertionType][1]}`;
+            if (reToken.repeat) {
+                let quant = `<i>${reToken.raw.slice(reToken.repeat.beginIndex)}</i>`;
+                assertHTML += quant;
+            }
+
+            return _parseDefault(reToken, assertHTML, reToken.assertionType);
         }
         const _parseGroup = (reToken) => {
             let subTokens = "";
             reToken.sub.forEach(subToken => {
                 subTokens += _parseRegexSON(subToken);
             });
-            let groupAttributes = `non-capture="${reToken.nonCapture || "false"}" group-number="${reToken.num || ""}" group-name="${reToken.name || ""}"`;
+            let groupAttributes = `non-capture="${reToken.nonCapture || 'false'}" group-number="${reToken.num || ''}" group-name="${reToken.name || ''}"`;
 
             let groupMod = reToken.nonCapture ? "?:" : "";
             let groupNameMap = {
@@ -257,7 +256,7 @@ function RegexHighlighter($editor, $syntax) {
                 "(?'": `?'${reToken.name}'`,
             }
             if (reToken.raw.slice(0, 3) in groupNameMap) {
-                groupMod = reToken.name ? groupNameMap[reToken.raw.slice(0, 3)] : "";
+                groupMod = reToken.name ? groupNameMap[reToken.raw.slice(0, 3)] : '';
                 groupMod = expandHtmlEntities(groupMod);
             }
             let endParen = `<span class="parenthesis">)</span>`;
@@ -266,11 +265,13 @@ function RegexHighlighter($editor, $syntax) {
                     endParen = "";
                 }
             }
-            let regexGroupTag = _parseDefault(
-                reToken,
-                `<span class="parenthesis">(</span>${groupMod}${subTokens}${endParen}`,
-                extraAttributes = groupAttributes
-            );
+            let groupHTML = `<span class="parenthesis">(</span>${groupMod}${subTokens}${endParen}`;
+            if (reToken.repeat) {
+                let quant = `<i>${reToken.raw.slice(reToken.repeat.beginIndex)}</i>`;
+                groupHTML += quant;
+            }
+
+            let regexGroupTag = _parseDefault(reToken, groupHTML,extraAttributes=groupAttributes);
 
             return regexGroupTag;
         }
@@ -287,6 +288,11 @@ function RegexHighlighter($editor, $syntax) {
                 }
 
             });
+            
+            if (reToken.repeat) {
+                let quant = `<i>${reToken.raw.slice(reToken.repeat.beginIndex)}</i>`;
+                branches += quant;
+            }
 
             let regexChoiceTag = _parseDefault(reToken, branches);
 
@@ -303,18 +309,26 @@ function RegexHighlighter($editor, $syntax) {
             // let charset = expandHtmlEntities(
             //   reToken.raw.replace(new RegExp(`[\\\\${reToken.classes.join("\\\\")}]`))
             // );
-            let charset = reToken.raw;
+            let charsetHTML = expandHtmlEntities(reToken.raw);
             if (reToken.repeat) {
-                charset = reToken.raw.slice(0, reToken.repeat.beginIndex);
+                let quant = `<i>${reToken.raw.slice(reToken.repeat.beginIndex)}</i>`;
+                charsetHTML = expandHtmlEntities(reToken.raw.slice(0, reToken.repeat.beginIndex));
+                charsetHTML += quant;
             }
-            let regexCarsetTag = _parseDefault(reToken, charset);
+            let regexCarsetTag = _parseDefault(reToken, charsetHTML);
             return regexCarsetTag;
         }
         const _parseExact = (reToken) => {
-            return _parseDefault(reToken, expandHtmlEntities(reToken.raw));
+            let exactHTML = expandHtmlEntities(reToken.raw);
+            if (reToken.repeat) {
+                let quant = `<i>${reToken.raw.slice(reToken.repeat.beginIndex)}</i>`;
+                exactHTML = expandHtmlEntities(reToken.raw.slice(0, reToken.repeat.beginIndex));
+                exactHTML += quant;
+            }
+            return _parseDefault(reToken, exactHTML);
         }
         const _parseDot = (reToken) => {
-            return _parseDefault(reToken, ".", "dot");
+            return _parseDefault(reToken, ".", extraClass="dot");
         }
 
         const typeMap = {
@@ -356,9 +370,15 @@ function RegexHighlighter($editor, $syntax) {
         
         
         if ($testDiv.innerText !== regexRaw) {
-            // showErrorsParser("Cannot render well that regex!");
-            let noParsed = regexRaw.slice($testDiv.innerText.length,);
-            htmlParsed = `<span>${htmlParsed}</span><span>${expandHtmlEntities(noParsed)}</span>`;
+            if ($testDiv.innerText.length < regexRaw.length) {
+                // showErrorsParser("Cannot render well that regex!");
+                let noParsed = regexRaw.slice($testDiv.innerText.length);
+                htmlParsed = `<span>${htmlParsed}</span><span>${expandHtmlEntities(noParsed)}</span>`;
+            }
+            else {
+                // showErrorsParser("Cannot render well that regex!");
+                htmlParsed = `<span>${expandHtmlEntities(regexRaw)}</span>`;
+            }
         }
 
         return htmlParsed;

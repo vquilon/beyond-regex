@@ -357,13 +357,9 @@ ins {
   font-weight: bold;
 }
 
-.regex .group {
-  border: 1px solid;
-  border-color: transparent;
-}
 .regex span.group:hover {
-  background: #4df06a40;
-  border-color: green;
+  background: #4df06a0f;
+  outline: 2px #00961b8f solid;
 }
 
 span.assert.AssertLookahead > .parenthesis {
