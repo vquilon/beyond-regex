@@ -11,6 +11,17 @@ window.onbeforeunload = function (e) {
 }
 
 
+function isDescendant(parent, child) {
+    var node = child.parentNode;
+    while (node != null) {
+        if (node == parent) {
+            return true;
+        }
+        node = node.parentNode;
+    }
+    return false;
+}
+
 window.onload = function () {
     changeDark2LightTheme();
 
@@ -32,6 +43,8 @@ window.onload = function () {
 
     });
 
+    
+
     // UBICAR TODOS LOS SCRIPTS QUE NECESITEN ESPERAR A LA CARGA DEL DOM
 
     // OFFLINE HANDLER
@@ -40,6 +53,15 @@ window.onload = function () {
 
     let beyondEditor = Editor();
     let beyondEditorIns = beyondEditor.init();
+    // CREAR UN FICHERO CON VARIABLES GLOBALES CON LOS NOMBRES DE CLASES o IDs
+    document.addEventListener("keyup", (event) => {
+        if (event.key === "[") {
+            if(!isDescendant(beyondEditorIns.editorParser.$input, window.getSelection().anchorNode)) {
+                document.querySelector("#close-side").click();
+            }
+        }
+    })
+
 
     // VISUALIZER PANEL
     panelVisualizer({editorParser: beyondEditorIns.editorParser}).init();

@@ -48,12 +48,13 @@ var EditorParser = (options) => {
     }
     else {
         var $containerEditor = document.querySelector(options.containerSelector);
-        var $inputRegex = $containerEditor.querySelector('.editor');
+        var $input = $containerEditor.querySelector(`#editor-input > .${options.inputClass}`);
+        var $editorRegex = $input.querySelector('.editor');
 
         var syntaxProcessor = EditorSyntaxis({
             $containerEditor: $containerEditor,
-            $inputRegex: $inputRegex,
-            $syntaxRegex: $containerEditor.querySelector('.syntax')
+            $inputRegex: $editorRegex,
+            $syntaxRegex: $input.querySelector('.syntax')
         });
 
         var $editorTerminal = $containerEditor.querySelector('#editor-terminal');
@@ -275,7 +276,7 @@ var EditorParser = (options) => {
             $containerEditor.regexson = regexson;
         }
 
-        syntaxProcessor.onInput(regexson, { target: $inputRegex });
+        syntaxProcessor.onInput(regexson, { target: $editorRegex });
         return true;
     };
 
@@ -345,10 +346,10 @@ var EditorParser = (options) => {
         return correctParams.re;
     };
     const getRegex = () => {
-        return $inputRegex.innerText;
+        return $editorRegex.innerText;
     }
     const setRegexValue = function (v) {
-        $inputRegex.innerText = v;
+        $editorRegex.innerText = v;
     };
 
     const getFlags = function () {
@@ -392,7 +393,7 @@ var EditorParser = (options) => {
     const initEventsListener = () => {
         let regexParsed = false;
         let timeoutInputId = null;
-        $inputRegex.addEventListener('keydown', (event) => {
+        $editorRegex.addEventListener('keydown', (event) => {
             let keyDownLabel = event.key.toLowerCase();
             if(keyDownLabel === "enter" && event.ctrlKey) {
                 if ($visualBtn !== null) {
@@ -401,7 +402,7 @@ var EditorParser = (options) => {
                 $visualBtn.click();
             }
         });
-        $inputRegex.addEventListener('input', (event) => {
+        $editorRegex.addEventListener('input', (event) => {
             parseRegex(getRegex());
             regexParsed = true;
             window.hasChanges = true;
@@ -419,7 +420,7 @@ var EditorParser = (options) => {
         });
 
         // Prevent of paste non raw elements in contenteditable
-        $inputRegex.addEventListener('paste', (event) => {
+        $editorRegex.addEventListener('paste', (event) => {
             event.preventDefault();
             let clipboardData = event.clipboardData || window.clipboardData;
             let pastedData = clipboardData.getData('Text');
@@ -518,7 +519,7 @@ var EditorParser = (options) => {
 
         // Scroll on terminal
         $errorBox.addEventListener("scroll", (ev) => {
-            $inputRegex.scrollLeft = ev.currentTarget.scrollLeft;
+            $editorRegex.scrollLeft = ev.currentTarget.scrollLeft;
         });
 
         // parseBtn.addEventListener("click", (event) => {
@@ -589,6 +590,7 @@ var EditorParser = (options) => {
         getCorrectedReLanguage: getCorrectedReLanguage,
         getCorrectedRegex: getCorrectedRegex,
         _updateRaphaelItemsJSON: _updateRaphaelItemsJSON,
-        $containerEditor: $containerEditor
+        $containerEditor: $containerEditor,
+        $input: $input
     }
 }

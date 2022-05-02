@@ -1,7 +1,8 @@
 function Editor(options={}) {
     const init = () => {
         let editorParser = EditorParser({
-            containerSelector: ".container-editor",
+            containerSelector: options.containerSelector|| ".container-editor",
+            inputClass: options.inputClass || "input",
             debug: options.debug || true,
             regexSONId: options.regexSONId || "regex-json",
             raphaelJSONId: options.raphaelJSONId || "raphael-json",
