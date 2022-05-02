@@ -16,11 +16,12 @@
 
   --color-editor: #4b0082;
   --back-editor: #e2e2e2;
-  --margin-editor: #e2e2e2;
+  --color-editor-margin: #e2e2e2;
   --tools-back: #6ebefc;
 
-  --font-size: 24px;
+  --font-size: 25px;
   --line-height-ratio: 1.4;
+  --editor-margin: 20px;
 }
 
 [data-theme="dark"] {
@@ -41,11 +42,16 @@
 
   --color-editor: #fff;
   --back-editor: #1a1a1a;
-  --margin-editor: #1a1a1a;
+  --color-editor-margin: #202020;
   --tools-back: #2e1279;
 
-  --font-size: 24px;
+  --font-size: 25px;
   --line-height-ratio: 1.4;
+  --editor-margin: 20px;
+}
+
+#editor-actions .actions-container .only-mobile {
+  display: none;
 }
 
 .regex-quotes {
@@ -78,20 +84,28 @@
 .input-syntax,
 .input-carets {
   width: 100%;
+  box-sizing: border-box;
   /* background-color: var(--margin-editor); */
   transition: transform 1s, background 1s, opacity 1s;
 }
 
 .input-carets {
   background: none;
-  z-index: 3;
+  padding: 0;
+  z-index: 1;
   pointer-events: none;
+  min-height: calc(var(--line-height-ratio) * var(--font-size));
 }
 
 .caret {
+  display: inline-block;
   position: absolute;
-  left: 0;
-  top: 0;
+  width: 0.1em;
+  height: calc(var(--line-height-ratio) * var(--font-size));
+  left: calc(var(--pos-char) * 1ch - 0.1em/2);
+  top: calc(var(--pos-line) * var(--line-height-ratio) * var(--font-size));
+  background: var(--color-editor);
+  opacity: 1;
   color: var(--color-editor);
   -webkit-animation: 1s blink step-end infinite;
   -moz-animation: 1s blink step-end infinite;
@@ -101,54 +115,50 @@
 }
 
 @keyframes blink {
-  from,
-  to {
-    color: transparent;
+  0% {
+    opacity: 0;
   }
   50% {
-    color: black;
+    opacity: 1;
   }
 }
 @-moz-keyframes blink {
-  from,
-  to {
-    color: transparent;
+  0% {
+    opacity: 0;
   }
   50% {
-    color: black;
+    opacity: 1;
   }
 }
 @-webkit-keyframes blink {
-  from,
-  to {
-    color: transparent;
+  0% {
+    opacity: 0;
   }
   50% {
-    color: black;
+    opacity: 1;
   }
 }
 @-ms-keyframes blink {
-  from,
-  to {
-    color: transparent;
+  0% {
+    opacity: 0;
   }
   50% {
-    color: black;
+    opacity: 1;
   }
 }
 @-o-keyframes blink {
-  from,
-  to {
-    color: transparent;
+  0% {
+    opacity: 0;
   }
   50% {
-    color: black;
+    opacity: 1;
   }
 }
 
 .input-editor {
   z-index: 2;
   background: transparent;
+  pointer-events: none;
 }
 .input-syntax {
   z-index: 3;
@@ -174,7 +184,7 @@
 .caret {
   font-family: VictorMono, monospace;
   font-size: var(--font-size);
-  cursor:text;
+  cursor: text;
 }
 
 .editor,
@@ -189,6 +199,7 @@
 }
 
 .editor {
+  display: inline-block;
   width: 100%;
   /*  text-align: justify; */
   overflow: hidden;
@@ -208,24 +219,10 @@
   -webkit-text-fill-color: #ffffff00;
 }
 
-pre.editor {
-  display: inline-block;
-}
-
-textarea.editor {
-  width: 100%;
-  resize: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  display: block;
-}
-
 .syntax {
+  cursor: text;
   /* background-color: var(--back-editor); */
   word-break: break-all;
-  /* white-space: nowrap; */
-  /* pointer-events: none; */
   color: var(--color-editor);
 }
 
@@ -235,7 +232,7 @@ textarea.editor {
   transition: none;
 }
 
-/*Estilos de syntaxis*/
+/*Estilos de sintaxis*/
 .code-inline {
   color: rgb(78, 204, 163);
   background-color: rgba(78, 204, 163, 0.08);

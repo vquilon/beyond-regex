@@ -60,6 +60,7 @@ var EditorParser = (options) => {
         var $editorTerminal = $containerEditor.querySelector('#editor-terminal');
         var $terminalStats = $editorTerminal.querySelector('#terminal-stats');
         var $realTimeCheck = $containerEditor.querySelector('#real-time-check');
+        var $editMobile = $containerEditor.querySelector('#mobile-edit')
         var $terminalError = $containerEditor.querySelector('#terminal-error');
         var $errorDef = $terminalError.querySelector("#errorDef");
         var $errorBox = $terminalError.querySelector('#errorBox');
@@ -546,6 +547,12 @@ var EditorParser = (options) => {
                 }
             }
         }
+
+        $editMobile.addEventListener("change", (event) => {
+            if ($editMobile.checked) $inputEditor.classList.add("editing");
+            else $inputEditor.classList.remove("editing");
+        });
+
     }
     if (!NONEDITOR) {
         initEventsListener();

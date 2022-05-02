@@ -55,17 +55,27 @@
     </div>
 
     <div id="editor-actions">
-        <button title="Get the link" id="shareIt"><i class="fas fa-link"></i></button>
-        <div title="Update below panels connected" class="checkbox checkbox__1">
-            <input id="real-time-check" type="checkbox">
-            <label for="real-time-check"><span class="material-icons">dashboard</span></label>
+        <div class="actions-container">
+            <button title="Get the link" id="shareIt">
+                <i class="fas fa-link"></i>
+            </button>
+            <div title="Update below panels connected" class="checkbox checkbox__1">
+                <input id="real-time-check" type="checkbox">
+                <label for="real-time-check"><span class="material-icons">dashboard</span></label>
+            </div>
+            <div title="Edit" class="checkbox checkbox__1 only-mobile">
+                <input id="mobile-edit" type="checkbox">
+                <label for="mobile-edit">
+                    <span class="material-icons material-symbols-outlined">edit_note</span>
+                </label>
+            </div>
         </div>
     </div>
 
     <div id="editor-input">
         <span class="regex-quotes">/</span>
         <!-- <input id="input" class="input" value="" /> -->
-        <div class="input">
+        <div tabindex="0" class="input">
             <div class="input-carets"></div>
             <div class="input-syntax">
                 <div class="regex syntax"></div>
