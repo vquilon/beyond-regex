@@ -92,7 +92,7 @@
 .input-carets {
   background: none;
   padding: 0;
-  z-index: 1;
+  z-index: 4;
   pointer-events: none;
   min-height: calc(var(--line-height-ratio) * var(--font-size));
 }

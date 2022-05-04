@@ -94,7 +94,7 @@ function EditorSyntaxis(options = {}) {
 
     const getCaretsElements = () => {
         $inputCarets = $containerEditor.querySelector('.input').querySelector(".input-carets");
-        let carets = $inputCarets.querySelectorAll(".caret");
+        let carets = Array.from($inputCarets.querySelectorAll(".caret"));
         return carets;
     }
 
@@ -367,15 +367,35 @@ function EditorSyntaxis(options = {}) {
         //     }
         // });
         $containerEditor.querySelector('.input').addEventListener("blur", event => {
+            console.log("BLURRED");
             $containerEditor.querySelector('.input').querySelector(".input-carets").innerHTML = "";
             $editor.lastCaret = undefined;
         });
 
+        const calculateActualRect = (clientY) => {
+            if (!window.hasOwnProperty("selRects")) window.selRects = [];
+            if (window.selRects.length === 0) {
+                // Se comprueba que donde se ha hecho mousedown no corresponde con la posicion de una seleccion
+                let sel = window.getSelection();
+                sel.selectAllChildren($editor);
+                let allRects = Array.from(sel.getRangeAt(0).getClientRects());
+                sel.removeAllRanges();
+                window.selRects = allRects;  
+            }
+
+            let selRect;
+            for (let i in window.selRects) {
+                if (window.selRects[i].y <= clientY) selRect = window.selRects[i];
+            }
+
+            return selRect;
+        }
         $syntax.addEventListener("mousedown", (event) => {
             $editor.selecting = true;
-            // Se comprueba que donde se ha hecho mousedown no corresponde con la posicion de una seleccion
+
+            let selRect = calculateActualRect(event.clientY);
             $editor.firstCaretPos = {
-                x: event.clientX,
+                x: Math.min(event.clientX, selRect.x + selRect.width),
                 y: event.clientY
             };
 
@@ -401,8 +421,9 @@ function EditorSyntaxis(options = {}) {
         $syntax.addEventListener("mousemove", (event) => {
             if ($editor.hasOwnProperty("selecting")) {
                 if ($editor.selecting) {
+                    let selRect = calculateActualRect(event.clientY);
                     $editor.lastCaretPos = {
-                        x: event.clientX,
+                        x: Math.min(event.clientX, selRect.x + selRect.width),
                         y: event.clientY
                     }
                     // Se actualiza la posicion de la seleccion
@@ -447,6 +468,7 @@ function EditorSyntaxis(options = {}) {
         //     synxtaxHighlighter.onInput($containerEditor.regexson, event);
         // });
         const keydownEditor = (event, $containerEl) => {
+            window.selRects = [];
             const auxProcessInput = (event) => {
                 let that = event.target;
                 // Ctrl
@@ -521,7 +543,6 @@ function EditorSyntaxis(options = {}) {
                 let carets = getCaretsElements();
                 for (let c in carets) {
                     let $caret = carets[c];
-                    
                     // TODO: almacenar parametros necesarios en cada Caret y actualizarlos
                     let caretBBounds = $caret.getBoundingClientRect();
 
