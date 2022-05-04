@@ -549,8 +549,8 @@ var EditorParser = (options) => {
         }
 
         $editMobile.addEventListener("change", (event) => {
-            if ($editMobile.checked) $inputEditor.classList.add("editing");
-            else $inputEditor.classList.remove("editing");
+            if ($editMobile.checked) $input.classList.add("editing");
+            else $input.classList.remove("editing");
         });
 
     }

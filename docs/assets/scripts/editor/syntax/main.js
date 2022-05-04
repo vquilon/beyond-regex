@@ -4,7 +4,21 @@ function EditorSyntaxis(options = {}) {
     let $syntax = options.$syntaxRegex;
     let synxtaxHighlighter = RegexHighlighter($editor, $syntax);
 
-    const selectSyntaxFromPoint = (startX, startY, endX, endY, containerSel) => {
+    const getTextNodeRelPos = (caretPos, $parent) => {
+        let textNodes = $parent.childNodes;
+        let offsetStart = 0;
+        let offsetEnd = 0;
+        for (let tIndex = 0; tIndex < textNodes.length; tIndex++) {
+            let tNode = textNodes[tIndex];
+            offsetEnd += tNode.textContent.length;
+            if (caretPos <= offsetEnd) {
+                return [tNode, caretPos - offsetStart];
+            }
+            offsetStart += tNode.textContent.length;
+        }
+    }
+
+    const selectSyntaxFromPoint = (startX, startY, endX, endY, $containerSel) => {
         let doc = document;
         let start, end, range = null;
         if (typeof doc.caretPositionFromPoint != "undefined") {
@@ -34,8 +48,51 @@ function EditorSyntaxis(options = {}) {
             range.select();
         }
 
-        return getCaretParentIndex(containerSel);
+        return getCaretParentIndex($containerSel);
     };
+
+    const selectEditorFromSyntax = (caretStart, caretEnd) => {
+        if (caretStart === 0 && caretEnd === 0) {
+            let range = document.createRange();
+            let sel = window.getSelection();
+
+            sel.removeAllRanges();
+
+            range.setStart($editor, caretStart);
+            range.setEnd($editor, caretEnd);
+            sel.addRange(range);
+        }
+        else {
+            caretStart = Math.min($editor.innerText.length, caretStart);
+            caretEnd = Math.min($editor.innerText.length, caretEnd);
+            var [$tNodeStart, caretStart] = getTextNodeRelPos(caretStart, $editor);
+            var [$tNodeEnd, caretEnd] = getTextNodeRelPos(caretEnd, $editor);
+            caretStart = Math.min($editor.innerText.length, caretStart);
+            caretEnd = Math.min($editor.innerText.length, caretEnd);
+
+            let range = document.createRange();
+            let sel = window.getSelection();
+
+            sel.removeAllRanges();
+
+            if (caretStart > caretEnd) {
+                range.setStart($tNodeEnd, caretEnd);
+                range.setEnd($tNodeStart, caretStart);
+                range.collapse(false);
+                sel.addRange(range);
+                sel.extend($tNodeEnd, caretEnd);
+            } else {
+                range.setStart($tNodeStart, caretStart);
+                range.setEnd($tNodeEnd, caretEnd);
+                sel.addRange(range);
+            }
+        }
+    };
+
+    const selectEditorFromPoint = (startX, startY, endX, endY, $containerSel) => {
+        let [caretStart, caretEnd] = selectSyntaxFromPoint(startX, startY, endX, endY, $containerSel)
+        selectEditorFromSyntax(caretStart, caretEnd);
+    }
 
     const getCaretParentIndex = (element) => {
         let prePosition = 0;
@@ -98,20 +155,6 @@ function EditorSyntaxis(options = {}) {
         return carets;
     }
 
-    const getTextNodeRelPos = (caretPos, $parent) => {
-        let textNodes = $parent.childNodes;
-        let offsetStart = 0;
-        let offsetEnd = 0;
-        for (let tIndex = 0; tIndex < textNodes.length; tIndex++) {
-            let tNode = textNodes[tIndex];
-            offsetEnd += tNode.textContent.length;
-            if (caretPos <= offsetEnd) {
-                return [tNode, caretPos - offsetStart];
-            }
-            offsetStart += tNode.textContent.length;
-        }
-    }
-
     // Catch Listeners
     const init_listeners = () => {
         // HANDLE MULTIEDIT
@@ -151,60 +194,30 @@ function EditorSyntaxis(options = {}) {
         }
 
         const addCaretElementWith = (caretChar, caretLine)  => {
-            let $caret = document.createElement("span");
-            $caret.classList.add("caret");
-
             // Calculo de la posicion del ultimo caret
             let $inputCarets = document.querySelector(".input-carets");
-
-            $caret.style.setProperty("--pos-char", caretChar);
-            $caret.style.setProperty("--pos-line", caretLine);
-
-            $editor.lastCaret = $caret;
-            $inputCarets.appendChild($caret);
+            
+            alreadyExists = Array.from($inputCarets.children).map((x) => {
+                return (
+                    parseInt(x.style.getPropertyValue("--pos-char")) === caretChar &&
+                    parseInt(x.style.getPropertyValue("--pos-line")) === caretLine
+                )
+            }).includes(true); 
+            if (!alreadyExists) {
+                let $caret = document.createElement("span");
+                $caret.classList.add("caret");
+                $caret.style.setProperty("--pos-char", caretChar);
+                $caret.style.setProperty("--pos-line", caretLine);
+    
+                $editor.lastCaret = $caret;
+                $inputCarets.appendChild($caret);
+            }
         }
 
         const addSelectionElement = (caretRects) => {
             // TODO: Generar el html para los background de seleccion
         };
 
-        const selectEditorFromSyntax = (caretStart, caretEnd) => {
-            if (caretStart === 0 && caretEnd === 0) {
-                let range = document.createRange();
-                let sel = window.getSelection();
-
-                sel.removeAllRanges();
-
-                range.setStart($editor, caretStart);
-                range.setEnd($editor, caretEnd);
-                sel.addRange(range);
-            }
-            else {
-                caretStart = Math.min($editor.innerText.length, caretStart);
-                caretEnd = Math.min($editor.innerText.length, caretEnd);
-                var [$tNodeStart, caretStart] = getTextNodeRelPos(caretStart, $editor);
-                var [$tNodeEnd, caretEnd] = getTextNodeRelPos(caretEnd, $editor);
-                caretStart = Math.min($editor.innerText.length, caretStart);
-                caretEnd = Math.min($editor.innerText.length, caretEnd);
-
-                let range = document.createRange();
-                let sel = window.getSelection();
-
-                sel.removeAllRanges();
-
-                if (caretStart > caretEnd) {
-                    range.setStart($tNodeEnd, caretEnd);
-                    range.setEnd($tNodeStart, caretStart);
-                    range.collapse(false);
-                    sel.addRange(range);
-                    sel.extend($tNodeEnd, caretEnd);
-                } else {
-                    range.setStart($tNodeStart, caretStart);
-                    range.setEnd($tNodeEnd, caretEnd);
-                    sel.addRange(range);
-                }
-            }
-        };
 
         const getCharWidthAt = (element) => {
             let auxNode = document.createElement("span");
@@ -367,9 +380,11 @@ function EditorSyntaxis(options = {}) {
         //     }
         // });
         $containerEditor.querySelector('.input').addEventListener("blur", event => {
-            console.log("BLURRED");
-            $containerEditor.querySelector('.input').querySelector(".input-carets").innerHTML = "";
-            $editor.lastCaret = undefined;
+            if (!$containerEditor.querySelector('.input').editing) {
+                console.log("BLURRED");
+                $containerEditor.querySelector('.input').querySelector(".input-carets").innerHTML = "";
+                $editor.lastCaret = undefined;
+            }
         });
 
         const calculateActualRect = (clientY) => {
@@ -468,8 +483,9 @@ function EditorSyntaxis(options = {}) {
         //     synxtaxHighlighter.onInput($containerEditor.regexson, event);
         // });
         const keydownEditor = (event, $containerEl) => {
+            // console.log(event.key);
             window.selRects = [];
-            const auxProcessInput = (event) => {
+            const _ProcessInput = (event) => {
                 let that = event.target;
                 // Ctrl
                 if (event.keyCode === 17) {
@@ -535,37 +551,54 @@ function EditorSyntaxis(options = {}) {
                 //     that.shift_pressed = !that.shift_pressed;
                 // }
 
-                // synxtaxHighlighter.onInput($containerEditor.regexson, { target: $editor });
+            }
+            const _ProcessMoveCarets = (event) => {
+                event.preventDefault();
+
             }
 
             // Si mi containerEl no es $editor entonces tengo que obtener el foco de este para cada caret
             if ($containerEl !== $editor) {
+                $containerEditor.querySelector('.input').editing = true;
                 let carets = getCaretsElements();
                 for (let c in carets) {
                     let $caret = carets[c];
+                    let caretChar = parseInt($caret.style.getPropertyValue("--pos-char"));
+                    let caretLine = parseInt($caret.style.getPropertyValue("--pos-line"));
+
                     // TODO: almacenar parametros necesarios en cada Caret y actualizarlos
                     let caretBBounds = $caret.getBoundingClientRect();
 
-                    // Se carga de cada caret a una seleccion de syntax
-                    var [caretStartPos, caretEndPos] = selectSyntaxFromPoint(
+                    // Se carga de cada caret a una seleccion de editor
+                    selectEditorFromPoint(
                         caretBBounds.x, caretBBounds.y, caretBBounds.x, caretBBounds.y,
-                        // Es $syntax porq ue es el que esta en el top, y esta focussed el input que es el contenedor
-                        $containerEl
+                        // Es $syntax por que es el que esta en el top, y esta focussed el input que es el contenedor
+                        $syntax
                     );
-                    // Se selecciona Editor
-                    selectEditorFromSyntax(caretStartPos, caretEndPos);
 
-                    auxProcessInput(event);
+                    addCaretElementWith(caretChar, caretLine);
                 }
             }
+
+            if(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'End', 'Home', 'PageUp', 'PageDown'].includes(event.key)) {
+                if ($containerEl !== $editor) {
+                    _ProcessMoveCarets(event);
+                }
+            }
+
             else {
-                auxProcessInput(event);
+                _ProcessInput(event);
+            }
+            if ($containerEl !== $editor) {
+                window.getSelection().removeAllRanges();
+                // Recuperamos el foco del input
+                $containerEditor.querySelector('.input').focus();
+                $containerEditor.querySelector('.input').editing = false;
             }
         }
 
 
-
-        $editor.addEventListener('keydown', event => {keydownEditor(event, $editor)});
+        // $editor.addEventListener('keydown', event => {keydownEditor(event, $editor)});
         $containerEditor.querySelector(".input").addEventListener('keydown', event => {keydownEditor(event, $syntax)});
     }
 
