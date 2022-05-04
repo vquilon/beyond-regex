@@ -377,7 +377,7 @@ function EditorSyntaxis(options = {}) {
             if (window.selRects.length === 0) {
                 // Se comprueba que donde se ha hecho mousedown no corresponde con la posicion de una seleccion
                 let sel = window.getSelection();
-                sel.selectAllChildren($editor);
+                sel.selectAllChildren($syntax);
                 let allRects = Array.from(sel.getRangeAt(0).getClientRects());
                 sel.removeAllRanges();
                 window.selRects = allRects;  
