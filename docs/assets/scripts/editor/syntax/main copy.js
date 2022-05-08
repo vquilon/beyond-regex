@@ -1,12 +1,16 @@
 function EditorSyntaxis(options = {}) {
     let $containerEditor = options.$containerEditor;
-    let $inputCarets = $containerEditor.querySelector(".input-carets");
     let $editor = options.$inputRegex;
     let $syntax = options.$syntaxRegex;
     let synxtaxHighlighter = RegexHighlighter($editor, $syntax);
 
     // Catch Listeners
     const init_listeners = () => {
+        // HANDLE MULTIEDIT
+        // mouseup - Get caret positions from $syntax to $editor
+        // input - If ctrl pressed saved in queue the position of caret
+        // input - Control updates of caret with arrow keys
+        
         const getTextNodeRelPos = (caretPos, $parent) => {
             let textNodes = $parent.childNodes;
             let offsetStart = 0;
@@ -20,7 +24,7 @@ function EditorSyntaxis(options = {}) {
                 offsetStart += tNode.textContent.length;
             }
         }
-        
+    
         const getCaretParentIndex = ($element) => {
             let prePosition = 0;
             let postPosition = 0;
@@ -81,11 +85,7 @@ function EditorSyntaxis(options = {}) {
             let carets = Array.from($inputCarets.querySelectorAll(".caret"));
             return carets;
         }
-    
-        // HANDLE MULTIEDIT
-        // mouseup - Get caret positions from $syntax to $editor
-        // input - If ctrl pressed saved in queue the position of caret
-        // input - Control updates of caret with arrow keys
+
         const getFontSize = () => {
             let comptStyle = window.getComputedStyle(document.documentElement);
             let fontSizeRaw = comptStyle.getPropertyValue("--font-size");
@@ -98,32 +98,37 @@ function EditorSyntaxis(options = {}) {
             return fontSize * ratioLineHeight
         }
 
-        const addCaretElementWith = (caretChar, caretLine, dragStyle=false)  => {
+        const addCaretElementWith = (caretChar, caretLine)  => {
             // Calculo de la posicion del ultimo caret
-            let carets = Array.from($inputCarets.children);
-            let $caret;
-            for (let i=0; i<carets.length; i++) {
-                $caretAux = carets[i];
-                if (
-                    parseInt($caretAux.style.getPropertyValue("--pos-char")) === caretChar &&
-                    parseInt($caretAux.style.getPropertyValue("--pos-line")) === caretLine
-                ) {
-                    $caret = $caretAux;
-                    break;
-                }
-            }
-            if (!$caret || dragStyle) {
+            let $inputCarets = document.querySelector(".input-carets");
+            // let carets = Array.from($inputCarets.children);
+            // let $caret;
+            // for (let i=0; i<carets.length; i++) {
+            //     $_caret = carets[i];
+            //     if (
+            //         parseInt($_caret.style.getPropertyValue("--pos-char")) === caretChar &&
+            //         parseInt($_caret.style.getPropertyValue("--pos-line")) === caretLine
+            //     ) {
+            //         // TODO: En principio tendria que elminarlo y quedarse con ese caret
+            //         $caret = $_caret;
+            //         break;
+            //     }
+            // }
+
+            // if (!$caret) {
                 $caret = document.createElement("span");
                 $caret.classList.add("caret");
                 $caret.style.setProperty("--pos-char", caretChar);
                 $caret.style.setProperty("--pos-line", caretLine);
+    
+                $editor.lastCaret = $caret;
                 $inputCarets.appendChild($caret);
-            }
-            else {
-                $inputCarets.removeChild($caret);
-                $caret = undefined;
-            }
-            return $caret;
+            // }
+            // else {
+            //     $editor.lastCaret = $caret;
+            // }
+
+            return $editor.lastCaret;
         }
         const addCaretElementAt = (caretPos) => {
             let charWidth = getCharWidthAt($syntax);
@@ -132,7 +137,7 @@ function EditorSyntaxis(options = {}) {
 
             let caretLine = parseInt((caretPos.y - editorBBounds.y) / lineHeight);
             let caretChar = Math.round((caretPos.x - editorBBounds.x) / charWidth);
-            return addCaretElementWith(caretChar, caretLine);
+            return addCaretElementWith(caretChar, caretLine)
         }
         const addSelectionElement = (caretRects) => {
             // TODO: Generar el html para los background de seleccion
@@ -216,7 +221,6 @@ function EditorSyntaxis(options = {}) {
         const selectEditorFromPoint = (startX, startY, endX, endY, $containerNode) => {
             let [caretStart, caretEnd] = selectSyntaxFromPoint(startX, startY, endX, endY, $containerNode)
             selectEditorFromSyntax(caretStart, caretEnd);
-            return [caretStart, caretEnd];
         }
         const getCaretPosFromSelection = () => {
             let caretRect = window.getSelection().getRangeAt(0).getClientRects();
@@ -372,7 +376,7 @@ function EditorSyntaxis(options = {}) {
             let editorBBounds = $editor.getBoundingClientRect();
             let caretChar = Math.round((caretPosX - editorBBounds.x) / $editor.widthCharMap[fontSize]);
             let caretLine = parseInt((caretPosY - editorBBounds.y) / lineHeight);
-            addCaretElementWith(caretChar, caretLine);
+            $editor.lastCaret = addCaretElementWith(caretChar, caretLine);
 
             // Si esta collapsado no se generan los rects de seleccion
             if (!range.collapsed) {
@@ -389,11 +393,13 @@ function EditorSyntaxis(options = {}) {
         //     let $inputEditor = $containerEditor.querySelector(".input");
         //     if ($inputEditor !== event.target && !$inputEditor.contains(event.target)) {
         //         $inputEditor.querySelector(".input-carets").innerHTML = "";
+        //         $editor.lastCaret = undefined;
         //     }
         // });
         $containerEditor.querySelector('.input').addEventListener("blur", event => {
             if (!$containerEditor.querySelector('.input').editing) {
                 $containerEditor.querySelector('.input').querySelector(".input-carets").innerHTML = "";
+                $editor.lastCaret = undefined;
             }
         });
 
@@ -422,7 +428,7 @@ function EditorSyntaxis(options = {}) {
             if(selRect !== undefined) {
                 caretPos = {
                     x: Math.min(caretPos.x, selRect.x + selRect.width),
-                    y: selRect.y + selRect.height/2
+                    y: selRect.y + selRect.width/2
                 };
     
                 let charWidth = getCharWidthAt($syntax);
@@ -435,52 +441,29 @@ function EditorSyntaxis(options = {}) {
                 let $caret;
                 if (dragStyle) {
                     if ($editor.dragCaret === undefined) {
-                        $caret = addCaretElementWith(caretChar, caretLine, dragStyle=true);
+                        $caret = addCaretElementWith(caretChar, caretLine);
                         $editor.dragCaret = $caret;
                     }
                     else {
                         // Se edita el previo solamente
                         $caret = $editor.dragCaret;
                     }
-                    $caret.style.setProperty("--pos-char", caretChar);
-                    $caret.style.setProperty("--pos-line", caretLine);
                 }
-                else {
-                    // CTRL pulsado
-                    if (false) {
-                        addCaretElementWith(caretChar, caretLine);
-                    }
-                    else if ($inputCarets.children.length === 0) {
-                        addCaretElementWith(caretChar, caretLine);
+                else{
+                    if (false || $editor.lastCaret === undefined) { // Si esta activado el control se agrega un caret nuevo
+                        $caret = addCaretElementWith(caretChar, caretLine);
+                        $editor.lastCaret = $caret;
                     }
                     else {
-                        // Se edita el ultimo solamente, ya que implica que no se agrega uno nuevo sino que se
-                        // mueve el caret actual
-                        // Si hubiera mas de uno y no se ha pulsado CTRL, entonces habria que borrarlos todos menos el ultimo
-                        let carets = Array.from($inputCarets.children);
-                        for (let i=0; i<carets.length-1; i++) {
-                            $inputCarets.removeChild(carets[i]);
-                        }
-                        $caret = $inputCarets.children[0];
-                        $caret.style.setProperty("--pos-char", caretChar);
-                        $caret.style.setProperty("--pos-line", caretLine);
+                        // Se edita el previo solamente
+                        $caret = $editor.lastCaret
                     }
                 }
+                $caret.style.setProperty("--pos-char", caretChar);
+                $caret.style.setProperty("--pos-line", caretLine);
             }
 
             return caretPos;
-        }
-        const updateCarets = (caretEndOffset) => {
-            let $inputCarets = $containerEditor.querySelector(".input-carets");
-            let carets = Array.from($inputCarets.children);
-            for (let i=0; i<carets.length; i++) {
-                let $caret = carets[i];
-                // Actualizo la posicion del caret por el caretEndOffset
-                // Obtener el caretEnd de este caret e incrementarlo
-
-                // Convertir las coordenadas de caretEnd a Posicion de Char y Line
-                // Modificar las propiedades del caret
-            }
         }
 
         $syntax.addEventListener("mousedown", (event) => {
@@ -504,11 +487,9 @@ function EditorSyntaxis(options = {}) {
             $editor.selecting = false;
             $editor.dragging = true;
         }, false);
-        
         // $syntax.addEventListener("dragend", function(event) {
         //   // reset the transparency
         // }, false);
-        
         /* events fired on the drop targets */
         $syntax.addEventListener("dragover", function(event) {
           // prevent default to allow drop
@@ -521,7 +502,6 @@ function EditorSyntaxis(options = {}) {
             $editor.dragCaret.classList.add("drag");
           }
         }, false);
-        
         $syntax.addEventListener("dragenter", function(event) {
             let syntaxBB = $syntax.getBoundingClientRect();
             let targetBB = event.target.getBoundingClientRect();
@@ -537,7 +517,6 @@ function EditorSyntaxis(options = {}) {
                 }
             }
         }, false);
-        
         $containerEditor.addEventListener("dragleave", function(event) {
             let syntaxBB = $syntax.getBoundingClientRect();
             let targetBB = event.target.getBoundingClientRect();
@@ -568,8 +547,8 @@ function EditorSyntaxis(options = {}) {
             
             let [caretStart, caretEnd] = getCaretParentIndex($editor);
             selectSyntaxFromEditor(caretStart, caretEnd);
-            let caretPos = getCaretPosFromSelection();
-            addCaretElementAt(caretPos);
+            $editor.lastCaretPos = getCaretPosFromSelection();
+            addCaretElementAt($editor.lastCaretPos);
 
             $containerEditor.querySelector('.input').querySelector(".input-carets").removeChild($editor.dragCaret);
             $editor.dragCaret = undefined;
@@ -595,6 +574,7 @@ function EditorSyntaxis(options = {}) {
         // });
         const keydownEditor = (event, $containerEl) => {
             // console.log(event.key);
+            window.selRects = [];
             const _ProcessInput = (event) => {
                 let that = event.target;
                 // Ctrl
@@ -635,7 +615,7 @@ function EditorSyntaxis(options = {}) {
 
                             // // put caret at right position again
                             // that.selectionStart = that.selectionEnd = start + 1;
-                        } 
+                        }
 
                     }
                     else {
@@ -686,7 +666,7 @@ function EditorSyntaxis(options = {}) {
                         $syntax
                     );
 
-                    // addCaretElementWith(caretChar, caretLine);
+                    addCaretElementWith(caretChar, caretLine);
                 }
             }
 
@@ -695,11 +675,11 @@ function EditorSyntaxis(options = {}) {
                     _ProcessMoveCarets(event);
                 }
             }
+
             else {
                 _ProcessInput(event);
             }
             if ($containerEl !== $editor) {
-                // Quito la seleccion de Editor y le devuelvo el foco al syntax
                 window.getSelection().removeAllRanges();
                 // Recuperamos el foco del input
                 $containerEditor.querySelector('.input').focus();
@@ -709,7 +689,7 @@ function EditorSyntaxis(options = {}) {
 
 
         // $editor.addEventListener('keydown', event => {keydownEditor(event, $editor)});
-        $containerEditor.querySelector(".input").addEventListener('keydown', event => {keydownEditor(event, event.target)});
+        $containerEditor.querySelector(".input").addEventListener('keydown', event => {keydownEditor(event, $syntax)});
     }
 
     init_listeners();
