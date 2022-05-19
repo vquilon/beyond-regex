@@ -138,7 +138,7 @@ function EditorSyntaxis(options = {}) {
             // TODO: Generar el html para los background de seleccion
         };
 
-        const selectSyntaxFromPoint = (startX, startY, endX, endY, $containerNode) => {
+        const selectSyntaxFromPoint = (startX, startY, endX, endY) => {
             let doc = document;
             let start, end, range = null;
             if (typeof doc.caretPositionFromPoint != "undefined") {
@@ -168,7 +168,7 @@ function EditorSyntaxis(options = {}) {
                 range.select();
             }
 
-            return getCaretParentIndex($containerNode);
+            return getCaretParentIndex($syntax);
         };
         const selectWith = (caretStart, caretEnd, $toNode=undefined) => {
             if (caretStart === 0 && caretEnd === 0) {
@@ -213,14 +213,19 @@ function EditorSyntaxis(options = {}) {
         const selectEditorFromSyntax = (caretStart, caretEnd) => {
             selectWith(caretStart, caretEnd, $toNode=$editor);
         };
-        const selectEditorFromPoint = (startX, startY, endX, endY, $containerNode) => {
-            let [caretStart, caretEnd] = selectSyntaxFromPoint(startX, startY, endX, endY, $containerNode)
+        const selectEditorFromPoint = (startX, startY, endX, endY) => {
+            let [caretStart, caretEnd] = selectSyntaxFromPoint(startX, startY, endX, endY);
             selectEditorFromSyntax(caretStart, caretEnd);
             return [caretStart, caretEnd];
         }
         const getCaretPosFromSelection = () => {
             let caretRect = window.getSelection().getRangeAt(0).getClientRects();
             return {x: caretRect.x, y: caretRect.y};
+        }
+        const getCaretStartEndFromPos = (startX, startY, endX, endY) => {
+            let [caretStart, caretEnd] = selectSyntaxFromPoint(startX, startY, endX, endY);
+            window.getSelection().removeAllRanges();
+            return [caretStart, caretEnd];
         }
 
         const getCharWidthAt = ($element) => {
@@ -315,7 +320,7 @@ function EditorSyntaxis(options = {}) {
             let lastCaretLine = parseInt((lastCaretPos.y - editorBBounds.y) / lineHeight);
 
             let startCaretPos = firstCaretPos;
-            let endCaretPos = lastCaretLine;
+            let endCaretPos = lastCaretPos;
             let backward = false;
 
             // Genero los rects en funcion de las posiciones del caret y los caretStart y caretEnd
@@ -342,7 +347,7 @@ function EditorSyntaxis(options = {}) {
             let endCaretLine = lastCaretLine;
 
             let startCaretChar = Math.round((startCaretPos.x - editorBBounds.x) / charWidth);
-            let endCaretChar = Math.round((startCaretPos.x - editorBBounds.x) / charWidth);
+            let endCaretChar = Math.round((endCaretPos.x - editorBBounds.x) / charWidth);
 
             return [startCaretChar, endCaretChar, startCaretLine, endCaretLine, backward];
         };
@@ -365,8 +370,6 @@ function EditorSyntaxis(options = {}) {
             selectEditorFromSyntax(caretStart, caretEnd);
             
             // VISUAL: SE CREA EL ELEMENTO CARET AL DOM
-            $editor.lastCaretPos = {x: caretPosX, y: caretPosY};
-
             let fontSize = getFontSize();
             let lineHeight = getLineHeight(fontSize);
             let editorBBounds = $editor.getBoundingClientRect();
@@ -417,7 +420,7 @@ function EditorSyntaxis(options = {}) {
 
             return selRect;
         }
-        const updateCaretPos = (caretPos, dragStyle=false) => {
+        const updateCaretPos = (caretPos, firstCaret=false, dragStyle=false) => {
             let selRect = calculateActualRect(caretPos.y);
             if(selRect !== undefined) {
                 caretPos = {
@@ -448,10 +451,10 @@ function EditorSyntaxis(options = {}) {
                 else {
                     // CTRL pulsado
                     if (false) {
-                        addCaretElementWith(caretChar, caretLine);
+                        $caret = addCaretElementWith(caretChar, caretLine);
                     }
                     else if ($inputCarets.children.length === 0) {
-                        addCaretElementWith(caretChar, caretLine);
+                        $caret = addCaretElementWith(caretChar, caretLine);
                     }
                     else {
                         // Se edita el ultimo solamente, ya que implica que no se agrega uno nuevo sino que se
@@ -465,34 +468,53 @@ function EditorSyntaxis(options = {}) {
                         $caret.style.setProperty("--pos-char", caretChar);
                         $caret.style.setProperty("--pos-line", caretLine);
                     }
+                    if (firstCaret) {
+                        $caret.style.setProperty("--first-pos-x", caretPos.x);
+                        $caret.style.setProperty("--first-pos-y", caretPos.y);
+                    }
                 }
             }
 
             return caretPos;
         }
-        const updateCarets = (caretEndOffset) => {
+        const updateCarets = (_event) => {
             let $inputCarets = $containerEditor.querySelector(".input-carets");
             let carets = Array.from($inputCarets.children);
             for (let i=0; i<carets.length; i++) {
                 let $caret = carets[i];
                 // Actualizo la posicion del caret por el caretEndOffset
                 // Obtener el caretEnd de este caret e incrementarlo
+                let caretBB = $caret.getBoundingClientRect()
+                let [caretStart, caretEnd] = selectSyntaxFromPoint(caretBB.x, caretBB.y, caretBB.x, caretBB.y);
+                selectEditorFromSyntax(caretStart, caretEnd);
 
+                // Propago la accion
+                // Mover cuando se pulsa el control hasta el siguiente caracter que sea [\w _(]
+
+                let sel = window.getSelection();
+                let selRects = sel.getRangeAt(0).getClientRects();
+                let caretEndOffset = 0;
+
+
+                $caret.style.setProperty("--caret-index", caretEnd + caretEndOffset);
+                let caretPos = {x: selRects[0].x, y: selRects[0].y};
                 // Convertir las coordenadas de caretEnd a Posicion de Char y Line
+                let [startCaretChar, endCaretChar, startCaretLine, endCaretLine, backward] = generateCaretPositions(caretPos, caretPos);
                 // Modificar las propiedades del caret
+                $caret.style.setProperty("--pos-char", endCaretChar);
+                $caret.style.setProperty("--pos-line", endCaretLine);
+                sel.removeAllRanges();
             }
         }
 
         $syntax.addEventListener("mousedown", (event) => {
             $editor.selecting = true;
-            $editor.firstCaretPos = {x: event.clientX, y: event.clientY}
-            $editor.firstCaretPos = updateCaretPos($editor.firstCaretPos);
+            updateCaretPos({x: event.clientX, y: event.clientY}, firstCaret=true);
         }, true);
         $syntax.addEventListener("mousemove", (event) => {
             if (!$editor.hasOwnProperty("selecting")) $editor.selecting = false;
             if ($editor.selecting) {
-                $editor.lastCaretPos = {x: event.clientX, y: event.clientY}
-                $editor.lastCaretPos = updateCaretPos($editor.lastCaretPos);
+                updateCaretPos({x: event.clientX, y: event.clientY});
             }
         }, true);
         $syntax.addEventListener("mouseup", (event) => {
@@ -664,7 +686,7 @@ function EditorSyntaxis(options = {}) {
             }
             const _ProcessMoveCarets = (event) => {
                 event.preventDefault();
-
+                updateCarets(event);
             }
 
             // Si mi containerEl no es $editor entonces tengo que obtener el foco de este para cada caret
@@ -680,11 +702,7 @@ function EditorSyntaxis(options = {}) {
                     let caretBBounds = $caret.getBoundingClientRect();
 
                     // Se carga de cada caret a una seleccion de editor
-                    selectEditorFromPoint(
-                        caretBBounds.x, caretBBounds.y, caretBBounds.x, caretBBounds.y,
-                        // Es $syntax por que es el que esta en el top, y esta focussed el input que es el contenedor
-                        $syntax
-                    );
+                    selectEditorFromPoint(caretBBounds.x, caretBBounds.y, caretBBounds.x, caretBBounds.y);
 
                     // addCaretElementWith(caretChar, caretLine);
                 }
