@@ -54,7 +54,9 @@ var EditorParser = (options) => {
         var syntaxProcessor = EditorSyntaxis({
             $containerEditor: $containerEditor,
             $inputRegex: $editorRegex,
-            $syntaxRegex: $input.querySelector('.syntax')
+            $syntaxRegex: $input.querySelector('.syntax'),
+            // TODO: SOLO PARA TESTING
+            debugInputClass: '.input-debug'
         });
 
         var $editorTerminal = $containerEditor.querySelector('#editor-terminal');

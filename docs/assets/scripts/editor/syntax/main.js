@@ -1,24 +1,44 @@
 function EditorSyntaxis(options = {}) {
+    // Tendra claves como la fecha 
+    let editorHistory = [{"date": Date.now(), "zActions": 1, "name": "init"}];
+    let actualHist = 0;
+
+
     let $containerEditor = options.$containerEditor;
     let $inputCarets = $containerEditor.querySelector(".input-carets");
     let $editor = options.$inputRegex;
     let $syntax = options.$syntaxRegex;
+    let $input = $inputCarets.parentElement;
+    let $editorInput = $containerEditor.querySelector("#editor-input");
     let synxtaxHighlighter = RegexHighlighter($editor, $syntax);
+
+    let $debugCont = undefined;
+    if (options.hasOwnProperty('debugInputClass')) {
+        $debugCont = document.createElement("div");
+        $debugCont.classList.add(options.debugInputClass);
+        $input.appendChild($debugCont);
+    }
 
     // Catch Listeners
     const init_listeners = () => {
         const getTextNodeRelPos = (caretPos, $parent) => {
+            if ($parent.nodeType === 3) return [$parent, caretPos];
             let textNodes = $parent.childNodes;
             let offsetStart = 0;
             let offsetEnd = 0;
+            let tNode = undefined;
             for (let tIndex = 0; tIndex < textNodes.length; tIndex++) {
-                let tNode = textNodes[tIndex];
+                tNode = textNodes[tIndex];
                 offsetEnd += tNode.textContent.length;
                 if (caretPos <= offsetEnd) {
-                    return [tNode, caretPos - offsetStart];
+                    if (caretPos - offsetStart > tNode.childNodes.length) {
+                        return getTextNodeRelPos(caretPos-offsetStart, tNode);
+                    }
+                    break
                 }
                 offsetStart += tNode.textContent.length;
             }
+            return [tNode, caretPos - offsetStart];
         }
         
         const getCaretParentIndex = ($element) => {
@@ -214,12 +234,13 @@ function EditorSyntaxis(options = {}) {
             selectWith(caretStart, caretEnd, $toNode=$editor);
         };
         const selectEditorFromPoint = (startX, startY, endX, endY) => {
+            // Needs to are a global reference
             let [caretStart, caretEnd] = selectSyntaxFromPoint(startX, startY, endX, endY);
             selectEditorFromSyntax(caretStart, caretEnd);
             return [caretStart, caretEnd];
         }
         const getCaretPosFromSelection = () => {
-            let caretRect = window.getSelection().getRangeAt(0).getClientRects();
+            let caretRect = window.getSelection().getRangeAt(0).getClientRects()[0];
             return {x: caretRect.x, y: caretRect.y};
         }
         const getCaretStartEndFromPos = (startX, startY, endX, endY) => {
@@ -401,6 +422,7 @@ function EditorSyntaxis(options = {}) {
         });
 
         const calculateActualRect = (clientY) => {
+            let editorBBounds = $editor.getBoundingClientRect();
             if (!window.hasOwnProperty("selRects")) window.selRects = [];
             if (window.selRects.length === 0) {
                 // Se comprueba que donde se ha hecho mousedown no corresponde con la posicion de una seleccion
@@ -410,17 +432,54 @@ function EditorSyntaxis(options = {}) {
                 sel.removeAllRanges();
                 allRects = allRects.sort((a, b) => a.y - b.y );
                 window.selRects = allRects;
+                for (let rect of window.selRects) {
+                    rect.y -= editorBBounds.y;
+                    // rect.top -= editorBBounds.top;
+                    rect.x -= editorBBounds.x;
+                    // rect.left -= editorBBounds.left;
+                }
             }
 
             let selRect;
+            let lineHeight = getLineHeight();
+            // TODO: Hay que ordenar los rects, y quedarse con los cuadros de las diferentes lineas, despues
+            // Generar una funcion que los pinte para obvservar bien como se van cambiando y generando
+            // modificar en la funcion de resize, y de input, es decir cada vez que se cambia el window.selRects
+
             for (let i in window.selRects) {
                 var _rect = window.selRects[i];
                 if (clientY >= _rect.y) selRect = _rect;
+            }
+            let inputBB = $input.getBoundingClientRect();
+            if ($debugCont !== undefined) {
+                $debugCont.innerHTML = "";
+                for (let rect of window.selRects) {
+                    let $boxSel = document.createElement("span");
+                    $boxSel.style.width = `${rect.width}px`;
+                    $boxSel.style.height = `${rect.height}px`;
+                    //$boxSel.style.left = `${rect.left - inputBB.left - parseFloat(window.getComputedStyle($input).paddingLeft)}px`;
+                    $boxSel.style.left = `${rect.left}px`;
+                    $boxSel.style.top = `${rect.top}px`;
+
+                    $boxSel.style.position = 'absolute';
+                    $boxSel.style.background = '#0000ff1f';
+                    $boxSel.classList.add("boxSel");
+                    $debugCont.appendChild($boxSel);
+                }
             }
 
             return selRect;
         }
         const updateCaretPos = (caretPos, firstCaret=false, dragStyle=false) => {
+            let editorBBounds = $editor.getBoundingClientRect();
+            globalCaretPos = {
+                x: caretPos.x,
+                y: caretPos.y
+            };
+            caretPos = {
+                x: caretPos.x - editorBBounds.x,
+                y: caretPos.y - editorBBounds.y
+            };
             let selRect = calculateActualRect(caretPos.y);
             if(selRect !== undefined) {
                 caretPos = {
@@ -430,10 +489,9 @@ function EditorSyntaxis(options = {}) {
     
                 let charWidth = getCharWidthAt($syntax);
                 let lineHeight = getLineHeight();
-                let editorBBounds = $editor.getBoundingClientRect();
     
-                let caretLine = parseInt((caretPos.y - editorBBounds.y) / lineHeight);
-                let caretChar = Math.round((caretPos.x - editorBBounds.x) / charWidth);
+                let caretLine = parseInt((caretPos.y) / lineHeight);
+                let caretChar = Math.round((caretPos.x) / charWidth);
     
                 let $caret;
                 if (dragStyle) {
@@ -451,10 +509,10 @@ function EditorSyntaxis(options = {}) {
                 else {
                     // CTRL pulsado
                     if (false) {
-                        $caret = addCaretElementWith(caretChar, caretLine);
+                        $caret = addCaretElementWith(caretChar, caretLine, dragStyle=dragStyle);
                     }
                     else if ($inputCarets.children.length === 0) {
-                        $caret = addCaretElementWith(caretChar, caretLine);
+                        $caret = addCaretElementWith(caretChar, caretLine, dragStyle=dragStyle);
                     }
                     else {
                         // Se edita el ultimo solamente, ya que implica que no se agrega uno nuevo sino que se
@@ -469,8 +527,8 @@ function EditorSyntaxis(options = {}) {
                         $caret.style.setProperty("--pos-line", caretLine);
                     }
                     if (firstCaret) {
-                        $caret.style.setProperty("--first-pos-x", caretPos.x);
-                        $caret.style.setProperty("--first-pos-y", caretPos.y);
+                        $caret.style.setProperty("--first-pos-x", globalCaretPos.x);
+                        $caret.style.setProperty("--first-pos-y", globalCaretPos.y);
                     }
                 }
             }
@@ -539,7 +597,7 @@ function EditorSyntaxis(options = {}) {
           if (!$editor.hasOwnProperty("dragging")) $editor.dragging = false;
           if ($editor.dragging) {
             $editor.dragCaretPos = {x: event.clientX, y: event.clientY};
-            $editor.dragCaretPos = updateCaretPos($editor.dragCaretPos, dragStyle=true);
+            $editor.dragCaretPos = updateCaretPos($editor.dragCaretPos, firstCaret=false, dragStyle=true);
             $editor.dragCaret.classList.add("drag");
           }
         }, false);
@@ -572,8 +630,10 @@ function EditorSyntaxis(options = {}) {
 
             if(!insideCondition) {
                 if ($editor.dragging && $editor.dragCaret) {
-                    $editor.dragging = false; 
-                    $containerEditor.querySelector('.input').querySelector(".input-carets").removeChild($editor.dragCaret);
+                    if ($inputCarets.contains($editor.dragCaret)) {
+                        $inputCarets.removeChild($editor.dragCaret);
+                    }
+                    $editor.dragging = false;
                     $editor.dragCaret = undefined;
                 }
             }
@@ -583,20 +643,81 @@ function EditorSyntaxis(options = {}) {
         $syntax.addEventListener("drop", function(event) {
             // prevent default action (open as link for some elements)
             event.preventDefault();
+            execCommands($editor.ownerDocument, ["delete"], false, null, keepZAction=false, customZActions=0);
             let textDragged = event.dataTransfer.getData("Text");
             let caretBBounds = $editor.dragCaret.getBoundingClientRect();
-            selectEditorFromPoint(caretBBounds.x, caretBBounds.y, caretBBounds.x, caretBBounds.y, $syntax);
-            document.execCommand('insertHTML', false, textDragged);
+            selectEditorFromPoint(caretBBounds.x, caretBBounds.y, caretBBounds.x, caretBBounds.y);
+            execCommands($editor.ownerDocument, ["insertHTML"], false, textDragged, keepZAction=true, customZActions=2, nameZAction="DroppedElement");
             
             let [caretStart, caretEnd] = getCaretParentIndex($editor);
             selectSyntaxFromEditor(caretStart, caretEnd);
             let caretPos = getCaretPosFromSelection();
             addCaretElementAt(caretPos);
 
-            $containerEditor.querySelector('.input').querySelector(".input-carets").removeChild($editor.dragCaret);
+            if ($inputCarets.contains($editor.dragCaret)) {
+                $inputCarets.removeChild($editor.dragCaret);
+            }
+            $editor.dragging = false;
             $editor.dragCaret = undefined;
           
         }, false);
+
+        const execCommandUndo = (doc, showUI=false, value=null) => {
+            if (actualHist > 0) {
+                for (let i=0; i < editorHistory[actualHist]["zActions"]; i++) doc.execCommand("undo", showUI, value);
+                actualHist -= 1;
+            }
+        }
+
+        const execCommandRedo = (doc, showUI=false, value=null) => {
+            if (actualHist < editorHistory.length-1){
+                actualHist += 1;
+                for (let i=0; i < editorHistory[actualHist]["zActions"]; i++) doc.execCommand("redo", showUI, value);
+            }
+        }
+
+        const execCommands = (doc, commands, showUI=false, value=null, keepZAction=true, customZActions=0, nameZAction="") => {
+            for (let command of commands) {
+                if (command === "undo") return execCommandUndo(doc, showUI, value);
+                if (command === "redo") return execCommandRedo(doc, showUI, value);    
+                doc.execCommand(command, showUI, value);
+            }
+            if (customZActions === 0) customZActions = commands.length;
+            if (nameZAction === "") nameZAction = commands.join("_");
+            if (keepZAction) {
+                actualHist += 1;
+                editorHistory.push({"date": Date.now(), "zActions": customZActions, "name": nameZAction});
+            }
+        }
+
+        const execCommandsAt = (index, $el, commands, showUI=false, value=null, keepZAction=true, customZActions=0, nameZAction="") => {
+            let doc = $el.ownerDocument;
+            let docView = $el.ownerDocument.defaultView;
+            let sel = doc.getSelection();
+            let range = sel.getRangeAt(0);
+            let $tNodeStart;
+            [$tNodeStart, index] = getTextNodeRelPos(index, $el);
+            range.setStart($tNodeStart, index);
+            range.setEnd($tNodeStart, index);
+            sel.removeAllRanges();
+            sel.addRange(range);
+            execCommands(doc, commands, showUI, value, noZAction, keepZAction, customZActions, nameZAction);
+        }
+
+        const execCommandsWithin = (indexStart, indexEnd, $el, commands, showUI=false, value=null, keepZAction=true, customZActions=0, nameZAction="") => {
+            let doc = $el.ownerDocument;
+            let docView = $el.ownerDocument.defaultView;
+            let sel = docView.getSelection();
+            let range = sel.getRangeAt(0);
+            let $tNodeStart, $tNodeEnd;
+            [$tNodeStart, indexStart] = getTextNodeRelPos(indexStart, $el);
+            [$tNodeEnd, indexEnd] = getTextNodeRelPos(indexEnd, $el);
+            range.setStart($tNodeStart, index);
+            range.setEnd($tNodeEnd, index);
+            sel.removeAllRanges();
+            sel.addRange(range);
+            execCommands(doc, commands, showUI, value, noZAction, keepZAction, customZActions, nameZAction);
+        }
 
         // $syntax.addEventListener("selectstart", () => {
         //     console.log("Selection started in targetDiv");
@@ -616,16 +737,12 @@ function EditorSyntaxis(options = {}) {
         //     synxtaxHighlighter.onInput($containerEditor.regexson, event);
         // });
         const keydownEditor = (event, $containerEl) => {
-            // console.log(event.key);
+            // console.log(event);
             const _ProcessInput = (event) => {
+                window.selRects = [];
                 let that = event.target;
-                // Ctrl
-                if (event.keyCode === 17) {
-                    // console.log(getCaretIndex($editor));
-                }
-                // tab key
                 // Falta implementar con rango diferente inicial y final en la misma linea y diferente
-                if (event.keyCode === 9) {
+                if (event.key === "Tab") {
                     // This will prevent us from tabbing out of the editor
                     event.preventDefault();
                     // Obtengo las posiciones de la seleccion de $containerEl, ya que tengo la seleccion cargado
@@ -635,45 +752,80 @@ function EditorSyntaxis(options = {}) {
                     // now insert four non-breaking spaces for the tab key
                     if (!event.shiftKey) {
                         if (caretStartPos === caretEndPos) {
-                            let doc = $editor.ownerDocument.defaultView;
-                            let sel = doc.getSelection();
-                            let range = sel.getRangeAt(0);
+                            // let doc $editor.ownerDocument;
+                            // let docView = $editor.ownerDocument.defaultView;
+                            // let sel = doc.getSelection();
+                            // let range = sel.getRangeAt(0);
                             // let tabNode = document.createTextNode("\t");
                             // range.insertNode(tabNode);
-                            document.execCommand('insertHTML', false, "\t");
+                            execCommands($editor.ownerDocument, ["insertHTML"], false, "\t");
                             // range.setStartAfter(tabNode);
                             // range.setEndAfter(tabNode); 
                             // sel.removeAllRanges();
                             // sel.addRange(range);
                         }
                         else {
-                            // TODO: Identar la linea entera, es decir agregar un tab al inicio
-                            // // let start = that.selectionStart;
-                            // // let end = that.selectionEnd;
+                            // TODO: Para cada linea que este el rango hay que agregar en el frimer \n de cada linea un \t
+                            // Identar la linea entera, es decir agregar un tab al inicio
+                            // let rawContent = $editor.innerText.slice(0, caretEndPos);
+                            // let indexNewLine = rawContent.lastIndexOf("\n");
+                            // rawContent = $editor.innerText.slice(indexNewLine === -1 ? 0 : indexNewLine, caretStartPos);
+                            // let indexTab = rawContent.lastIndexOf("\t");
 
-                            // // set textarea value to: text before caret + tab + text after caret
-                            // that.value = that.value.substring(0, start) +
-                            //     "\t" + that.value.substring(end);
-
-                            // // put caret at right position again
-                            // that.selectionStart = that.selectionEnd = start + 1;
-                        } 
-
+                            // if (indexNewLine !== -1) {
+                            //     let doc = $editor.ownerDocument;
+                            //     let docView = $editor.ownerDocument.defaultView;
+                            //     let sel = docView.getSelection();
+                            //     let range = sel.getRangeAt(0);
+                            //     let $tNodeStart;
+                            //     [$tNodeStart, indexNewLine] = getTextNodeRelPos(indexNewLine, $editor);
+                            //     range.setStart($tNodeStart, indexNewLine);
+                            //     range.setEnd($tNodeStart, indexNewLine);
+                            //     sel.removeAllRanges();
+                            //     sel.addRange(range);
+                            //     document.execCommand('delete', false, null);
+                            // }
+                        }
                     }
                     else {
-                        let rawContent = $editor.innerText.slice(0, caretStartPos);
-                        let indexTab = rawContent.lastIndexOf("\t");
-                        if (indexTab !== -1) {
-                            let doc = $editor.ownerDocument.defaultView;
-                            let sel = doc.getSelection();
-                            let range = sel.getRangeAt(0);
-                            // TODO: Check
-                            let [$tNodeStart, indexTab] = getTextNodeRelPos(indexTab, $editor);
-                            range.setStart($tNodeStart, indexTab);
-                            range.setEnd($tNodeStart, indexTab + 1);
-                            sel.removeAllRanges();
-                            sel.addRange(range);
-                            document.execCommand('delete', false, null);
+                        if (caretStartPos === caretEndPos) {
+                            if ($editor.innerText[caretStartPos-1] === "\t") {
+                                execCommands($editor.ownerDocument, ["delete"], false, null);
+
+                            }
+                        }
+                        else {
+                            // TODO: Para cada linea que este el rango hay que agregar en el frimer \n de cada linea un \t
+                            let indexNewLines = [];
+                            let firstNewLine = $editor.innerText.slice(0, Math.min(caretStartPos, caretEndPos)).lastIndexOf("\n");
+                            if (firstNewLine > 0){
+                                if ($editor.innerText[firstNewLine-1] === "\t") indexNewLines.push(firstNewLine);
+                            }
+
+                            let rawContent = $editor.innerText.slice(Math.min(caretStartPos, caretEndPos), Math.max(caretStartPos, caretEndPos));
+                            let actualIndex = 0;
+                            for (let line of rawContent.split("\n")) {
+                                if (line !== "") {
+                                    if (line[1] === "\t") {
+                                        indexNewLines.push(actualIndex);
+                                    }
+                                    actualIndex += line
+                                }
+                                else {
+                                    actualIndex += 1;
+                                }
+                            }
+
+                            let i = 0;
+                            for (let indexLine of indexNewLines) {
+                                if (i < indexNewLines.length) { 
+                                    execCommandsAt(indexLine, $editor, ["delete"], keepZAction=false);
+                                }
+                                else {
+                                    execCommandsAt(indexLine, $editor, ["delete"], keepZAction=true, customZActions=indexNewLines.length, nameZAction="outdent multiple lines");
+                                }
+                                i += 1;
+                            }
                         }
                     }
                 }
@@ -686,6 +838,26 @@ function EditorSyntaxis(options = {}) {
             }
             const _ProcessMoveCarets = (event) => {
                 event.preventDefault();
+                // TODO: Make different actions for move the carets in the visual spans, after, it will be updated
+                let carets = getCaretsElements();
+                for (let c in carets) {
+                    let $caret = carets[c];
+                    let caretChar = parseInt($caret.style.getPropertyValue("--pos-char"));
+                    let caretLine = parseInt($caret.style.getPropertyValue("--pos-line"));
+                    let firstPosX = parseFloat($caret.style.getPropertyValue("--first-pos-x"));
+                    let firstPosY = parseFloat($caret.style.getPropertyValue("--first-pos-y"));
+                    // TODO: Hay que realizar el cambio y limitar donde se ubicara el caret, de igual forma que se hace
+                    //  cuando se hace click, es decir utilizar el selRects, para determinar si se pasa a la siguiente linea o no
+                    if(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+                        $caret.style.setProperty("--pos-char", caretChar);
+                        $caret.style.setProperty("--pos-line", caretLine);
+                        $caret.style.setProperty("--first-pos-x", globalCaretPos.x);
+                        $caret.style.setProperty("--first-pos-y", globalCaretPos.y);
+                    }
+                    else if (['End', 'Home', 'PageUp', 'PageDown'].includes(event.key)) {
+
+                    }
+                }
                 updateCarets(event);
             }
 
@@ -697,12 +869,16 @@ function EditorSyntaxis(options = {}) {
                     let $caret = carets[c];
                     let caretChar = parseInt($caret.style.getPropertyValue("--pos-char"));
                     let caretLine = parseInt($caret.style.getPropertyValue("--pos-line"));
+                    let firstPosX = parseFloat($caret.style.getPropertyValue("--first-pos-x"));
+                    let firstPosY = parseFloat($caret.style.getPropertyValue("--first-pos-y"));
 
                     // TODO: almacenar parametros necesarios en cada Caret y actualizarlos
                     let caretBBounds = $caret.getBoundingClientRect();
-
                     // Se carga de cada caret a una seleccion de editor
-                    selectEditorFromPoint(caretBBounds.x, caretBBounds.y, caretBBounds.x, caretBBounds.y);
+                    selectEditorFromPoint(
+                        firstPosX, firstPosY,
+                        caretBBounds.x, caretBBounds.y
+                    );
 
                     // addCaretElementWith(caretChar, caretLine);
                 }
@@ -711,6 +887,16 @@ function EditorSyntaxis(options = {}) {
             if(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'End', 'Home', 'PageUp', 'PageDown'].includes(event.key)) {
                 if ($containerEl !== $editor) {
                     _ProcessMoveCarets(event);
+                }
+            }
+            else if (event.ctrlKey && (event.key === "Z" || event.key === "z")) {
+                event.preventDefault();
+                // Mirar en un historico privado variable local, el numero de veces que se tiene que realizar un undo
+                if(event.shiftKey) {
+                    execCommandRedo($editor.ownerDocument);
+                }
+                else {
+                    execCommandUndo($editor.ownerDocument);
                 }
             }
             else {
@@ -726,8 +912,13 @@ function EditorSyntaxis(options = {}) {
         }
 
 
-        // $editor.addEventListener('keydown', event => {keydownEditor(event, $editor)});
+        $editor.addEventListener('keydown', event => {event.preventDefault()});
         $containerEditor.querySelector(".input").addEventListener('keydown', event => {keydownEditor(event, event.target)});
+
+        const ro = new ResizeObserver(entries => {
+            window.selRects = [];
+        });
+        ro.observe($editorInput);
     }
 
     init_listeners();
