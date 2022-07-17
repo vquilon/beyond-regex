@@ -135,6 +135,9 @@ function EditorSyntaxis(options = {}) {
             if (!$caret || dragStyle) {
                 $caret = document.createElement("span");
                 $caret.classList.add("caret");
+                let actualCaretChar = parseInt($caret.style.getPropertyValue("--pos-char")) || 0;
+                let maxCaretChar = Math.max(caretChar, actualCaretChar)
+                $caret.style.setProperty("--max-pos-char", maxCaretChar);
                 $caret.style.setProperty("--pos-char", caretChar);
                 $caret.style.setProperty("--pos-line", caretLine);
                 $inputCarets.appendChild($caret);
@@ -421,27 +424,32 @@ function EditorSyntaxis(options = {}) {
             }
         });
 
-        const calculateActualRect = (clientY) => {
+        const calculateAllRects = () => {
             let editorBBounds = $editor.getBoundingClientRect();
+            let sel = window.getSelection();
+            sel.selectAllChildren($syntax);
+            let allRects = Array.from(sel.getRangeAt(0).getClientRects());
+            sel.removeAllRanges();
+            allRects = allRects.sort((a, b) => a.y - b.y );
+            window.selRects = allRects;
+            for (let rect of window.selRects) {
+                rect.y -= editorBBounds.y;
+                // rect.top -= editorBBounds.top;
+                rect.x -= editorBBounds.x;
+                // rect.left -= editorBBounds.left;
+            }
+        }
+
+        const calculateActualRect = (clientY) => {
             if (!window.hasOwnProperty("selRects")) window.selRects = [];
             if (window.selRects.length === 0) {
                 // Se comprueba que donde se ha hecho mousedown no corresponde con la posicion de una seleccion
-                let sel = window.getSelection();
-                sel.selectAllChildren($syntax);
-                let allRects = Array.from(sel.getRangeAt(0).getClientRects());
-                sel.removeAllRanges();
-                allRects = allRects.sort((a, b) => a.y - b.y );
-                window.selRects = allRects;
-                for (let rect of window.selRects) {
-                    rect.y -= editorBBounds.y;
-                    // rect.top -= editorBBounds.top;
-                    rect.x -= editorBBounds.x;
-                    // rect.left -= editorBBounds.left;
-                }
+                calculateAllRects();
             }
 
             let selRect;
-            let lineHeight = getLineHeight();
+            // let lineHeight = getLineHeight();
+
             // TODO: Hay que ordenar los rects, y quedarse con los cuadros de las diferentes lineas, despues
             // Generar una funcion que los pinte para obvservar bien como se van cambiando y generando
             // modificar en la funcion de resize, y de input, es decir cada vez que se cambia el window.selRects
@@ -450,7 +458,7 @@ function EditorSyntaxis(options = {}) {
                 var _rect = window.selRects[i];
                 if (clientY >= _rect.y) selRect = _rect;
             }
-            let inputBB = $input.getBoundingClientRect();
+            // let inputBB = $input.getBoundingClientRect();
             if ($debugCont !== undefined) {
                 $debugCont.innerHTML = "";
                 for (let rect of window.selRects) {
@@ -470,9 +478,39 @@ function EditorSyntaxis(options = {}) {
 
             return selRect;
         }
+
+        const getTotalVisualLines = () => {
+            if (window.selRects.length === 0) calculateAllRects();
+            window.selRects.sort((a, b) => b.y - a.y);
+            let lastPosLine = window.selRects[0].y;
+            let lineHeight = getLineHeight();
+            return parseInt(lastPosLine / lineHeight);
+        }
+
+        const getFixedCharLine = (caretChar, maxCaretChar, caretLine) => {
+            let charWidth = getCharWidthAt($syntax);
+            let lineHeight = getLineHeight();
+
+            let maxCaretLine = getTotalVisualLines();
+            let fixedCaretLine = maxCaretLine < caretLine ? maxCaretLine : caretLine;
+            fixedCaretLine = Math.max(fixedCaretLine, 0);
+
+            let selRect = calculateActualRect((fixedCaretLine * lineHeight) + lineHeight/2);
+            
+            let fixedMaxCaretChar = maxCaretChar;
+            let fixedCaretChar = caretChar;
+            if (selRect) {
+                fixedMaxCaretChar = Math.round((selRect.x + selRect.width) / charWidth);
+                fixedCaretChar =  maxCaretChar < caretChar ? maxCaretChar : caretChar;
+                fixedCaretChar = Math.max(fixedCaretChar, 0);
+            }
+            
+            return [fixedCaretChar, fixedMaxCaretChar, fixedCaretLine];
+        }
+
         const updateCaretPos = (caretPos, firstCaret=false, dragStyle=false) => {
             let editorBBounds = $editor.getBoundingClientRect();
-            globalCaretPos = {
+            let globalCaretPos = {
                 x: caretPos.x,
                 y: caretPos.y
             };
@@ -490,8 +528,8 @@ function EditorSyntaxis(options = {}) {
                 let charWidth = getCharWidthAt($syntax);
                 let lineHeight = getLineHeight();
     
-                let caretLine = parseInt((caretPos.y) / lineHeight);
-                let caretChar = Math.round((caretPos.x) / charWidth);
+                let caretLine = parseInt(caretPos.y / lineHeight);
+                let caretChar = Math.round(caretPos.x / charWidth);
     
                 let $caret;
                 if (dragStyle) {
@@ -503,6 +541,9 @@ function EditorSyntaxis(options = {}) {
                         // Se edita el previo solamente
                         $caret = $editor.dragCaret;
                     }
+                    let actualCaretChar = parseInt($caret.style.getPropertyValue("--pos-char")) || 0;
+                    let maxCaretChar = Math.max(caretChar, actualCaretChar)
+                    $caret.style.setProperty("--max-pos-char", maxCaretChar);
                     $caret.style.setProperty("--pos-char", caretChar);
                     $caret.style.setProperty("--pos-line", caretLine);
                 }
@@ -523,6 +564,9 @@ function EditorSyntaxis(options = {}) {
                             $inputCarets.removeChild(carets[i]);
                         }
                         $caret = $inputCarets.children[0];
+                        let actualCaretChar = parseInt($caret.style.getPropertyValue("--pos-char")) || 0;
+                        let maxCaretChar = Math.max(caretChar, actualCaretChar)
+                        $caret.style.setProperty("--max-pos-char", maxCaretChar);
                         $caret.style.setProperty("--pos-char", caretChar);
                         $caret.style.setProperty("--pos-line", caretLine);
                     }
@@ -559,6 +603,9 @@ function EditorSyntaxis(options = {}) {
                 // Convertir las coordenadas de caretEnd a Posicion de Char y Line
                 let [startCaretChar, endCaretChar, startCaretLine, endCaretLine, backward] = generateCaretPositions(caretPos, caretPos);
                 // Modificar las propiedades del caret
+                let actualCaretChar = parseInt($caret.style.getPropertyValue("--pos-char")) || 0;
+                let maxCaretChar = Math.max(endCaretChar, actualCaretChar)
+                $caret.style.setProperty("--max-pos-char", maxCaretChar);
                 $caret.style.setProperty("--pos-char", endCaretChar);
                 $caret.style.setProperty("--pos-line", endCaretLine);
                 sel.removeAllRanges();
@@ -583,6 +630,7 @@ function EditorSyntaxis(options = {}) {
         $syntax.addEventListener("dragstart", function(event) {
             $editor.selecting = false;
             $editor.dragging = true;
+            $editor.internalDrag = true;
         }, false);
         
         // $syntax.addEventListener("dragend", function(event) {
@@ -643,11 +691,15 @@ function EditorSyntaxis(options = {}) {
         $syntax.addEventListener("drop", function(event) {
             // prevent default action (open as link for some elements)
             event.preventDefault();
-            execCommands($editor.ownerDocument, ["delete"], false, null, keepZAction=false, customZActions=0);
+            customZActions = 0;
+            if($editor.internalDrag) {
+                execCommands($editor.ownerDocument, ["delete"], false, null, keepZAction=false, customZActions=0);
+                customZActions++;
+            }
             let textDragged = event.dataTransfer.getData("Text");
             let caretBBounds = $editor.dragCaret.getBoundingClientRect();
             selectEditorFromPoint(caretBBounds.x, caretBBounds.y, caretBBounds.x, caretBBounds.y);
-            execCommands($editor.ownerDocument, ["insertHTML"], false, textDragged, keepZAction=true, customZActions=2, nameZAction="DroppedElement");
+            execCommands($editor.ownerDocument, ["insertHTML"], false, textDragged, keepZAction=true, customZActions=customZActions+1, nameZAction="DroppedElement");
             
             let [caretStart, caretEnd] = getCaretParentIndex($editor);
             selectSyntaxFromEditor(caretStart, caretEnd);
@@ -659,6 +711,7 @@ function EditorSyntaxis(options = {}) {
             }
             $editor.dragging = false;
             $editor.dragCaret = undefined;
+            $editor.internalDrag = false;
           
         }, false);
 
@@ -719,6 +772,162 @@ function EditorSyntaxis(options = {}) {
             execCommands(doc, commands, showUI, value, noZAction, keepZAction, customZActions, nameZAction);
         }
 
+        const _ProcessInput = (event) => {
+            window.selRects = [];
+            let that = event.target;
+            // Falta implementar con rango diferente inicial y final en la misma linea y diferente
+            if (event.key === "Tab") {
+                // This will prevent us from tabbing out of the editor
+                event.preventDefault();
+                // Obtengo las posiciones de la seleccion de $containerEl, ya que tengo la seleccion cargado
+                // en los nodos hijos de texto de $containerEl
+                var [caretStartPos, caretEndPos] = getCaretParentIndex($editor);
+
+                // now insert four non-breaking spaces for the tab key
+                if (!event.shiftKey) {
+                    if (caretStartPos === caretEndPos) {
+                        execCommands($editor.ownerDocument, ["insertHTML"], false, "\t");
+                    }
+                    else {
+                        // TODO: Para cada linea que este el rango hay que agregar en el frimer \n de cada linea un \t
+                        // Identar la linea entera, es decir agregar un tab al inicio
+                        // let rawContent = $editor.innerText.slice(0, caretEndPos);
+                        // let indexNewLine = rawContent.lastIndexOf("\n");
+                        // rawContent = $editor.innerText.slice(indexNewLine === -1 ? 0 : indexNewLine, caretStartPos);
+                        // let indexTab = rawContent.lastIndexOf("\t");
+
+                        // if (indexNewLine !== -1) {
+                        //     let doc = $editor.ownerDocument;
+                        //     let docView = $editor.ownerDocument.defaultView;
+                        //     let sel = docView.getSelection();
+                        //     let range = sel.getRangeAt(0);
+                        //     let $tNodeStart;
+                        //     [$tNodeStart, indexNewLine] = getTextNodeRelPos(indexNewLine, $editor);
+                        //     range.setStart($tNodeStart, indexNewLine);
+                        //     range.setEnd($tNodeStart, indexNewLine);
+                        //     sel.removeAllRanges();
+                        //     sel.addRange(range);
+                        //     document.execCommand('delete', false, null);
+                        // }
+                    }
+                }
+                else {
+                    if (caretStartPos === caretEndPos) {
+                        if ($editor.innerText[caretStartPos-1] === "\t") {
+                            execCommands($editor.ownerDocument, ["delete"], false, null);
+                        }
+                    }
+                    else {
+                        // TODO: Para cada linea que este el rango hay que agregar en el frimer \n de cada linea un \t
+                        let indexNewLines = [];
+                        let firstNewLine = $editor.innerText.slice(0, Math.min(caretStartPos, caretEndPos)).lastIndexOf("\n");
+                        if (firstNewLine > 0){
+                            if ($editor.innerText[firstNewLine-1] === "\t") indexNewLines.push(firstNewLine);
+                        }
+
+                        let rawContent = $editor.innerText.slice(Math.min(caretStartPos, caretEndPos), Math.max(caretStartPos, caretEndPos));
+                        let actualIndex = 0;
+                        for (let line of rawContent.split("\n")) {
+                            if (line !== "") {
+                                if (line[1] === "\t") {
+                                    indexNewLines.push(actualIndex);
+                                }
+                                actualIndex += line
+                            }
+                            else {
+                                actualIndex += 1;
+                            }
+                        }
+
+                        let i = 0;
+                        for (let indexLine of indexNewLines) {
+                            if (i < indexNewLines.length) { 
+                                execCommandsAt(indexLine, $editor, ["delete"], keepZAction=false);
+                            }
+                            else {
+                                execCommandsAt(indexLine, $editor, ["delete"], keepZAction=true, customZActions=indexNewLines.length, nameZAction="outdent multiple lines");
+                            }
+                            i += 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        const _ProcessMoveCarets = (event) => {
+            event.preventDefault();
+            // TODO: Make different actions for move the carets in the visual spans, after, it will be updated
+            let carets = getCaretsElements();
+            for (let c in carets) {
+                let $caret = carets[c];
+                let maxCaretChar = parseInt($caret.style.getPropertyValue("--max-pos-char"));
+                let caretChar = parseInt($caret.style.getPropertyValue("--pos-char"));
+                let caretLine = parseInt($caret.style.getPropertyValue("--pos-line"));
+                let firstPosX = parseFloat($caret.style.getPropertyValue("--first-pos-x"));
+                let firstPosY = parseFloat($caret.style.getPropertyValue("--first-pos-y"));
+
+                // TODO: Hay que realizar el cambio y limitar donde se ubicara el caret, de igual forma que se hace
+                //  cuando se hace click, es decir utilizar el selRects, para determinar si se pasa a la siguiente linea o no
+                if(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+                    let moveArrowMap = {
+                        "ArrowLeft": (_char, _line) => {
+                            if (_char === 0) {
+                                _char = Infinity;
+                                _line -= 1;
+                            }
+                            else {
+                                _char -= 1;
+                            }
+                            return [_char, _line];
+                        },
+                        "ArrowRight": (_char, _line) => {
+                            if (_char === 0) {
+                                _char = Infinity;
+                                _line += 1;
+                            }
+                            else {
+                                _char += 1;
+                            }
+                            return [_char, _line];
+                        },
+                        "ArrowUp": (_char, _line) => {
+                            return [_char, _line-1];
+                        },
+                        "ArrowDown": (_char, _line) => {
+                            return [_char, _line+1];
+                        },
+                    }
+                    let [modCaretChar, modCaretLine] = moveArrowMap[event.key](caretChar, caretLine);
+                    // TODO: Arreglar seleccionar el maxChar correctamente
+                    let [newCaretChar, newMaxCaretChar, newCaretLine] = getFixedCharLine(modCaretChar, maxCaretChar, modCaretLine);
+                    window.getSelection().removeAllRanges();
+                    if(['ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                        $caret.style.setProperty("--max-pos-char", newMaxCaretChar);
+                    }
+                    $caret.style.setProperty("--pos-char", newCaretChar);
+                    $caret.style.setProperty("--pos-line", newCaretLine);
+                    // $caret.style.setProperty("--first-pos-x", globalCaretPos.x);
+                    // $caret.style.setProperty("--first-pos-y", globalCaretPos.y);
+                }
+                else if (['End', 'Home', 'PageUp', 'PageDown'].includes(event.key)) {
+
+                }
+            }
+            updateCarets(event);
+        }
+        const _ProcessSpecialActions = (event) => {
+            event.preventDefault();
+            if (event.key.toUpperCase() === "Z") {
+                // Mirar en un historico privado variable local, el numero de veces que se tiene que realizar un undo
+                if(event.shiftKey) {
+                    execCommandRedo($editor.ownerDocument);
+                }
+                else {
+                    execCommandUndo($editor.ownerDocument);
+                }
+            }
+        }
+
         // $syntax.addEventListener("selectstart", () => {
         //     console.log("Selection started in targetDiv");
         //     document.addEventListener("selectionchange", logSelection);
@@ -737,129 +946,8 @@ function EditorSyntaxis(options = {}) {
         //     synxtaxHighlighter.onInput($containerEditor.regexson, event);
         // });
         const keydownEditor = (event, $containerEl) => {
+            // if ($containerEl !== $editor) return;
             // console.log(event);
-            const _ProcessInput = (event) => {
-                window.selRects = [];
-                let that = event.target;
-                // Falta implementar con rango diferente inicial y final en la misma linea y diferente
-                if (event.key === "Tab") {
-                    // This will prevent us from tabbing out of the editor
-                    event.preventDefault();
-                    // Obtengo las posiciones de la seleccion de $containerEl, ya que tengo la seleccion cargado
-                    // en los nodos hijos de texto de $containerEl
-                    var [caretStartPos, caretEndPos] = getCaretParentIndex($editor);
-
-                    // now insert four non-breaking spaces for the tab key
-                    if (!event.shiftKey) {
-                        if (caretStartPos === caretEndPos) {
-                            // let doc $editor.ownerDocument;
-                            // let docView = $editor.ownerDocument.defaultView;
-                            // let sel = doc.getSelection();
-                            // let range = sel.getRangeAt(0);
-                            // let tabNode = document.createTextNode("\t");
-                            // range.insertNode(tabNode);
-                            execCommands($editor.ownerDocument, ["insertHTML"], false, "\t");
-                            // range.setStartAfter(tabNode);
-                            // range.setEndAfter(tabNode); 
-                            // sel.removeAllRanges();
-                            // sel.addRange(range);
-                        }
-                        else {
-                            // TODO: Para cada linea que este el rango hay que agregar en el frimer \n de cada linea un \t
-                            // Identar la linea entera, es decir agregar un tab al inicio
-                            // let rawContent = $editor.innerText.slice(0, caretEndPos);
-                            // let indexNewLine = rawContent.lastIndexOf("\n");
-                            // rawContent = $editor.innerText.slice(indexNewLine === -1 ? 0 : indexNewLine, caretStartPos);
-                            // let indexTab = rawContent.lastIndexOf("\t");
-
-                            // if (indexNewLine !== -1) {
-                            //     let doc = $editor.ownerDocument;
-                            //     let docView = $editor.ownerDocument.defaultView;
-                            //     let sel = docView.getSelection();
-                            //     let range = sel.getRangeAt(0);
-                            //     let $tNodeStart;
-                            //     [$tNodeStart, indexNewLine] = getTextNodeRelPos(indexNewLine, $editor);
-                            //     range.setStart($tNodeStart, indexNewLine);
-                            //     range.setEnd($tNodeStart, indexNewLine);
-                            //     sel.removeAllRanges();
-                            //     sel.addRange(range);
-                            //     document.execCommand('delete', false, null);
-                            // }
-                        }
-                    }
-                    else {
-                        if (caretStartPos === caretEndPos) {
-                            if ($editor.innerText[caretStartPos-1] === "\t") {
-                                execCommands($editor.ownerDocument, ["delete"], false, null);
-
-                            }
-                        }
-                        else {
-                            // TODO: Para cada linea que este el rango hay que agregar en el frimer \n de cada linea un \t
-                            let indexNewLines = [];
-                            let firstNewLine = $editor.innerText.slice(0, Math.min(caretStartPos, caretEndPos)).lastIndexOf("\n");
-                            if (firstNewLine > 0){
-                                if ($editor.innerText[firstNewLine-1] === "\t") indexNewLines.push(firstNewLine);
-                            }
-
-                            let rawContent = $editor.innerText.slice(Math.min(caretStartPos, caretEndPos), Math.max(caretStartPos, caretEndPos));
-                            let actualIndex = 0;
-                            for (let line of rawContent.split("\n")) {
-                                if (line !== "") {
-                                    if (line[1] === "\t") {
-                                        indexNewLines.push(actualIndex);
-                                    }
-                                    actualIndex += line
-                                }
-                                else {
-                                    actualIndex += 1;
-                                }
-                            }
-
-                            let i = 0;
-                            for (let indexLine of indexNewLines) {
-                                if (i < indexNewLines.length) { 
-                                    execCommandsAt(indexLine, $editor, ["delete"], keepZAction=false);
-                                }
-                                else {
-                                    execCommandsAt(indexLine, $editor, ["delete"], keepZAction=true, customZActions=indexNewLines.length, nameZAction="outdent multiple lines");
-                                }
-                                i += 1;
-                            }
-                        }
-                    }
-                }
-                // Shift
-                // if (event.keyCode === 16) {
-                //     event.preventDefault();
-                //     that.shift_pressed = !that.shift_pressed;
-                // }
-
-            }
-            const _ProcessMoveCarets = (event) => {
-                event.preventDefault();
-                // TODO: Make different actions for move the carets in the visual spans, after, it will be updated
-                let carets = getCaretsElements();
-                for (let c in carets) {
-                    let $caret = carets[c];
-                    let caretChar = parseInt($caret.style.getPropertyValue("--pos-char"));
-                    let caretLine = parseInt($caret.style.getPropertyValue("--pos-line"));
-                    let firstPosX = parseFloat($caret.style.getPropertyValue("--first-pos-x"));
-                    let firstPosY = parseFloat($caret.style.getPropertyValue("--first-pos-y"));
-                    // TODO: Hay que realizar el cambio y limitar donde se ubicara el caret, de igual forma que se hace
-                    //  cuando se hace click, es decir utilizar el selRects, para determinar si se pasa a la siguiente linea o no
-                    if(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
-                        $caret.style.setProperty("--pos-char", caretChar);
-                        $caret.style.setProperty("--pos-line", caretLine);
-                        $caret.style.setProperty("--first-pos-x", globalCaretPos.x);
-                        $caret.style.setProperty("--first-pos-y", globalCaretPos.y);
-                    }
-                    else if (['End', 'Home', 'PageUp', 'PageDown'].includes(event.key)) {
-
-                    }
-                }
-                updateCarets(event);
-            }
 
             // Si mi containerEl no es $editor entonces tengo que obtener el foco de este para cada caret
             if ($containerEl !== $editor) {
@@ -889,31 +977,32 @@ function EditorSyntaxis(options = {}) {
                     _ProcessMoveCarets(event);
                 }
             }
-            else if (event.ctrlKey && (event.key === "Z" || event.key === "z")) {
-                event.preventDefault();
-                // Mirar en un historico privado variable local, el numero de veces que se tiene que realizar un undo
-                if(event.shiftKey) {
-                    execCommandRedo($editor.ownerDocument);
-                }
-                else {
-                    execCommandUndo($editor.ownerDocument);
-                }
+            else if (event.ctrlKey) {
+                _ProcessSpecialActions(event);
             }
             else {
                 _ProcessInput(event);
             }
+
             if ($containerEl !== $editor) {
                 // Quito la seleccion de Editor y le devuelvo el foco al syntax
                 window.getSelection().removeAllRanges();
                 // Recuperamos el foco del input
-                $containerEditor.querySelector('.input').focus();
-                $containerEditor.querySelector('.input').editing = false;
+                $input.focus();
+                $input.editing = false;
             }
         }
 
+        $input.addEventListener('keydown', event => {keydownEditor(event, event.target)});
 
-        $editor.addEventListener('keydown', event => {event.preventDefault()});
-        $containerEditor.querySelector(".input").addEventListener('keydown', event => {keydownEditor(event, event.target)});
+        // REMOVE CTRL Z DEFAULT
+        document.addEventListener('keydown', event => {
+            if (event.ctrlKey) {
+                if (event.key.toUpperCase() === "Z" || event.key.toUpperCase() === "Y") {
+                    event.preventDefault();
+                }
+            }
+        });
 
         const ro = new ResizeObserver(entries => {
             window.selRects = [];
