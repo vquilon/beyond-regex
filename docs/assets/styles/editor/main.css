@@ -50,9 +50,9 @@
   --editor-margin: 20px;
 }
 
-#editor-actions .actions-container .only-mobile {
+/* #editor-actions .actions-container .only-mobile {
   display: none;
-}
+} */
 
 .regex-quotes {
   width: 3ch;
@@ -234,6 +234,26 @@
   -webkit-background-clip: text;
   -moz-background-clip: text;
   -webkit-text-fill-color: #ffffff00;
+}
+
+.input.editing .input-editor {
+  z-index: 4;
+  pointer-events: all;
+}
+
+.input.editing .input-editor .editor {
+  background-clip: initial;
+  -webkit-background-clip: initial;
+  -moz-background-clip: initial;
+  -webkit-text-fill-color: var(--color-editor);
+}
+
+.input.editing .input-syntax .syntax,
+.input.editing .input-syntax .syntax *,
+.input.editing .input-syntax .syntax *:after,
+.input.editing .input-syntax .syntax *:before {
+  color: transparent;
+  background: transparent;
 }
 
 .syntax {
