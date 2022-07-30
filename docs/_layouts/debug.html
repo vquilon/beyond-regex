@@ -1,30 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {% include head/meta.html %}
-    {% include head/base_styles.html %}
-    {% include head/building-styles.html %}
-    
-    {% include editor/debug/styles.html %}
-    {% include editor/circle-selector/styles.html %}
-    {% include editor/flag-selector/styles.html %}
-
-    {% include mobile/styles.html %}
-  
-    <!-- VENDORS SCRIPTS -->
-    {% include head/base_scripts.html %}
-  
-    <!-- Scripts para el control de la barra de conexion -->
-    {% include offline-status/scripts.html %}
-  
-    {% include editor/scripts.html %}
-    {% include editor/debug/scripts.html %}
-  
-    <!-- DEFINE / INITIALIZE LISTENERS -->
-    <script defer src="{{ site.baseurl }}/assets/scripts/switch_theme.js"></script>
-    <script defer src="{{ site.baseurl }}/assets/scripts/menu_listeners.js"></script>
-    <script defer>
-        window.onbeforeunload = function (e) {
+{% include head/meta.html %} {% include head/base_styles.html %} {% include head/building-styles.html %} {% include editor/debug/styles.html %} {% include editor/circle-selector/styles.html %} {% include editor/flag-selector/styles.html %} {% include mobile/styles.html %}
+<!-- VENDORS SCRIPTS -->
+{% include head/base_scripts.html %}
+<!-- Scripts para el control de la barra de conexion -->
+{% include offline-status/scripts.html %} {% include editor/scripts.html %} {% include editor/debug/scripts.html %}
+<!-- DEFINE / INITIALIZE LISTENERS -->
+<script defer="defer" src="{{ site.baseurl }}/assets/scripts/switch_theme.js"></script>
+<script defer="defer" src="{{ site.baseurl }}/assets/scripts/menu_listeners.js"></script>
+<script defer="defer">
+window.onbeforeunload = function (e) {
             var areChanges = window.hasChanges || false;
             var areUnsavedData = window.hasUnsavedData || true;
             if (areChanges & areUnsavedData) {
@@ -59,24 +45,19 @@
                 loader_view_id: "graph-loader",
             });
         }
-    </script>
-  
-    <noscript>
-      <h2 id="noscript">Please enable JavaScript in order to use all features</h2>
-    </noscript>
-  
+</script>
+<noscript>
+<h2 id="noscript">Please enable JavaScript in order to use all features</h2>
+</noscript>
 </head>
-
 <body>
-    <script defer>
-        document.body.classList.add("js-enabled");
-    </script>
-    {% include svg-utils/svg-filters.html %}
-    <div id="container-main">
-        {{ content }}
-    </div>
-    
-    {% include offline-status/connection-box.html %}
+<script defer="defer">
+document.body.classList.add("js-enabled");
+</script>
+{% include svg-utils/svg-filters.html %}
+<div id="container-main">
+{{ content }}
+</div>
+{% include offline-status/connection-box.html %}
 </body>
-
 </html>

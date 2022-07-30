@@ -1,18 +1,1 @@
-function Editor(options={}) {
-    const init = () => {
-        let editorParser = EditorParser({
-            containerSelector: options.containerSelector|| ".container-editor",
-            inputClass: options.inputClass || "input",
-            debug: options.debug || true,
-            regexSONId: options.regexSONId || "regex-json",
-            raphaelJSONId: options.raphaelJSONId || "raphael-json",
-            loader_view_id: options.loader_view_id || "graph-loader",
-        });
-        return {
-            editorParser: editorParser,
-        };
-    };
-    return {
-        init: init
-    };
-}
+function Editor(e={}){return{init:()=>{return{editorParser:EditorParser({containerSelector:e.containerSelector||".container-editor",inputClass:e.inputClass||"input",debug:e.debug||!0,regexSONId:e.regexSONId||"regex-json",raphaelJSONId:e.raphaelJSONId||"raphael-json",loader_view_id:e.loader_view_id||"graph-loader"})}}}}
