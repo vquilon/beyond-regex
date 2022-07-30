@@ -1,1 +1,17 @@
-window.onload=function(){var r=EditorParser({noneditor:!0,loader_view_id:"graph-loader"});visualizerPanel=RegexVisualizerPanel({editorParser:r,loader_view_id:"graph-loader",progress_bar_class:"progress"})};
+window.onload = function () {
+    // OFFLINE HANDLER
+    // offlineHandler();
+
+    let editorParser = EditorParser({
+        noneditor: true,
+        loader_view_id: "graph-loader",
+    });
+
+    // VISUALIZER PANEL
+    visualizerPanel = RegexVisualizerPanel({
+        editorParser: editorParser,
+        loader_view_id: "graph-loader",
+        progress_bar_class: "progress"
+    });
+
+}

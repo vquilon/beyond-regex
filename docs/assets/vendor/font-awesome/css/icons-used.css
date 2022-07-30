@@ -1,1 +1,106 @@
-@font-face{font-family:"Font Awesome 5 Brands";font-style:normal;font-weight:400;font-display:block;src:url(../webfonts/fa-brands-400.eot);src:url(../webfonts/fa-brands-400.eot?#iefix) format("embedded-opentype"),url(../webfonts/fa-brands-400.woff2) format("woff2"),url(../webfonts/fa-brands-400.woff) format("woff"),url(../webfonts/fa-brands-400.ttf) format("truetype"),url(../webfonts/fa-brands-400.svg#fontawesome) format("svg")}@font-face{font-family:"Font Awesome 5 Free";font-style:normal;font-weight:400;font-display:block;src:url(../webfonts/fa-regular-400.eot);src:url(../webfonts/fa-regular-400.eot?#iefix) format("embedded-opentype"),url(../webfonts/fa-regular-400.woff2) format("woff2"),url(../webfonts/fa-regular-400.woff) format("woff"),url(../webfonts/fa-regular-400.ttf) format("truetype"),url(../webfonts/fa-regular-400.svg#fontawesome) format("svg")}@font-face{font-family:"Font Awesome 5 Free";font-style:normal;font-weight:900;font-display:block;src:url(../webfonts/fa-solid-900.eot);src:url(../webfonts/fa-solid-900.eot?#iefix) format("embedded-opentype"),url(../webfonts/fa-solid-900.woff2) format("woff2"),url(../webfonts/fa-solid-900.woff) format("woff"),url(../webfonts/fa-solid-900.ttf) format("truetype"),url(../webfonts/fa-solid-900.svg#fontawesome) format("svg")}.fa,.fab,.fad,.fal,.far,.fas{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:inline-block;font-style:normal;font-variant:normal;text-rendering:auto}.fab{font-family:"Font Awesome 5 Brands"}.fab,.far{font-weight:400}.fa,.far,.fas{font-family:"Font Awesome 5 Free"}.fa,.fas{font-weight:900}.fa-book-open:before{content:"\f518"}.fa-check:before{content:"\f00c"}.fa-codepen:before{content:"\f1cb"}.fa-copy:before{content:"\f0c5"}.fa-download:before{content:"\f019"}.fa-github:before{content:"\f09b"}.fa-hammer:before{content:"\f6e3"}.fa-js-square:before{content:"\f3b9"}.fa-link:before{content:"\f0c1"}.fa-linkedin-in:before{content:"\f0e1"}.fa-python:before{content:"\f3e2"}.fa-user-circle:before{content:"\f2bd"}
+@font-face {
+    font-family: "Font Awesome 5 Brands";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url(../webfonts/fa-brands-400.eot);
+    src: url(../webfonts/fa-brands-400.eot?#iefix) format("embedded-opentype"),url(../webfonts/fa-brands-400.woff2) format("woff2"),url(../webfonts/fa-brands-400.woff) format("woff"),url(../webfonts/fa-brands-400.ttf) format("truetype"),url(../webfonts/fa-brands-400.svg#fontawesome) format("svg")
+}
+@font-face {
+    font-family: "Font Awesome 5 Free";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url(../webfonts/fa-regular-400.eot);
+    src: url(../webfonts/fa-regular-400.eot?#iefix) format("embedded-opentype"),url(../webfonts/fa-regular-400.woff2) format("woff2"),url(../webfonts/fa-regular-400.woff) format("woff"),url(../webfonts/fa-regular-400.ttf) format("truetype"),url(../webfonts/fa-regular-400.svg#fontawesome) format("svg")
+}
+@font-face {
+    font-family: "Font Awesome 5 Free";
+    font-style: normal;
+    font-weight: 900;
+    font-display: block;
+    src: url(../webfonts/fa-solid-900.eot);
+    src: url(../webfonts/fa-solid-900.eot?#iefix) format("embedded-opentype"),url(../webfonts/fa-solid-900.woff2) format("woff2"),url(../webfonts/fa-solid-900.woff) format("woff"),url(../webfonts/fa-solid-900.ttf) format("truetype"),url(../webfonts/fa-solid-900.svg#fontawesome) format("svg")
+}
+
+.fa,.fab,.fad,.fal,.far,.fas {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+}
+.fab {
+    font-family: "Font Awesome 5 Brands"
+}
+
+.fab,.far {
+    font-weight: 400
+}
+
+
+.fa,.far,.fas {
+    font-family: "Font Awesome 5 Free"
+}
+
+.fa,.fas {
+    font-weight: 900
+}
+
+.fa-book-open:before {
+    content: "\f518"
+}
+
+.fa-check:before {
+    content: "\f00c"
+}
+
+.fa-codepen:before {
+    content: "\f1cb"
+}
+
+.fa-copy:before {
+    content: "\f0c5"
+}
+
+.fa-download:before {
+    content: "\f019"
+}
+
+
+.fa-github:before {
+    content: "\f09b"
+}
+
+.fa-hammer:before {
+    content: "\f6e3"
+}
+
+
+.fa-js-square:before {
+    content: "\f3b9"
+}
+
+.fa-link:before {
+    content: "\f0c1"
+}
+
+.fa-linkedin-in:before {
+    content: "\f0e1"
+}
+
+.fa-python:before {
+    content: "\f3e2"
+}
+
+.fa-user-circle:before {
+    content: "\f2bd"
+}
+
+.fa-code {
+    font-weight: 600;
+}
+.fa-code:before {
+    content: "\f121"
+}

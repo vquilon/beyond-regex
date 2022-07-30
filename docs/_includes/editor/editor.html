@@ -46,40 +46,65 @@
                             <label class="item" for="5" aria-hidden="aria-hidden"><i class="fab fa-java"></i><i
                                     class="code-version">8</i></label>
                         </div> -->
-</div>
-</div>
-</div>
-<div id="editor-actions">
-<button title="Get the link" id="iframeIt"><i class="fas fa-link"></i></button>
-<div title="Activate real time check syntax" class="checkbox checkbox__1">
-<input id="real-time-check" type="checkbox">
-<label for="real-time-check"><span class="material-icons">spellcheck</span></label>
-</div>
-</div>
-<div id="editor-input">
-<span style="margin-left: 5px;">/</span>
-<input id="input" class="input" value="">
-<span style="margin-right: 5px;">/</span>
-</div>
-<div id="editor-flags">
-<div id="container-input" class="checkbox__2">
-<div id="container-show">
-<span id="input-show" class="material-icons">flag</span>
-</div>
-<div id="overlay-show"></div>
-<input id="flag-i" type="checkbox" value="i" name="flag">
-<label class="label-input" for="flag-i"><span>i</span></label>
-<input id="flag-m" type="checkbox" value="m" name="flag">
-<label class="label-input" for="flag-m"><span>m</span></label>
-<input id="flag-g" type="checkbox" value="g" name="flag">
-<label class="label-input" for="flag-g"><span>g</span></label>
-<div id="container-values">
-<span class="show-values" id="check-i">i</span>
-<span class="show-values" id="check-m">m</span>
-<span class="show-values" id="check-g">g</span>
-</div>
-</div>
-<!-- <div class="checkbox checkbox__1">
+            </div>
+        </div>
+    </div>
+
+    <div id="editor-actions">
+        <div class="actions-container">
+            <button title="Get the link" id="shareIt">
+                <i class="fas fa-link"></i>
+            </button>
+            <div title="Update below panels connected" class="checkbox checkbox__1">
+                <input id="real-time-check" type="checkbox">
+                <label for="real-time-check"><span class="material-icons">dashboard</span></label>
+            </div>
+            <div title="Edit" class="checkbox checkbox__1 only-mobile">
+                <input id="mobile-edit" type="checkbox">
+                <label for="mobile-edit">
+                    <span class="material-icons material-symbols-outlined">edit_note</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div id="editor-input">
+        <span class="regex-quotes">/</span>
+        <!-- <input id="input" class="input" value="" /> -->
+        <div tabindex="0" class="input">
+            <div class="input-carets"></div>
+            <div class="input-syntax">
+                <div class="regex syntax"></div>
+            </div>
+            <div class="input-editor">
+                <pre class="editor" spellcheck="false" contenteditable="true"></pre>
+            </div>
+        </div>
+        <span class="regex-quotes">/</span>
+    </div>
+
+    <div id="editor-flags">
+        <div id="container-input" class="checkbox__2">
+            <div id="container-show">
+                <span id="input-show" class="material-icons">flag</span>
+            </div>
+            <div id="overlay-show"></div>
+
+            <input id="flag-i" type="checkbox" value="i" name="flag" />
+            <label class="label-input" for="flag-i"><span>i</span></label>
+            <input id="flag-m" type="checkbox" value="m" name="flag" />
+            <label class="label-input" for="flag-m"><span>m</span></label>
+            <input id="flag-g" type="checkbox" value="g" name="flag" />
+            <label class="label-input" for="flag-g"><span>g</span></label>
+
+            <div id="container-values">
+                <span class="show-values" id="check-i">i</span>
+                <span class="show-values" id="check-m">m</span>
+                <span class="show-values" id="check-g">g</span>
+            </div>
+
+        </div>
+        <!-- <div class="checkbox checkbox__1">
             <input id="checkbox-ignorecase" type="checkbox" name="flag" value="i">
             <label for="checkbox-ignorecase"><i>i</i></label>
         </div>

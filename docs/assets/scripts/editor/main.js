@@ -1,23 +1,310 @@
-var EditorParser=e=>{const n=e.noneditor||!1,t=e.debug||!1;var l,a,c,i,s,o,d,u,r,g,m=document.querySelector("#input"),p={re:"",reLang:"",flags:""};function f(e,r){e.innerHTML="";var t=document.createTextNode("");return t.nodeValue=r,e.appendChild(t),r}function h(e,r){c.classList.remove("correct-syntax"),(async()=>{const e=Swal.mixin({toast:!0,position:"top-right",iconColor:"white",customClass:{popup:"colored-toast"},showConfirmButton:!1,timer:1500,timerProgressBar:!0});await e.fire({icon:"error",title:"Error: See the editor console error!"})})(),c.style.display="block";var t=[],o=[];"number"==typeof r.lastIndex&&t.push(` ${e}`),o.push("Error:"+r.message),o.push(""),s.style.setProperty("--position-error-ch",`${r.lastIndex+1}ch`),e=0,e=s.scrollLeft,f(s,t.join("\n")),f(i,o.join("\n")),s.scrollLeft=e,s.scrollWidth,s.clientWidth,r=s.scrollWidth/s.textContent.length*(r.lastIndex+1)-s.clientWidth/2,s.scrollLeft=r}n?(R=I(),p={re:R.re,reLang:R.reLang,flags:R.flags}):(l=document.querySelector("#editor-terminal").querySelector("#terminal-stats"),a=document.querySelector("#real-time-check"),c=document.querySelector("#terminal-error"),i=c.querySelector("#errorDef"),s=c.querySelector("#errorBox"),o=document.getElementsByName("flag"),d=document.querySelector("#iframeIt"),u=document.querySelector("#visualizeClick"),r=e.raphaelJSONId||"raphael-json",g=e.regexSONId||"regex-json");var y=document.querySelector(`#${e.loader_view_id}`);function x(e,r){t&&window.hasOwnProperty("JsonView")&&(e.innerHTML="",window.setTimeout(()=>JsonView.renderJSON(r,e),50))}const v=e=>e.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"),w=e=>{f(s,""),f(i,"Correct syntax"),c.classList.add("correct-syntax");var r=null;try{var t,o=RegexParser(),n=document.querySelector("[name='languageRegex']:checked").value,a=(r=o(e,null,n),`${e.length}`);t=`${r.groupCount}`,f(l.querySelector("#re-len .stat-value"),a),f(l.querySelector("#re-groups .stat-value"),t),p={re:e,reLang:n,flags:C()}}catch(r){if(!(r instanceof o.RegexSyntaxError))throw r;h(e,r)}return r&&(e={raw:(e=r).raw.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"),groupCount:e.groupCount,tree:e.tree},x(document.querySelector(`#${g}`),e)),r};function S(e){return e.replace(/^\s+/,"").replace(/\s+$/,"")}const b=()=>p.re,L=()=>m.value;function $(e){m.value=e}function C(){for(var e="",r=0,t=o.length;r<t;r++)o[r].checked&&(e+=o[r].value);return e}const q=()=>p.flags;var k,R=function(e){for(var r=0;r<o.length;r++)~e.indexOf(o[r].value)?o[r].checked=!0:o[r].checked=!1};const B=()=>p.reLang;function I(){var e=location.hash;return!e||e.length<2?e={reLang:"python",embed:!1,re:"",highlight:!0,flags:""}:((e=(e=e.slice(2)).split("&").reduce(function(e,r){var t=r.substring(r.indexOf("=")+1);return e[r.substring(0,r.indexOf("="))]=t,e},{})).raLang=e.reLang,e.embed="true"===e.embed,e.flags=e.flags||"",e.re=e.re?S(decodeURIComponent(e.re)):""),e}return e=function(e){document.querySelector(`[value="${e}"]`).checked=!0},n||(function(){let r=null;m.addEventListener("input",function(e){r&&clearTimeout(r),a.checked&&(r=setTimeout(()=>{w(L())},500)),window.hasChanges=!0,u.disabled=!1}),d.addEventListener("click",function(){if(!w(L()))return!1;var e=0<(r=(e=location.href).indexOf("#"))?e.slice(0,r):e,r=b();const t=`
-            <iframe frameborder="0" width="500px" height="300px"
-            src="${e}#!embed=true&flags=${C()}&re=${encodeURIComponent(r)}">
-            </iframe>`;r=v(t),Swal.fire({title:"Share your visual regex",html:`
-                <div id="beyond-regex-iframe-copy" class="container-copy">
-                    <div class="iframe-copier">
-                        <div class="iframe-content">
-                            <span>${r}</span>
-                        </div>
-                        <div class="wrap-copy-iframe"><button class="copy-iframe"><i class="far fa-copy"></i></button></div>
-                    </div>
-                </div>
-                `,icon:"info",iconHtml:'<span class="sweetalert-icon material-icons">share</span>',showCancelButton:!0,showConfirmButton:!1,showCloseButton:!0,cancelButtonText:"Close",didOpen:()=>{Swal.showLoading(),document.querySelector("#beyond-regex-iframe-copy button.copy-iframe").addEventListener("click",function(){navigator.clipboard.writeText(t),document.querySelector("#beyond-regex-iframe-copy .copy-iframe>i").className="fas fa-check",document.querySelector("#beyond-regex-iframe-copy .iframe-copier").classList.add("copied"),setTimeout(function(){var e=document.querySelector("#beyond-regex-iframe-copy .copy-iframe>i");let r=document.querySelector("#beyond-regex-iframe-copy .iframe-copier");e&&r&&r.classList.remove("copied")},1e3)}),Swal.hideLoading()}})}),s.addEventListener("scroll",e=>{m.scrollLeft=e.currentTarget.scrollLeft});let e=document.querySelectorAll("[name='languageRegex']");for(var t=0,o=e.length;t<o;t++)e[t].onclick=function(){y.classList.contains("loading")||u.disabled&&(u.disabled=!1)}}(),!(k=I()).embed&&"export"!=k.cmd||(document.body.className+=" embed"),k.flags?R(k.flags):R("g"),k.re?$(k.re):$("^BEYOND ReGex(?P<TOOLS>builder|[bv]isualize|(?=de)bugger) Born to be a RegEx editor$"),k.reLang?e(k.reLang):e("python")),{parseSharedRegex:(e,r="python")=>{var t=null;try{var o=RegexParser(),t=o(e,null,r)}catch(r){if(!(r instanceof o.RegexSyntaxError))throw r;n&&((e,r)=>{let t="";var o,n,a;"number"==typeof r.lastIndex&&(o=v(e.slice(0,r.lastIndex)),n=v(e[r.lastIndex]),a=v(e.slice(r.lastIndex+1)),e=`${location.origin}/beyond-regex/`,editLink=`${e}#!flags=${q()}&re=${encodeURIComponent(b())}&reLang=${B()}"`,t=`
-                <p style="text-align: left;">Regex Flags: <strong>${q()}</strong></p>        
-                <p style="text-align: left;">Regex Language syntax: <strong>${B()}</strong></p>    
-                <p style="text-align:left; margin-top: 1em">${r.message}</p>
-                <div style="overflow-x: auto; overflow-y: hidden; white-space: nowrap; margin-top: 1em;">${o}<strong style="
+var EditorParser = (options) => {
+    const NONEDITOR = options.noneditor || false
+    const DEBUG = options.debug || false;
+
+    const trim = (s) => {
+        return s.replace(/^\s+/, '').replace(/\s+$/, '');
+    }
+
+    const getParams = () => {
+        var params = location.hash;
+        if (!params || params.length < 2) {
+            params = {
+                reLang: "python",
+                embed: false,
+                re: "",
+                highlight: true,
+                flags: ''
+            };
+        } else {
+            params = params.slice(2);
+            params = params.split("&").reduce(function (p, indvParam) {
+                let val = indvParam.substring(indvParam.indexOf("=")+1);
+                let key = indvParam.substring(0, indvParam.indexOf("="));
+                p[key] = val;
+                return p;
+            }, {});
+            params.raLang = params.reLang;
+            params.embed = params.embed === 'true';
+            params.flags = params.flags || '';
+            params.re = params.re ? trim(decodeURIComponent(params.re)) : '';
+        }
+        return params;
+    }
+
+    var correctParams = {
+        re: "",
+        reLang: "",
+        flags: ""
+    }
+    if (NONEDITOR) {
+        // ES UN SHARED
+        let params = getParams();
+        correctParams = {
+            re: params.re,
+            reLang: params.reLang,
+            flags: params.flags
+        }
+    }
+    else {
+        var $containerEditor = document.querySelector(options.containerSelector);
+        var $input = $containerEditor.querySelector(`#editor-input > .${options.inputClass}`);
+        var $editorRegex = $input.querySelector('.editor');
+
+        var syntaxProcessor = EditorSyntaxis({
+            $containerEditor: $containerEditor,
+            $inputRegex: $editorRegex,
+            $syntaxRegex: $input.querySelector('.syntax'),
+            // TODO: SOLO PARA TESTING
+            debugInputClass: '.input-debug'
+        });
+
+        var $editorTerminal = $containerEditor.querySelector('#editor-terminal');
+        var $terminalStats = $editorTerminal.querySelector('#terminal-stats');
+        var $realTimeCheck = $containerEditor.querySelector('#real-time-check');
+        var $editMobile = $containerEditor.querySelector('#mobile-edit')
+        var $terminalError = $containerEditor.querySelector('#terminal-error');
+        var $errorDef = $terminalError.querySelector("#errorDef");
+        var $errorBox = $terminalError.querySelector('#errorBox');
+        var $flags = $containerEditor.querySelectorAll('input[name="flag"]');
+        var $shareBtn = $containerEditor.querySelector('#shareIt');
+
+        // En un futuro tiene que desaparecer, cuando se puedan editar los paneles, esta interaccion de desactivarlos
+        // Tiene que venir por configuracion maestra.
+        // Es decir la regex el editor, en este caso uno o dos, desactiva aquellos paneles a los que este unido,
+        // Por lo que el Editor debera tener unos diccionarios en los que le diga los IDs que tiene asociado este editor Regex
+        var $visualBtn = document.querySelector('#visualizeClick');
+        
+        var raphaelJSONId = options.raphaelJSONId || "raphael-json";
+        var regexSONId = options.regexSONId || "regex-json";
+    }
+
+    // De igual forma esto debera desaparecer
+    var $loader_view = document.querySelector(`#${options.loader_view_id}`);
+
+    const updateStats = function (regExpresion, regexSON) {
+        let reLen = `${regExpresion.length}`;
+        let reGroups = `${regexSON.groupCount}`;
+        setInnerText($terminalStats.querySelector("#re-len .stat-value"), reLen);
+        setInnerText($terminalStats.querySelector("#re-groups .stat-value"), reGroups);
+    }
+    const hideError = function () {
+        setInnerText($errorBox, "");
+        setInnerText($errorDef, "Correct syntax");
+        $terminalError.classList.add("correct-syntax");
+        // $editorError.style.display = 'none';
+    }
+    const showError = function (regular_exp, err) {
+        $terminalError.classList.remove("correct-syntax");
+        
+        const fireError = () => {
+            Swal.fire({
+                toast: true,
+                icon: 'error',
+                title: 'Error: See the editor console error!',
+                position: 'top-right',
+                iconColor: 'white',
+                customClass: {
+                    popup: 'colored-toast'
+                },
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true
+            })
+        }
+        fireError();
+        $terminalError.style.display = 'block';
+        var msg_re = [];
+        var msg_def = [];
+        if (typeof err.lastIndex === 'number') {
+            msg_re.push(` ${regular_exp}`);
+            // msg_re.push(Kit().repeats('-', err.lastIndex) + "^");
+        }
+        msg_def.push("Error:" + err.message);
+        msg_def.push("");
+        $errorBox.style.setProperty("--position-error-ch", `${err.lastIndex + 1}ch`)
+        
+        let prevScrollLeft = 0;
+        prevScrollLeft = $errorBox.scrollLeft;
+
+        setInnerText($errorBox, msg_re.join("\n"));
+        setInnerText($errorDef, msg_def.join("\n"));
+
+        $errorBox.scrollLeft = prevScrollLeft;
+
+        const animateScroll = (absScroll) => {
+            if (absScroll < 0 ) absScroll = 0;
+            let magScroll = 10;
+            if ( Math.abs( $errorBox.scrollLeft - maxScrollLeft ) < 10 ) {
+                magScroll = Math.abs( $errorBox.scrollLeft - maxScrollLeft );
+                $errorBox.scrollLeft = absScroll;
+            }
+            else {
+                let relScroll = absScroll - $errorBox.scrollLeft
+                let dirScroll = relScroll / Math.abs(relScroll);
+                
+                $errorBox.scrollLeft += dirScroll*magScroll;
+
+                if ( dirScroll * (absScroll - $errorBox.scrollLeft) > 0 ) {
+                    requestAnimationFrame(() => {
+                        animateScroll(absScroll);
+                    });
+                }
+            }
+        };
+        var maxScrollLeft = ( $errorBox.scrollWidth - $errorBox.clientWidth );
+        let boxErrorScrollLeft = (( $errorBox.scrollWidth / $errorBox.textContent.length ) * (err.lastIndex + 1)) - $errorBox.clientWidth/2;
+        // animateScroll(boxErrorScrollLeft);
+        $errorBox.scrollLeft = boxErrorScrollLeft;
+    }
+    
+
+    const getInnerText = function (ele) {
+        if (!ele)
+            return '';
+        var node = ele.firstChild
+            , results = [];
+        if (!node)
+            return '';
+        do {
+            if (node.nodeType === document.TEXT_NODE)
+                results.push(node.nodeValue);
+            else
+                results.push(getInnerText(node));
+        } while (node = node.nextSibling); return results.join('');
+    }
+    const setInnerText = function (ele, s) {
+        ele.innerHTML = '';
+        var t = document.createTextNode('');
+        t.nodeValue = s;
+        ele.appendChild(t);
+        return s;
+    }
+
+    const escapeHTML = (unsafe) => {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+    // const clearSelect = function () {
+    //     if (window.getSelection) {
+    //         if (window.getSelection().empty) {
+    //             // Chrome
+    //             window.getSelection().empty();
+    //         } else if (window.getSelection().removeAllRanges) {
+    //             // Firefox
+    //             window.getSelection().removeAllRanges();
+    //         }
+    //     } else if (document.selection) {
+    //         // IE
+    //         document.selection.empty();
+    //     }
+    // }
+
+    const _updateJSONViewer = function ($elem, jsonData) {
+        if (DEBUG && window.hasOwnProperty("JsonView")) {
+            window.setTimeout(() =>{
+                $elem.innerHTML = "";
+                JsonView.renderJSON(jsonData, $elem);
+            }, 50);
+        }
+    }
+    const _updateRaphaelItemsJSON = (_raphaelItems) => {
+        const $elemRaphael = document.querySelector(`#${raphaelJSONId}`);
+        _updateJSONViewer($elemRaphael, _raphaelItems)
+    }
+
+    const _updateRegexson = (_regexTree) => {
+        function escapteHTML(inHTMLtext) {
+            return inHTMLtext.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        // Se obtiene sin una funcion traverse
+        _regexTree = {
+            raw: escapteHTML(_regexTree.raw),
+            groupCount: _regexTree.groupCount,
+            tree: _regexTree.tree
+        }
+        const $regexSON = document.querySelector(`#${regexSONId}`);
+        _updateJSONViewer($regexSON, _regexTree);
+    };
+
+    const parseRegex = (regExpresion) => {
+        // Aqui se realiza el parseo
+        var skipError = false;
+
+        // updateLocationURL();
+        hideError();
+        var regexson = null;
+        try {
+            var init_parse = RegexParser();
+            var language_selected = getReLanguage();
+            regexson = init_parse(regExpresion, null, language_selected);
+
+            let errors = regexson.errors;
+            if (errors.length !== 0 && !skipError) {
+                errors.forEach((error) => {
+                    // if (error instanceof init_parse.RegexSyntaxError) {
+                        showError(regExpresion, error);
+                    // }
+                });
+            }
+
+            updateStats(regExpresion, regexson);
+
+            // Actualizo los valores correctos parseados
+            correctParams = {
+                re: regExpresion,
+                reLang: language_selected,
+                flags: getFlags()
+            }
+        } catch (e) {
+            if (e instanceof init_parse.RegexSyntaxError) {
+                if (!skipError) {
+                    showError(regExpresion, e);
+                }
+            } else {
+                throw e;
+            }
+            return false;
+        }
+        if (regexson) {
+            _updateRegexson(regexson);
+            $containerEditor.regexson = regexson;
+        }
+
+        syntaxProcessor.onInput(regexson, { target: $editorRegex });
+        return true;
+    };
+
+    const showErrorShared = (regExpresion, err) => {
+        let msg_error = "";
+        if (typeof err.lastIndex === 'number') {
+            let previousPart = escapeHTML(regExpresion.slice(0, err.lastIndex));
+            let wrongPart = escapeHTML(regExpresion[err.lastIndex]);
+            let postPart = escapeHTML(regExpresion.slice(err.lastIndex + 1));
+            
+            let src = `${location.origin}/beyond-regex/`;
+            editLink = `${src}#!flags=${getCorrectedFlags()}&re=${encodeURIComponent(getCorrectedRegex())}&reLang=${getCorrectedReLanguage()}"`
+            msg_error = `
+                <p style="text-align: left;">Regex Flags: <strong>${getCorrectedFlags()}</strong></p>        
+                <p style="text-align: left;">Regex Language syntax: <strong>${getCorrectedReLanguage()}</strong></p>    
+                <p style="text-align:left; margin-top: 1em">${err.message}</p>
+                <div style="overflow-x: auto; overflow-y: hidden; white-space: nowrap; margin-top: 1em;">${previousPart}<strong style="
                     color: red;
-                    text-decoration: underline 1px wavy;">${n}</strong>${a}</div>
-            `),Swal.fire({title:"Shared regex is wrong",icon:"error",html:`
+                    text-decoration: underline 1px wavy;">${wrongPart}</strong>${postPart}</div>
+            `;
+        }
+        Swal.fire({
+            title: "Shared regex is wrong",
+            icon: "error",
+            html: `
             <style>
             a.cool-anchor {
                 color: white;
@@ -31,5 +318,288 @@ var EditorParser=e=>{const n=e.noneditor||!1,t=e.debug||!1;var l,a,c,i,s,o,d,u,r
                 background: linear-gradient(45deg, #03a9f4, #ff0058);
             }
             </style>
-            ${t}<a target="_black" class="cool-anchor" href="${editLink}">Correct with the editor!</a>
-            `,showCancelButton:!0,showConfirmButton:!1,showCloseButton:!0,cancelButtonText:"Close"})})(e,r)}return t},trim:S,getParams:I,parseRegex:w,getCorrectedFlags:q,getCorrectedReLanguage:B,getCorrectedRegex:b,_updateRaphaelItemsJSON:e=>{x(document.querySelector(`#${r}`),e)}}};
+            ${msg_error}<a target="_black" class="cool-anchor" href="${editLink}">Correct with the editor!</a>
+            `,
+            showCancelButton: true,
+            showConfirmButton: false,
+            showCloseButton: true,
+            cancelButtonText: 'Close'
+        });
+    }
+
+    const parseSharedRegex = (regExpresion, language_selected = "python") => {
+        // Aqui se realiza el parseo
+        var regEXSON = null;
+        try {
+            var init_parse = RegexParser();
+            regEXSON = init_parse(regExpresion, null, language_selected);
+        } catch (e) {
+            if (e instanceof init_parse.RegexSyntaxError) {
+                showErrorShared(regExpresion, e);
+            } else {
+                throw e;
+            }
+        }
+
+        return regEXSON
+    };
+
+    // Getters input
+    const getCorrectedRegex = () => {
+        return correctParams.re;
+    };
+    const getRegex = () => {
+        return $editorRegex.innerText;
+    }
+    const setRegexValue = function (v) {
+        $editorRegex.innerText = v;
+    };
+
+    const getFlags = function () {
+        var fg = '';
+        for (var i = 0, l = $flags.length; i < l; i++) {
+            if ( $flags[i].checked ) fg += $flags[i].value;
+        }
+        return fg;
+    }
+    const getCorrectedFlags = () => {
+        return correctParams.flags;
+    }
+    const setFlags = function (fg) {
+        for (var i = 0; i < $flags.length; i++) {
+            if (~fg.indexOf($flags[i].value))
+                $flags[i].checked = true;
+            else
+                $flags[i].checked = false;
+        }
+    }
+
+    const getReLanguage = () => {
+        return document.querySelector("[name='languageRegex']:checked").value;
+    };
+    const getCorrectedReLanguage = () => {
+        return correctParams.reLang;
+    }
+    const setRegexLanguage = function (v) {
+        document.querySelector(`[value="${v}"]`).checked = true;
+    };
+
+    const generateURL = function (params) {
+        var re = getCorrectedRegex();
+        var flags = getFlags();
+        return "#!" + (params.debug ? "debug=true&" : "") + (params.cmd ? "cmd=" + params.cmd + "&" : "") + (params.embed ? "embed=true&" : "") + "flags=" + flags + "&re=" + encodeURIComponent(params.re = re);
+    }
+    const updateLocationURL = function () {
+        location.hash = generateURL(params);
+    }
+
+    const initEventsListener = () => {
+        let regexParsed = false;
+        let timeoutInputId = null;
+        $editorRegex.addEventListener('keydown', (event) => {
+            let keyDownLabel = event.key.toLowerCase();
+            if(keyDownLabel === "enter" && event.ctrlKey) {
+                if ($visualBtn !== null) {
+                    $visualBtn.disabled = false;
+                }
+                $visualBtn.click();
+            }
+        });
+        $editorRegex.addEventListener('input', (event) => {
+            parseRegex(getRegex());
+            regexParsed = true;
+            window.hasChanges = true;
+            if ($visualBtn !== null) {
+                $visualBtn.disabled = false;
+            }
+
+            // Ejecucion de los paneles
+            if (timeoutInputId) clearTimeout(timeoutInputId);
+            if ($realTimeCheck.checked) {
+                timeoutInputId = setTimeout( () => {
+                    $visualBtn.click();
+                }, 500);
+            }
+        });
+
+        // Prevent of paste non raw elements in contenteditable
+        $editorRegex.addEventListener('paste', (event) => {
+            event.preventDefault();
+            let clipboardData = event.clipboardData || window.clipboardData;
+            let pastedData = clipboardData.getData('Text');
+            document.execCommand('insertText', false, pastedData);
+            parseRegex(getRegex());
+            regexParsed = true;
+        });
+    
+        $shareBtn.addEventListener('click', function () {
+            if (!parseRegex(getRegex())) return false;
+
+            var src = location.href;
+            var indexHashParams = src.indexOf('#');
+            src = indexHashParams > 0 ? src.slice(0, indexHashParams) : src;
+            var re = getCorrectedRegex();
+            // window.prompt("Copy the html code:", html);
+            const urlLink = `${src}#!embed=true&flags=${getFlags()}&re=${encodeURIComponent(re)}`;
+            const iframeLink = `
+            <iframe frameborder="0" width="500px" height="300px"
+            src="${urlLink}">
+            </iframe>`;
+
+            const iframeLinkLiteral = escapeHTML(iframeLink);
+            Swal.fire({
+                title: 'Share your visual regex',
+                html: `
+                <div id="beyond-regex-editor-copy" class="container-copy">
+                    <div class="copy-container">
+                        <div class="copy-content">
+                            <span>${urlLink}</span>
+                        </div>
+                        <div class="wrap-copy-btn">
+                            <button title="Copy link" data-copy="${urlLink}" class="copy-btn">
+                                <i class="far fa-copy"></i>
+                                <span class="confetti-container">
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                </span>
+                            </button>
+                            <button title="Copy iframe" data-copy="${iframeLinkLiteral}" class="copy-btn">
+                                <i class="far fa-code"></i>
+                                <span class="confetti-container">
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                    <span class="confetti"></span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                `,
+                // <div id="iframe-link">${iframeLink}</div>
+                // `,
+                icon: 'info',
+                iconHtml: `<span class="sweetalert-icon material-icons">share</span>`,
+                showCancelButton: true,
+                showConfirmButton: false,
+                showCloseButton: true,
+                cancelButtonText: 'Close',
+                didOpen: () => {
+                    Swal.showLoading();
+
+                    // Listeners button copy
+                    document.querySelectorAll("#beyond-regex-editor-copy button.copy-btn").forEach(($itemBtn) =>{
+                        $itemBtn.addEventListener("click", (event) => {
+                            const link = $itemBtn.dataset.copy
+                            navigator.clipboard.writeText(link);
+                            
+                            let $iconCopy = $itemBtn.querySelector("i");
+                            let prevIconClass = $iconCopy.className;
+                            $iconCopy.className = "fas fa-check";
+                            document.querySelector("#beyond-regex-editor-copy .copy-container").classList.add("copied");
+                            $itemBtn.classList.add("copied");
+                            setTimeout(function () {
+                                let $copyContainer = document.querySelector("#beyond-regex-editor-copy .copy-container");
+                                if ($iconCopy && $copyContainer) {
+                                    $iconCopy.className = prevIconClass;
+                                    $copyContainer.classList.remove("copied");
+                                    $itemBtn.classList.remove("copied");
+                                }
+                            }, 1000);
+                        });
+                    })
+
+                    Swal.hideLoading();
+                }
+            });
+        });
+
+        // Scroll on terminal
+        $errorBox.addEventListener("scroll", (ev) => {
+            $editorRegex.scrollLeft = ev.currentTarget.scrollLeft;
+        });
+
+        // parseBtn.addEventListener("click", (event) => {
+        //     var regExpresion = inputRegex.value;
+        //     _parseRegex(regExpresion);
+        // });
+
+        let langs = document.querySelectorAll("[name='languageRegex']");
+        for (var i = 0, max = langs.length; i < max; i++) {
+            langs[i].onclick = function () {
+                parseRegex(getRegex());
+                regexParsed = true;
+                // Aqui deberia notificar al resto de paneles que la regex se ha parseado
+                // Puede que utilizando los message de javascript y cada panel tiene un listener de escucha
+                if ($loader_view !== null) {
+                    if (!$loader_view.classList.contains("loading")) {
+                        if ($visualBtn !== null) {
+                            if ($visualBtn !== null) {
+                                $visualBtn.disabled = false;
+                            }
+                            $visualBtn.click();
+                        }
+                    }
+                }
+            }
+        }
+
+        $editMobile.addEventListener("change", (event) => {
+            if ($editMobile.checked) $input.classList.add("editing");
+            else $input.classList.remove("editing");
+        });
+
+    }
+    if (!NONEDITOR) {
+        initEventsListener();
+
+        var params = getParams();
+        if (params.embed || params.cmd == "export") {
+            document.body.className += " embed";
+        }
+
+        // if (params.embed || params.cmd === "export") {
+        //     var embedFooterLink = document.getElementById("embedFooterLink");
+        //     embedFooterLink.href = `${document.location.origin}${document.location.pathname}` + location.hash.replace(/\bembed=true\b/ig, "").replace(/\bcmd=export\b/ig, '');
+        // }
+
+        if (params.flags) {
+            setFlags(params.flags);
+        } else{
+            setFlags("g");
+        }
+        if (params.re) {
+            setRegexValue(params.re);
+        } else{
+            setRegexValue("^BEYOND ReGex(?P<TOOLS>builder|[bv]isualize|(?=de)bugger) Born to be a RegEx editor$");
+        }
+        if (params.reLang) {
+            setRegexLanguage(params.reLang);
+        } else {
+            setRegexLanguage("python");
+        }
+
+        parseRegex(getRegex());
+    }
+
+
+    return {
+        parseRegex: parseRegex,
+        getRegex: getRegex,
+        parseSharedRegex: parseSharedRegex,
+        trim: trim,
+        getParams: getParams,
+        getCorrectedFlags: getCorrectedFlags,
+        getCorrectedReLanguage: getCorrectedReLanguage,
+        getCorrectedRegex: getCorrectedRegex,
+        _updateRaphaelItemsJSON: _updateRaphaelItemsJSON,
+        $containerEditor: $containerEditor,
+        $input: $input
+    }
+}

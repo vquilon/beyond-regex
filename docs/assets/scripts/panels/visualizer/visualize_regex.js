@@ -1,1 +1,948 @@
-function RegexVisualizer(t,o,e,u){var c,l=Kit();function d(t,e){if(e=e||"normal",r[t]&&r[t][e])return r[t][e];c.attr({"font-size":t,"font-weight":e});var i=c.getBBox();return r[t]=r[t]||{},r[t][e]={width:i.width/((c.attr("text").length-1)/2),height:i.height/2}}function p(i,t,n){var e,r=[],h=[],a=0,s=t,o=n,u=n;if(!i.length)return $.empty(i,t,n);i.forEach(function(t){t=t.repeat?$.repeat(t,s,n):$[t.type](t,s,n),r.push(t),s+=t.width+16,a+=t.width,o=Math.min(o,t.y),u=Math.max(u,t.y+t.height),h=h.concat(t.items)}),e=u-o,r.reduce(function(t,e){return a+=16,t=y(i,t.lineOutX,n,e.lineInX,_fromItem=t,_toItem=e),h.push(t),e});var c=r[0].lineInX,l=r[r.length-1].lineOutX;return{items:h,width:a,height:e,x:t,y:o,lineInX:c,lineOutX:l}}function v(t,e,i){t.forEach(function(t){t._translate?t._translate(e,i):(t.x+=e,t.y+=i)})}function g(t,e,i,n,r,h){return{type:"group",id:t.id||"",indices:[t.indices[0]+1,t.indices[1]-1],class:`g:${t.type}:${[t.indices[0]+1,t.indices[1]-1].join(";")}`,children:e,transform:`t${i},${n}`,x:i,y:n,width:r,height:h,_translate:function(t,e){this.x+=t,this.y+=e,this.transform=`t${this.x},${this.y}`}}}function k(t,e,i,n,r,h){e=l.toPrint(e);var a=d(16),s=e.length*a.width,a=a.height+12,s=12+s,r={type:"rect",class:`rect:${t.type}:${t.indices.join(";")}`,x:0,y:0,width:s,height:a,stroke:"none",fill:r||"transparent"};return{text:h={type:"text",class:`text:${t.type}:${t.indices.join(";")}`,x:s/2,y:a/2,text:e,"font-size":16,"font-family":x,fill:h||"black"},rect:r,items:[n=g(t,[r,h],i,n-a/2,s,a)],width:s,height:a,x:i,y:n.y,lineInX:i,lineOutX:i+s}}function X(t,e,i,n,r){var h=d(14),a=(s=n.split("\n")).length*h.height,s=1<s.length?Math.max.apply(Math,s.map(function(t){return t.length})):n.length;return s*=h.width,{label:{type:"text",class:`text:${t.type}:${t.indices.join(";")}`,x:e,y:i-a/2-4,text:n,"font-size":14,"font-family":x,fill:r||"#444"},x:e-s/2,y:i-a-4,width:s,height:4+a}}function y(t,e,i,n,r=null,h=null){let a="linejoint";return null!==r&&(a=`${a}::${r.items.map(t=>t.class).join("_")}`),null!==h&&(a=`${a}::${h.items.map(t=>t.class).join("_")}::`),t.hasOwnProperty("indices")&&(a=`curve:${t.indices.join(";")}`),{type:"path",class:`path:${a}`,x:e,y:i,path:["M",e,i,"H",n],"stroke-linecap":"butt","stroke-linejoin":"round",stroke:"#333","stroke-width":2,_translate:function(t,e){var i=this.path;i[1]+=t,i[2]+=e,i[4]+=t}}}function f(t,e,i,n,r){var h,a=n<e?-1:1,s=r<i?-1:1,n=Math.abs(i-r)<15?(h=["M",e,i,"C",e+Math.min(Math.abs(n-e)/2,10)*a,i,n-(n-e)/2,r,n,r],function(t,e){var i=this.path;i[1]+=t,i[2]+=e,i[4]+=t,i[5]+=e,i[6]+=t,i[7]+=e,i[8]+=t,i[9]+=e}):(h=["M",e,i,"Q",e+10*a,i,e+10*a,i+10*s,"V",Math.abs(i-r)<20?i+10*s:r-10*s,"Q",e+10*a,r,e+10*a*2,r,"H",n],function(t,e){var i=this.path;i[1]+=t,i[2]+=e,i[4]+=t,i[5]+=e,i[6]+=t,i[7]+=e,i[9]+=e,i[11]+=t,i[12]+=e,i[13]+=t,i[14]+=e,i[16]+=t});return{type:"path",class:`path:curve:${t.indices.join(";")}`,path:h,"stroke-linecap":"butt","stroke-linejoin":"round",stroke:"#333","stroke-width":2,_translate:n}}function n(t,e,i,n){return n={type:"circle",id:t.id,class:`circle:${t.type}:${t.indices.join(";")}`,fill:n,cx:10,cy:0,r:10,stroke:"none",_translate:function(t,e){this.cx+=t,this.cy+=e}},container_group=g(t,[n],e,i,20,20),{items:[container_group],width:container_group.width,height:container_group.height,x:e,y:i,lineInX:container_group.x,lineOutX:container_group.x+container_group.width}}function m(t){if(Array.isArray(t)){for(var e=t,i=0;i<e.length;i++)if(!m(e[i]))return!1;return!0}return t.type===EMPTY_NODE||(t.type===GROUP_NODE&&void 0===t.num?m(t.sub):t.type===CHOICE_NODE?m(t.branches):void 0)}var x="DejaVu Sans Mono,monospace",w="#e2e2e2",b=!1,r={},$={startPoint:function(t,e,i){return n({type:"startPoint",id:"startPoint",indices:[-1,-1]},e,i,h.startRegex)},endPoint:function(t,e,i){return n({type:"endPoint",id:"endPoint",indices:[1/0,1/0]},e,i,h.endRegex)},empty:function(t,e,i){return{items:[y(t,e,i,e+10)],width:10,height:2,x:e,y:i,lineInX:e,lineOutX:e+10}},exact:function(t,e,i){return k(t,t.chars,e,i,"skyblue")},dot:function(t,e,i){return(i=k(t,"AnyCharExceptNewLine",e,i,"DarkGreen","white")).rect.r=10,i.rect.tip="AnyChar except CR LF",i},backref:function(t,e,i){return(i=k(t,"Backref #"+t.num,e,i,"navy","white")).rect.r=8,i},repeat:function(t,e,i){function n(t){return t+(t<2?" time":" times")}function r(t,e){var i=this.path;i[1]+=t,i[2]+=e,i[4]+=t,i[5]+=e,i[6]+=t,i[7]+=e,i[9]+=e,i[11]+=t,i[12]+=e,i[13]+=t,i[14]+=e,i[16]+=t,i[18]+=t,i[19]+=e,i[20]+=t,i[21]+=e,i[23]+=e,i[25]+=t,i[26]+=e,i[27]+=t,i[28]+=e}if(m(t))return $.empty(t,e,i);var h=t.repeat,a="",s=[];if(h.min===h.max&&0===h.min)return $.empty(t,e,i);var o=$[t.type](t,e,i),u=o.width,c=o.height;if(h.min===h.max&&1===h.min)return o;h.min===h.max?a+=n(h.min):(a+=h.min,isFinite(h.max)?a+=(1<h.max-h.min?" to ":" or ")+n(h.max):a+=" or more times");var l,d,p=10,g=0,y=o.y+o.height-i,f=20+o.width,u=f;return 1!==h.max?(y+=10,c+=10,l={type:"path",class:`path:curve:${t.indices.join(";")}`,path:["M",o.x+10,i,"Q",e,i,e,i+10,"V",i+y-10,"Q",e,i+y,e+10,i+y,"H",e+f-10,"Q",e+f,i+y,e+f,i+y-10,"V",i+10,"Q",e+f,i,o.x+o.width+10,i],_translate:r,stroke:"maroon","stroke-width":2},h.nonGreedy&&(l.stroke="Brown",l["stroke-dasharray"]="-"),s.push(l)):a=!1,0===h.min&&(d=i-o.y+10,p+=10,g=-12,u=f+=20,c+=10,h={type:"path",class:`path:curve:${t.indices.join(";")}`,path:["M",e,i,"Q",e+10,i,e+10,i-10,"V",i-d+10,"Q",e+10,i-d,e+20,i-d,"H",e+f-20,"Q",e+f-10,i-d,e+f-10,i-d+10,"V",i-10,"Q",e+f-10,i,e+f,i],_translate:r,stroke:h.nonGreedy?"darkgreen":"#333","stroke-width":2},l&&v([l],10,0),s.push(h)),a&&(v([(a=X(t,e+u/2,i,a)).label],0,y+a.height+4),s.push(a.label),c+=4+a.height,(y=(Math.max(a.width,u)-u)/2)&&v(s,y,0),u=Math.max(a.width,u),p+=y),v(o.items,p,0),{items:s=s.concat(o.items),width:u,height:c,x:e,y:o.y+g,lineInX:o.lineInX+p,lineOutX:o.lineOutX+p}},choice:function(h,a,s){if(m(h))return $.empty(h,a,s);var e=0,o=0,t=h.branches.map(function(t){return t=p(t,a,s),e+=t.height,o=Math.max(o,t.width),t});e+=6*(t.length-1)+8;var u=a+(o+=40)/2,c=s-e/2+4,l=a+o,d=[];return t.forEach(function(t){var e=u-t.width/2;v(t.items,e-t.x,c-t.y),d=d.concat(t.items);var i=s+c-t.y,n=f(h,a,s,a+20,i),r=f(h,l,s,a+o-20,i);d.push(n,r),a+20!==e-t.x+t.lineInX&&d.push(y(h,a+20,i,e-t.x+t.lineInX)),t.lineOutX+e-t.x!=a+o-20&&d.push(y(h,t.lineOutX+e-t.x,i,a+o-20)),t.x=e,t.y=c,c+=t.height+6}),{items:d,width:o,height:e,x:a,y:s-e/2,lineInX:a,lineOutX:l}},charset:function(e,i,n){var t,r={d:"Digit",D:"NonDigit",w:"Word",W:"NonWord",s:"WhiteSpace",S:"NonWhiteSpace"},h=e.exclude?"Pink":"Khaki",a=e.exclude?"#C00":"";if(!e.chars&&!e.ranges.length&&1===e.classes.length){if((t=k(e,r[e.classes[0]],i,n,"Green","white")).rect.r=5,e.exclude){var s=X(e,t.x+t.width/2,t.y,"None of:",a);(x=t.items).push(s.label);var o=t.width,u=Math.max(s.width,t.width);return v(x,w=(u-o)/2,0),{items:x,width:u,height:t.height+s.height,x:Math.min(s.x,t.x),y:s.y,lineInX:w+t.x,lineOutX:w+t.x+t.width}}return t}if(!e.chars&&!e.ranges.length&&!e.classes.length)return(t=k(e,"AnyChar",i,n,"green","white")).rect.r=5,t;var c=[],u=0,l=0;e.chars&&((g=k(e,e.chars,i,n,"LightSkyBlue","black")).rect.r=5,c.push(g),u=g.width),e.ranges.forEach(function(t){t=t.split("").join("-"),(t=k(e,t,i,n,"teal","white")).rect.r=5,c.push(t),u=Math.max(t.width,u)}),e.classes.forEach(function(t){(t=k(e,r[t],i,n,"Green","white")).rect.r=5,c.push(t),u=Math.max(t.width,u)});var d,p,g=c[0].height,y=[],f=[];for(c.sort(function(t,e){return e.width-t.width}),c.forEach(function(t){(2*t.width+4>u?y:f).push(t)}),c=y;f.length;){if(d=f.pop(),!(p=f.pop())){c.push(d);break}2<d.width-p.width?(c.push(d),f.push(p)):(v(p.items,d.width+4,0),c.push({items:d.items.concat(p.items),width:d.width+p.width+4,height:d.height,x:d.x,y:d.y}),l-=d.height)}u+=12;var l=4*(c.length-1)+c.length*g+12,m=(h={type:"rect",class:`rect:charsetgroup:${e.indices.join(";")}`,x:i,y:n-l/2,r:4,width:u,height:l,stroke:"none",fill:h}).y+6,x=[h];c.forEach(function(t){v(t.items,i-t.x+(u-t.width)/2,m-t.y),x=x.concat(t.items),m+=t.height+4}),s=X({type:"charsetgroup",indices:e.indices},h.x+h.width/2,h.y,(e.exclude?"None":"One")+" of:",a),x.push(s.label);var w,o=u;return u=Math.max(s.width,u),v(x,w=(u-o)/2,0),{items:x,width:u,height:l+s.height,x:Math.min(s.x,i),y:s.y,lineInX:w+i,lineOutX:w+i+h.width}},group:function(t,e,i){if(m(t))return $.empty(t,e,i);var n=p(t.sub,0,0),r=g(t,n.items,0,0,n.width,n.height);if(t.num){v([r],10,0);var h=n.width+20,a=n.height+20,s={type:"rect",id:t.id,indices:t.indices,class:`rect:${t.type}:${t.indices.join(";")}`,x:0,y:n.y-10,r:6,width:h,height:a,"stroke-dasharray":".",stroke:"silver","stroke-width":2},o=X(t,s.width/2,s.y-2,`Group ${t.name}#${t.num}`),u=Math.max(o.width,h);return{items:[a=g(t,[r,s,o.label],e+(h=(u-h)/2),i,u,a+o.height+4)],width:a.width,height:a.height,x:a.x,y:a.y+o.y,lineInX:e+h+n.lineInX+10,lineOutX:e+h+n.lineOutX+10}}return v([r],e,i),{items:[r],width:r.width,height:r.height,x:e+n.x,y:i+n.y,lineInX:e+n.lineInX,lineOutX:e+n.lineOutX}},assert:function(t,e,i){var n=(h=t.assertionType).replace("Assert","")+"!";if(r={AssertNonWordBoundary:{bg:"maroon",fg:"white"},AssertWordBoundary:{bg:"purple",fg:"white"},AssertEnd:{bg:"Indigo",fg:"white"},AssertBegin:{bg:"Indigo",fg:"white"}}[h])return k(t,n=!b||"AssertBegin"!==h&&"AssertEnd"!==h?n:"Line"+n,e,i,r.bg,r.fg);h===AssertLookahead?(a="CornflowerBlue",s="darkgreen",n="Followed by:"):h===AssertNegativeLookahead&&(a="#F63",s="Purple",n="Not followed by:");var r=$.group(t,e,i),h=r.height+16,i=r.width+16,a={type:"rect",class:`rect:${t.type}:${t.indices.join(";")}`,x:e,y:r.y-8,r:6,width:i,height:h,"stroke-dasharray":"-",stroke:a,"stroke-width":2},n=X(t,a.x+i/2,a.y,n,s),s=Math.max(i,n.width),i=(s-i)/2;return v(r.items,8+i,0),i&&v([a,n.label],i,0),{items:r.items.concat([a,n.label]),width:s,height:a.height+n.height,x:e,y:n.y,lineInX:i+r.lineInX+8,lineOutX:i+r.lineOutX+8}}},h={startRegex:"#03a9f4",endRegex:"#ff0058",delimiter:"Indigo",flags:"darkgreen",exact:"#334",dot:"darkblue",backref:"teal",$:"purple","^":"purple","\\b":"#F30","\\B":"#F30","(":"blue",")":"blue","?=":"darkgreen","?!":"red","?:":"grey","[":"navy","]":"navy","|":"blue","{":"maroon",",":"maroon","}":"maroon","*":"maroon","+":"maroon","?":"maroon",repeatNonGreedy:"#F61",defaults:"black",charsetRange:"olive",charsetClass:"navy",charsetExclude:"red",charsetChars:"#534"};return function(t,e,i){var n,r,h,a,[s,e]=function(t,e){t.clear(),t.setSize(0,0);let i=t.rect(0,0,0,0);return i.attr("fill",w),i.attr("stroke",w),c=t.text(-1e3,-1e3,"XgfTlM|.q\nXgfTlM|.q").attr({"font-family":x,"font-size":16}),t=d(16,"bold"),b=!!~e.indexOf("m"),[i,t]}(i,o);return u.updateProgressBar(10),n=i,h=e,a=s,(e=t.tree).unshift({type:"startPoint"}),e.push({type:"endPoint"}),r=p(e,0,0),t=Math.max(r.height+30+h.height,0),e=Math.max(r.width+20,0),n.setSize(e,t),a.attr("width",e),a.attr("height",t),v(r.items,10,20+h.height-r.y),s=r,u.updateProgressBar(50),c.remove(),u.updateProgressBar(60),i.addv2(s.items),u.updateProgressBar(100),s}(t,o,e)}
+// (function () {
+// var { Kit } = require("./auxiliar_functions");
+// var { NFA }  = require("./NFA_parser");
+
+// if (define("visualize", ["./Kit", "./parse"], function(t, e) {
+function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $progress_bar) {
+    var _aux_Kit = Kit();
+    
+    function paintRegex(regexson_tree, regex_flags, canvasRaph) {
+        let [regexBoxRect, sizeTextItem] = _prepareCanvasRaphael(canvasRaph, regex_flags);
+        $progress_bar.updateProgressBar(10);
+        
+        // Generacion del grafo
+        let raphael_items = _generateGraph(canvasRaph, regexson_tree, sizeTextItem, regexBoxRect);
+        $progress_bar.updateProgressBar(50);
+        
+        _postCanvasRaphael();
+        $progress_bar.updateProgressBar(60);
+        
+        // Se pintan todos los items en el canvas de Raphael
+        canvasRaph.addv2(raphael_items.items);
+        $progress_bar.updateProgressBar(100);
+
+        return raphael_items;
+    }
+
+    // SET DE FUNCIONES PRINCIPALES DEL paintRegex
+    function _prepareCanvasRaphael(canvasRaph, regex_flags) {
+        canvasRaph.clear(), canvasRaph.setSize(0, 0);
+        let regexBoxRect = canvasRaph.rect(0, 0, 0, 0);
+        regexBoxRect.attr("fill", STROKE_COLOR), regexBoxRect.attr("stroke", STROKE_COLOR);
+        createTextNodeWithFontFamilySize(canvasRaph);
+
+        let sizeTextItem = getFontSizes(GRAPH_FONTSIZE, "bold");
+
+        // Variar el comportamiento del grafo segun los flags
+        HAS_FLAG_MULTILINE = !!~regex_flags.indexOf("m");
+
+        return [regexBoxRect, sizeTextItem];
+    }
+    function _generateGraph(canvasRaph, regexson_tree, sizeTextItem, regexBoxRect) {
+        let max_item_width = 0;
+        let max_item_height = 0;
+
+         // Procesamiento y generacion del literal de la regex y ubicarlo en el grafo
+        // let regex_text_items = _generateHihglightRegexLiteral(regexson_tree, regex_flags);
+        // [max_item_width, max_item_height] = _resizeHeightWithRegexLiteral(regex_text_items, size_item_text, margin_items);
+
+
+        // Se procesa el regexson para generar los items con formato json que despues procesara Raphael
+        var raphael_items = generateRaphaelSVGItems([...regexson_tree.tree], 0, 0);
+
+        max_item_height = Math.max(raphael_items.height + 3 * ITEMS_MARGIN + sizeTextItem.height, max_item_height);
+        max_item_width = Math.max(raphael_items.width + 2 * ITEMS_MARGIN, max_item_width);
+
+        // Establece el size del canvas al maximo que hay generado por las regex
+        // TODO: Se puede cambiar y dejarlo fijo, ya que en un futuro tendra control zooming y panning.
+        canvasRaph.setSize(max_item_width, max_item_height);
+        regexBoxRect.attr("width", max_item_width);
+        regexBoxRect.attr("height", max_item_height);
+        addsOffset(raphael_items.items, ITEMS_MARGIN, 2 * ITEMS_MARGIN + sizeTextItem.height - raphael_items.y);
+
+        return raphael_items;
+    }
+    function _postCanvasRaphael() {
+        // SE BORRA EL ELEMENTO QUE ALMACENABA DE FORMA TEMPORAL EL SIZE DE LA FUENTE Y ESTILO
+        AUX_FONT_STYLE_ELEMENT.remove();
+    }
+    //
+
+    // FUNCIONES AUXILIARES PARA GENERAR EL TEXTO HIHGLIGHTED EN EL GRAFO
+    function _generateHihglightRegexLiteral(regexson, regex_flags) {
+        // Generacion del texto encima del grafo
+        var regex_text_items = processRegexTextItems(regexson.tree);
+        regex_text_items.unshift(createRegexTextItem("/", colors_map.delimiter));
+        regex_text_items.unshift(createRegexTextItem("RegExp: "));
+        regex_text_items.push(createRegexTextItem("/", colors_map.delimiter));
+        regex_flags && regex_text_items.push(createRegexTextItem(regex_flags, colors_map.flags));
+        return regex_text_items;
+    }
+    function _resizeHeightWithRegexLiteral(regex_text_items, size_item_text, margin_items) {
+        var aux_margin_items = margin_items;
+        var margin_height = size_item_text.height / 2 + margin_items;
+
+        max_item_width = regex_text_items.reduce(function (t, e) {
+            return e.x = t,
+                e.y = margin_height,
+                t + e.text.length * size_item_text.width
+        }, aux_margin_items);
+        max_item_width += margin_items;
+        max_item_height = size_item_text.height + 2 * margin_items;
+        regex_text_items = canvas_Raph.add(regex_text_items);
+
+        // Establece la altura para el size generado por el texto de la regex
+        canvas_Raph.setSize(max_item_width, size_item_text.height + 2 * margin_items);
+
+        return [max_item_width, max_item_height]
+    }
+    //
+
+    function getFontSizes(font_size, font_weight) {
+        if (font_weight = font_weight || "normal", FONT_STYLE_MAP[font_size] && FONT_STYLE_MAP[font_size][font_weight])
+            return FONT_STYLE_MAP[font_size][font_weight];
+        AUX_FONT_STYLE_ELEMENT.attr({
+            "font-size": font_size,
+            "font-weight": font_weight
+        });
+        var font_style_aux_bbox = AUX_FONT_STYLE_ELEMENT.getBBox();
+        return FONT_STYLE_MAP[font_size] = FONT_STYLE_MAP[font_size] || {},
+            FONT_STYLE_MAP[font_size][font_weight] = {
+                width: font_style_aux_bbox.width / ((AUX_FONT_STYLE_ELEMENT.attr("text").length - 1) / 2),
+                height: font_style_aux_bbox.height / 2
+            }
+    }
+    function createTextNodeWithFontFamilySize(canvas_Raphael) {
+        // Se crea este elemento vacio para determiar el tamaño que tienen los caracteres
+        // dentro del grafo para un familia de fuente y tamaño, despues se cambia el 
+        // estilo
+        AUX_FONT_STYLE_ELEMENT = canvas_Raphael.text(-1e3, -1e3, "XgfTlM|.q\nXgfTlM|.q").attr({
+            "font-family": FONT_FAMILY,
+            "font-size": GRAPH_FONTSIZE
+        })
+    }
+    function generateRaphaelSVGItems(regexsonTree, _offset_x, _offset_y) {
+        regexsonTree.unshift({
+            type: "startPoint"
+        });
+        regexsonTree.push({
+            type: "endPoint"
+        });
+
+        return processRegexJSONToRaphaelSVG(regexsonTree, _offset_x, _offset_y)
+    }
+    // Funcion que ordena y crea los paths
+    function processRegexJSONToRaphaelSVG(regexsonTree, offset_x, offset_y) {
+        var processed_items_result = [];
+        var raphael_items = [];
+        var items_width = 0;
+        var items_height = 0;
+        var _offset_x = offset_x;
+        var _offset_y = offset_y;
+        var _actualHeight = offset_y;
+
+        if (!regexsonTree.length) {
+            return generator_Raph_map.empty(regexsonTree, offset_x, offset_y);
+        }
+
+        // Creacion de cada item
+        regexsonTree.forEach(function (single_regexjson_info) {
+            var raphael_element;
+            if (single_regexjson_info.repeat) {
+                raphael_element = generator_Raph_map.repeat(single_regexjson_info, _offset_x, offset_y);
+            } else {
+                raphael_element = generator_Raph_map[single_regexjson_info.type](single_regexjson_info, _offset_x, offset_y);
+            }
+            // Agregar un grupo que envuelva a los elementos creados por la funcion
+            processed_items_result.push(raphael_element);
+            _offset_x += raphael_element.width + LINE_ITEMS_GAP;
+            items_width += raphael_element.width;
+            _offset_y = Math.min(_offset_y, raphael_element.y);
+            _actualHeight = Math.max(_actualHeight, raphael_element.y + raphael_element.height);
+            raphael_items = raphael_items.concat(raphael_element.items)
+        });
+
+        // Aqui se generan los paths que unen los diferentes elementos (horizontalmente)
+        items_height = _actualHeight - _offset_y;
+        processed_items_result.reduce(function (firstElement, nextElement) {
+            items_width += LINE_ITEMS_GAP;
+            var line_path_item = createLinesPathItem(regexsonTree, firstElement.lineOutX, offset_y, nextElement.lineInX, _fromItem = firstElement, _toItem = nextElement);
+            return raphael_items.push(line_path_item), nextElement;
+        });
+        var items_linein_x = processed_items_result[0].lineInX;
+        var items_lineout_x = processed_items_result[processed_items_result.length - 1].lineOutX;
+        return {
+            items: raphael_items,
+            width: items_width,
+            height: items_height,
+            x: offset_x,
+            y: _offset_y,
+            lineInX: items_linein_x,
+            lineOutX: items_lineout_x
+        }
+    }
+    function addsOffset(raphael_items, offset_x, offset_y) {
+        raphael_items.forEach(function (raph_item) {
+            raph_item._translate ? raph_item._translate(offset_x, offset_y) : (raph_item.x += offset_x, raph_item.y += offset_y);
+        });
+    }
+    function createGroupContainerItem(regexJSONInfo, children_items, offset_x, offset_y, width, height) {
+        return {
+            type: "group",
+            id: regexJSONInfo.id || "",
+            indices: [regexJSONInfo.indices[0] + 1, regexJSONInfo.indices[1] - 1],
+            class: `g:${regexJSONInfo.type}:${[regexJSONInfo.indices[0] + 1, regexJSONInfo.indices[1] - 1].join(';')}`,
+            children: children_items,
+            transform: `t${offset_x},${offset_y}`,
+            x: offset_x,
+            y: offset_y,
+            width: width,
+            height: height,
+            _translate: function (offset_x, offset_y) {
+                this.x += offset_x;
+                this.y += offset_y;
+                this.transform = `t${this.x},${this.y}`;
+            }
+        };
+    }
+    function createExactCharItem(regexJSONInfo, rawText, offset_x, offset_y, background_color, text_color) {
+        rawText = _aux_Kit.toPrint(rawText);
+        var size_item_text = getFontSizes(GRAPH_FONTSIZE);
+        var text_item_width = rawText.length * size_item_text.width;
+
+        var rect_item_height = size_item_text.height + 12;
+        var rect_item_width = text_item_width + 12;
+        var rect_item = {
+            type: "rect",
+            class: `rect:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+            x: 0,// offset_x,
+            y: 0, // offset_y - rect_item_height / 2,
+            width: rect_item_width,
+            height: rect_item_height,
+            stroke: "none",
+            fill: background_color || "transparent"
+        };
+        var text_item = {
+            type: "text",
+            class: `text:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+            x: rect_item_width / 2, // offset_x + text_item_width / 2,
+            y: rect_item_height / 2, // offset_y,
+            text: rawText,
+            "font-size": GRAPH_FONTSIZE,
+            "font-family": FONT_FAMILY,
+            fill: text_color || "black"
+        };
+
+        var container_item = createGroupContainerItem(regexJSONInfo, [rect_item, text_item], offset_x, offset_y - rect_item_height / 2, rect_item_width, rect_item_height);
+
+        return {
+            text: text_item,
+            rect: rect_item,
+            items: [container_item],
+            width: rect_item_width,
+            height: rect_item_height,
+            x: offset_x,
+            y: container_item.y,
+            lineInX: offset_x,
+            lineOutX: offset_x + rect_item_width
+        }
+    }
+    function createTextItemElement(regexJSONInfo, offset_x, offset_y, raw_text, background_color) {
+        var text_width, text_size_attr = getFontSizes(REGEX_FONTSIZE);
+        var text_splitted = raw_text.split("\n");
+        var textlines_height = text_splitted.length * text_size_attr.height;
+        text_width = text_splitted.length > 1 ? Math.max.apply(Math, text_splitted.map(function (t) {
+            return t.length
+        })) : raw_text.length,
+            text_width *= text_size_attr.width;
+        return {
+            label: {
+                type: "text",
+                class: `text:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+                x: offset_x,
+                y: offset_y - textlines_height / 2 - 4,
+                text: raw_text,
+                "font-size": REGEX_FONTSIZE,
+                "font-family": FONT_FAMILY,
+                fill: background_color || "#444"
+            },
+            x: offset_x - text_width / 2,
+            y: offset_y - textlines_height - 4,
+            width: text_width,
+            height: textlines_height + 4
+        }
+    }
+    function createLinesPathItem(regexJSONInfo, offset_x, offset_y, offset_x_to, _fromItem = null, _toItem = null) {
+        // Se generan al final todos los paths por lo que no hay informacion en los paths util
+        let idInfo = "linejoint";
+        if (_fromItem !== null) {
+            // El filter es para comprobar que tiene la propiedad
+            idInfo = `${idInfo}::${_fromItem.items.map(item => item.class)/*.filter(x => x)*/.join('_')}`;
+        }
+        if (_toItem !== null) {
+            idInfo = `${idInfo}::${_toItem.items.map(item => item.class)/*.filter(x => x)*/.join('_')}::`;
+        }
+
+        if (regexJSONInfo.hasOwnProperty('indices')) {
+            idInfo = `curve:${regexJSONInfo.indices.join(';')}`;
+        }
+        return {
+            type: "path",
+            class: `path:${idInfo}`,
+            x: offset_x,
+            y: offset_y,
+            path: ["M", offset_x, offset_y, "H", offset_x_to],
+            "stroke-linecap": "butt",
+            "stroke-linejoin": "round",
+            stroke: "#333",
+            "stroke-width": 2,
+            _translate: function (_offset_x, _offset_y) {
+                var path = this.path;
+                path[1] += _offset_x, path[2] += _offset_y, path[4] += _offset_x
+            }
+        }
+    }
+    function createChoicesPathItem(regexJSONInfo, offset_x, offset_y, width, height) {
+        var path, _translate_path;
+        var width_direction = offset_x > width ? -1 : 1;
+        var height_direction = offset_y > height ? -1 : 1;
+
+        if (Math.abs(offset_y - height) < 15) {
+            path = ["M", offset_x, offset_y, "C", offset_x + Math.min(Math.abs(width - offset_x) / 2, 10) * width_direction, offset_y, width - (width - offset_x) / 2, height, width, height];
+            _translate_path = function (_offset_x, _offset_y) {
+                var path = this.path;
+                path[1] += _offset_x, path[2] += _offset_y, path[4] += _offset_x, path[5] += _offset_y;
+                path[6] += _offset_x, path[7] += _offset_y, path[8] += _offset_x, path[9] += _offset_y;
+            }
+        }
+        else {
+            path = ["M", offset_x, offset_y, "Q", offset_x + 10 * width_direction, offset_y, offset_x + 10 * width_direction, offset_y + 10 * height_direction, "V", Math.abs(offset_y - height) < 20 ? offset_y + 10 * height_direction : height - 10 * height_direction, "Q", offset_x + 10 * width_direction, height, offset_x + 10 * width_direction * 2, height, "H", width];
+            _translate_path = function (_offset_x, _offset_y) {
+                var path = this.path;
+                path[1] += _offset_x, path[2] += _offset_y, path[4] += _offset_x, path[5] += _offset_y;
+                path[6] += _offset_x, path[7] += _offset_y, path[9] += _offset_y, path[11] += _offset_x;
+                path[12] += _offset_y, path[13] += _offset_x, path[14] += _offset_y, path[16] += _offset_x;
+            };
+        }
+        return {
+            type: "path",
+            class: `path:curve:${regexJSONInfo.indices.join(';')}`,
+            path: path,
+            "stroke-linecap": "butt",
+            "stroke-linejoin": "round",
+            stroke: "#333",
+            "stroke-width": 2,
+            _translate: _translate_path
+        }
+    }
+    function createCircleItem(regexJSONInfo, offset_x, offset_y, fillColor) {
+        var _circle_radius = 10;
+        var circle_item = {
+            type: "circle",
+            id: regexJSONInfo.id,
+            class: `circle:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+            fill: fillColor,
+            cx: _circle_radius, // offset_x + _circle_radius,
+            cy: 0, // offset_y,
+            r: _circle_radius,
+            stroke: "none",
+            _translate: function (_offset_x, _offset_y) {
+                this.cx += _offset_x, this.cy += _offset_y
+            }
+        };
+        container_group = createGroupContainerItem(regexJSONInfo, [circle_item], offset_x, offset_y, _circle_radius * 2, _circle_radius * 2);
+        return {
+            items: [container_group],
+            width: container_group.width,
+            height: container_group.height,
+            x: offset_x,
+            y: offset_y,
+            lineInX: container_group.x,
+            lineOutX: container_group.x + container_group.width
+        }
+    }
+    function checkRegexJSONInfo(regexJSONInfo) {
+        if (Array.isArray(regexJSONInfo)) {
+            for (var e = regexJSONInfo, r = 0; r < e.length; r++)
+                if (!checkRegexJSONInfo(e[r]))
+                    return !1;
+            return !0
+        }
+        var _regex_json_info = regexJSONInfo;
+        return _regex_json_info.type === EMPTY_NODE || (_regex_json_info.type === GROUP_NODE && void 0 === _regex_json_info.num ? checkRegexJSONInfo(_regex_json_info.sub) : _regex_json_info.type === CHOICE_NODE ? checkRegexJSONInfo(_regex_json_info.branches) : void 0)
+    }
+    function processRegexTextItems(regexson_tree) {
+        var regex_items_text = [];
+        return regexson_tree.forEach(function (item_regexson) {
+            if (item_regexson.sub)
+                regex_items_text.push(createRegexTextItem("(")),
+                    item_regexson.type === ASSERT_NODE ? item_regexson.assertionType === AssertLookahead ? regex_items_text.push(createRegexTextItem("?=")) : regex_items_text.push(createRegexTextItem("?!")) : item_regexson.name !== "" ? regex_items_text.push(createRegexTextItem(`?P<${item_regexson.name}>`)) : item_regexson.nonCapture && regex_items_text.push(createRegexTextItem("?:")),
+                    regex_items_text = regex_items_text.concat(processRegexTextItems(item_regexson.sub)),
+                    regex_items_text.push(createRegexTextItem(")"));
+            else if (item_regexson.branches)
+                item_regexson.branches.map(processRegexTextItems).forEach(function (t) {
+                    regex_items_text = regex_items_text.concat(t),
+                        regex_items_text.push(createRegexTextItem("|"))
+                }),
+                    regex_items_text.pop();
+            else {
+                var n = colors_map[item_regexson.type] || colors_map.defaults;
+                switch (item_regexson.type) {
+                    case CHARSET_NODE:
+                        var i = checkCharsetNotEmpty(item_regexson);
+                        (!i || item_regexson.exclude) && regex_items_text.push(createRegexTextItem("[")),
+                            item_regexson.exclude && regex_items_text.push(createRegexTextItem("^", colors_map.charsetExclude)),
+                            item_regexson.ranges.forEach(function (t) {
+                                regex_items_text.push(createRegexTextItem(escapeCharsetBrackets(t[0] + "-" + t[1]), colors_map.charsetRange))
+                            }),
+                            item_regexson.classes.forEach(function (t) {
+                                regex_items_text.push(createRegexTextItem("\\" + t, colors_map.charsetClass))
+                            }),
+                            regex_items_text.push(createRegexTextItem(escapeCharsetBrackets(item_regexson.chars), colors_map.charsetChars)),
+                            (!i || item_regexson.exclude) && regex_items_text.push(createRegexTextItem("]"));
+                        break;
+                    default:
+                        var a = item_regexson.raw || "";
+                        item_regexson.repeat && (a = a.slice(0, item_regexson.repeat.beginIndex)),
+                            a = _aux_Kit.toPrint(a, !0),
+                            regex_items_text.push(createRegexTextItem(a, n))
+                }
+            }
+            if (item_regexson.repeat) {
+                var s = item_regexson.repeat.min
+                    , o = item_regexson.repeat.max;
+                0 === s && o === 1 / 0 ? regex_items_text.push(createRegexTextItem("*")) : 1 === s && o === 1 / 0 ? regex_items_text.push(createRegexTextItem("+")) : 0 === s && 1 === o ? regex_items_text.push(createRegexTextItem("?")) : (regex_items_text.push(createRegexTextItem("{")),
+                    regex_items_text.push(createRegexTextItem(s)),
+                    s === o ? regex_items_text.push(createRegexTextItem("}")) : (regex_items_text.push(createRegexTextItem(",")),
+                        isFinite(o) && regex_items_text.push(createRegexTextItem(o)),
+                        regex_items_text.push(createRegexTextItem("}")))),
+                    item_regexson.repeat.nonGreedy && regex_items_text.push(createRegexTextItem("?", colors_map.repeatNonGreedy))
+            }
+        }), regex_items_text
+    }
+    function escapeCharsetBrackets(e) {
+        return e = _aux_Kit.toPrint(e),
+            e.replace(/\[/g, "\\[").replace(/\]/g, "\\]")
+    }
+    function createRegexTextItem(t, e) {
+        return e = e || colors_map[t] || colors_map.defaults,
+        {
+            type: "text",
+            "font-size": GRAPH_FONTSIZE,
+            "font-family": FONT_FAMILY,
+            text: t + "",
+            fill: e,
+            "text-anchor": "start",
+            "font-weight": "bold"
+        }
+    }
+    function checkCharsetNotEmpty(charset_item) {
+        return !charset_item.chars && !charset_item.ranges.length && 1 === charset_item.classes.length
+    }
+
+    var AUX_FONT_STYLE_ELEMENT;
+    var FONT_FAMILY = "DejaVu Sans Mono,monospace";
+    var GRAPH_FONTSIZE = 16, REGEX_FONTSIZE = 14, LINE_ITEMS_GAP = 16;
+    var STROKE_COLOR = "#e2e2e2", HAS_FLAG_MULTILINE = !1, ITEMS_MARGIN = 10, FONT_STYLE_MAP = {};
+    var generator_Raph_map = {
+        startPoint: function (regexJSONInfo, offset_x, offset_y) {
+            return createCircleItem(
+                { 
+                    type: "startPoint",
+                    id: "startPoint",
+                    indices: [-1, -1]
+                }, offset_x, offset_y, colors_map.startRegex // "r(0.5,0.5)#EFE-green"
+            );
+        },
+        endPoint: function (regexJSONInfo, offset_x, offset_y) {
+            return createCircleItem(
+                {
+                    type: "endPoint",
+                    id: "endPoint",
+                    indices: [Infinity, Infinity]
+                }, offset_x, offset_y, colors_map.endRegex // "r(0.5,0.5)#FFF-#000"
+            );
+        },
+        empty: function (regexJSONInfo, offset_x, offset_y) {
+            return {
+                items: [createLinesPathItem(regexJSONInfo, offset_x, offset_y, offset_x + 10)],
+                width: 10,
+                height: 2,
+                x: offset_x,
+                y: offset_y,
+                lineInX: offset_x,
+                lineOutX: offset_x + 10
+            }
+        },
+        exact: function (regexJSONInfo, offset_x, offset_y) {
+            return createExactCharItem(regexJSONInfo, regexJSONInfo.chars, offset_x, offset_y, "skyblue",)
+        },
+        dot: function (regexJSONInfo, offset_x, offset_y) {
+            var dot_item = createExactCharItem(regexJSONInfo, "AnyCharExceptNewLine", offset_x, offset_y, "DarkGreen", "white");
+
+            return dot_item.rect.r = 10,
+                dot_item.rect.tip = "AnyChar except CR LF",
+                dot_item
+        },
+        backref: function (regexJSONInfo, offset_x, offset_y) {
+            var backref_item = createExactCharItem(regexJSONInfo, "Backref #" + regexJSONInfo.num, offset_x, offset_y, "navy", "white");
+            return backref_item.rect.r = 8,
+                backref_item
+        },
+        repeat: function (regexJSONInfo, offset_x, offset_y) {
+            function timesText(t) {
+                return t + (t < 2 ? " time" : " times")
+            }
+            function _translateFunc(_offset_x, _offset_y) {
+                var r = this.path;
+                r[1] += _offset_x,
+                    r[2] += _offset_y,
+                    r[4] += _offset_x,
+                    r[5] += _offset_y,
+                    r[6] += _offset_x,
+                    r[7] += _offset_y,
+                    r[9] += _offset_y,
+                    r[11] += _offset_x,
+                    r[12] += _offset_y,
+                    r[13] += _offset_x,
+                    r[14] += _offset_y,
+                    r[16] += _offset_x,
+                    r[18] += _offset_x,
+                    r[19] += _offset_y,
+                    r[20] += _offset_x,
+                    r[21] += _offset_y,
+                    r[23] += _offset_y,
+                    r[25] += _offset_x,
+                    r[26] += _offset_y,
+                    r[27] += _offset_x,
+                    r[28] += _offset_y
+            }
+            if (checkRegexJSONInfo(regexJSONInfo))
+                return generator_Raph_map.empty(regexJSONInfo, offset_x, offset_y);
+            var repeat_info = regexJSONInfo.repeat
+                , o = ""
+                , c = [];
+            if (repeat_info.min === repeat_info.max && 0 === repeat_info.min)
+                return generator_Raph_map.empty(regexJSONInfo, offset_x, offset_y);
+            var u = generator_Raph_map[regexJSONInfo.type](regexJSONInfo, offset_x, offset_y)
+                , l = u.width
+                , f = u.height;
+            if (repeat_info.min === repeat_info.max && 1 === repeat_info.min)
+                return u;
+            repeat_info.min === repeat_info.max ? o += timesText(repeat_info.min) : (o += repeat_info.min,
+                isFinite(repeat_info.max) ? o += (repeat_info.max - repeat_info.min > 1 ? " to " : " or ") + timesText(repeat_info.max) : o += " or more times");
+            var d = 10
+                , g = 0
+                , x = 10
+                , v = u.y + u.height - offset_y
+                , y = 20 + u.width;
+            l = y;
+            var m;
+            1 !== repeat_info.max ? (v += 10,
+                f += 10,
+                m = {
+                    type: "path",
+                    class: `path:curve:${regexJSONInfo.indices.join(';')}`,
+                    path: ["M", u.x + 10, offset_y, "Q", offset_x, offset_y, offset_x, offset_y + x, "V", offset_y + v - x, "Q", offset_x, offset_y + v, offset_x + x, offset_y + v, "H", offset_x + y - x, "Q", offset_x + y, offset_y + v, offset_x + y, offset_y + v - x, "V", offset_y + x, "Q", offset_x + y, offset_y, u.x + u.width + 10, offset_y],
+                    _translate: _translateFunc,
+                    stroke: "maroon",
+                    "stroke-width": 2
+                },
+                repeat_info.nonGreedy && (m.stroke = "Brown",
+                    m["stroke-dasharray"] = "-"),
+                c.push(m)) : o = !1;
+            var b;
+            if (0 === repeat_info.min) {
+                var _ = offset_y - u.y + 10
+                    , w = y + 20;
+                d += 10,
+                    g = -12,
+                    l = w,
+                    f += 10,
+                    b = {
+                        type: "path",
+                        class: `path:curve:${regexJSONInfo.indices.join(';')}`,
+                        path: ["M", offset_x, offset_y, "Q", offset_x + x, offset_y, offset_x + x, offset_y - x, "V", offset_y - _ + x, "Q", offset_x + x, offset_y - _, offset_x + 20, offset_y - _, "H", offset_x + w - 20, "Q", offset_x + w - x, offset_y - _, offset_x + w - x, offset_y - _ + x, "V", offset_y - x, "Q", offset_x + w - x, offset_y, offset_x + w, offset_y],
+                        _translate: _translateFunc,
+                        stroke: repeat_info.nonGreedy ? "darkgreen" : "#333",
+                        "stroke-width": 2
+                    },
+                    m && addsOffset([m], 10, 0),
+                    c.push(b)
+            }
+            if (o) {
+                var E = createTextItemElement(regexJSONInfo, offset_x + l / 2, offset_y, o);
+                addsOffset([E.label], 0, v + E.height + 4),
+                    c.push(E.label),
+                    f += 4 + E.height;
+                var C = (Math.max(E.width, l) - l) / 2;
+                C && addsOffset(c, C, 0),
+                    l = Math.max(E.width, l),
+                    d += C
+            }
+            return addsOffset(u.items, d, 0),
+                c = c.concat(u.items),
+            {
+                items: c,
+                width: l,
+                height: f,
+                x: offset_x,
+                y: u.y + g,
+                lineInX: u.lineInX + d,
+                lineOutX: u.lineOutX + d
+            }
+        },
+        choice: function (regexJSONInfo, offset_x, offset_y) {
+            if (checkRegexJSONInfo(regexJSONInfo))
+                return generator_Raph_map.empty(regexJSONInfo, offset_x, offset_y);
+            var n = 0
+                , i = 0
+                , a = regexJSONInfo.branches.map(function (regexBranch) {
+                    var branchPath = processRegexJSONToRaphaelSVG(regexBranch, offset_x, offset_y);
+                    return n += branchPath.height,
+                        i = Math.max(i, branchPath.width),
+                        branchPath
+                });
+            n += 6 * (a.length - 1) + 8,
+                i += 40;
+            var c = offset_x + i / 2
+                , h = offset_y - n / 2 + 4
+                , f = offset_x + i
+                , d = [];
+            return a.forEach(function (t) {
+                var n = c - t.width / 2;
+                addsOffset(t.items, n - t.x, h - t.y),
+                    d = d.concat(t.items);
+                var a = offset_y + h - t.y
+                    , o = createChoicesPathItem(regexJSONInfo, offset_x, offset_y, offset_x + 20, a)
+                    , p = createChoicesPathItem(regexJSONInfo, f, offset_y, offset_x + i - 20, a);
+                d.push(o, p),
+                    offset_x + 20 !== n - t.x + t.lineInX && d.push(createLinesPathItem(regexJSONInfo, offset_x + 20, a, n - t.x + t.lineInX)),
+                    t.lineOutX + n - t.x != offset_x + i - 20 && d.push(createLinesPathItem(regexJSONInfo, t.lineOutX + n - t.x, a, offset_x + i - 20)),
+                    t.x = n,
+                    t.y = h,
+                    h += t.height + 6
+            }),
+            {
+                items: d,
+                width: i,
+                height: n,
+                x: offset_x,
+                y: offset_y - n / 2,
+                lineInX: offset_x,
+                lineOutX: f
+            }
+        },
+        charset: function (regexJSONInfo, offset_x, offset_y) {
+            var n = {
+                d: "Digit",
+                D: "NonDigit",
+                w: "Word",
+                W: "NonWord",
+                s: "WhiteSpace",
+                S: "NonWhiteSpace"
+            }
+                , i = regexJSONInfo.exclude ? "Pink" : "Khaki"
+                , a = regexJSONInfo.exclude ? "#C00" : "";
+            if (checkCharsetNotEmpty(regexJSONInfo)) {
+                var o = createExactCharItem(regexJSONInfo, n[regexJSONInfo.classes[0]], offset_x, offset_y, "Green", "white");
+                if (o.rect.r = 5,
+                    regexJSONInfo.exclude) {
+                    var u = createTextItemElement(regexJSONInfo, o.x + o.width / 2, o.y, "None of:", a)
+                        , l = o.items;
+                    l.push(u.label);
+                    var f = o.width
+                        , p = Math.max(u.width, o.width)
+                        , d = (p - f) / 2;
+                    return addsOffset(l, d, 0),
+                    {
+                        items: l,
+                        width: p,
+                        height: o.height + u.height,
+                        x: Math.min(u.x, o.x),
+                        y: u.y,
+                        lineInX: d + o.x,
+                        lineOutX: d + o.x + o.width
+                    }
+                }
+                return o
+            }
+            if (!regexJSONInfo.chars && !regexJSONInfo.ranges.length && !regexJSONInfo.classes.length) {
+                var o = createExactCharItem(regexJSONInfo, "AnyChar", offset_x, offset_y, "green", "white");
+                return o.rect.r = 5,
+                    o
+            }
+            var g, x, y = [], p = 0, m = 0;
+            regexJSONInfo.chars && (g = createExactCharItem(regexJSONInfo, regexJSONInfo.chars, offset_x, offset_y, "LightSkyBlue", "black"),
+                g.rect.r = 5,
+                y.push(g),
+                p = g.width),
+                regexJSONInfo.ranges.forEach(function (t) {
+                    t = t.split("").join("-");
+                    var n = createExactCharItem(regexJSONInfo, t, offset_x, offset_y, "teal", "white");
+                    n.rect.r = 5,
+                        y.push(n),
+                        p = Math.max(n.width, p)
+                }),
+                regexJSONInfo.classes.forEach(function (t) {
+                    var i = createExactCharItem(regexJSONInfo, n[t], offset_x, offset_y, "Green", "white");
+                    i.rect.r = 5,
+                        y.push(i),
+                        p = Math.max(i.width, p)
+                }),
+                x = y[0].height;
+            var b = []
+                , _ = [];
+            y.sort(function (t, e) {
+                return e.width - t.width
+            }),
+                y.forEach(function (t) {
+                    2 * t.width + 4 > p ? b.push(t) : _.push(t)
+                }),
+                y = b;
+            for (var w, E; _.length;) {
+                if (w = _.pop(),
+                    !(E = _.pop())) {
+                    y.push(w);
+                    break
+                }
+                w.width - E.width > 2 ? (y.push(w),
+                    _.push(E)) : (addsOffset(E.items, w.width + 4, 0),
+                        y.push({
+                            items: w.items.concat(E.items),
+                            width: w.width + E.width + 4,
+                            height: w.height,
+                            x: w.x,
+                            y: w.y
+                        }),
+                        m -= w.height)
+            }
+            p += 12, m = 4 * (y.length - 1) + y.length * x + 12;
+            var C = {
+                type: "rect",
+                class: `rect:charsetgroup:${regexJSONInfo.indices.join(';')}`,
+                x: offset_x,
+                y: offset_y - m / 2,
+                r: 4,
+                width: p,
+                height: m,
+                stroke: "none",
+                fill: i
+            }
+                , k = C.y + 6
+                , l = [C];
+            y.forEach(function (t) {
+                addsOffset(t.items, offset_x - t.x + (p - t.width) / 2, k - t.y),
+                    l = l.concat(t.items),
+                    k += t.height + 4
+            });
+            let infoCharset = { type: "charsetgroup", indices: regexJSONInfo.indices };
+            var u = createTextItemElement(infoCharset, C.x + C.width / 2, C.y, (regexJSONInfo.exclude ? "None" : "One") + " of:", a);
+            l.push(u.label);
+            var f = p;
+            p = Math.max(u.width, p);
+            var d = (p - f) / 2;
+            return addsOffset(l, d, 0),
+            {
+                items: l,
+                width: p,
+                height: m + u.height,
+                x: Math.min(u.x, offset_x),
+                y: u.y,
+                lineInX: d + offset_x,
+                lineOutX: d + offset_x + C.width
+            }
+        },
+        group: function (regexJSONInfo, offset_x, offset_y) {
+            if (checkRegexJSONInfo(regexJSONInfo)) {
+                return generator_Raph_map.empty(regexJSONInfo, offset_x, offset_y);
+            }
+            // Puede que haya que quitar los offset, y agregarlos al grupo g
+            var subgroups_items_element = processRegexJSONToRaphaelSVG(regexJSONInfo.sub, 0, 0);
+            var container_group_item = createGroupContainerItem(
+                regexJSONInfo, subgroups_items_element.items,
+                0, 0,
+                subgroups_items_element.width, subgroups_items_element.height
+            )
+            if (regexJSONInfo.num) {
+                // Agrega un offset a la izquierda para mover todos los items a la derecha y que se centre el dashed group que lo engloba
+                addsOffset([container_group_item], 10, 0);
+                var group_decorator_width = subgroups_items_element.width + 20;
+                var group_decorator_height = subgroups_items_element.height + 20;
+
+                var groupinfo_rect_item = {
+                    type: "rect",
+                    id: regexJSONInfo.id,
+                    indices: regexJSONInfo.indices,
+                    class: `rect:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+                    x: 0,
+                    y: subgroups_items_element.y - 10,
+                    r: 6,
+                    width: group_decorator_width,
+                    height: group_decorator_height,
+                    "stroke-dasharray": ".",
+                    stroke: "silver",
+                    "stroke-width": 2
+                };
+                var groupinfo_text_item = createTextItemElement(
+                    regexJSONInfo,
+                    groupinfo_rect_item.width / 2, groupinfo_rect_item.y - 2,
+                    `Group ${regexJSONInfo.name}#${regexJSONInfo.num}`
+                );
+
+                var max_width = Math.max(groupinfo_text_item.width, group_decorator_width);
+                var offset_x_width = (max_width - group_decorator_width) / 2;
+
+                var container_item = createGroupContainerItem(
+                    regexJSONInfo, [container_group_item, groupinfo_rect_item, groupinfo_text_item.label],
+                    offset_x + offset_x_width, offset_y,
+                    max_width, group_decorator_height + groupinfo_text_item.height + 4
+                );
+
+                // offset_x_width && addsOffset([container_item], offset_x_width, 0);
+
+                return {
+                    items: [container_item],
+                    width: container_item.width,
+                    height: container_item.height,
+                    x: container_item.x,
+                    y: container_item.y + groupinfo_text_item.y,
+                    lineInX: offset_x + offset_x_width + subgroups_items_element.lineInX + 10,
+                    lineOutX: offset_x + offset_x_width + subgroups_items_element.lineOutX + 10
+                }
+            }
+            // Llega aqui si es grupo un non-capturing
+            addsOffset([container_group_item], offset_x, offset_y);
+            return {
+                items: [container_group_item],
+                width: container_group_item.width,
+                height: container_group_item.height,
+                x: offset_x + subgroups_items_element.x,
+                y: offset_y + subgroups_items_element.y,
+                lineInX: offset_x + subgroups_items_element.lineInX,
+                lineOutX: offset_x + subgroups_items_element.lineOutX
+            };
+        },
+        assert: function (regexJSONInfo, offsetX, offsetY) {
+            var n;
+            var i = {
+                AssertNonWordBoundary: {
+                    bg: "maroon",
+                    fg: "white"
+                },
+                AssertWordBoundary: {
+                    bg: "purple",
+                    fg: "white"
+                },
+                AssertEnd: {
+                    bg: "Indigo",
+                    fg: "white"
+                },
+                AssertBegin: {
+                    bg: "Indigo",
+                    fg: "white"
+                }
+            };
+            var assertion_type = regexJSONInfo.assertionType;
+            var raw_text = assertion_type.replace("Assert", "") + "!";
+            if (n = i[assertion_type]) {
+                return !HAS_FLAG_MULTILINE || "AssertBegin" !== assertion_type && "AssertEnd" !== assertion_type || (raw_text = "Line" + raw_text),
+                    createExactCharItem(regexJSONInfo, raw_text, offsetX, offsetY, n.bg, n.fg);
+            }
+            var stroke_color, background_color;
+            if (assertion_type === AssertLookahead) {
+                stroke_color = "CornflowerBlue";
+                background_color = "darkgreen";
+                raw_text = "Followed by:";
+            } else if (assertion_type === AssertNegativeLookahead) {
+                stroke_color = "#F63";
+                background_color = "Purple";
+                raw_text = "Not followed by:";
+            }
+            // assertion_type === AssertLookahead ? (
+            //     stroke_color = "CornflowerBlue",
+            //     background_color = "darkgreen",
+            //     raw_text = "Followed by:"
+            //     ) : assertion_type === AssertNegativeLookahead && (
+            //         stroke_color = "#F63",
+            //         background_color = "Purple",
+            //         raw_text = "Not followed by:");
+            var group_items_result = generator_Raph_map.group(regexJSONInfo, offsetX, offsetY)
+            var rect_item_height = group_items_result.height + 16;
+            var rect_item_width = group_items_result.width + 16;
+
+            var rect_item = {
+                type: "rect",
+                class: `rect:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+                x: offsetX,
+                y: group_items_result.y - 8,
+                r: 6,
+                width: rect_item_width,
+                height: rect_item_height,
+                "stroke-dasharray": "-",
+                stroke: stroke_color,
+                "stroke-width": 2
+            };
+            var text_item = createTextItemElement(regexJSONInfo, rect_item.x + rect_item_width / 2, rect_item.y, raw_text, background_color);
+            var max_width_items = Math.max(rect_item_width, text_item.width);
+            var y = (max_width_items - rect_item_width) / 2;
+
+            return addsOffset(group_items_result.items, y + 8, 0),
+                y && addsOffset([rect_item, text_item.label], y, 0),
+            {
+                items: group_items_result.items.concat([rect_item, text_item.label]),
+                width: max_width_items,
+                height: rect_item.height + text_item.height,
+                x: offsetX,
+                y: text_item.y,
+                lineInX: y + group_items_result.lineInX + 8,
+                lineOutX: y + group_items_result.lineOutX + 8
+            }
+        }
+    };
+    var colors_map = {
+        startRegex: "#03a9f4",
+        endRegex: "#ff0058",
+        delimiter: "Indigo",
+        flags: "darkgreen",
+        exact: "#334",
+        dot: "darkblue",
+        backref: "teal",
+        $: "purple",
+        "^": "purple",
+        "\\b": "#F30",
+        "\\B": "#F30",
+        "(": "blue",
+        ")": "blue",
+        "?=": "darkgreen",
+        "?!": "red",
+        "?:": "grey",
+        "[": "navy",
+        "]": "navy",
+        "|": "blue",
+        "{": "maroon",
+        ",": "maroon",
+        "}": "maroon",
+        "*": "maroon",
+        "+": "maroon",
+        "?": "maroon",
+        repeatNonGreedy: "#F61",
+        defaults: "black",
+        charsetRange: "olive",
+        charsetClass: "navy",
+        charsetExclude: "red",
+        charsetChars: "#534"
+    };
+
+    return paintRegex(regexson_tree, regex_flags, canvas_Raphael_paper);
+}
+// ),
+
+//  ),
+// "function" != typeof define)
+//     var define = require("amdefine")(module);
+
+
+// module.exports = {visualize};
+
+// });

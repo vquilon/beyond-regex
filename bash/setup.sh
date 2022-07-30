@@ -30,12 +30,13 @@ su - $USER
 
 rvm user gemsets
 rvm reset
-rvm install ruby
-rvm install 2.5
-rvm --default use 2.5
+
+rvm install 2.5.8
+rvm --default use 2.5.8
 
 # Instalar Gemas del proyecto
 gem install jekyll bundler
+gem update --system 3.2.3
 
 cd docs
 bundle install
