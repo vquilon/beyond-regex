@@ -21,6 +21,16 @@ function EditorSyntaxis(options = {}) {
 
     // Catch Listeners
     const init_listeners = () => {
+        const disableCaretsBlink = () => {
+            $inputCarets.classList.remove("blink");
+            if ($inputCarets.timeoutBlink) {
+                clearTimeout($inputCarets.timeoutBlink);
+            }
+            $inputCarets.timeoutBlink = window.setTimeout(() => {
+                $inputCarets.classList.add("blink");
+            }, 500);
+        }
+
         const getTextNodeRelPos = (caretOffset, $parent) => {
             if ($parent.nodeType === 3) return [$parent, caretOffset];
             let textNodes = $parent.childNodes;
@@ -643,16 +653,17 @@ function EditorSyntaxis(options = {}) {
 
                 // let limitCaretChar = Math.round((selRect.x + selRect.width) / charWidth);
                 // $caret.style.setProperty("--limit-pos-char", limitCaretChar);
-
-                let actualCaretChar = parseInt($caret.style.getPropertyValue("--pos-char")) || 0;
-                let maxCaretChar = Math.max(caretChar, actualCaretChar)
-                $caret.style.setProperty("--max-pos-char", maxCaretChar);
-                $caret.style.setProperty("--pos-char", caretChar);
-                $caret.style.setProperty("--pos-line", caretLine);
-
-                if (firstCaret) {
-                    $caret.style.setProperty("--fpos-char", caretChar);
-                    $caret.style.setProperty("--fpos-line", caretLine);
+                if ($caret !== undefined) {
+                    let actualCaretChar = parseInt($caret.style.getPropertyValue("--pos-char")) || 0;
+                    let maxCaretChar = Math.max(caretChar, actualCaretChar)
+                    $caret.style.setProperty("--max-pos-char", maxCaretChar);
+                    $caret.style.setProperty("--pos-char", caretChar);
+                    $caret.style.setProperty("--pos-line", caretLine);
+    
+                    if (firstCaret) {
+                        $caret.style.setProperty("--fpos-char", caretChar);
+                        $caret.style.setProperty("--fpos-line", caretLine);
+                    }
                 }
             }
 
@@ -691,6 +702,7 @@ function EditorSyntaxis(options = {}) {
         }
 
         $syntax.addEventListener("mousedown", (event) => {
+            disableCaretsBlink();
             $editor.selecting = true;
             updateCaretPos({x: event.clientX, y: event.clientY}, $caret=undefined, ctrlKey=event.ctrlKey);
         }, true);
@@ -796,6 +808,7 @@ function EditorSyntaxis(options = {}) {
         }, false);
 
         const execCommandUndo = (doc, showUI=false, value=null) => {
+            // Colocar el caret en la posicion que se esta editando
             if (actualHist > 0) {
                 for (let i=0; i < editorHistory[actualHist]["zActions"]; i++) doc.execCommand("undo", showUI, value);
                 actualHist -= 1;
@@ -803,6 +816,7 @@ function EditorSyntaxis(options = {}) {
         }
 
         const execCommandRedo = (doc, showUI=false, value=null) => {
+            // Colocar el caret en la posicion que se esta editando
             if (actualHist < editorHistory.length-1){
                 actualHist += 1;
                 for (let i=0; i < editorHistory[actualHist]["zActions"]; i++) doc.execCommand("redo", showUI, value);
@@ -1050,6 +1064,7 @@ function EditorSyntaxis(options = {}) {
 
             if(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'End', 'Home', 'PageUp', 'PageDown'].includes(event.key)) {
                 if ($containerEl !== $editor) {
+                    disableCaretsBlink();
                     _ProcessMoveCarets(event);
                 }
             }
@@ -1057,6 +1072,7 @@ function EditorSyntaxis(options = {}) {
                 _ProcessSpecialActions(event);
             }
             else {
+                disableCaretsBlink();
                 // Si mi containerEl no es $editor entonces tengo que obtener el foco de este para cada caret
                 if ($containerEl !== $editor) {
                     $containerEditor.querySelector('.input').editing = true;
