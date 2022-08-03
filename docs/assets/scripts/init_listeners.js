@@ -51,7 +51,9 @@ window.onload = function () {
     offlineHandler();
 
 
-    let beyondEditor = Editor();
+    let beyondEditor = Editor({
+        debug: false
+    });
     let beyondEditorIns = beyondEditor.init();
     // CREAR UN FICHERO CON VARIABLES GLOBALES CON LOS NOMBRES DE CLASES o IDs
     document.addEventListener("keyup", (event) => {
