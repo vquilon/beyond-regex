@@ -466,6 +466,20 @@ function EditorSyntaxis(options = {}) {
             window.selRects = [];
             window.newLines = {};
             
+            if (allRects.length === 0) {
+                // Generar un cuadro vacio de ancho para poder seleccionar, de momento se coje el alto del editor
+                allRects.push({
+                    bottom: editorBBounds.bottom,
+                    height: editorBBounds.height,
+                    left: editorBBounds.left,
+                    right: editorBBounds.left,
+                    top: editorBBounds.top,
+                    width: 0,
+                    x: editorBBounds.x,
+                    y: editorBBounds.y
+                });
+            }
+
             let y = allRects[0].y;
             let _wholeRectLine = {
                 bottom: 0,
@@ -536,6 +550,23 @@ function EditorSyntaxis(options = {}) {
                 rect.bottom = rect.height + rect.top;
                 rect.left -= editorBBounds.left;
                 rect.right = rect.width + rect.left;
+            }
+
+            if ($editor.textContent.slice(-2) === "\n\n") {
+                // Hay una nueva linea al final, por lo que hay que agregar un nuevo sel rect win width
+                let lastRect = window.selRects[window.selRects.length - 1];
+                let firstRect = window.selRects[0];
+                window.selRects.push({
+                    bottom: lastRect.bottom + firstRect.top + lastRect.height,
+                    height: lastRect.height,
+                    left: lastRect.left,
+                    right: lastRect.left,
+                    top: lastRect.bottom + firstRect.top,
+                    width: 0,
+                    x: lastRect.x,
+                    y: lastRect.bottom + firstRect.top
+                });
+
             }
 
             if ($debugCont !== undefined) {

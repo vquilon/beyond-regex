@@ -385,10 +385,10 @@ function RegexHighlighter($editor, $syntax) {
     }
 
     // Event Input Listener
-    const onInput = (regexson, { target: $elm }) => {
+    const onInput = (regexson, regexraw, { target: $elm }) => {
         // Parse Content
         // Size Change
-        if ($elm.nodeName == 'TEXTAREA') {
+        if ($elm.nodeName === 'TEXTAREA') {
             if (lastRegex === $elm.value) {
                 lastRegex = $elm.value;
             }
@@ -417,14 +417,13 @@ function RegexHighlighter($editor, $syntax) {
             }
         }
         else {
-            if (lastRegex === $elm.textContent) {
-                lastRegex = $elm.textContent;
+            if (lastRegex === regexraw) {
+                lastRegex = regexraw;
             }
             else {
-                // var syntaxHTML = convertRawToHTMLResult($editor.textContent);
-                // var syntaxHTML = RegexColorizer.colorizeText($editor.textContent);
-                var syntaxHTML = parseRegexToHTML(regexson, $editor.textContent);
-        
+                // var syntaxHTML = convertRawToHTMLResult(regexraw);
+                // var syntaxHTML = RegexColorizer.colorizeText(regexraw);
+                var syntaxHTML = parseRegexToHTML(regexson, regexraw);
             }
         }
 

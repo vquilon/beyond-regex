@@ -279,7 +279,7 @@ var EditorParser = (options) => {
             $containerEditor.regexson = regexson;
         }
 
-        syntaxProcessor.onInput(regexson, { target: $editorRegex });
+        syntaxProcessor.onInput(regexson, getRegex(), { target: $editorRegex });
         return true;
     };
 
@@ -349,7 +349,7 @@ var EditorParser = (options) => {
         return correctParams.re;
     };
     const getRegex = () => {
-        return $editorRegex.innerText;
+        return $editorRegex.innerText.replace(/\n$/, "");
     }
     const setRegexValue = function (v) {
         $editorRegex.innerText = v;
@@ -385,7 +385,7 @@ var EditorParser = (options) => {
     };
 
     const generateURL = function (params) {
-        var re = getCorrectedRegex();
+        var re = getCorrectedRegex().replace(/\n$/, "");
         var flags = getFlags();
         return "#!" + (params.debug ? "debug=true&" : "") + (params.cmd ? "cmd=" + params.cmd + "&" : "") + (params.embed ? "embed=true&" : "") + "flags=" + flags + "&re=" + encodeURIComponent(params.re = re);
     }
@@ -575,9 +575,9 @@ var EditorParser = (options) => {
             setFlags("g");
         }
         if (params.re) {
-            setRegexValue(params.re);
+            setRegexValue(`${params.re}\n`);
         } else{
-            setRegexValue("^BEYOND ReGex(?P<TOOLS>builder|[bv]isualize|(?=de)bugger) Born to be a RegEx editor$");
+            setRegexValue("^BEYOND ReGex(?P<TOOLS>builder|[bv]isualize|(?=de)bugger) Born to be a RegEx editor$\n");
         }
         if (params.reLang) {
             setRegexLanguage(params.reLang);
