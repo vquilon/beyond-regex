@@ -279,7 +279,6 @@
                 defs.appendChild(cp);
                 this.setAttribute("clip-path", "url(#" + cpID + ")")
             };
-
             this.group.animate = function () {
                 var el = this;
                 var args = arguments;
@@ -314,7 +313,6 @@
                     }
                 }
             };
-
             this.group.attr = function (name, value) {
                 // if (this.removed) {
                 //     return this;
@@ -466,35 +464,41 @@
         function auxAddWithGroup(paperproto, json) {
             var res = paperproto.set();
             var children;
-            var j, i = 0, ii = json.length;
-            for (; i < ii; i++) {
-                j = json[i] || {};
-                var g;
-                if (j.type === "group") {
-                    // Agregar el id y clase y ocultar
-                    var res, children = auxAddWithGroup(paperproto, j.children);
-                    // Eliminar j.children para limpiar los atributos
-                    let _g_indices = j.indices;
-                    let _g_id = j.id;
-                    delete j.indices;
-                    delete j.id;
-                    g = paperproto[j.type](children).attr(j);
-                    // g.node.id = "";
-                    g.node.setAttribute("data-id", _g_id);
-                    g.node.setAttribute("data-indices", _g_indices.join(","));
+            if (json !== undefined) {
+                var j, i = 0, ii = json.length;
+                for (; i < ii; i++) {
+                    j = json[i] || {};
+                    var g;
+                    if (j.type === "group") {
+                        // Agregar el id y clase y ocultar
+                        var res, children = auxAddWithGroup(paperproto, j.children);
+                        // Eliminar j.children para limpiar los atributos
+                        let _g_dataset;
+                        if (j[has]("dataset")) {
+                            _g_dataset = j.dataset;
+                            delete j.dataset;
+                        }
+                        g = paperproto[j.type](children).attr(j);
+                       
+                        if (_g_dataset !== undefined) {
+                            for (let attr of Object.keys(_g_dataset)) {
+                                g.node.setAttribute(`data-${attr}`, _g_dataset[attr])
+                            }
+                        }
 
-                    appendChildrenToNode(g[0], children.items);
-                    children = res.push(g);
-                } else {
-                    if(elements[has](j.type)) {
-                        let child = paperproto[j.type]().attr(j);
-                        // child.node.id = j.id || "";
-                        var children = res.push(child);
+                        if (children !== undefined) {
+                            appendChildrenToNode(g[0], children.items);
+                        }
+                        children = res.push(g);
+                    } else {
+                        if(elements[has](j.type)) {
+                            let child = paperproto[j.type]().attr(j);
+                            // child.node.id = j.id || "";
+                            var children = res.push(child);
+                        }
                     }
-                    
-                    
-                }
 
+                }
             }
             return res, children;
         }

@@ -1,10 +1,8 @@
 var CustomThumbnailSVGControl = function (options) {
     // import { ShadowViewport } from "./shadow_viewport";
-    const mainSVGContainer = "mainSVGContainer";
-    const mainSVGViewPort = "mainSVGViewPort";
 
     var optionsViewportDefaults = {
-        viewportSelector: '.svg-pan-zoom_viewport', // Viewport selector. Can be querySelector string or SVGElement
+        viewportSelector: `.${options.mainViewPortClass}`, // Viewport selector. Can be querySelector string or SVGElement
         panEnabled: true, // enable or disable panning (default enabled)
         controlIconsEnabled: false, // insert icons to give user an option in addition to mouse events to control pan/zoom (default disabled)
         zoomEnabled: true, // enable or disable zooming (default enabled)
@@ -655,17 +653,20 @@ var CustomThumbnailSVGControl = function (options) {
         // };
 
         // Agrego todo lo que haya dentro de $mainSVG en una etiqueta g
-        let $gContainer = document.createElementNS("http://www.w3.org/2000/svg", 'g');
-        let $gViewPort = document.createElementNS("http://www.w3.org/2000/svg", 'g');
-        
-        $gContainer.id = mainSVGContainer;
-        $gViewPort.id = mainSVGViewPort;
-        let children = [...$mainSVG.childNodes];
-        children.forEach(function (child) {
-            $gContainer.appendChild(child);
-        });
-        $gViewPort.appendChild($gContainer);
-        $mainSVG.appendChild($gViewPort);
+
+        // ####################################### COMENTADO
+        // let $gContainer = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+        // let $gViewPort = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+
+        // $gContainer.id = options.mainSVGContainer;
+        // $gViewPort.id = options.mainSVGViewPort;
+        // let children = [...$mainSVG.childNodes];
+        // children.forEach(function (child) {
+        //     $gContainer.appendChild(child);
+        // });
+        // $gViewPort.appendChild($gContainer);
+        // $mainSVG.appendChild($gViewPort);
+        // ####################################### COMENTADO
 
         let _main_svg = svgPanZoom('#' + options.mainSVGId, {
             zoomEnabled: true,
@@ -1007,7 +1008,7 @@ var CustomThumbnailSVGControl = function (options) {
         // $thumbSVG = $mainSVG.cloneNode(true);
         $thumbSVG = document.createElementNS(svgns, 'svg');
         let $useElemen = document.createElementNS(svgns, 'use');
-        $useElemen.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${mainSVGContainer}`);
+        $useElemen.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${options.mainSVGContainer}`);
         let $thumbViewport = document.createElementNS(svgns, 'g');
         $thumbViewport.id = "thumbnail-viewport"
         let thumb_viewport_class = options.thumbnailViewport.viewportSelector || optionsViewportDefaults;
@@ -1122,12 +1123,14 @@ var CustomThumbnailSVGControl = function (options) {
         );
 
         // Zoom Out
-        let $zoom_out = _createIconZoom('M 420.67 210.335 C 420.67 257.269 405.298 300.613 379.313 335.606 L 502.948 459.241 C 515.017 471.31 515.017 490.879 502.948 502.948 C 490.879 515.017 471.31 515.017 459.241 502.948 L 335.606 379.313 C 300.613 405.298 257.269 420.67 210.335 420.67 C 94.17 420.67 0 326.5 0 210.335 C 0 94.17 94.17 0 210.335 0 C 326.5 0 420.67 94.17 420.67 210.335 Z M 323.979 185.927 L 96.646 185.927 C 83 185.927 71.936 196.991 71.936 210.637 C 71.936 224.284 83 235.349 96.646 235.349 L 323.979 235.349 C 337.625 235.349 348.69 224.284 348.69 210.637 C 348.69 196.991 337.625 185.927 323.979 185.927 Z',
+        let $zoom_out = _createIconZoom(
+            'M 420.67 210.335 C 420.67 257.269 405.298 300.613 379.313 335.606 L 502.948 459.241 C 515.017 471.31 515.017 490.879 502.948 502.948 C 490.879 515.017 471.31 515.017 459.241 502.948 L 335.606 379.313 C 300.613 405.298 257.269 420.67 210.335 420.67 C 94.17 420.67 0 326.5 0 210.335 C 0 94.17 94.17 0 210.335 0 C 326.5 0 420.67 94.17 420.67 210.335 Z M 323.979 185.927 L 96.646 185.927 C 83 185.927 71.936 196.991 71.936 210.637 C 71.936 224.284 83 235.349 96.646 235.349 L 323.979 235.349 C 337.625 235.349 348.69 224.284 348.69 210.637 C 348.69 196.991 337.625 185.927 323.979 185.927 Z',
             "zoom-out"
         );
 
         // Zoom Reset
-        let $zoom_reset = _createIconZoom('M 420.67 210.335 C 420.67 257.269 405.298 300.613 379.313 335.606 L 502.948 459.241 C 515.017 471.31 515.017 490.879 502.948 502.948 C 490.879 515.017 471.31 515.017 459.241 502.948 L 335.606 379.313 C 300.613 405.298 257.269 420.67 210.335 420.67 C 94.17 420.67 0 326.5 0 210.335 C 0 94.17 94.17 0 210.335 0 C 326.5 0 420.67 94.17 420.67 210.335 Z M 348.273 94.961 C 338.364 94.961 330.333 102.994 330.333 112.902 L 330.333 141.72 C 319.644 123.116 304.763 107.22 286.708 95.246 C 264.036 80.21 237.619 72.261 210.313 72.261 C 191.639 72.261 173.515 75.923 156.445 83.144 C 139.964 90.114 125.167 100.088 112.465 112.791 C 99.763 125.494 89.788 140.291 82.817 156.77 C 75.597 173.842 71.936 191.966 71.936 210.638 C 71.936 229.311 75.597 247.435 82.817 264.506 C 89.788 280.987 99.764 295.783 112.465 308.485 C 125.168 321.188 139.965 331.163 156.445 338.134 C 173.515 345.354 191.64 349.015 210.313 349.015 C 226.259 349.015 241.899 346.322 256.798 341.009 C 271.197 335.874 284.579 328.416 296.574 318.845 C 308.449 309.366 318.628 298.085 326.828 285.314 C 335.181 272.303 341.246 258.105 344.853 243.113 C 347.171 233.48 341.242 223.791 331.608 221.473 C 321.973 219.155 312.285 225.085 309.967 234.719 C 304.682 256.689 291.976 276.605 274.19 290.799 C 265.306 297.891 255.399 303.413 244.747 307.211 C 233.726 311.141 222.141 313.134 210.313 313.134 C 182.936 313.134 157.196 302.472 137.838 283.113 C 118.479 263.754 107.817 238.015 107.817 210.637 C 107.817 183.261 118.479 157.521 137.838 138.163 C 157.197 118.804 182.936 108.142 210.313 108.142 C 230.542 108.142 250.102 114.022 266.876 125.148 C 281.332 134.735 293.04 147.704 301.051 162.925 L 281.223 162.925 C 271.314 162.925 263.282 170.957 263.282 180.865 C 263.282 190.774 271.314 198.806 281.223 198.806 L 348.273 198.806 C 358.182 198.806 366.214 190.774 366.214 180.865 L 366.214 112.902 C 366.214 102.994 358.182 94.961 348.273 94.961 Z',
+        let $zoom_reset = _createIconZoom(
+            'M 420.67 210.335 C 420.67 257.269 405.298 300.613 379.313 335.606 L 502.948 459.241 C 515.017 471.31 515.017 490.879 502.948 502.948 C 490.879 515.017 471.31 515.017 459.241 502.948 L 335.606 379.313 C 300.613 405.298 257.269 420.67 210.335 420.67 C 94.17 420.67 0 326.5 0 210.335 C 0 94.17 94.17 0 210.335 0 C 326.5 0 420.67 94.17 420.67 210.335 Z M 348.273 94.961 C 338.364 94.961 330.333 102.994 330.333 112.902 L 330.333 141.72 C 319.644 123.116 304.763 107.22 286.708 95.246 C 264.036 80.21 237.619 72.261 210.313 72.261 C 191.639 72.261 173.515 75.923 156.445 83.144 C 139.964 90.114 125.167 100.088 112.465 112.791 C 99.763 125.494 89.788 140.291 82.817 156.77 C 75.597 173.842 71.936 191.966 71.936 210.638 C 71.936 229.311 75.597 247.435 82.817 264.506 C 89.788 280.987 99.764 295.783 112.465 308.485 C 125.168 321.188 139.965 331.163 156.445 338.134 C 173.515 345.354 191.64 349.015 210.313 349.015 C 226.259 349.015 241.899 346.322 256.798 341.009 C 271.197 335.874 284.579 328.416 296.574 318.845 C 308.449 309.366 318.628 298.085 326.828 285.314 C 335.181 272.303 341.246 258.105 344.853 243.113 C 347.171 233.48 341.242 223.791 331.608 221.473 C 321.973 219.155 312.285 225.085 309.967 234.719 C 304.682 256.689 291.976 276.605 274.19 290.799 C 265.306 297.891 255.399 303.413 244.747 307.211 C 233.726 311.141 222.141 313.134 210.313 313.134 C 182.936 313.134 157.196 302.472 137.838 283.113 C 118.479 263.754 107.817 238.015 107.817 210.637 C 107.817 183.261 118.479 157.521 137.838 138.163 C 157.197 118.804 182.936 108.142 210.313 108.142 C 230.542 108.142 250.102 114.022 266.876 125.148 C 281.332 134.735 293.04 147.704 301.051 162.925 L 281.223 162.925 C 271.314 162.925 263.282 170.957 263.282 180.865 C 263.282 190.774 271.314 198.806 281.223 198.806 L 348.273 198.806 C 358.182 198.806 366.214 190.774 366.214 180.865 L 366.214 112.902 C 366.214 102.994 358.182 94.961 348.273 94.961 Z',
             "zoom-reset"
         );
 
@@ -1267,7 +1270,7 @@ var CustomThumbnailSVGControl = function (options) {
     function updateSVGContent(newSVG) {
         // Actualiza el contenido del SVG
         // Simplemente es cambiar `mainSVGContainer`
-        let $svgContainer = $mainView.querySelector(`${mainSVGContainer}`);
+        let $svgContainer = $mainView.querySelector(`${options.mainSVGContainer}`);
         $svgContainer
     }
 

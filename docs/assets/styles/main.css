@@ -679,7 +679,7 @@ span#close-side .burger:hover .strip, #container-main.menu-open span#close-side 
     justify-content: center;
     padding: 10px;
     grid-row: 2;
-
+    z-index: 4;
     background: #e2e2e2;
 }
 
@@ -731,7 +731,7 @@ span#close-side .burger:hover .strip, #container-main.menu-open span#close-side 
     justify-content: flex-end;
     grid-row: 2;
     background: #e2e2e2;
-    z-index: 1;
+    z-index: 4;
     /* Solo para mostrar los flags a la izquierda no se necesita */
     /* width: 5em; */
 }

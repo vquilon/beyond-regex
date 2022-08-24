@@ -16,8 +16,21 @@ var RegexVisualizerPanel = function (options) {
     var $loader_view = document.querySelector(`#${options.loader_view_id}`);
     var $progress_bar = $loader_view.querySelector(`.${options.progress_bar_class}`);
 
+    let mainViewId = 'visualizer-graphView';
+    let mainSVGId = 'visualizer-graphSVG';
+    let mainSVGContainer = "mainSVGContainer";
+    let mainSVGViewPort = "mainSVGViewPort";
+    let mainViewPortClass = "svg-pan-zoom_viewport";
+
     var paper = new Raphael('visualizer-graphView', 10, 10);
-    paper.canvas.id = 'visualizer-graphSVG';
+    paper.canvas.id = mainSVGId;
+
+    let $gContainer = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+    let $gViewPort = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+    $gContainer.id = mainSVGContainer;
+    $gViewPort.id = mainSVGViewPort;
+    $gViewPort.appendChild($gContainer);
+    paper.canvas.appendChild($gViewPort);
 
     var svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl;
 
@@ -99,7 +112,7 @@ var RegexVisualizerPanel = function (options) {
 
             window.setTimeout(() => {
 
-                raphael_items = RegexVisualizer(regexson, getCorrectedFlags(), paper, $progress_bar);
+                raphael_items = RegexVisualizer(regexson, getCorrectedFlags(), paper,$gViewPort, $gContainer, $progress_bar);
                 _updateRaphaelItemsJSON(raphael_items);
                 // Una vez que se pinta actualizar el plugin de visualizador SVG
                 // if (!svg_graph_controller && !svg_thumb_controller && !destroyAllHandler_ThumbnailSVGControl) {
@@ -114,8 +127,11 @@ var RegexVisualizerPanel = function (options) {
                     destroyAllHandler_ThumbnailSVGControl();
                 }
                 [svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl] = CustomThumbnailSVGControl({
-                    mainViewId: 'visualizer-graphView',
-                    mainSVGId: 'visualizer-graphSVG',
+                    mainViewId: mainViewId,
+                    mainSVGId: mainSVGId,
+                    mainSVGContainer: mainSVGContainer,
+                    mainSVGViewPort: mainSVGViewPort,
+                    mainViewPortClass: mainViewPortClass,
                     // Dejamos que lo autogenere con el id
                     thumbContainerId: 'thumbViewContainer',
                 });
@@ -152,10 +168,14 @@ var RegexVisualizerPanel = function (options) {
                 $progress_bar.style.transform = "";
             }
 
-            raphael_items = RegexVisualizer(regEXSON, getCorrectedFlags(), paper, $progress_bar);
+            raphael_items = RegexVisualizer(regEXSON, getCorrectedFlags(), paper, $gViewPort, $gContainer, $progress_bar);
             [svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl] = CustomThumbnailSVGControl({
-                mainViewId: 'visualizer-graphView',
-                mainSVGId: 'visualizer-graphSVG',
+                mainViewId: mainViewId,
+                mainSVGId: mainSVGId,
+                mainSVGContainer: mainSVGContainer,
+                mainSVGViewPort: mainSVGViewPort,
+                mainViewPortClass: mainViewPortClass,
+                // Dejamos que lo autogenere con el id
                 thumbContainerId: 'thumbViewContainer',
             });
             // Se oculta el loader

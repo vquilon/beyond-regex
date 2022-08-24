@@ -3,8 +3,23 @@
 // var { NFA }  = require("./NFA_parser");
 
 // if (define("visualize", ["./Kit", "./parse"], function(t, e) {
-function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $progress_bar) {
+function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gViewPort, $gContainer, $progress_bar) {
     var _aux_Kit = Kit();
+    
+    // canvas_Raphael_paper.addv2([
+    //     {
+    //         type: "group",
+    //         id: "mainSVGViewPort",
+    //         children: [{
+    //             type: "group",
+    //             id: "mainSVGContainer"
+    //         }]
+    //     }
+    // ]);
+    // Create ViewPort
+    // id = mainSVGViewPort
+    // class = svg-pan-zoom_viewport
+    // Create inside this ViewPort
     
     function paintRegex(regexson_tree, regex_flags, canvasRaph) {
         let [regexBoxRect, sizeTextItem] = _prepareCanvasRaphael(canvasRaph, regex_flags);
@@ -17,8 +32,16 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $prog
         _postCanvasRaphael();
         $progress_bar.updateProgressBar(60);
         
-        // Se pintan todos los items en el canvas de Raphael
         canvasRaph.addv2(raphael_items.items);
+        $progress_bar.updateProgressBar(90);
+
+        let childNodes = Array.from(canvasRaph.canvas.childNodes);
+        childNodes.forEach(el => {
+            if (el !== $gViewPort) {
+                $gContainer.appendChild(el);
+            }
+        });
+
         $progress_bar.updateProgressBar(100);
 
         return raphael_items;
@@ -26,7 +49,19 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $prog
 
     // SET DE FUNCIONES PRINCIPALES DEL paintRegex
     function _prepareCanvasRaphael(canvasRaph, regex_flags) {
-        canvasRaph.clear(), canvasRaph.setSize(0, 0);
+        // canvasRaph.clear();
+        // canvasRaph.setSize(0, 0);
+
+        // Se pintan todos los items en el canvas de Raphael
+        // Obtener los elementos que hay ahora cargados
+        // Verificar que ningun ID coincide con los que hay en el json de regex
+        // Todos los IDs que no se actualicen se borraran del Paper de Raphael
+        // En caso de actualizar todo, se eliminaran todos
+        canvasRaph.forEach(el => {
+            // No borrar los grupos del viewport, y generarlos en el init del paper
+            el.remove();
+        });
+
         let regexBoxRect = canvasRaph.rect(0, 0, 0, 0);
         regexBoxRect.attr("fill", STROKE_COLOR), regexBoxRect.attr("stroke", STROKE_COLOR);
         createTextNodeWithFontFamilySize(canvasRaph);
@@ -190,7 +225,9 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $prog
         return {
             type: "group",
             id: regexJSONInfo.id || "",
-            indices: [regexJSONInfo.indices[0] + 1, regexJSONInfo.indices[1] - 1],
+            dataset: {
+                indices: [regexJSONInfo.indices[0] + 1, regexJSONInfo.indices[1] - 1].join(","),
+            },
             class: `g:${regexJSONInfo.type}:${[regexJSONInfo.indices[0] + 1, regexJSONInfo.indices[1] - 1].join(';')}`,
             children: children_items,
             transform: `t${offset_x},${offset_y}`,
@@ -284,7 +321,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $prog
         }
 
         if (regexJSONInfo.hasOwnProperty('indices')) {
-            idInfo = `curve:${regexJSONInfo.indices.join(';')}`;
+            idInfo = `any:${regexJSONInfo.indices.join(';')}`;
         }
         return {
             type: "path",
@@ -542,7 +579,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $prog
                 f += 10,
                 m = {
                     type: "path",
-                    class: `path:curve:${regexJSONInfo.indices.join(';')}`,
+                    class: `path:repeat:${regexJSONInfo.indices.join(';')}`,
                     path: ["M", u.x + 10, offset_y, "Q", offset_x, offset_y, offset_x, offset_y + x, "V", offset_y + v - x, "Q", offset_x, offset_y + v, offset_x + x, offset_y + v, "H", offset_x + y - x, "Q", offset_x + y, offset_y + v, offset_x + y, offset_y + v - x, "V", offset_y + x, "Q", offset_x + y, offset_y, u.x + u.width + 10, offset_y],
                     _translate: _translateFunc,
                     stroke: "maroon",
@@ -561,7 +598,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $prog
                     f += 10,
                     b = {
                         type: "path",
-                        class: `path:curve:${regexJSONInfo.indices.join(';')}`,
+                        class: `path:repeat:${regexJSONInfo.indices.join(';')}`,
                         path: ["M", offset_x, offset_y, "Q", offset_x + x, offset_y, offset_x + x, offset_y - x, "V", offset_y - _ + x, "Q", offset_x + x, offset_y - _, offset_x + 20, offset_y - _, "H", offset_x + w - 20, "Q", offset_x + w - x, offset_y - _, offset_x + w - x, offset_y - _ + x, "V", offset_y - x, "Q", offset_x + w - x, offset_y, offset_x + w, offset_y],
                         _translate: _translateFunc,
                         stroke: repeat_info.nonGreedy ? "darkgreen" : "#333",
