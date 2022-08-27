@@ -21,5 +21,10 @@ const CHANGELOG = {
             "Hide controls in the visualizer panel",
             "Fixing some interface bugs",
         ],
+        "16": [
+            "New Icon",
+            "Improve the generation of Visual Regex",
+            "Some fixes about the interface"
+        ],
     }
 }
