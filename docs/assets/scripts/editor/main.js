@@ -56,7 +56,7 @@ var EditorParser = (options) => {
             $inputRegex: $editorRegex,
             $syntaxRegex: $input.querySelector('.syntax'),
             // TODO: SOLO PARA TESTING
-            debugInputClass: '.input-debug'
+            // debugInputClass: '.input-debug'
         });
 
         var $editorTerminal = $containerEditor.querySelector('#editor-terminal');

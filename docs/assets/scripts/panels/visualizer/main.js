@@ -29,10 +29,11 @@ var RegexVisualizerPanel = function (options) {
     let $gViewPort = document.createElementNS("http://www.w3.org/2000/svg", 'g');
     $gContainer.id = mainSVGContainer;
     $gViewPort.id = mainSVGViewPort;
+    $gViewPort.classList.add(mainViewPortClass);
     $gViewPort.appendChild($gContainer);
     paper.canvas.appendChild($gViewPort);
 
-    var svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl;
+    var svg_graph_controller, svg_thumb_controller, updateContents_ThumbnailSVGControl;
 
 
     // SET DE FUNCIONES AUXILIARES
@@ -123,19 +124,21 @@ var RegexVisualizerPanel = function (options) {
                 //     thumbContainerId: 'thumbViewContainer',
                 // });
                 // }
-                if (destroyAllHandler_ThumbnailSVGControl) {
-                    destroyAllHandler_ThumbnailSVGControl();
+                if (updateContents_ThumbnailSVGControl) {
+                    updateContents_ThumbnailSVGControl();
                 }
-                [svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl] = CustomThumbnailSVGControl({
-                    mainViewId: mainViewId,
-                    mainSVGId: mainSVGId,
-                    mainSVGContainer: mainSVGContainer,
-                    mainSVGViewPort: mainSVGViewPort,
-                    mainViewPortClass: mainViewPortClass,
-                    // Dejamos que lo autogenere con el id
-                    thumbContainerId: 'thumbViewContainer',
-                });
-
+                else {
+                    [svg_graph_controller, svg_thumb_controller, updateContents_ThumbnailSVGControl] = CustomThumbnailSVGControl({
+                        mainViewId: mainViewId,
+                        mainSVGId: mainSVGId,
+                        mainSVGContainer: mainSVGContainer,
+                        mainSVGViewPort: mainSVGViewPort,
+                        mainViewPortClass: mainViewPortClass,
+                        // Dejamos que lo autogenere con el id
+                        thumbContainerId: 'thumbViewContainer',
+                    });
+                }
+                
                 // Se vuelve a ocultar el loader
                 hideLoader();
             }, 0);
@@ -169,15 +172,20 @@ var RegexVisualizerPanel = function (options) {
             }
 
             raphael_items = RegexVisualizer(regEXSON, getCorrectedFlags(), paper, $gViewPort, $gContainer, $progress_bar);
-            [svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl] = CustomThumbnailSVGControl({
-                mainViewId: mainViewId,
-                mainSVGId: mainSVGId,
-                mainSVGContainer: mainSVGContainer,
-                mainSVGViewPort: mainSVGViewPort,
-                mainViewPortClass: mainViewPortClass,
-                // Dejamos que lo autogenere con el id
-                thumbContainerId: 'thumbViewContainer',
-            });
+            if (updateContents_ThumbnailSVGControl) {
+                updateContents_ThumbnailSVGControl();
+            }
+            else {
+                [svg_graph_controller, svg_thumb_controller, updateContents_ThumbnailSVGControl] = CustomThumbnailSVGControl({
+                    mainViewId: mainViewId,
+                    mainSVGId: mainSVGId,
+                    mainSVGContainer: mainSVGContainer,
+                    mainSVGViewPort: mainSVGViewPort,
+                    mainViewPortClass: mainViewPortClass,
+                    // Dejamos que lo autogenere con el id
+                    thumbContainerId: 'thumbViewContainer',
+                });
+            }
             // Se oculta el loader
             hideLoader();
 

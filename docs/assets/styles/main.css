@@ -123,7 +123,8 @@ span#close-side .burger {
     line-height: 2.5em;
     transition: transform 0.3s, background-position 1s;
     /* transition: all .5s ease; */
-    
+    border: 1px #f6f6f67d solid;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -138,19 +139,19 @@ span#close-side .strip div {
     transition: transform .65s cubic-bezier(0.075, 0.82, 0.165, 1), margin .65s cubic-bezier(0.075, 0.82, 0.165, 1);
     width: 1.5em;
 }
-span#close-side .burger:hover .strip div:first-child, #container-main.menu-open span#close-side .burger .strip div:first-child{
+span#close-side:hover .burger .strip div:first-child, #container-main.menu-open span#close-side .burger .strip div:first-child{
     transform: translateY(0.2em) rotate(-15deg);
     margin: 0;
 }
-span#close-side .burger:hover .strip div:nth-child(2), #container-main.menu-open span#close-side .burger .strip div:nth-child(2) {
+span#close-side:hover .burger .strip div:nth-child(2), #container-main.menu-open span#close-side .burger .strip div:nth-child(2) {
     transform: rotate(45deg) ;
     margin: 0;
 }
-span#close-side .burger:hover .strip div:last-child, #container-main.menu-open span#close-side .burger .strip div:last-child {
+span#close-side:hover .burger .strip div:last-child, #container-main.menu-open span#close-side .burger .strip div:last-child {
     transform: translateY(-0.2em) rotate(-75deg);
     margin: 0;
 }
-span#close-side .burger:hover .strip, #container-main.menu-open span#close-side .burger .strip {
+span#close-side:hover .burger .strip, #container-main.menu-open span#close-side .burger .strip {
     transform: rotate(45deg);
     transition: transform .25s ease .05s;
 }
@@ -159,6 +160,9 @@ span#close-side .burger:hover .strip, #container-main.menu-open span#close-side 
     span#close-side:hover .burger {
     background-position: 0% 50%;
     background: linear-gradient(135deg, #03a9f4, #ff0058, #d61c71, #f9005c);
+    border: none;
+    padding: 1px;
+
     background-size: 200px 200px;
 }
 
@@ -190,6 +194,8 @@ span#close-side .burger:hover .strip, #container-main.menu-open span#close-side 
 #container-main:not(.menu-open) span#close-side .burger {
     /* opacity: 0; */
     /* visibility: hidden; */
+    border: none;
+    padding: 1px;
     transform: translateX(4em);
     background: linear-gradient(315deg, #d61c71, #f9005c);
     /* background: linear-gradient(135deg, #03a9f4, #ff0058, #d61c71, #f9005c); */

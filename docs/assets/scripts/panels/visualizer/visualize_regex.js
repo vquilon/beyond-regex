@@ -57,10 +57,11 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
         // Verificar que ningun ID coincide con los que hay en el json de regex
         // Todos los IDs que no se actualicen se borraran del Paper de Raphael
         // En caso de actualizar todo, se eliminaran todos
+        let elementsRaphael = [];
         canvasRaph.forEach(el => {
-            // No borrar los grupos del viewport, y generarlos en el init del paper
-            el.remove();
+            elementsRaphael.push(el);
         });
+        elementsRaphael.forEach(el => el.remove());
 
         let regexBoxRect = canvasRaph.rect(0, 0, 0, 0);
         regexBoxRect.attr("fill", STROKE_COLOR), regexBoxRect.attr("stroke", STROKE_COLOR);

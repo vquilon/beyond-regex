@@ -669,6 +669,7 @@ var CustomThumbnailSVGControl = function (options) {
         // ####################################### COMENTADO
 
         let _main_svg = svgPanZoom('#' + options.mainSVGId, {
+            viewportSelector: optionsViewportDefaults.viewportSelector,
             zoomEnabled: true,
             controlIconsEnabled: false,
             fit: true,
@@ -1149,7 +1150,7 @@ var CustomThumbnailSVGControl = function (options) {
 
         // Calcular el transform
         // transform: matrix(0.233779, 0, 0, 0.233779, 0, 3.26552);
-        thumb_viewport = _createShadowViewportThumbnail($thumbSVG);
+        // thumb_viewport = _createShadowViewportThumbnail($thumbSVG);
         // TODO: Utilizar el ViewPort para controlar la diferencia del minimap al original
     }
     var initThumbView = function () {
@@ -1267,11 +1268,42 @@ var CustomThumbnailSVGControl = function (options) {
         }
     }
 
-    function updateSVGContent(newSVG) {
+    // TODO: ACTUALIZAR AQUI DEPENDIENDO DEL CAMBIO DEL CONTIDO COMO UN UPDATE
+    function updateSVGContent() {
         // Actualiza el contenido del SVG
         // Simplemente es cambiar `mainSVGContainer`
-        let $svgContainer = $mainView.querySelector(`${options.mainSVGContainer}`);
-        $svgContainer
+        // let $svgContainer = $mainView.querySelector(`${options.mainSVGContainer}`);
+        // $svgContainer
+        // main_svg.viewport.getCTM();
+
+        // Update CTM to fit to the witdth and height of the SVG
+        main_svg.viewport.simpleViewBoxCache();
+        main_svg.viewport.setCTM(main_svg.viewport.processCTM());
+        // main_svg.viewport.updateCTM(main_svg.viewport.processCTM());
+        main_svg.viewport.updateCTMOnNextFrame(main_svg.viewport.processCTM());
+        let temp_state = {
+            zoom: main_svg.getZoom(),
+            pan: main_svg.getPan()
+        }
+        main_svg.reset();
+        main_svg.zoomBy(0.8);
+        initialState.pan = main_svg.getPan();
+        initialState.zoom = main_svg.getZoom();
+        main_svg.zoom(temp_state.zoom);
+        main_svg.pan(temp_state.pan);
+
+        thumb_svg.viewport.simpleViewBoxCache();
+        thumb_svg.viewport.setCTM(thumb_svg.viewport.processCTM());
+        // thumb_svg.viewport.updateCTM(thumb_svg.viewport.processCTM());
+        thumb_svg.viewport.updateCTMOnNextFrame(thumb_svg.viewport.processCTM());
+        thumb_svg.resize();
+        // Centrar pan y zoom del thumbnail
+        thumb_svg.resetZoom();
+        thumb_svg.zoomOut();
+        thumb_svg.zoomOut();
+        thumb_svg.center(true);
+        // Actualizar el recuardo del viewbox del thumbnail
+        thumb_svg.updateThumbScope();
     }
 
     var firstResize = true;
@@ -1329,5 +1361,5 @@ var CustomThumbnailSVGControl = function (options) {
     ro.observe($mainView);
 
     // return [main_svg, thumb_svg, destroyAll];
-    return [main_svg, thumb_svg, destroyAll];
+    return [main_svg, thumb_svg, updateSVGContent];
 };

@@ -11,9 +11,10 @@ function EditorSyntaxis(options = {}) {
     let $input = $inputCarets.parentElement;
     let $editorInput = $containerEditor.querySelector("#editor-input");
     let synxtaxHighlighter = RegexHighlighter($editor, $syntax);
-
+    let debug = false;
     let $debugCont = undefined;
     if (options.hasOwnProperty('debugInputClass')) {
+        debug = true;
         $debugCont = document.createElement("div");
         $debugCont.classList.add(options.debugInputClass);
         $input.appendChild($debugCont);
@@ -539,7 +540,7 @@ function EditorSyntaxis(options = {}) {
                     // New Line the next
                     newLine = true;
                 }
-                console.log("LINE", caretStart, caretEnd, newLine);
+                if(debug) console.log("LINE", caretStart, caretEnd, newLine);
                 window.getSelection().removeAllRanges();
             }
             
