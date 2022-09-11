@@ -110,7 +110,10 @@ var RegexVisualizerPanel = function (options) {
                 // Se le da al boton otra vez el aspecto normal
                 visualBtn.disabled = false;
             }
-
+            
+            // TODO: Hay que generar las operaciones diferentes que tiene que realizar el RegexVisualizert
+            //  de forma que se itere en un for estas funciones callback lanzando diferentes setTimeouts,
+            //  ordeandos y estas divisiones seran las porciones que ira actualizando
             window.setTimeout(() => {
 
                 raphael_items = RegexVisualizer(regexson, getCorrectedFlags(), paper,$gViewPort, $gContainer, $progress_bar);

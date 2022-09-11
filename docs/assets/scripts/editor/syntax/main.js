@@ -6,6 +6,7 @@ function EditorSyntaxis(options = {}) {
 
     let $containerEditor = options.$containerEditor;
     let $inputCarets = $containerEditor.querySelector(".input-carets");
+    let $inputSelections = $containerEditor.querySelector(".input-selects");
     let $editor = options.$inputRegex;
     let $syntax = options.$syntaxRegex;
     let $input = $inputCarets.parentElement;
@@ -19,6 +20,8 @@ function EditorSyntaxis(options = {}) {
         $debugCont.classList.add(options.debugInputClass);
         $input.appendChild($debugCont);
     }
+
+    let widthCharMap = {};
 
     // Catch Listeners
     const init_listeners = () => {
@@ -112,22 +115,44 @@ function EditorSyntaxis(options = {}) {
             let carets = Array.from($inputCarets.querySelectorAll(".caret"));
             return carets;
         }
-    
-        // HANDLE MULTIEDIT
-        // mouseup - Get caret positions from $syntax to $editor
-        // input - If ctrl pressed saved in queue the position of caret
-        // input - Control updates of caret with arrow keys
+        
         const getFontSize = () => {
             let comptStyle = window.getComputedStyle(document.documentElement);
             let fontSizeRaw = comptStyle.getPropertyValue("--font-size");
             return parseFloat(fontSizeRaw.substring(0, fontSizeRaw.length - 2));
         }
-        const getLineHeight = (fontSize=0) => {
-            if ($editor.hasOwnProperty('fontSize')) {
-                if ($editor.fontSize) {
-                    return $editor.fontSize;
+        const cacheWidthChar = () => {
+            if (!window.hasOwnProperty("selRects")) window.selRects = [];
+            if (window.selRects.length === 0) calculateAllRects();
+
+            let widthChar = [...window.selRects].reduce((a, b) => a + b.width, 0) / selectionCaret.toString().length;
+            widthCharMap[fontSize] = widthChar;
+        }
+        const getCharWidthAt = ($element) => {
+            if ($element.hasOwnProperty('charWidth')) {
+                if ($element.charWidth) {
+                    return $element.charWidth;
                 }
             }
+                
+            let auxNode = document.createElement("span");
+            auxNode.innerText = "0";
+            auxNode.style.opacity = "0";
+            $element.appendChild(auxNode);
+            let _width = auxNode.getBoundingClientRect().width;
+            auxNode.remove();
+            $element.charWidth = _width;
+            return _width;
+        }
+        const getCharWidth = (fontSize=0) => {
+            if (fontSize === 0) fontSize = getFontSize();
+            if (!widthCharMap.hasOwnProperty(fontSize)) {
+                widthCharMap[fontSize] = getCharWidthAt($syntax);
+            }
+            return widthCharMap[fontSize];
+        }
+
+        const getLineHeight = (fontSize=0) => {
             if (fontSize === 0) fontSize = getFontSize();
             let comptStyle = window.getComputedStyle(document.documentElement);
             let ratioLineHeight =  parseFloat(comptStyle.getPropertyValue("--line-height-ratio"));
@@ -184,7 +209,29 @@ function EditorSyntaxis(options = {}) {
             return addCaretElementWith(caretChar, caretLine);
         }
         const addSelectionElement = (caretRects) => {
-            // TODO: Generar el html para los background de seleccion
+            let lineHeight = getLineHeight();
+            let editorBBounds = $editor.getBoundingClientRect();
+            $inputSelections.innerHTML = "";
+            for (let i = 0; i < caretRects.length; i++) {
+                let _caretRect = caretRects[i];
+                // reducedCRects.push({
+                //     bottom: caretRects[i-1].bottom,
+                //     height: caretRects[i-1].height,
+                //     left: xMin,
+                //     right: xMax,
+                //     top: yAux,
+                //     width: xMax - xMin,
+                //     x: xMin,
+                //     y: yAux
+                // });
+                $caretSelection = document.createElement("span");
+                $caretSelection.classList.add("caret-selection");
+                $caretSelection.style.setProperty("--pos-x", _caretRect.x - editorBBounds.x);
+                $caretSelection.style.setProperty("--pos-y", _caretRect.y - editorBBounds.y);
+                $caretSelection.style.setProperty("--size-width", _caretRect.width);
+                $caretSelection.style.setProperty("--size-height", lineHeight);
+                $inputSelections.append($caretSelection);
+            }
         };
 
         const selectSyntaxFromPoint = (startX, startY, endX, endY) => {
@@ -277,25 +324,19 @@ function EditorSyntaxis(options = {}) {
             window.getSelection().removeAllRanges();
             return [caretStart, caretEnd];
         }
+        const getCaretPosFromCharLine = (caretChar, caretLine) => {
+            let fontSize = getFontSize();
+            let lineHeight = getLineHeight(fontSize);
+            let charWidth = getCharWidth(fontSize);
+            let editorBBounds = $editor.getBoundingClientRect();
+            caretPosX = (charWidth * caretChar) + editorBBounds.x;
+            caretPosY = (lineHeight * caretLine) + editorBBounds.y;
 
-        const getCharWidthAt = ($element) => {
-            if ($element.hasOwnProperty('charWidth')) {
-                if ($element.charWidth) {
-                    return $element.charWidth;
-                }
-            }
-                
-            let auxNode = document.createElement("span");
-            auxNode.innerText = "0";
-            auxNode.style.opacity = "0";
-            $element.appendChild(auxNode);
-            let _width = auxNode.getBoundingClientRect().width;
-            auxNode.remove();
-            $element.charWidth = _width;
-            return _width;
+            return [caretPosX, caretPosY];
         }
 
-        const _reduceCaretRects = (caretRects) => {
+        
+        const _reduceCaretRects = (caretRects, isBackwards) => {
             caretRects = caretRects.sort((a, b) => { return isBackwards ? a.y - b.y : b.y - a.y });
 
             // Hay que eliminar aquellos rects que correspondan a la misma linea horizontalmente
@@ -330,24 +371,13 @@ function EditorSyntaxis(options = {}) {
             }
             return reducedCRects;
         }
-
+        
         const getCaretPositions = (range, caretStart, caretEnd) => {
             let fontSize = getFontSize();
             let caretRects = Array.from(range.getClientRects());
             let isBackwards = caretEnd < caretStart ? true : false;
-
             // Ahora se crean los caret en funcion de la ultima la ultima posicion de los clientRects
-            if (caretRects.length > 1) {
-                caretRects = _reduceCaretRects(caretRects);
-
-                if (!$editor.widthCharMap.hasOwnProperty(fontSize)) {
-                    let widthChar = [...caretRects].reduce((a, b) => a + b.width, 0) / selectionCaret.toString().length;
-                    $editor.widthCharMap[fontSize] = widthChar;
-                }
-            }
-            else {
-                $editor.widthCharMap[fontSize] = getCharWidthAt($syntax);
-            }
+            caretRects = _reduceCaretRects(caretRects, isBackwards);
 
             let actualSel = caretRects[0];
             let caretPosX = 0;
@@ -409,38 +439,6 @@ function EditorSyntaxis(options = {}) {
             return [startCaretChar, endCaretChar, startCaretLine, endCaretLine, backward];
         };
 
-        // $syntax.addEventListener("selectionchange", (event) => {
-        const updateSelectionRendered = () => {
-            if ($editor.widthCharMap === undefined) $editor.widthCharMap = {};
-
-            let selectionCaret = window.getSelection();
-            let range = selectionCaret.getRangeAt(0);
-
-            // Obtengo los caret index relativos al padre de la seleccion, para que esto fuincione
-            // Tengo que tener una seleccion cargada en algun nodo hijo del element que se le pasa
-            // en este caso se le pasa $syntax, porque mi seleccion se hace en $syntax
-            let [caretStart, caretEnd] = getCaretParentIndex($syntax);
-
-            let [caretRects, caretPosX, caretPosY] = getCaretPositions(range, caretStart, caretEnd);
-
-            // FUNCIONAL: SE AGREGA A $editor LA SELECCION DE $syntax
-            selectEditorFromSyntax(caretStart, caretEnd);
-            
-            // VISUAL: SE CREA EL ELEMENTO CARET AL DOM
-            let fontSize = getFontSize();
-            let lineHeight = getLineHeight(fontSize);
-            let editorBBounds = $editor.getBoundingClientRect();
-            let caretChar = Math.round((caretPosX - editorBBounds.x) / $editor.widthCharMap[fontSize]);
-            let caretLine = parseInt((caretPosY - editorBBounds.y) / lineHeight);
-            addCaretElementWith(caretChar, caretLine);
-
-            // Si esta collapsado no se generan los rects de seleccion
-            if (!range.collapsed) {
-                // Se agregan a container-carets dos span con clase caret-selection
-                addSelectionElement(caretRects);
-            }
-        };
-
         function logSelection() {  
             console.log(window.getSelection().toString());
         }
@@ -453,8 +451,14 @@ function EditorSyntaxis(options = {}) {
         // });
         $containerEditor.querySelector('.input').addEventListener("blur", event => {
             if (!$containerEditor.querySelector('.input').editing) {
-                $containerEditor.querySelector('.input').querySelector(".input-carets").innerHTML = "";
+                // $inputCarets.innerHTML = "";
+                $inputCarets.classList.add("nofocus");
+                $inputSelections.classList.add("nofocus");
             }
+        });
+        $containerEditor.querySelector('.input').addEventListener("focus", event => {
+            $inputCarets.classList.remove("nofocus");
+            $inputSelections.classList.remove("nofocus");
         });
 
         const calculateAllRects = () => {
@@ -588,7 +592,7 @@ function EditorSyntaxis(options = {}) {
             }
         }
 
-        const calculateActualRect = (clientY) => {
+        const calculateActualRect = (clientY, absolutePos=false) => {
             if (!window.hasOwnProperty("selRects")) window.selRects = [];
             // Se comprueba que donde se ha hecho mousedown no corresponde con la posicion de una seleccion
             if (window.selRects.length === 0) calculateAllRects();
@@ -603,6 +607,21 @@ function EditorSyntaxis(options = {}) {
             for (let i in window.selRects) {
                 var _rect = window.selRects[i];
                 if (clientY >= _rect.y) selRect = _rect;
+            }
+            
+            selRect = Object.keys(selRect).reduce((obj, _key) => {
+                obj[_key] = selRect[_key];
+                return obj;
+            }, {});
+
+            if (absolutePos) {
+                let editorBBounds = $editor.getBoundingClientRect();
+                selRect.y += editorBBounds.y;
+                selRect.x += editorBBounds.x;
+                selRect.top += editorBBounds.top;
+                selRect.bottom += editorBBounds.top;
+                selRect.left += editorBBounds.left;
+                selRect.right += editorBBounds.left;
             }
             // let inputBB = $input.getBoundingClientRect();
 
@@ -693,14 +712,128 @@ function EditorSyntaxis(options = {}) {
                     $caret.style.setProperty("--pos-line", caretLine);
     
                     if (firstCaret) {
+                        // $inputSelections.innerHTML = "";
                         $caret.style.setProperty("--fpos-char", caretChar);
                         $caret.style.setProperty("--fpos-line", caretLine);
+                    }
+                    else {
+                        updateSelectionCarets();
                     }
                 }
             }
 
             return caretPos;
         }
+
+        const updateSelectionCarets = () => {
+            let carets = Array.from($inputCarets.children);
+            let lineHeight = getLineHeight();
+            let $caret;
+            let caretRects = []
+            for (let i=0; i<carets.length; i++) {
+                $caret = carets[i];
+                
+                let cFirstPosLine = parseInt($caret.style.getPropertyValue("--fpos-line"));
+                let cPosLine = parseInt($caret.style.getPropertyValue("--pos-line"));
+                let [caretFirstPosX, caretFirstPosY] = getCaretPosFromCharLine(
+                    parseInt($caret.style.getPropertyValue("--fpos-char")),
+                    cFirstPosLine
+                );
+                let [caretPosX, caretPosY] = getCaretPosFromCharLine(
+                    parseInt($caret.style.getPropertyValue("--pos-char")),
+                    cPosLine
+                );
+                if (cPosLine !== cFirstPosLine) {
+                    // Se tiene que calcular si la seleccion en backward o no
+                    let isBackwards = false;
+                    if (cFirstPosLine > cPosLine) {
+                        isBackwards = true;
+                    }
+                    // Una vez con esta informacion obtener los selRects de cada linea
+                    let firstSelRect = calculateActualRect((cFirstPosLine * lineHeight) + lineHeight/2, absolutePos=true);
+                    let lastSelRect = calculateActualRect((cPosLine * lineHeight) + lineHeight/2, absolutePos=true);
+                    // Agregar los caretRects teniendo en cuenta donde empieza y acaba
+                    if (isBackwards) {
+                        // First selection
+                        caretRects.push({
+                            top: caretFirstPosY,
+                            bottom: caretFirstPosY + lineHeight,
+                            height: lineHeight,
+                            width: caretFirstPosX - firstSelRect.left,
+                            left: firstSelRect.left,
+                            right: caretFirstPosX,
+                            x: firstSelRect.left,
+                            y: caretFirstPosY
+                        });
+                        // Last selection
+                        caretRects.push({
+                            bottom: lastSelRect.bottom,
+                            top: lastSelRect.top,
+                            height: lineHeight,
+                            width: lastSelRect.right - caretPosX,
+                            left: caretPosX,
+                            right: lastSelRect.right,
+                            x: caretPosX,
+                            y: lastSelRect.y
+                        });
+                    }
+                    else {
+                        caretRects.push({
+                            top: firstSelRect.top,
+                            bottom: firstSelRect.bottom,
+                            height: lineHeight,
+                            width: firstSelRect.right - caretFirstPosX ,
+                            left: caretFirstPosX,
+                            right: firstSelRect.right,
+                            x: caretFirstPosX,
+                            y: firstSelRect.y
+                        });
+                        // Last selection
+                        caretRects.push({
+                            top: lastSelRect.top,
+                            bottom: lastSelRect.bottom,
+                            height: lineHeight,
+                            width: caretPosX - lastSelRect.left,
+                            left: lastSelRect.left,
+                            right: caretPosX,
+                            x: lastSelRect.x,
+                            y: lastSelRect.y
+                        });
+                    }
+                    if (Math.abs(cPosLine - cFirstPosLine) > 0) {
+                        // Por ultimo si se abarcan mas de 2 lineas se agregan los cuadros de seleccion de las lineas intermedias
+                        for (let iLine=Math.min(cFirstPosLine, cPosLine) + 1; iLine < Math.max(cFirstPosLine, cPosLine); iLine++) {
+                            let selRect = calculateActualRect((iLine * lineHeight) + lineHeight/2, absolutePos=true);
+                            caretRects.push(selRect);
+                        }
+                    }
+                }
+                else {
+                    let isBackwards = false;
+                    if (caretFirstPosX > caretPosX) {
+                        isBackwards = true;
+                    }
+                    caretRects.push({
+                        top: caretPosY,
+                        bottom: caretPosY + lineHeight,
+                        height: lineHeight,
+                        width: Math.abs(caretPosX - caretFirstPosX),
+                        left: isBackwards ? caretPosX : caretFirstPosX,
+                        right: isBackwards ? caretFirstPosX : caretPosX,
+                        x: isBackwards ? caretPosX : caretFirstPosX,
+                        y: caretPosY
+                    });
+                }
+            }
+            // TODO: Aplicar una reduccion de numero de carets a usar, es decir fusionar estos selectionRects si hay dos que se solapan
+            //  y mantener unicamente el caret de la fusion
+            // Si hay un caret moviendose con el raton es decir estoy moviendo solo 1 caret este absorve el resto de carets si entra
+            //  dentro del rango de seleccion de otros
+            // Pero si se estan moviendo todos los carets, y se solapan, entonces se fusionan y se queda el caret activo que en el que se realizaba
+            // la seleccion
+            addSelectionElement(caretRects);
+        }
+
         const updateCarets = (_event) => {
             let $inputCarets = $containerEditor.querySelector(".input-carets");
             let carets = Array.from($inputCarets.children);
@@ -739,7 +872,8 @@ function EditorSyntaxis(options = {}) {
             updateCaretPos({x: event.clientX, y: event.clientY}, $caret=undefined, ctrlKey=event.ctrlKey);
         }, true);
         $syntax.addEventListener("mousemove", (event) => {
-            if (!$editor.hasOwnProperty("selecting")) $editor.selecting = false;
+            // which === 2 // Check if middle wheel is pressed
+            if (!$editor.hasOwnProperty("selecting") && event.which === 1) $editor.selecting = false;
             if ($editor.selecting) {
                 let carets = Array.from($inputCarets.children);
                 
@@ -1054,12 +1188,12 @@ function EditorSyntaxis(options = {}) {
                     // sel.modify("extend", "forward", "lineboundary");
                 }
             }
+            updateSelectionCarets();
             // updateCarets(event);
         }
         const _ProcessSpecialActions = (event) => {
-            event.preventDefault();
-            
             if (event.key.toUpperCase() === "Z") {
+                event.preventDefault();
                 // Mirar en un historico privado variable local, el numero de veces que se tiene que realizar un undo
                 if(event.shiftKey) {
                     execCommandRedo($editor.ownerDocument);
@@ -1067,6 +1201,13 @@ function EditorSyntaxis(options = {}) {
                 else {
                     execCommandUndo($editor.ownerDocument);
                 }
+            }
+            if (event.key.toUpperCase() === "A") {
+                event.preventDefault();
+                // Select all
+                let sel = window.getSelection();
+                sel.selectAllChildren($syntax);
+
             }
         }
 
@@ -1144,6 +1285,8 @@ function EditorSyntaxis(options = {}) {
                         $caret.style.setProperty("--pos-line", caretLine);
                         $caret.style.setProperty("--fpos-char", caretChar);
                         $caret.style.setProperty("--fpos-line", caretLine);
+
+                        updateSelectionCarets();
                     }
                 }
             }

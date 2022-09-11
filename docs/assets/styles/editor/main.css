@@ -82,14 +82,15 @@
 
 .input-editor,
 .input-syntax,
-.input-carets {
+.input-carets,
+.input-selects {
   width: 100%;
   box-sizing: border-box;
   /* background-color: var(--margin-editor); */
   transition: transform 1s, background 1s, opacity 1s;
 }
 
-.input-carets {
+.input-selects {
   background: none;
   padding: 0;
   z-index: 4;
@@ -97,7 +98,29 @@
   min-height: calc(var(--line-height-ratio) * var(--font-size));
 }
 
-.caret {
+.input-selects .caret-selection {
+  position: absolute;
+  left: calc(var(--pos-x) * 1px);
+  top: calc(var(--pos-y) * 1px);
+  width: calc(var(--size-width) * 1px);
+  height: calc(var(--size-height) * 1px);
+  background: var(--color-editor);
+  opacity: 0.2;
+}
+
+.input-selects.nofocus {
+  filter: grayscale(1);
+}
+
+.input-carets {
+  background: none;
+  padding: 0;
+  z-index: 5;
+  pointer-events: none;
+  min-height: calc(var(--line-height-ratio) * var(--font-size));
+}
+
+.input-carets .caret {
   display: inline-block;
   position: absolute;
   width: 0.1em;
@@ -114,7 +137,11 @@
   animation: none;
 }
 
-.blink .caret {
+.input-carets.nofocus .caret {
+  display: none;
+}
+
+.input-carets.blink .caret {
   -webkit-animation: 1s blink step-end infinite;
   -moz-animation: 1s blink step-end infinite;
   -ms-animation: 1s blink step-end infinite;
@@ -122,7 +149,7 @@
   animation: 1s blink step-end infinite;
 }
 
-.caret.drag {
+.input-carets .caret.drag {
   background: linear-gradient(
     var(--color-editor), var(--color-editor),
     transparent, transparent,

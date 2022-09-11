@@ -16,7 +16,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
     //         }]
     //     }
     // ]);
-    // Create ViewPort
+    // Create ViewPort][[]]
     // id = mainSVGViewPort
     // class = svg-pan-zoom_viewport
     // Create inside this ViewPort
