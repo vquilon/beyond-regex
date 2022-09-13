@@ -446,7 +446,7 @@
     //     return res;
     // };
 
-    Raphael.fn.addv2 = function (json) {
+    Raphael.fn.addv2 = function (raphael_items) {
         var elements = { circle: 1, rect: 1, path: 1, ellipse: 1, text: 1, image: 1, group: 1 };
         var has = "hasOwnProperty";
         function appendChildrenToNode(node, children) {
@@ -461,13 +461,13 @@
             });
             node.appendChild(documentFragment);
         }
-        function auxAddWithGroup(paperproto, json) {
+        function auxAddWithGroup(paperproto, _raphael_items) {
             var res = paperproto.set();
             var children;
-            if (json !== undefined) {
-                var j, i = 0, ii = json.length;
+            if (_raphael_items !== undefined) {
+                var j, i = 0, ii = _raphael_items.length;
                 for (; i < ii; i++) {
-                    j = json[i] || {};
+                    j = _raphael_items[i] || {};
                     var g;
                     if (j.type === "group") {
                         // Agregar el id y clase y ocultar
@@ -503,8 +503,8 @@
             return res, children;
         }
 
-        if (Raphael.is(json, "array")) {
-            var res, children = auxAddWithGroup(this, json);
+        if (Raphael.is(raphael_items, "array")) {
+            var res, children = auxAddWithGroup(this, raphael_items);
         }
         return res;
     };
