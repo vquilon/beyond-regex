@@ -30,5 +30,9 @@ const CHANGELOG = {
             "Multi Selection available now in the editor",
             "Non-Blocking render visual regex"
         ],
+        "18": [
+            "Fix bugs in the regex editor",
+            "Non-Blocking render visual regex v2"
+        ],
     }
 }
