@@ -235,6 +235,7 @@ function EditorSyntaxis(options = {}) {
         };
 
         const selectSyntaxFromPoint = (startX, startY, endX, endY) => {
+            // TODO: Solo funciona si esta el viewport visible, si hay scroll no funcionaria
             let doc = document;
             let start, end, range = null;
             if (typeof doc.caretPositionFromPoint != "undefined") {
@@ -536,17 +537,19 @@ function EditorSyntaxis(options = {}) {
             // Para calcular que es una new line o visual line se tiene que hacer un split de los \n
             // y se cuentan los indices, despues teniendo en cuenta los selRects, se obtendran los contenidos
             // de cada linea
-            for (let rect of window.selRects.sort((a, b) => a.y - b.y )) {
-                let midHeight = (rect.top + rect.bottom) / 2;
-                let [caretStart, caretEnd] = selectSyntaxFromPoint(rect.left+1, midHeight, rect.right, midHeight);
-                let newLine = false;
-                if ($editor.innerText[caretEnd+1] === "\n") {
-                    // New Line the next
-                    newLine = true;
-                }
-                if(debug) console.log("LINE", caretStart, caretEnd, newLine);
-                window.getSelection().removeAllRanges();
-            }
+            // if(debug) {
+            //     for (let rect of window.selRects.sort((a, b) => a.y - b.y )) {
+            //         let midHeight = (rect.top + rect.bottom) / 2;
+            //         let [caretStart, caretEnd] = selectSyntaxFromPoint(rect.left+1, midHeight, rect.right, midHeight);
+            //         let newLine = false;
+            //         if ($editor.innerText[caretEnd+1] === "\n") {
+            //             // New Line the next
+            //             newLine = true;
+            //         }
+            //         console.log("LINE", caretStart, caretEnd, newLine);
+            //         window.getSelection().removeAllRanges();
+            //     }
+            // }
             
             for (let rect of window.selRects) {
                 rect.y -= editorBBounds.y;
@@ -608,22 +611,23 @@ function EditorSyntaxis(options = {}) {
                 var _rect = window.selRects[i];
                 if (clientY >= _rect.y) selRect = _rect;
             }
-            
-            selRect = Object.keys(selRect).reduce((obj, _key) => {
-                obj[_key] = selRect[_key];
-                return obj;
-            }, {});
-
-            if (absolutePos) {
-                let editorBBounds = $editor.getBoundingClientRect();
-                selRect.y += editorBBounds.y;
-                selRect.x += editorBBounds.x;
-                selRect.top += editorBBounds.top;
-                selRect.bottom += editorBBounds.top;
-                selRect.left += editorBBounds.left;
-                selRect.right += editorBBounds.left;
+            if (selRect) {
+                selRect = Object.keys(selRect).reduce((obj, _key) => {
+                    obj[_key] = selRect[_key];
+                    return obj;
+                }, {});
+    
+                if (absolutePos) {
+                    let editorBBounds = $editor.getBoundingClientRect();
+                    selRect.y += editorBBounds.y;
+                    selRect.x += editorBBounds.x;
+                    selRect.top += editorBBounds.top;
+                    selRect.bottom += editorBBounds.top;
+                    selRect.left += editorBBounds.left;
+                    selRect.right += editorBBounds.left;
+                }
+                // let inputBB = $input.getBoundingClientRect();
             }
-            // let inputBB = $input.getBoundingClientRect();
 
             return selRect;
         }
@@ -695,9 +699,18 @@ function EditorSyntaxis(options = {}) {
                         // }
                         $inputCarets.innerHTML = "";
                     }
+                    // if (dragStyle) {
+                    //     let carets = Array.from($inputCarets.children);
+                    //     for (let c of carets) {
+                    //         if (! c.classList.contains("drag")) {
+                    //             c.remove();
+                    //         }
+                    //     }
+                    // }
                     $caret = addCaretElementWith(caretChar, caretLine, dragStyle=dragStyle);
 
                     if (dragStyle) {
+                        $caret.classList.add("drag");
                         $editor.dragCaret = $caret;
                     }
                 }
@@ -717,7 +730,7 @@ function EditorSyntaxis(options = {}) {
                         $caret.style.setProperty("--fpos-line", caretLine);
                     }
                     else {
-                        updateSelectionCarets();
+                        if (!dragStyle) updateSelectionCarets();
                     }
                 }
             }
@@ -753,58 +766,60 @@ function EditorSyntaxis(options = {}) {
                     let firstSelRect = calculateActualRect((cFirstPosLine * lineHeight) + lineHeight/2, absolutePos=true);
                     let lastSelRect = calculateActualRect((cPosLine * lineHeight) + lineHeight/2, absolutePos=true);
                     // Agregar los caretRects teniendo en cuenta donde empieza y acaba
-                    if (isBackwards) {
-                        // First selection
-                        caretRects.push({
-                            top: caretFirstPosY,
-                            bottom: caretFirstPosY + lineHeight,
-                            height: lineHeight,
-                            width: caretFirstPosX - firstSelRect.left,
-                            left: firstSelRect.left,
-                            right: caretFirstPosX,
-                            x: firstSelRect.left,
-                            y: caretFirstPosY
-                        });
-                        // Last selection
-                        caretRects.push({
-                            bottom: lastSelRect.bottom,
-                            top: lastSelRect.top,
-                            height: lineHeight,
-                            width: lastSelRect.right - caretPosX,
-                            left: caretPosX,
-                            right: lastSelRect.right,
-                            x: caretPosX,
-                            y: lastSelRect.y
-                        });
-                    }
-                    else {
-                        caretRects.push({
-                            top: firstSelRect.top,
-                            bottom: firstSelRect.bottom,
-                            height: lineHeight,
-                            width: firstSelRect.right - caretFirstPosX ,
-                            left: caretFirstPosX,
-                            right: firstSelRect.right,
-                            x: caretFirstPosX,
-                            y: firstSelRect.y
-                        });
-                        // Last selection
-                        caretRects.push({
-                            top: lastSelRect.top,
-                            bottom: lastSelRect.bottom,
-                            height: lineHeight,
-                            width: caretPosX - lastSelRect.left,
-                            left: lastSelRect.left,
-                            right: caretPosX,
-                            x: lastSelRect.x,
-                            y: lastSelRect.y
-                        });
+                    if (firstSelRect && lastSelRect) {
+                        if (isBackwards) {
+                            // First selection
+                            caretRects.push({
+                                top: caretFirstPosY,
+                                bottom: caretFirstPosY + lineHeight,
+                                height: lineHeight,
+                                width: caretFirstPosX - firstSelRect.left,
+                                left: firstSelRect.left,
+                                right: caretFirstPosX,
+                                x: firstSelRect.left,
+                                y: caretFirstPosY
+                            });
+                            // Last selection
+                            caretRects.push({
+                                bottom: lastSelRect.bottom,
+                                top: lastSelRect.top,
+                                height: lineHeight,
+                                width: lastSelRect.right - caretPosX,
+                                left: caretPosX,
+                                right: lastSelRect.right,
+                                x: caretPosX,
+                                y: lastSelRect.y
+                            });
+                        }
+                        else {
+                            caretRects.push({
+                                top: firstSelRect.top,
+                                bottom: firstSelRect.bottom,
+                                height: lineHeight,
+                                width: firstSelRect.right - caretFirstPosX ,
+                                left: caretFirstPosX,
+                                right: firstSelRect.right,
+                                x: caretFirstPosX,
+                                y: firstSelRect.y
+                            });
+                            // Last selection
+                            caretRects.push({
+                                top: lastSelRect.top,
+                                bottom: lastSelRect.bottom,
+                                height: lineHeight,
+                                width: caretPosX - lastSelRect.left,
+                                left: lastSelRect.left,
+                                right: caretPosX,
+                                x: lastSelRect.x,
+                                y: lastSelRect.y
+                            });
+                        }
                     }
                     if (Math.abs(cPosLine - cFirstPosLine) > 0) {
                         // Por ultimo si se abarcan mas de 2 lineas se agregan los cuadros de seleccion de las lineas intermedias
                         for (let iLine=Math.min(cFirstPosLine, cPosLine) + 1; iLine < Math.max(cFirstPosLine, cPosLine); iLine++) {
                             let selRect = calculateActualRect((iLine * lineHeight) + lineHeight/2, absolutePos=true);
-                            caretRects.push(selRect);
+                            if (selRect) caretRects.push(selRect);
                         }
                     }
                 }
@@ -903,8 +918,7 @@ function EditorSyntaxis(options = {}) {
           if (!$editor.hasOwnProperty("dragging")) $editor.dragging = false;
           if ($editor.dragging) {
             $editor.dragCaretPos = {x: event.clientX, y: event.clientY};
-            $editor.dragCaretPos = updateCaretPos($editor.dragCaretPos, firstCaret=false, dragStyle=true);
-            $editor.dragCaret.classList.add("drag");
+            $editor.dragCaretPos = updateCaretPos($editor.dragCaretPos, $caret=$editor.dragCaret, firstCaret=false, dragStyle=true);
           }
         }, false);
         

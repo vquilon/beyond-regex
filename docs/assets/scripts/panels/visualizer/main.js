@@ -35,6 +35,22 @@ var RegexVisualizerPanel = function (options) {
 
     var svg_graph_controller, svg_thumb_controller, updateContents_ThumbnailSVGControl;
 
+    const addOnThumbnailWithZoom = () => {
+        if (updateContents_ThumbnailSVGControl) {
+            updateContents_ThumbnailSVGControl();
+        }
+        else {
+            [svg_graph_controller, svg_thumb_controller, updateContents_ThumbnailSVGControl] = CustomThumbnailSVGControl({
+                mainViewId: mainViewId,
+                mainSVGId: mainSVGId,
+                mainSVGContainer: mainSVGContainer,
+                mainSVGViewPort: mainSVGViewPort,
+                mainViewPortClass: mainViewPortClass,
+                // Dejamos que lo autogenere con el id
+                thumbContainerId: 'thumbViewContainer',
+            });
+        }
+    }
 
     // SET DE FUNCIONES AUXILIARES
     // var dragGraphListeners = function (g) {
@@ -79,19 +95,9 @@ var RegexVisualizerPanel = function (options) {
         }
         var regexson = $containerEditor.regexson;
         if (regexson && regexson.errors.length === 0) {
-            // Se desactiva el boton
             visualBtn.disabled = true;
 
-            // Antes hay que disponer un loader con una pequeña barra de carga
-            // Esta se obtiene el objeto barra que se vaya cargando
             $loader_view.classList.add("loading");
-            // console.log("Agregar clase loading");
-            let updateProgressBar = function (newValue) {
-                // console.log(`Actualizando valor de progreso: ${newValue}`);
-                this.attributes.getNamedItem("data-value").value = `${newValue}`;
-                this.style.transform = `scaleX(${newValue / 100})`;
-            }
-            $progress_bar.updateProgressBar = updateProgressBar;
 
             // Se destruye el controlador svg
             // if (svg_graph_controller && svg_thumb_controller && destroyAllHandler_ThumbnailSVGControl) {
@@ -102,48 +108,30 @@ var RegexVisualizerPanel = function (options) {
             // Se le pasa como argumento el loader
             var raphael_items = {};
 
-            let hideLoader = function () {
-                // console.log("Ocultar loader");
-                $loader_view.classList.remove("loading");
-                $progress_bar.attributes.getNamedItem("data-value").value = "0";
-                $progress_bar.style.transform = "";
-                // Se le da al boton otra vez el aspecto normal
-                visualBtn.disabled = false;
-            }
-            
             // TODO: Hay que generar las operaciones diferentes que tiene que realizar el RegexVisualizert
             //  de forma que se itere en un for estas funciones callback lanzando diferentes setTimeouts,
             //  ordeandos y estas divisiones seran las porciones que ira actualizando
             window.setTimeout(() => {
+                const callback = () => {
+                    if (updateContents_ThumbnailSVGControl) {
+                        updateContents_ThumbnailSVGControl();
+                    }
+                    else {
+                        [svg_graph_controller, svg_thumb_controller, updateContents_ThumbnailSVGControl] = CustomThumbnailSVGControl({
+                            mainViewId: mainViewId,
+                            mainSVGId: mainSVGId,
+                            mainSVGContainer: mainSVGContainer,
+                            mainSVGViewPort: mainSVGViewPort,
+                            mainViewPortClass: mainViewPortClass,
+                            // Dejamos que lo autogenere con el id
+                            thumbContainerId: 'thumbViewContainer',
+                        });
+                    }
+                }
 
-                raphael_items = RegexVisualizer(regexson, getCorrectedFlags(), paper,$gViewPort, $gContainer, $progress_bar);
+                raphael_items = RegexVisualizer(regexson, getCorrectedFlags(), paper, $gViewPort, $gContainer, $progress_bar, addOnThumbnailWithZoom);
                 _updateRaphaelItemsJSON(raphael_items);
-                // Una vez que se pinta actualizar el plugin de visualizador SVG
-                // if (!svg_graph_controller && !svg_thumb_controller && !destroyAllHandler_ThumbnailSVGControl) {
-                // [svg_graph_controller, svg_thumb_controller, destroyAllHandler_ThumbnailSVGControl] = ThumbnailSVGControl({
-                //     mainViewId: 'visualizer-graphView',
-                //     mainSVGId: 'visualizer-graphSVG',
-                //     // Dejamos que lo autogenere con el id
-                //     thumbContainerId: 'thumbViewContainer',
-                // });
-                // }
-                if (updateContents_ThumbnailSVGControl) {
-                    updateContents_ThumbnailSVGControl();
-                }
-                else {
-                    [svg_graph_controller, svg_thumb_controller, updateContents_ThumbnailSVGControl] = CustomThumbnailSVGControl({
-                        mainViewId: mainViewId,
-                        mainSVGId: mainSVGId,
-                        mainSVGContainer: mainSVGContainer,
-                        mainSVGViewPort: mainSVGViewPort,
-                        mainViewPortClass: mainViewPortClass,
-                        // Dejamos que lo autogenere con el id
-                        thumbContainerId: 'thumbViewContainer',
-                    });
-                }
-                
-                // Se vuelve a ocultar el loader
-                hideLoader();
+
             }, 0);
             return true;
         }
@@ -158,39 +146,10 @@ var RegexVisualizerPanel = function (options) {
         var regExpresion = getCorrectedRegex();
         var regEXSON = parseRegex(regExpresion, language_selected = getCorrectedReLanguage());
         if (regEXSON) {
-            $loader_view.classList.add("loading");
-            let updateProgressBar = function (newValue) {
-                this.attributes.getNamedItem("data-value").value = `${newValue}`;
-                this.style.transform = `scaleX(${newValue / 100})`;
-            }
-            $progress_bar.updateProgressBar = updateProgressBar;
-
             // Se le pasa como argumento el loader
             var raphael_items = {};
 
-            let hideLoader = function () {
-                $loader_view.classList.remove("loading");
-                $progress_bar.attributes.getNamedItem("data-value").value = "0";
-                $progress_bar.style.transform = "";
-            }
-
-            raphael_items = RegexVisualizer(regEXSON, getCorrectedFlags(), paper, $gViewPort, $gContainer, $progress_bar);
-            if (updateContents_ThumbnailSVGControl) {
-                updateContents_ThumbnailSVGControl();
-            }
-            else {
-                [svg_graph_controller, svg_thumb_controller, updateContents_ThumbnailSVGControl] = CustomThumbnailSVGControl({
-                    mainViewId: mainViewId,
-                    mainSVGId: mainSVGId,
-                    mainSVGContainer: mainSVGContainer,
-                    mainSVGViewPort: mainSVGViewPort,
-                    mainViewPortClass: mainViewPortClass,
-                    // Dejamos que lo autogenere con el id
-                    thumbContainerId: 'thumbViewContainer',
-                });
-            }
-            // Se oculta el loader
-            hideLoader();
+            raphael_items = RegexVisualizer(regEXSON, getCorrectedFlags(), paper, $gViewPort, $gContainer, $progress_bar, addOnThumbnailWithZoom);
 
             return true;
         }
@@ -199,7 +158,7 @@ var RegexVisualizerPanel = function (options) {
         }
     }
 
-    const generatePanelURL = function (iframe=false) {
+    const generatePanelURL = function (iframe = false) {
         let re = getCorrectedRegex();
         let flags = getCorrectedFlags();
         let reLang = getCorrectedReLanguage();
@@ -238,7 +197,7 @@ var RegexVisualizerPanel = function (options) {
         return svgAsXML;
     }
 
-    const generateImageOn = async ($canvas, $img, $anchor, imageType="svg") => {
+    const generateImageOn = async ($canvas, $img, $anchor, imageType = "svg") => {
         //Use raphael.export to fetch the SVG from the paper
         // let svg = paper.toSVG();
         let $svg = paper.canvas.cloneNode(true);
@@ -285,9 +244,9 @@ var RegexVisualizerPanel = function (options) {
                 //     //     renderSource(svg);
                 //     // }
                 // });
-                
+
                 // Automcompleted version (Github Copilot)
-                
+
                 $canvas.width = w * ratio;
                 $canvas.height = h * ratio;
                 // $canvas.style.width = w+"px";
@@ -311,8 +270,8 @@ var RegexVisualizerPanel = function (options) {
                 };
                 _img.src = _imgURL;
             }
-        
-                
+
+
         }
         updateBackgroundStyle(rectBackground, imageType);
 
@@ -323,195 +282,211 @@ var RegexVisualizerPanel = function (options) {
         }
 
     }
-    function initEventsListener() {
-        visualBtn.addEventListener("click", (event) => {
-            if (!event.detail || event.detail == 1) {
-                visualizeRegex();
+
+    const updateProgressBar = function (newValue) {
+        if (!$loader_view.classList.contains("loading")) $loader_view.classList.add("loading");
+
+        // console.log(`Actualizando valor de progreso: ${newValue}`);
+        this.attributes.getNamedItem("data-value").value = `${newValue}`;
+        this.style.transform = `scaleX(${newValue / 100})`;
+        if (newValue === 100) {
+            // Se vuelve a ocultar el loader
+            // console.log("Ocultar loader");
+            $loader_view.classList.remove("loading");
+            $progress_bar.attributes.getNamedItem("data-value").value = "0";
+            $progress_bar.style.transform = "";
+
+            // Se le da al boton otra vez el aspecto normal
+            if (visualBtn) visualBtn.disabled = false;
+        }
+    }
+
+    function initEventsListener(isPanelShared) {
+        $progress_bar.updateProgressBar = updateProgressBar;
+
+        if (!isPanelShared) {
+            visualBtn.addEventListener("click", (event) => {
+                if (!event.detail || event.detail == 1) {
+                    visualizeRegex();
+                }
+            });
+
+            exportBtn.addEventListener("click", (event) => {
+
+                Swal.fire({
+                    title: 'Share the Image Graph (PNG)!',
+                    icon: "info",
+                    iconHtml: `<span class="sweetalert-icon material-icons">image</span>`,
+                    html: `
+                    <canvas style="display:none; width: 100%; height: unset;" id="export-image"></canvas>
+                    
+                    <a class="anchor-export-img" href="" download="graph-regex.png"><img id="exported-img" src=""><span><i class="fas fa-download"></i>PNG</span></a>
+                    `,
+                    showCancelButton: true,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    cancelButtonText: 'Close',
+                    didOpen: () => {
+                        Swal.showLoading();
+
+                        let { $img, rectBackground, updateBackgroundStyle } = generateImageOn(
+                            document.querySelector("canvas#export-image"),
+                            document.querySelector("img#exported-img"),
+                            document.querySelector("img#exported-img").parentElement,
+                            imageType = "png"
+                        );
+
+                        Swal.hideLoading();
+                    }
+                });
+
+            });
+        }
+
+        // Listeners
+        document.querySelector("#share-visualize").addEventListener("click", (event) => {
+            // OPEN SWAL WITH IFRAME LINK AND IMAGE EXPORT
+            const exportedIframeURL = new Promise((resolve) => {
+                resolve({
+                    panelIframeURL: generatePanelURL(iframe = true),
+                    panelURL: generatePanelURL(iframe = false)
+                });
+            });
+
+            exportedIframeURL.then((res) => {
+                Swal.fire({
+                    title: 'Share the interactive graph!',
+                    icon: "info",
+                    iconHtml: `<span class="sweetalert-icon material-icons">image</span>`,
+                    html: `
+                    <div id="visualizer-copy" class="container-copy">
+                        <div class="copy-container">
+                            <div class="copy-content">
+                                <span>${escapeHTML(res.panelURL)}</span>
+                            </div>
+                            <div class="wrap-copy-btn">
+                                <button title="Copy link" data-copy="${res.panelURL}" class="copy-btn">
+                                    <i class="far fa-copy"></i>
+                                    <span class="confetti-container">
+                                        <span class="confetti"></span>
+                                        <span class="confetti"></span>
+                                        <span class="confetti"></span>
+                                        <span class="confetti"></span>
+                                        <span class="confetti"></span>
+                                        <span class="confetti"></span>
+                                    </span>
+                                </button>
+                                <button title="Copy iframe" data-copy="${escapeHTML(res.panelIframeURL)}" class="copy-btn">
+                                    <i class="far fa-code"></i>
+                                    <span class="confetti-container">
+                                        <span class="confetti"></span>
+                                        <span class="confetti"></span>
+                                        <span class="confetti"></span>
+                                        <span class="confetti"></span>
+                                        <span class="confetti"></span>
+                                        <span class="confetti"></span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas style="display:none; width: 100%; height: unset;" id="export-image"></canvas>
+                    
+                    <a class="anchor-export-img" href="" download="graph-regex.svg"><img id="exported-img" src=""><span><i class="fas fa-download"></i>SVG</span></a>
+                    `,
+                    showCancelButton: true,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    cancelButtonText: 'Close',
+                    didOpen: () => {
+                        Swal.showLoading();
+
+                        // Listeners button copy
+                        document.querySelectorAll("#visualizer-copy button.copy-btn").forEach(($itemBtn) => {
+                            $itemBtn.addEventListener("click", function () {
+                                const link = $itemBtn.dataset.copy
+                                navigator.clipboard.writeText(link);
+
+                                let $iconCopy = $itemBtn.querySelector("i");
+                                let prevIconClass = $iconCopy.className;
+                                $iconCopy.className = "fas fa-check";
+                                document.querySelector("#visualizer-copy .copy-container").classList.add("copied");
+                                $itemBtn.classList.add("copied");
+                                setTimeout(function () {
+                                    let $copyContainer = document.querySelector("#visualizer-copy .copy-container");
+                                    if ($iconCopy && $copyContainer) {
+                                        $iconCopy.className = prevIconClass;
+                                        $copyContainer.classList.remove("copied");
+                                        $itemBtn.classList.remove("copied");
+                                    }
+                                }, 1000);
+                            });
+                        })
+                        let { $img, rectBackground, updateBackgroundStyle } = generateImageOn(
+                            document.querySelector("canvas#export-image"),
+                            document.querySelector("img#exported-img"),
+                            document.querySelector("img#exported-img").parentElement,
+                            imageType = "svg"
+                        );
+
+                        Swal.hideLoading();
+                    }
+                });
+            })
+
+
+
+            // Swal.fire({
+            //     title: 'Share the interactive graph!',
+            //     html: "",
+            //     icon: 'info',
+            //     showCancelButton: true,
+            //     showCloseButton: true,
+            //     confirmButtonText: 'Yes, update it!',
+            //     cancelButtonText: 'No, cancel!',
+            //     reverseButtons: true
+            // }).then((result) => {
+            //     if (result.isConfirmed) {
+            //         Swal.fire(
+            //             'Updating...',
+            //             'Beyond Regex will be updated when the page reload, now!',
+            //             'success'
+            //         )
+            //     } else if (result.dismiss === Swal.DismissReason.cancel) {
+            //         Swal.fire(
+            //             'Cancelled',
+            //             `Your Service Worker version is ${swVersion}.`,
+            //             'info'
+            //         )
+
+            //     }
+            // })
+        });
+
+        document.querySelector("#full-screen").addEventListener("click", (event) => {
+            let vizGraph = document.querySelector("#visualizer-graph");
+            vizGraph.classList.toggle("full-screen");
+            if (vizGraph.classList.contains("full-screen")) {
+                document.querySelector("#full-screen").textContent = "close_fullscreen";
+            } else {
+                document.querySelector("#full-screen").textContent = "open_in_full";
             }
         });
 
-        exportBtn.addEventListener("click", (event) => {
 
-            Swal.fire({
-                title: 'Share the Image Graph (PNG)!',
-                icon: "info",
-                iconHtml: `<span class="sweetalert-icon material-icons">image</span>`,
-                html: `
-                <canvas style="display:none; width: 100%; height: unset;" id="export-image"></canvas>
-                
-                <a class="anchor-export-img" href="" download="graph-regex.png"><img id="exported-img" src=""><span><i class="fas fa-download"></i>PNG</span></a>
-                `,
-                showCancelButton: true,
-                showConfirmButton: false,
-                showCloseButton: true,
-                cancelButtonText: 'Close',
-                didOpen: () => {
-                    Swal.showLoading();
-
-                    let { $img, rectBackground, updateBackgroundStyle } = generateImageOn(
-                        document.querySelector("canvas#export-image"),
-                        document.querySelector("img#exported-img"),
-                        document.querySelector("img#exported-img").parentElement,
-                        imageType="png"
-                    );
-
-                    Swal.hideLoading();
-                }
-            });
-
-        }); 
-        // dragGraphListeners(document.getElementById('visualizer-graph'));
-
-        // exportBtn.addEventListener('click', function () {
-        //     var newParams = Object.assign({}, params);
-        //     newParams.cmd = 'export';
-        //     var hash = serializeHash(newParams);
-        //     window.open(location.href.split('#!')[0] + hash, "_blank");
-        // });
-    }
-
-    // Listeners
-    document.querySelector("#share-visualize").addEventListener("click", (event) => {
-        // OPEN SWAL WITH IFRAME LINK AND IMAGE EXPORT
-        const exportedIframeURL = new Promise((resolve) => {
-            resolve({
-                panelIframeURL: generatePanelURL(iframe=true),
-                panelURL: generatePanelURL(iframe=false)
-            });
+        // TODO: En un futuro deberian ser todo clases y aplicar listeners a cada uno de ellos, porque podria haber mas de un panel
+        document.querySelector("#visualizer-graph .control-panel .hide-button").addEventListener("click", (event) => {
+            document.querySelector("#visualizer-graph").classList.toggle("hide-control");
         });
 
-        exportedIframeURL.then((res) => {
-            Swal.fire({
-                title: 'Share the interactive graph!',
-                icon: "info",
-                iconHtml: `<span class="sweetalert-icon material-icons">image</span>`,
-                html: `
-                <div id="visualizer-copy" class="container-copy">
-                    <div class="copy-container">
-                        <div class="copy-content">
-                            <span>${escapeHTML(res.panelURL)}</span>
-                        </div>
-                        <div class="wrap-copy-btn">
-                            <button title="Copy link" data-copy="${res.panelURL}" class="copy-btn">
-                                <i class="far fa-copy"></i>
-                                <span class="confetti-container">
-                                    <span class="confetti"></span>
-                                    <span class="confetti"></span>
-                                    <span class="confetti"></span>
-                                    <span class="confetti"></span>
-                                    <span class="confetti"></span>
-                                    <span class="confetti"></span>
-                                </span>
-                            </button>
-                            <button title="Copy iframe" data-copy="${escapeHTML(res.panelIframeURL)}" class="copy-btn">
-                                <i class="far fa-code"></i>
-                                <span class="confetti-container">
-                                    <span class="confetti"></span>
-                                    <span class="confetti"></span>
-                                    <span class="confetti"></span>
-                                    <span class="confetti"></span>
-                                    <span class="confetti"></span>
-                                    <span class="confetti"></span>
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <canvas style="display:none; width: 100%; height: unset;" id="export-image"></canvas>
-                
-                <a class="anchor-export-img" href="" download="graph-regex.svg"><img id="exported-img" src=""><span><i class="fas fa-download"></i>SVG</span></a>
-                `,
-                showCancelButton: true,
-                showConfirmButton: false,
-                showCloseButton: true,
-                cancelButtonText: 'Close',
-                didOpen: () => {
-                    Swal.showLoading();
+        // dragGraphListeners(document.getElementById('visualizer-graph'));
+    }
 
-                    // Listeners button copy
-                    document.querySelectorAll("#visualizer-copy button.copy-btn").forEach(($itemBtn) =>{
-                        $itemBtn.addEventListener("click", function () {
-                            const link = $itemBtn.dataset.copy
-                            navigator.clipboard.writeText(link);
-                            
-                            let $iconCopy = $itemBtn.querySelector("i");
-                            let prevIconClass = $iconCopy.className;
-                            $iconCopy.className = "fas fa-check";
-                            document.querySelector("#visualizer-copy .copy-container").classList.add("copied");
-                            $itemBtn.classList.add("copied");
-                            setTimeout(function () {
-                                let $copyContainer = document.querySelector("#visualizer-copy .copy-container");
-                                if ($iconCopy && $copyContainer) {
-                                    $iconCopy.className = prevIconClass;
-                                    $copyContainer.classList.remove("copied");
-                                    $itemBtn.classList.remove("copied");
-                                }
-                            }, 1000);
-                        });
-                    })
-                    let { $img, rectBackground, updateBackgroundStyle } = generateImageOn(
-                        document.querySelector("canvas#export-image"),
-                        document.querySelector("img#exported-img"),
-                        document.querySelector("img#exported-img").parentElement,
-                        imageType="svg"
-                    );
-
-                    Swal.hideLoading();
-                }
-            });
-        })
-
-
-
-        // Swal.fire({
-        //     title: 'Share the interactive graph!',
-        //     html: "",
-        //     icon: 'info',
-        //     showCancelButton: true,
-        //     showCloseButton: true,
-        //     confirmButtonText: 'Yes, update it!',
-        //     cancelButtonText: 'No, cancel!',
-        //     reverseButtons: true
-        // }).then((result) => {
-        //     if (result.isConfirmed) {
-        //         Swal.fire(
-        //             'Updating...',
-        //             'Beyond Regex will be updated when the page reload, now!',
-        //             'success'
-        //         )
-        //     } else if (result.dismiss === Swal.DismissReason.cancel) {
-        //         Swal.fire(
-        //             'Cancelled',
-        //             `Your Service Worker version is ${swVersion}.`,
-        //             'info'
-        //         )
-
-        //     }
-        // })
-    });
-
-    document.querySelector("#full-screen").addEventListener("click", (event) => {
-        let vizGraph = document.querySelector("#visualizer-graph");
-        vizGraph.classList.toggle("full-screen");
-        if ( vizGraph.classList.contains("full-screen") ) {
-            document.querySelector("#full-screen").textContent = "close_fullscreen";
-        } else {
-            document.querySelector("#full-screen").textContent = "open_in_full";
-        }
-    });
-
-
-    // TODO: En un futuro deberian ser todo clases y aplicar listeners a cada uno de ellos, porque podria haber mas de un panel
-    document.querySelector("#visualizer-graph .control-panel .hide-button").addEventListener("click", (event) => {
-        document.querySelector("#visualizer-graph").classList.toggle("hide-control");
-    });
-
+    initEventsListener(isPanelShared);
     if (isPanelShared) {
         visualizeSharedRegex();
     }
     else {
-        initEventsListener();
-
         // Una vez todo cargado y configurado, parseamos la de ejemplo
         // IMPACTA MUCHO AL ESTAR MODIFICANDO ELEMENTOS DEL DOM EN LA CARGA INICIAL
         visualizeRegex();

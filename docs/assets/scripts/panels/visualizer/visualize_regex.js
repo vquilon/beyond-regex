@@ -1,37 +1,17 @@
-// (function () {
-// var { Kit } = require("./auxiliar_functions");
-// var { NFA }  = require("./NFA_parser");
-
-// if (define("visualize", ["./Kit", "./parse"], function(t, e) {
-function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gViewPort, $gContainer, $progress_bar) {
+function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gViewPort, $gContainer, $progress_bar, updateAddOns) {
     var _aux_Kit = Kit();
-    
-    // canvas_Raphael_paper.addv2([
-    //     {
-    //         type: "group",
-    //         id: "mainSVGViewPort",
-    //         children: [{
-    //             type: "group",
-    //             id: "mainSVGContainer"
-    //         }]
-    //     }
-    // ]);
-    // Create ViewPort][[]]
-    // id = mainSVGViewPort
-    // class = svg-pan-zoom_viewport
-    // Create inside this ViewPort
-    
+
     function paintRegex(regexson_tree, regex_flags, canvasRaph) {
         let [regexBoxRect, sizeTextItem] = _prepareCanvasRaphael(canvasRaph, regex_flags);
         $progress_bar.updateProgressBar(10);
-        
+
         // Generacion del grafo
         let raphael_items = _generateGraph(canvasRaph, regexson_tree, sizeTextItem, regexBoxRect);
         $progress_bar.updateProgressBar(50);
-        
+
         _postCanvasRaphael();
         $progress_bar.updateProgressBar(60);
-        
+
         canvasRaph.addv2(raphael_items.items);
         $progress_bar.updateProgressBar(90);
 
@@ -48,16 +28,16 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
     }
 
     function paintRegexCallbacks(regexson_tree, regex_flags, canvasRaph) {
-        const callback1 = (canvasRaph, regex_flags) => {
-            let [regexBoxRect, sizeTextItem] = _prepareCanvasRaphael(canvasRaph, regex_flags);
-            $progress_bar.updateProgressBar(10);
+        // const callback1 = (canvasRaph, regex_flags) => {
+        //     let [regexBoxRect, sizeTextItem] = _prepareCanvasRaphael(canvasRaph, regex_flags);
+        //     $progress_bar.updateProgressBar(10);
 
-            return [regexBoxRect, sizeTextItem];
-        }
+        //     return [regexBoxRect, sizeTextItem];
+        // }
         const callback2 = (canvasRaph, regexson_tree, sizeTextItem, regexBoxRect) => {
             // Generacion del grafo
             let raphael_items = _generateGraph(canvasRaph, regexson_tree, sizeTextItem, regexBoxRect);
-            $progress_bar.updateProgressBar(50);
+            $progress_bar.updateProgressBar(40);
 
             return [raphael_items, canvasRaph];
         }
@@ -67,7 +47,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
         }
         const callback4 = (canvasRaph, raphael_items) => {
             canvasRaph.addv2(raphael_items.items);
-            $progress_bar.updateProgressBar(90);
+            $progress_bar.updateProgressBar(80);
             return canvasRaph;
         }
         const callback5 = (canvasRaph) => {
@@ -81,11 +61,12 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
         }
 
         let execution_plan = [
-            [['canvasRaph', 'regex_flags'], callback1, ['regexBoxRect', 'sizeTextItem']],
+            // [['canvasRaph', 'regex_flags'], callback1, ['regexBoxRect', 'sizeTextItem']],
             [['canvasRaph', 'regexson_tree', 'sizeTextItem', 'regexBoxRect'], callback2, ['raphael_items', 'canvasRaph']],
             [[], callback3, []],
             [['canvasRaph', 'raphael_items'], callback4, ['canvasRaph']],
-            [['canvasRaph'], callback5, []]
+            [['canvasRaph'], callback5, []],
+            [[], updateAddOns, []]
         ]
 
         class Callable {
@@ -94,9 +75,9 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
                 this.inputs = inputs;
                 this.outputs = outputs;
             }
-            run (runtime_vars) {
+            run(runtime_vars) {
                 function argsify2(fn) {
-                    return function() {
+                    return function () {
                         let args_in = Array.prototype.slice.call(arguments)[0];
                         return fn.apply(0, args_in);
                     }
@@ -109,7 +90,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
                 if (this.outputs.args_names.length === 0) return runtime_vars;
                 if (this.outputs.args_names.length === 1) runtime_vars[this.outputs.args_names[0]] = outputs;
                 if (this.outputs.args_names.length > 1) {
-                    for (let i=0; i<this.outputs.args_names.length; i++) {
+                    for (let i = 0; i < this.outputs.args_names.length; i++) {
                         let arg_name = this.outputs.args_names[i];
                         runtime_vars[arg_name] = outputs[i];
                     }
@@ -145,32 +126,63 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
             }
 
             run() {
-                // TODO: No se puede realizar esto ya que no son tareas paralelizables tienen quye ser llamadas recursivas
                 for (let callStep of this.execution_plan) {
                     this.runtime_vars = callStep.run(this.runtime_vars);
                 }
             }
-            run_recursive() {
-                // TODO: No se puede realizar esto ya que no son tareas paralelizables tienen quye ser llamadas recursivas
+            run_iterative() {
+                // TODO: No se puede realizar esto ya que no son tareas paralelizables una depende de la otra
                 var runtime_vars = this.runtime_vars;
-                for (let i=0; i<this.execution_plan.length; i++) {
-                    (function(_i, execution_plan) {
+                for (let i = 0; i < this.execution_plan.length; i++) {
+                    (function (_i, execution_plan) {
                         let milisDelayBetweenRenderDOM = 500;
                         let stepFactorMilis = 20;
                         let callStep = execution_plan[_i];
                         window.setTimeout(
-                            function() {
+                            function () {
                                 runtime_vars = callStep.run(runtime_vars);
                             },
-                            _i*stepFactorMilis + milisDelayBetweenRenderDOM
+                            _i * stepFactorMilis + milisDelayBetweenRenderDOM
                         )
                     })(i, this.execution_plan);
                 }
             }
+            run_recursive() {
+                var milisDelayBetweenRenderDOM = 500;
+                var stepFactorMilis = 20;
+                var that = this;
+                function recursiveBatch(batchNum) {
+                    return function () {
+                        that.runtime_vars = that.execution_plan[batchNum].run(that.runtime_vars)
+                        if (batchNum < that.execution_plan.length - 1) {
+                            window.setTimeout(
+                                recursiveBatch(batchNum + 1), 0  // stepFactorMilis + milisDelayBetweenRenderDOM
+                            )
+                        }
+                    }
+                }
+
+                window.setTimeout(recursiveBatch(0), 0)
+            }
         }
 
-        let pipeline = new Pipeline(execution_plan, {canvasRaph: canvasRaph, regex_flags: regex_flags, regexson_tree: regexson_tree});
-        pipeline.run();
+        let [regexBoxRect, sizeTextItem] = _prepareCanvasRaphael(canvasRaph, regex_flags);
+        let childNodes = Array.from(canvasRaph.canvas.childNodes);
+        childNodes.forEach(el => {
+            if (el !== $gViewPort) {
+                $gContainer.appendChild(el);
+            }
+        });
+        $progress_bar.updateProgressBar(10);
+
+        let pipeline = new Pipeline(
+            execution_plan, {
+            regexBoxRect: regexBoxRect, sizeTextItem: sizeTextItem,
+            canvasRaph: canvasRaph, regex_flags: regex_flags, regexson_tree: regexson_tree
+        }
+        );
+        // pipeline.run();
+        pipeline.run_recursive();
 
         let raphael_items = pipeline.runtime_vars.raphael_items;
 
@@ -208,7 +220,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
         let max_item_width = 0;
         let max_item_height = 0;
 
-         // Procesamiento y generacion del literal de la regex y ubicarlo en el grafo
+        // Procesamiento y generacion del literal de la regex y ubicarlo en el grafo
         // let regex_text_items = _generateHihglightRegexLiteral(regexson_tree, regex_flags);
         // [max_item_width, max_item_height] = _resizeHeightWithRegexLiteral(regex_text_items, size_item_text, margin_items);
 
@@ -268,6 +280,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
         if (font_weight = font_weight || "normal", FONT_STYLE_MAP[font_size] && FONT_STYLE_MAP[font_size][font_weight])
             return FONT_STYLE_MAP[font_size][font_weight];
         AUX_FONT_STYLE_ELEMENT.attr({
+            "fill": "transparent",
             "font-size": font_size,
             "font-weight": font_weight
         });
@@ -615,7 +628,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
     var generator_Raph_map = {
         startPoint: function (regexJSONInfo, offset_x, offset_y) {
             return createCircleItem(
-                { 
+                {
                     type: "startPoint",
                     id: "startPoint",
                     indices: [-1, -1]
@@ -1102,15 +1115,8 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
         charsetChars: "#534"
     };
 
+
+    $progress_bar.updateProgressBar(0);
+
     return paintRegexCallbacks(regexson_tree, regex_flags, canvas_Raphael_paper);
 }
-// ),
-
-//  ),
-// "function" != typeof define)
-//     var define = require("amdefine")(module);
-
-
-// module.exports = {visualize};
-
-// });
