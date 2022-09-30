@@ -241,7 +241,6 @@ workbox.routing.setDefaultHandler(({ url, event, params }) => {
 //     );
 // });
 
-
 // Google Analytics Service Worker
 // Base Initialize with dimension
 // workbox.googleAnalytics.initialize({
