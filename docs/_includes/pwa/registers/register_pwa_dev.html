@@ -1,142 +1,144 @@
+<script type="text/javascript" src="{{site.baseurl}}/version.js"></script>
 <script defer="defer" type="module">
 // This code sample uses features introduced in Workbox v6.
-    import { Workbox } from 'https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-window.prod.mjs';
+  import { Workbox } from 'https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-window.prod.mjs';
 
-    if ('serviceWorker' in navigator) {
-        function createUIPrompt(opts) {
-            const showUpdateOption = async () => {
-                const swChangelogNotes = await wb.messageSW({ type: 'GET_CHANGELOG_NEW' });
-                const swActualVersion = await wb.messageSW({ type: 'GET_VERSION' });
-                const swNewVersion = await wb.messageSW({ type: 'GET_VERSION_NEW' });
-                
-                let versionDiff = `
-                <div style="text-align: left;margin-top: 20px;">
-                    <p>Your version: <span style="text-decoration: line-through; text-decoration-color: red;">${swActualVersion}</span></p>
-                    <p>New version: <span style="text-decoration: underline;">${swNewVersion}</span></p>    
-                </div>`
-                if ( swActualVersion === swNewVersion ) {
-                    versionDiff = ``;
-                }
-                Swal.fire({
-                    title: 'New version available!',
-                    html: `
-                        <p><span style="font-style: italic">Do you want to update now?</span>, <strong>We keep your data saved.</strong></p>
-                        ${versionDiff}
-                        <div style="text-align: left; background: #80808033; margin-top: 20px; padding: 10px 20px; border-radius: 5px">
-                            Changelog:
-                            <ul style="list-style-position: inside;">
-                                <li>${swChangelogNotes.join("<li>")}
-                            </ul>
-                        </div>
-                    `,
-                    icon: 'question',
-                    showCancelButton: true,
-                    showCloseButton: true,
-                    confirmButtonText: 'Yes, update it!',
-                    cancelButtonText: 'No, cancel!',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        opts.onAccept();
-                        Swal.fire(
-                            'Updating...',
-                            'Beyond Regex will be updated when the page reload, now!',
-                            'success'
-                        )
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        const showCancelInfo = async () => {
-                            const swVersion = await wb.messageSW({ type: 'GET_VERSION' });
-                            Swal.fire(
-                                'Cancelled',
-                                `Your Service Worker version is ${swVersion}.`,
-                                'info'
-                            )
-                        }
-                        showCancelInfo();
+  if ('serviceWorker' in navigator) {
+    function createUIPrompt(opts) {
+      const showUpdateOption = async () => {
+        const swChangelogNotes = await wb.messageSW({ versionBase: window.SW_VERSION, versionBuild: window.SW_BUILD, type: 'GET_CHANGELOG_NEW' });
+        const swActualVersion = `${window.SW_VERSION}.${window.SW_BUILD}`;
+        const swNewVersion = await wb.messageSW({ type: 'GET_VERSION' });
 
-                    }
-                })
+        let changeLogsHTML = "";
+        Object.keys(swChangelogNotes).forEach(_changeVersion => {
+          changeLogsHTML += `<strong>${_changeVersion}</strong>:<ul style="margin-bottom: 1em; list-style-position: inside;"><li>${swChangelogNotes[_changeVersion].join("<li>")}</ul>`
+        });
+        let versionDiff = `
+        <div style="text-align: left;margin-top: 20px;">
+          <p>Your version: <span style="text-decoration: line-through; text-decoration-color: red;">${swActualVersion}</span></p>
+          <p>New version: <span>${swNewVersion}</span></p>  
+        </div>`
+        if (swActualVersion === swNewVersion) {
+          versionDiff = ``;
+        }
+        Swal.fire({
+          title: 'New version available!',
+          html: `
+            <p><span style="font-style: italic">Do you want to update now?</span>, <strong>We keep your data saved.</strong></p>
+            ${versionDiff}
+            <div style="text-align: left; background: #80808033; margin-top: 20px; padding: 10px 20px; border-radius: 5px; max-height: 5em; overflow-y: auto">
+              ${changeLogsHTML}
+            </div>
+          `,
+          icon: 'question',
+          showCancelButton: true,
+          showCloseButton: true,
+          confirmButtonText: 'Yes, update it!',
+          cancelButtonText: 'No, cancel!',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            opts.onAccept();
+            Swal.fire(
+              'Updating...',
+              'Beyond Regex will be updated when the page reload, now!',
+              'success'
+            )
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            const showCancelInfo = async () => {
+              const swVersion = await wb.messageSW({ type: 'GET_VERSION' });
+              Swal.fire(
+                'Cancelled',
+                `Your Service Worker version is ${swVersion}.`,
+                'info'
+              )
             }
-            showUpdateOption();
-        }
+            showCancelInfo();
 
-        const wb = new Workbox("{{ site.baseurl }}/sw.js");
-        let registration;
-
-        // wb.addEventListener('activated', (event) => {
-        //   if (!event.isUpdate) {
-        //     console.log('Service worker activated for the first time!');
-
-        //     // If your service worker is configured to precache assets, those
-        //     // assets should all be available now.
-        //   }
-
-        //   // Get the current page URL + all resources the page loaded.
-        //   const urlsToCache = [
-        //     location.href,
-        //     ...performance.getEntriesByType('resource').map((r) => r.name),
-        //   ];
-        //   // Send that list of URLs to your router in the service worker.
-        //   wb.messageSW({
-        //     type: 'CACHE_URLS',
-        //     payload: { urlsToCache },
-        //   });
-        // });
-
-        const showSkipWaitingPrompt = (event) => {
-            console.log(`A new service worker has installed, but it can't activate` +
-                `until all tabs running the current version have fully unloaded.`);
-            // `event.wasWaitingBeforeRegister` will be false if this is
-            // the first time the updated service worker is waiting.
-            // When `event.wasWaitingBeforeRegister` is true, a previously
-            // updated service worker is still waiting.
-            // You may want to customize the UI prompt accordingly.
-
-            // Assumes your app has some sort of prompt UI element
-            // that a user can either accept or reject.
-            const prompt = createUIPrompt({
-                onAccept: () => {
-                    // Assuming the user accepted the update, set up a listener
-                    // that will reload the page as soon as the previously waiting
-                    // service worker has taken control.
-                    wb.addEventListener('controlling', (event) => {
-                        caches.keys().then(cacheNames => {
-                            cacheNames.forEach(cacheName => {
-                                if (!cacheName.endsWith("images") && !cacheName.endsWith("fonts")) {
-                                    caches.delete(cacheName);
-                                }
-                            });
-                        });
-
-                        window.location.reload();
-                    });
-
-                    wb.messageSkipWaiting();
-                },
-
-                onReject: () => {
-                    prompt.dismiss();
-                }
-            });
-        };
-        // Add an event listener to detect when the registered
-        // service worker has installed but is waiting to activate.
-        wb.addEventListener('waiting', showSkipWaitingPrompt);
-
-        wb.register().then(
-            registration => {
-                console.log(`Service Worker in Dev registered! Scope: ${registration.scope}`);
-            },
-            error => {
-                console.error(`Service Worker in Dev registration failed: ${error}`);
-            },
-        );
-
-        const printSWVersion = async () => {
-            const swVersion = await wb.messageSW({ type: 'GET_VERSION' });
-            console.log('Service Worker version:', swVersion);
-        }
-
-        printSWVersion();
+          }
+        })
+      }
+      showUpdateOption();
     }
+
+    const wb = new Workbox("{{ site.baseurl }}/sw.js");
+    let registration;
+
+    // wb.addEventListener('activated', (event) => {
+    //  if (!event.isUpdate) {
+    //   console.log('Service worker activated for the first time!');
+
+    //   // If your service worker is configured to precache assets, those
+    //   // assets should all be available now.
+    //  }
+
+    //  // Get the current page URL + all resources the page loaded.
+    //  const urlsToCache = [
+    //   location.href,
+    //   ...performance.getEntriesByType('resource').map((r) => r.name),
+    //  ];
+    //  // Send that list of URLs to your router in the service worker.
+    //  wb.messageSW({
+    //   type: 'CACHE_URLS',
+    //   payload: { urlsToCache },
+    //  });
+    // });
+
+    const showSkipWaitingPrompt = (event) => {
+      console.log(`A new service worker has installed, but it can't activate` +
+        `until all tabs running the current version have fully unloaded.`);
+      // `event.wasWaitingBeforeRegister` will be false if this is
+      // the first time the updated service worker is waiting.
+      // When `event.wasWaitingBeforeRegister` is true, a previously
+      // updated service worker is still waiting.
+      // You may want to customize the UI prompt accordingly.
+
+      // Assumes your app has some sort of prompt UI element
+      // that a user can either accept or reject.
+      const prompt = createUIPrompt({
+        onAccept: () => {
+          // Assuming the user accepted the update, set up a listener
+          // that will reload the page as soon as the previously waiting
+          // service worker has taken control.
+          wb.addEventListener('controlling', (event) => {
+            caches.keys().then(cacheNames => {
+              cacheNames.forEach(cacheName => {
+                if (!cacheName.endsWith("images") && !cacheName.endsWith("fonts")) {
+                  caches.delete(cacheName);
+                }
+              });
+
+              window.location.reload();
+            });
+          });
+
+          wb.messageSkipWaiting();
+        },
+
+        onReject: () => {
+          prompt.dismiss();
+        }
+      });
+    };
+    // Add an event listener to detect when the registered
+    // service worker has installed but is waiting to activate.
+    wb.addEventListener('waiting', showSkipWaitingPrompt);
+
+    wb.register().then(
+      registration => {
+        console.log(`Service Worker in Dev registered! Scope: ${registration.scope}`);
+      },
+      error => {
+        console.error(`Service Worker in Dev registration failed: ${error}`);
+      },
+    );
+
+    const printSWVersion = async () => {
+      const swVersion = await wb.messageSW({ type: 'GET_VERSION' });
+      console.log('Service Worker version:', swVersion);
+    }
+
+    printSWVersion();
+  }
 </script>
