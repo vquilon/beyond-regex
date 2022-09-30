@@ -3,9 +3,7 @@
 //  importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js');
 importScripts('./changelog.js');
-
-const SW_VERSION = '0.0.alpha';
-const SW_BUILD = '14'
+importScripts('./version.js');
 
 const CACHE_IMAGES = "beyond_regex-images";
 const CACHE_FONTS = "beyond_regex-fonts";
@@ -30,38 +28,21 @@ self.addEventListener("message", (event) => {
   if (event.data && event.data.type === 'GET_VERSION') {
     event.ports[0].postMessage(`${SW_VERSION}.${SW_BUILD}`);
   }
-  if (event.data && event.data.type === 'GET_VERSION_NEW') {
-    let lastVersion = Object.keys(CHANGELOG).sort(function (a, b) {
-      return parseInt(a) - parseInt(b);
-    });
-    // Ultima version
-    lastVersion = lastVersion[lastVersion.length - 1]
-    let lastBuild = Object.keys(CHANGELOG[lastVersion]).sort(function (a, b) {
-      return parseInt(a) - parseInt(b);
-    });
-
-    // Ultimo build
-    lastBuild = lastBuild[lastBuild.length - 1]
-
-    event.ports[0].postMessage(`${lastVersion}.${lastBuild}`);
-  }
-  if (event.data && event.data.type === 'GET_CHANGELOG') {
-    event.ports[0].postMessage(CHANGELOG[SW_VERSION][SW_BUILD]);
-  }
   if (event.data && event.data.type === 'GET_CHANGELOG_NEW') {
-    let lastVersion = Object.keys(CHANGELOG).sort(function (a, b) {
-      return parseInt(a) - parseInt(b);
+    let versions = Object.keys(CHANGELOG);
+    let oldVersion = event.data.versionbase || SW_VERSION;
+    let oldBuild = event.data.versionBuild || SW_BUILD;
+    let newVersions = versions.slice(versions.indexOf(oldVersion));
+    let newChangelogs = {};
+    newVersions.forEach(_version => {
+      let builds = Object.keys(CHANGELOG[_version]).sort();
+      let indexBuilds = oldBuild !== SW_BUILD ? builds.indexOf(oldBuild)+1 : builds.indexOf(oldBuild);
+      let newBuilds = builds.slice(indexBuilds);
+      newBuilds.forEach(_build => {
+        newChangelogs[`${_version}.${_build}`] = CHANGELOG[_version][_build];
+      });
     });
-    // Ultima version
-    lastVersion = lastVersion[lastVersion.length - 1]
-    let lastBuild = Object.keys(CHANGELOG[lastVersion]).sort(function (a, b) {
-      return parseInt(a) - parseInt(b);
-    });
-
-    // Ultimo build
-    lastBuild = lastBuild[lastBuild.length - 1]
-
-    event.ports[0].postMessage(CHANGELOG[lastVersion][lastBuild]);
+    event.ports[0].postMessage(newChangelogs);
   }
   if (event.data && event.data.type === "SKIP_WAITING") {
     self.skipWaiting();
@@ -95,10 +76,10 @@ self.addEventListener("message", (event) => {
 //   'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css',
 // ]);
 
-const regexChangelog = "/changelog\\.js"
-const regexBeyondFiles = "/beyond-regex/(.+\\.html|(?!changelog).+\\.js|.+\\.css)?"
-const regexFonts = "/fonts/.*\\.svg|.*\\.(?:eot|otf|ttf|woff|woff2)|^https://unpkg.com/ionicons.+|^https://fonts.googleapis.com/.+"
-const regexImages = "/.+\\.(png|jpe?g|svg|ico)"
+const regexChangelog = "/changelog\\.js";
+const regexBeyondFiles = "/beyond-regex/(.+\\.html|(?!changelog\\.js|version\\.js).+\\.js|.+\\.css)?";
+const regexFonts = "/fonts/.*\\.svg|.*\\.(?:eot|otf|ttf|woff|woff2)|^https://unpkg.com/ionicons.+|^https://fonts.googleapis.com/.+";
+const regexImages = "/.+\\.(png|jpe?g|svg|ico)";
 
 // MANTENDREMOS EL CHANGELOG ACTUALIZADO
 workbox.routing.registerRoute(
@@ -115,12 +96,27 @@ workbox.routing.registerRoute(
     ],
   })
 );
+// SE CACHEA SIEMPRE LA VERSION
+workbox.routing.registerRoute(
+  new RegExp(`.*/version\\.js$`),
+  new workbox.strategies.CacheFirst({
+    cacheName: CACHE_VERSIONED,
+    plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.ExpirationPlugin({
+        maxAgeSeconds: 365 * 24 * 60 * 60, // 4 Months
+      }),
+    ],
+  }),
+);
 
 // CON STALE WITH REVALIDATE COMPROBAREMOS SI HAY QUE ACTUALIZAR A UNA NUEVA VERSION
 // ESTRATEGIA NETWORK FIRST, DESPUES TIRARIA DEL CACHE VERSIONADO DE ARRIBA StaleWithRevalidate
 workbox.routing.registerRoute(
   new RegExp(`.+${regexBeyondFiles}$`),
-  new workbox.strategies.StaleWhileRevalidate({
+  new workbox.strategies.CacheFirst({
     cacheName: CACHE_VERSIONED,
     plugins: [
       new workbox.cacheableResponse.CacheableResponsePlugin({
@@ -183,6 +179,7 @@ workbox.routing.setDefaultHandler(({ url, event, params }) => {
     ],
   })
 });
+
 // OLD
 // workbox.routing.registerRoute(
 //   new RegExp(`.+${regexRemaining}$`),
