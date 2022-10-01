@@ -25,6 +25,8 @@ function isDescendant(parent, child) {
 window.onload = function () {
     changeDark2LightTheme();
 
+    document.querySelector("#title .version").innerText = `${window.SW_VERSION}.${window.SW_BUILD}`;
+
     let [sidebarMove, sidebarUp] = init_menu_listeners();
     document.addEventListener('mousemove', e => {
         sidebarMove(e, touch=false);

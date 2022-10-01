@@ -29,7 +29,8 @@ const CHANGELOG = {
     ],
     "18": [
       "Fix bugs in the regex editor",
-      "Non-Blocking render visual regex v2"
+      "Non-Blocking render visual regex v2",
+      "Show actual version in sidebar"
     ],
   }
 }

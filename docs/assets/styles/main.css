@@ -342,6 +342,7 @@ span#close-side:hover .burger .strip, #container-main.menu-open span#close-side 
     background: linear-gradient(315deg, #03a9f4, #ff0058);
     -webkit-text-stroke-width: 0px;
     text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff;
+    z-index: -1;
 }
 
 #sidebar .container-heading .heading #title em {
