@@ -1245,6 +1245,8 @@ function EditorSyntaxis(options = {}) {
         const keydownEditor = (event, $containerEl) => {
             // if ($containerEl !== $editor) return;
             // console.log(event);
+            window.scrollY = 0;
+            window.scrollX = 0;
 
             let charWidth = getCharWidthAt($syntax);
             let lineHeight = getLineHeight();
@@ -1274,13 +1276,16 @@ function EditorSyntaxis(options = {}) {
 
                         let editorBBounds = $editor.getBoundingClientRect();
 
+                        // TODO: De momento no se tiene en cuenta el editorBBounds debido a que el metodo que selecciona
+                        // lo hace unicamente teniendo el x y el y en cuenta del viewport del render del html
+                        // Por lo que de momento se necesita tener en cuenta el scroll
                         let firstCaretPos = {
-                            x: (firstCaretChar * charWidth) + editorBBounds.x,
-                            y: (firstCaretLine * lineHeight) + editorBBounds.y
+                            x: (firstCaretChar * charWidth) + editorBBounds.x - window.scrollX,
+                            y: (firstCaretLine * lineHeight) + editorBBounds.y - window.scrollY
                         };
                         let caretPos = {
-                            x: (caretChar * charWidth) + editorBBounds.x,
-                            y: (caretLine * lineHeight) + editorBBounds.y
+                            x: (caretChar * charWidth) + editorBBounds.x - window.scrollX,
+                            y: (caretLine * lineHeight) + editorBBounds.y - window.scrollY
                         }
                         // Se carga de cada caret a una seleccion de editor
                         selectEditorFromPoint(
