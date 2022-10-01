@@ -71,16 +71,15 @@ function EditorSyntaxis(options = {}) {
                     const selection = window.getSelection();
                     // Check if there is a selection (i.e. cursor in place)
                     if (selection.rangeCount !== 0) {
-                        let sel = getSelection();
-                        let position = sel.anchorNode.compareDocumentPosition(sel.focusNode);
+                        let position = selection.anchorNode.compareDocumentPosition(selection.focusNode);
                         backward = false;
                         // position == 0 if nodes are the same
-                        if (!position && sel.anchorOffset > sel.focusOffset ||
+                        if (!position && selection.anchorOffset > selection.focusOffset ||
                             position === Node.DOCUMENT_POSITION_PRECEDING)
                             backward = true;
     
                         // Store the original range
-                        const range = window.getSelection().getRangeAt(0);
+                        const range = selection.getRangeAt(0);
     
                         // Clone the range
                         const preCaretRange = range.cloneRange();
@@ -109,7 +108,7 @@ function EditorSyntaxis(options = {}) {
     
             return [prePosition, postPosition];
         };
-    
+
         const getCaretsElements = () => {
             $inputCarets = $containerEditor.querySelector('.input').querySelector(".input-carets");
             let carets = Array.from($inputCarets.querySelectorAll(".caret"));
@@ -317,9 +316,47 @@ function EditorSyntaxis(options = {}) {
             return [caretStart, caretEnd];
         }
         const getCaretPosFromSelection = () => {
-            let caretRect = window.getSelection().getRangeAt(0).getClientRects()[0];
-            return {x: caretRect.x, y: caretRect.y};
+            let caretRects = window.getSelection().getRangeAt(0).getClientRects();
+            let caretPos = {x: 0, y: 0};
+            if (caretRects.length === 0) {
+                caretPos = getPosFromRelativeSelection($editor);
+            }
+            else {
+                caretPos = {x: caretRects[0].x, y: caretRects[0].y};
+            }
+            return caretPos;
         }
+
+        const getPosFromRelativeSelection = ($element) => {
+            let caretRect = {x: 0, y: 0};
+            let backward = false;
+    
+            if ($element.nodeName === "TEXTAREA") {
+                prePosition = $element.selectionStart;
+                postPosition = $element.selectionEnd;
+                backward = $element.selectionDirection === "backward";
+            }
+            else {
+                const isSupported = typeof window.getSelection !== "undefined";
+                if (isSupported) {
+                    const selection = window.getSelection();
+                    // Check if there is a selection (i.e. cursor in place)
+                    if (selection.rangeCount !== 0) {
+                        // Store the original range
+                        const range = selection.getRangeAt(0);
+                        let [caretStart, caretEnd] = getCaretParentIndex($element)
+                        let [containerStart, offsetStart] = getTextNodeRelPos(caretStart, $element);
+                        let [containerEnd, offsetEnd] = getTextNodeRelPos(caretEnd, $element);
+                        range.setStart(containerStart, offsetStart);
+                        range.setEnd(containerEnd, offsetEnd);
+                        caretRect = range.getClientRects()[0];
+                    }
+                }
+            }
+    
+            return {x: caretRect.x, y: caretRect.y};
+        };
+
         const getCaretStartEndFromPos = (startX, startY, endX, endY) => {
             let [caretStart, caretEnd] = selectSyntaxFromPoint(startX, startY, endX, endY);
             window.getSelection().removeAllRanges();
@@ -439,10 +476,6 @@ function EditorSyntaxis(options = {}) {
 
             return [startCaretChar, endCaretChar, startCaretLine, endCaretLine, backward];
         };
-
-        function logSelection() {  
-            console.log(window.getSelection().toString());
-        }
 
         // document.addEventListener("click", event => {
         //     let $inputEditor = $containerEditor.querySelector(".input");
@@ -898,28 +931,24 @@ function EditorSyntaxis(options = {}) {
         $syntax.addEventListener("mouseup", (event) => {
             $editor.selecting = false;
         }, true);
-
-        
         $syntax.addEventListener("dragstart", function(event) {
             $editor.selecting = false;
             $editor.dragging = true;
             $editor.internalDrag = true;
         }, false);
-        
         // $syntax.addEventListener("dragend", function(event) {
         //   // reset the transparency
         // }, false);
         
         /* events fired on the drop targets */
         $syntax.addEventListener("dragover", function(event) {
-          // prevent default to allow drop
-          event.preventDefault();
-
-          if (!$editor.hasOwnProperty("dragging")) $editor.dragging = false;
-          if ($editor.dragging) {
-            $editor.dragCaretPos = {x: event.clientX, y: event.clientY};
-            $editor.dragCaretPos = updateCaretPos($editor.dragCaretPos, $caret=$editor.dragCaret, firstCaret=false, dragStyle=true);
-          }
+            // prevent default to allow drop
+            event.preventDefault();
+            if (!$editor.hasOwnProperty("dragging")) $editor.dragging = false;
+            if ($editor.dragging) {
+                $editor.dragCaretPos = {x: event.clientX, y: event.clientY};
+                $editor.dragCaretPos = updateCaretPos($editor.dragCaretPos, $caret=$editor.dragCaret, firstCaret=false, dragStyle=true);
+            }
         }, false);
         
         $syntax.addEventListener("dragenter", function(event) {
@@ -984,7 +1013,7 @@ function EditorSyntaxis(options = {}) {
             $editor.dragging = false;
             $editor.dragCaret = undefined;
             $editor.internalDrag = false;
-          
+
         }, false);
 
         const execCommandUndo = (doc, showUI=false, value=null) => {
