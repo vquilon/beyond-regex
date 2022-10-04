@@ -1427,10 +1427,14 @@ select:focus>option:checked {
     position: absolute;
     width: 80%;
     height: 80%;
-    animation: morph 4s linear infinite;
+    animation: unset;
     box-shadow: inset 0 0 20px -1px white, 0px 0px 20px 10px white;
     background: linear-gradient(45deg, #03a9f4 0%, #ff0058 100%);
     transition: border-radius 0.2s linear;
+}
+
+#graph-loader.loading .spinner:after {
+    animation: morph 4s linear infinite;
 }
 
 @keyframes rotate {

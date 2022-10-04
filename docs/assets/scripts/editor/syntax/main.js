@@ -410,7 +410,7 @@ function EditorSyntaxis(options = {}) {
             return reducedCRects;
         }
         
-        const getCaretPositions = (range, caretStart, caretEnd) => {
+        const getCaretPosWithRangeNOffsets = (range, caretStart, caretEnd) => {
             let fontSize = getFontSize();
             let caretRects = Array.from(range.getClientRects());
             let isBackwards = caretEnd < caretStart ? true : false;
@@ -432,7 +432,7 @@ function EditorSyntaxis(options = {}) {
             return [caretRects, caretPosX, caretPosY];
         };
 
-        const generateCaretPositions = (firstCaretPos, lastCaretPos) => {
+        const processCaretPositions = (firstCaretPos, lastCaretPos) => {
             // Obtengo el tamaño de caracter en pixel
             let charWidth = getCharWidthAt($syntax);
             // Obtengo el tamaño por linea en pixels
@@ -762,9 +762,9 @@ function EditorSyntaxis(options = {}) {
                         $caret.style.setProperty("--fpos-char", caretChar);
                         $caret.style.setProperty("--fpos-line", caretLine);
                     }
-                    else {
+                    // else {
                         if (!dragStyle) updateSelectionCarets();
-                    }
+                    // }
                 }
             }
 
@@ -776,9 +776,9 @@ function EditorSyntaxis(options = {}) {
             let lineHeight = getLineHeight();
             let $caret;
             let caretRects = []
+            $inputSelections.innerHTML = "";
             for (let i=0; i<carets.length; i++) {
                 $caret = carets[i];
-                
                 let cFirstPosLine = parseInt($caret.style.getPropertyValue("--fpos-line"));
                 let cPosLine = parseInt($caret.style.getPropertyValue("--pos-line"));
                 let [caretFirstPosX, caretFirstPosY] = getCaretPosFromCharLine(
@@ -903,7 +903,7 @@ function EditorSyntaxis(options = {}) {
                 $caret.style.setProperty("--caret-index", caretEnd + caretEndOffset);
                 let caretPos = {x: selRects[0].x, y: selRects[0].y};
                 // Convertir las coordenadas de caretEnd a Posicion de Char y Line
-                let [startCaretChar, endCaretChar, startCaretLine, endCaretLine, backward] = generateCaretPositions(caretPos, caretPos);
+                let [startCaretChar, endCaretChar, startCaretLine, endCaretLine, backward] = processCaretPositions(caretPos, caretPos);
                 // Modificar las propiedades del caret
                 let actualCaretChar = parseInt($caret.style.getPropertyValue("--pos-char")) || 0;
                 let maxCaretChar = Math.max(endCaretChar, actualCaretChar)
@@ -914,44 +914,68 @@ function EditorSyntaxis(options = {}) {
             }
         }
 
-        $syntax.addEventListener("mousedown", (event) => {
-            disableCaretsBlink();
-            $editor.selecting = true;
-            updateCaretPos({x: event.clientX, y: event.clientY}, $caret=undefined, ctrlKey=event.ctrlKey);
-        }, true);
-        $syntax.addEventListener("mousemove", (event) => {
-            // which === 2 // Check if middle wheel is pressed
-            if (!$editor.hasOwnProperty("selecting") && event.which === 1) $editor.selecting = false;
-            if ($editor.selecting) {
-                let carets = Array.from($inputCarets.children);
-                
-                updateCaretPos({x: event.clientX, y: event.clientY}, $caret=carets[carets.length-1], ctrlKey=event.ctrlKey);
-            } 
-        }, true);
-        $syntax.addEventListener("mouseup", (event) => {
-            $editor.selecting = false;
-        }, true);
-        $syntax.addEventListener("dragstart", function(event) {
-            $editor.selecting = false;
-            $editor.dragging = true;
-            $editor.internalDrag = true;
-        }, false);
-        // $syntax.addEventListener("dragend", function(event) {
-        //   // reset the transparency
-        // }, false);
-        
-        /* events fired on the drop targets */
-        $syntax.addEventListener("dragover", function(event) {
-            // prevent default to allow drop
-            event.preventDefault();
-            if (!$editor.hasOwnProperty("dragging")) $editor.dragging = false;
-            if ($editor.dragging) {
-                $editor.dragCaretPos = {x: event.clientX, y: event.clientY};
-                $editor.dragCaretPos = updateCaretPos($editor.dragCaretPos, $caret=$editor.dragCaret, firstCaret=false, dragStyle=true);
+        const getCaretPositions = ($caret) => {
+            let caretChar = parseInt($caret.style.getPropertyValue("--pos-char"));
+            let caretLine = parseInt($caret.style.getPropertyValue("--pos-line"));
+            let firstCaretChar = parseFloat($caret.style.getPropertyValue("--fpos-char"));
+            let firstCaretLine = parseFloat($caret.style.getPropertyValue("--fpos-line"));
+
+            let editorBBounds = $editor.getBoundingClientRect();
+            let charWidth = getCharWidthAt($syntax);
+            let lineHeight = getLineHeight();
+            // TODO: De momento no se tiene en cuenta el editorBBounds debido a que el metodo que selecciona
+            // lo hace unicamente teniendo el x y el y en cuenta del viewport del render del html
+            // Por lo que de momento se necesita tener en cuenta el scroll
+            let firstCaretPos = {
+                x: (firstCaretChar * charWidth) + editorBBounds.x,
+                y: (firstCaretLine * lineHeight) + editorBBounds.y
+            };
+            let caretPos = {
+                x: (caretChar * charWidth) + editorBBounds.x,
+                y: (caretLine * lineHeight) + editorBBounds.y
             }
-        }, false);
-        
-        $syntax.addEventListener("dragenter", function(event) {
+            return [firstCaretPos, caretPos];
+        }
+
+        const isMousePosInSelection = (mouseX, mouseY) => {
+            let selections = Array.from($inputSelections.children);
+            let $selection;
+            let editorBBounds = $editor.getBoundingClientRect();
+            for ($selection of selections) {
+                let posX = parseFloat($selection.style.getPropertyValue("--pos-x")) + editorBBounds.x;
+                let posY = parseFloat($selection.style.getPropertyValue("--pos-y")) + editorBBounds.y;
+                let sizeWidth = parseFloat($selection.style.getPropertyValue("--size-width"));
+                let sizeHeight = parseFloat($selection.style.getPropertyValue("--size-height"));
+                if (mouseX > posX && mouseX < posX + sizeWidth && mouseY > posY && mouseY < posY + sizeHeight) {
+                    return [$selection, {sx: posX, sy: posY, ex: posX + sizeWidth, ey: posY + sizeHeight}]
+                }
+            }
+            return [undefined, {sx: 0, sy: 0, ex: 0, ey: 0}];
+        }
+
+        const dragDropEvent = (text, event) => {
+            customZActions = 0;
+            if($editor.internalDrag) {
+                execCommands($editor.ownerDocument, ["delete"], false, null, keepZAction=false, customZActions=0);
+                customZActions++;
+            }
+            let caretBBounds = $editor.dragCaret.getBoundingClientRect();
+            selectEditorFromPoint(caretBBounds.x, caretBBounds.y, caretBBounds.x, caretBBounds.y);
+            execCommands($editor.ownerDocument, ["insertHTML"], false, text, keepZAction=true, customZActions=customZActions+1, nameZAction="DroppedElement");
+            
+            let [caretStart, caretEnd] = getCaretParentIndex($editor);
+            selectSyntaxFromEditor(caretStart, caretEnd);
+            let caretPos = getCaretPosFromSelection();
+            addCaretElementAt(caretPos);
+
+            if ($inputCarets.contains($editor.dragCaret)) {
+                $inputCarets.removeChild($editor.dragCaret);
+            }
+            $editor.dragging = false;
+            $editor.dragCaret = undefined;
+            $editor.internalDrag = false;
+        }
+        const dragEnterEvent = (event) => {
             let syntaxBB = $syntax.getBoundingClientRect();
             let targetBB = event.target.getBoundingClientRect();
             let insideCondition = (
@@ -962,12 +986,21 @@ function EditorSyntaxis(options = {}) {
             )
             if (insideCondition) {
                 if (! $editor.dragging) {
+                    $editor.selecting = false;
+                    $inputCarets.innerHTML = "";
+                    $inputSelections.innerHTML = "";
                     $editor.dragging = true;
+                    $editor.internalDrag = true;
                 }
             }
-        }, false);
-        
-        $containerEditor.addEventListener("dragleave", function(event) {
+        }
+        const dragOverEvent = (event) => {
+            event.preventDefault();
+            // if (!$editor.hasOwnProperty("dragging")) $editor.dragging = false;
+            $editor.dragCaretPos = {x: event.clientX, y: event.clientY};
+            $editor.dragCaretPos = updateCaretPos($editor.dragCaretPos, $caret=$editor.dragCaret, firstCaret=false, dragStyle=true);
+        }
+        const dragLeaveEvent = (event) => {
             let syntaxBB = $syntax.getBoundingClientRect();
             let targetBB = event.target.getBoundingClientRect();
             let insideCondition = (
@@ -986,34 +1019,75 @@ function EditorSyntaxis(options = {}) {
                     $editor.dragCaret = undefined;
                 }
             }
+        }
+
+        $syntax.addEventListener("mousedown", (event) => {
+            disableCaretsBlink();
+            // TODO: El metodo isMousePosInSelection, hay que perfeccionar para que un $selection tenga asociado un id de $caret
+            //  y de esta forma obtener el caret correspondiente de una seleccion, o agregar los mismos datos de start end del $caret
             
+            let [$selection, caretPos] = isMousePosInSelection(event.clientX, event.clientY);
+            if ($selection !== undefined) {
+                selectEditorFromPoint(
+                    caretPos.sx, caretPos.sy,
+                    caretPos.ex, caretPos.ey
+                );
+                // Get dataset from event.target and select from Point
+                $editor.textDragged = window.getSelection().toString();
+
+                $editor.selecting = false;
+                $inputCarets.innerHTML = "";
+                $editor.dragging = true;
+                $editor.internalDrag = true;
+            }
+            else {
+                $editor.selecting = true;
+                updateCaretPos({x: event.clientX, y: event.clientY}, $caret=undefined, ctrlKey=event.ctrlKey);
+            }
+
+        }, true);
+        $syntax.addEventListener("mousemove", (event) => {
+            // which === 2 // Check if middle wheel is pressed
+            if (!$editor.hasOwnProperty("selecting") && event.which === 1) $editor.selecting = false;
+            if ($editor.selecting) {
+                let carets = Array.from($inputCarets.children);
+                updateCaretPos({x: event.clientX, y: event.clientY}, $caret=carets[carets.length-1], ctrlKey=event.ctrlKey);
+            }
+            if ($editor.dragging) {
+                $editor.dragCaretPos = {x: event.clientX, y: event.clientY};
+                $editor.dragCaretPos = updateCaretPos($editor.dragCaretPos, $caret=$editor.dragCaret, firstCaret=false, dragStyle=true);
+            }
+        }, true);
+        $syntax.addEventListener("mouseup", (event) => {
+            if ($editor.selecting) $editor.selecting = false;
+            if ($editor.dragging) {
+                // TODO: Seleccionar antes
+                
+                dragDropEvent($editor.textDragged, event);
+            }
+        }, true);
+        $syntax.addEventListener("dragstart", function(event) {
+            // Nunca se tendra este evento, a no ser que se seleccione texto interno
+            $editor.selecting = false;
+            $inputCarets.innerHTML = "";
+            $editor.dragging = true;
+            $editor.internalDrag = true;
         }, false);
+        // $syntax.addEventListener("dragend", function(event) {
+        //   // reset the transparency
+        // }, false);
         
+        /* events fired on the drop targets */
+        $syntax.addEventListener("mouseenter", event => { if ($editor.dragging) dragEnterEvent(event)}, false);
+        $syntax.addEventListener("mouseleave", event => { if ($editor.dragging) dragLeaveEvent(event)}, false);
+        $syntax.addEventListener("dragover", dragOverEvent, false);
+        $syntax.addEventListener("dragenter", dragEnterEvent, false);
+        $containerEditor.addEventListener("dragleave", dragLeaveEvent, false);
         $syntax.addEventListener("drop", function(event) {
             // prevent default action (open as link for some elements)
             event.preventDefault();
-            customZActions = 0;
-            if($editor.internalDrag) {
-                execCommands($editor.ownerDocument, ["delete"], false, null, keepZAction=false, customZActions=0);
-                customZActions++;
-            }
             let textDragged = event.dataTransfer.getData("Text");
-            let caretBBounds = $editor.dragCaret.getBoundingClientRect();
-            selectEditorFromPoint(caretBBounds.x, caretBBounds.y, caretBBounds.x, caretBBounds.y);
-            execCommands($editor.ownerDocument, ["insertHTML"], false, textDragged, keepZAction=true, customZActions=customZActions+1, nameZAction="DroppedElement");
-            
-            let [caretStart, caretEnd] = getCaretParentIndex($editor);
-            selectSyntaxFromEditor(caretStart, caretEnd);
-            let caretPos = getCaretPosFromSelection();
-            addCaretElementAt(caretPos);
-
-            if ($inputCarets.contains($editor.dragCaret)) {
-                $inputCarets.removeChild($editor.dragCaret);
-            }
-            $editor.dragging = false;
-            $editor.dragCaret = undefined;
-            $editor.internalDrag = false;
-
+            dragDropEvent(textDragged, event);
         }, false);
 
         const execCommandUndo = (doc, showUI=false, value=null) => {
@@ -1270,8 +1344,14 @@ function EditorSyntaxis(options = {}) {
                 // console.log(`Select All Form 1 ${endTime - startTime} milliseconds`)
             }
             if (event.key.toUpperCase() === "C") {
-                // TODO
-                // navigator.clipboard.writeText(copyText.value);
+                let [firstCaretPos, caretPos] = getCaretPositions($caret);
+                // Se carga de cada caret a una seleccion de editor
+                selectSyntaxFromPoint(
+                    firstCaretPos.x, firstCaretPos.y,
+                    caretPos.x, caretPos.y
+                );
+                let text = window.getSelection().toString();
+                if (text !== "") navigator.clipboard.writeText();
             }
         }
 
@@ -1298,9 +1378,6 @@ function EditorSyntaxis(options = {}) {
             window.scrollY = 0;
             window.scrollX = 0;
 
-            let charWidth = getCharWidthAt($syntax);
-            let lineHeight = getLineHeight();
-
             if(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'End', 'Home', 'PageUp', 'PageDown'].includes(event.key)) {
                 if ($containerEl !== $editor) {
                     disableCaretsBlink();
@@ -1319,24 +1396,7 @@ function EditorSyntaxis(options = {}) {
                     let carets = getCaretsElements();
                     for (let c in carets) {
                         let $caret = carets[c];
-                        let caretChar = parseInt($caret.style.getPropertyValue("--pos-char"));
-                        let caretLine = parseInt($caret.style.getPropertyValue("--pos-line"));
-                        let firstCaretChar = parseFloat($caret.style.getPropertyValue("--fpos-char"));
-                        let firstCaretLine = parseFloat($caret.style.getPropertyValue("--fpos-line"));
-
-                        let editorBBounds = $editor.getBoundingClientRect();
-
-                        // TODO: De momento no se tiene en cuenta el editorBBounds debido a que el metodo que selecciona
-                        // lo hace unicamente teniendo el x y el y en cuenta del viewport del render del html
-                        // Por lo que de momento se necesita tener en cuenta el scroll
-                        let firstCaretPos = {
-                            x: (firstCaretChar * charWidth) + editorBBounds.x - window.scrollX,
-                            y: (firstCaretLine * lineHeight) + editorBBounds.y - window.scrollY
-                        };
-                        let caretPos = {
-                            x: (caretChar * charWidth) + editorBBounds.x - window.scrollX,
-                            y: (caretLine * lineHeight) + editorBBounds.y - window.scrollY
-                        }
+                        let [firstCaretPos, caretPos] = getCaretPositions($caret);
                         // Se carga de cada caret a una seleccion de editor
                         selectEditorFromPoint(
                             firstCaretPos.x, firstCaretPos.y,
