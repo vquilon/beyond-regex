@@ -2,6 +2,10 @@ var EditorParser = (options) => {
     const NONEDITOR = options.noneditor || false
     const DEBUG = options.debug || false;
 
+    let timeoutPanelsId = null;
+    let timeoutInputId = null;
+    let regexParsed = false;
+
     const trim = (s) => {
         return s.replace(/^\s+/, '').replace(/\s+$/, '');
     }
@@ -238,6 +242,7 @@ var EditorParser = (options) => {
     const parseRegex = (regExpresion) => {
         // Aqui se realiza el parseo
         var skipError = false;
+        regexParsed = false;
 
         // updateLocationURL();
         hideError();
@@ -270,9 +275,8 @@ var EditorParser = (options) => {
                     showError(regExpresion, e);
                 }
             } else {
-                throw e;
+                console.error(e);
             }
-            return false;
         }
         if (regexson) {
             _updateRegexson(regexson);
@@ -280,7 +284,7 @@ var EditorParser = (options) => {
         }
 
         syntaxProcessor.onInput(regexson, getRegex(), { target: $editorRegex });
-        return true;
+        regexParsed = true;
     };
 
     const showErrorShared = (regExpresion, err) => {
@@ -393,9 +397,22 @@ var EditorParser = (options) => {
         location.hash = generateURL(params);
     }
 
+    const processInput = () => {
+        parseRegex(getRegex());
+        window.hasChanges = true;
+        if ($visualBtn !== null) {
+            $visualBtn.disabled = false;
+        }
+        // Ejecucion de los paneles
+        if (timeoutPanelsId) clearTimeout(timeoutPanelsId);
+        if ($realTimeCheck.checked) {
+            timeoutPanelsId = setTimeout( () => {
+                $visualBtn.click();
+            }, 300);
+        }
+    }
+
     const initEventsListener = () => {
-        let regexParsed = false;
-        let timeoutInputId = null;
         $editorRegex.addEventListener('keydown', (event) => {
             let keyDownLabel = event.key.toLowerCase();
             if(keyDownLabel === "enter" && event.ctrlKey) {
@@ -405,21 +422,9 @@ var EditorParser = (options) => {
                 $visualBtn.click();
             }
         });
-        $editorRegex.addEventListener('input', (event) => {
-            parseRegex(getRegex());
-            regexParsed = true;
-            window.hasChanges = true;
-            if ($visualBtn !== null) {
-                $visualBtn.disabled = false;
-            }
 
-            // Ejecucion de los paneles
-            if (timeoutInputId) clearTimeout(timeoutInputId);
-            if ($realTimeCheck.checked) {
-                timeoutInputId = setTimeout( () => {
-                    $visualBtn.click();
-                }, 500);
-            }
+        $editorRegex.addEventListener('input', (event) => {
+            processInput();
         });
 
         // Prevent of paste non raw elements in contenteditable
@@ -428,12 +433,11 @@ var EditorParser = (options) => {
             let clipboardData = event.clipboardData || window.clipboardData;
             let pastedData = clipboardData.getData('Text');
             document.execCommand('insertText', false, pastedData);
-            parseRegex(getRegex());
-            regexParsed = true;
+            processInput();
         });
     
         $shareBtn.addEventListener('click', function () {
-            if (!parseRegex(getRegex())) return false;
+            if (regexParsed) return false;
 
             var src = location.href;
             var indexHashParams = src.indexOf('#');
@@ -533,8 +537,7 @@ var EditorParser = (options) => {
         let langs = document.querySelectorAll("[name='languageRegex']");
         for (var i = 0, max = langs.length; i < max; i++) {
             langs[i].onclick = function () {
-                parseRegex(getRegex());
-                regexParsed = true;
+                processInput()
                 // Aqui deberia notificar al resto de paneles que la regex se ha parseado
                 // Puede que utilizando los message de javascript y cada panel tiene un listener de escucha
                 if ($loader_view !== null) {

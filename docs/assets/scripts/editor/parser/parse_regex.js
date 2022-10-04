@@ -606,7 +606,7 @@ function RegexParser() {
     function f_groupEnd(t, e, r, n, i) {
       t = f_endChoice(t);
       var a = t._parentGroup;
-      if (!a)
+      if (!a) {
         init_object.RegexSyntaxThrows.push({
           type: "UnexpectedChar",
           lastIndex: r,
@@ -614,6 +614,13 @@ function RegexParser() {
           // lastStack: t,
           message: "Unexpected end parenthesis!"
         });
+        return (
+          delete t._parentGroup,
+          delete t.groupCounter,
+          t
+        );
+      }
+
       return (
         delete t._parentGroup,
         delete t.groupCounter,

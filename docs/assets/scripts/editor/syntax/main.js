@@ -1248,9 +1248,30 @@ function EditorSyntaxis(options = {}) {
             if (event.key.toUpperCase() === "A") {
                 event.preventDefault();
                 // Select all
-                let sel = window.getSelection();
-                sel.selectAllChildren($syntax);
+                let $caret;
+                // var startTime = performance.now();
+                // FORMA 1 : (1.5, 0.5) ms
+                $inputCarets.innerHTML = "";
+                let [caretChar, newLimitCaretChar, caretLine] = getFixedCharLine(Infinity, getLastVisualLine());
+                $caret = addCaretElementWith(caretChar, caretLine);
+                $caret.style.setProperty("--fpos-char", 0);
+                $caret.style.setProperty("--fpos-line", 0);
+                updateSelectionCarets();
 
+                // // FORMA 2 : (2.19999, 1.1000) ms
+                // let editorBBounds = $editor.getBoundingClientRect();
+                // updateCaretPos({x: editorBBounds.x, y: editorBBounds.y + getLineHeight()/2});
+                // let carets = Array.from($inputCarets.children);
+                // updateCaretPos(
+                //     {x: editorBBounds.x + editorBBounds.width, y: editorBBounds.y + editorBBounds.height - getLineHeight()/2},
+                //     $caret=carets[carets.length-1]
+                // );
+                // var endTime = performance.now();
+                // console.log(`Select All Form 1 ${endTime - startTime} milliseconds`)
+            }
+            if (event.key.toUpperCase() === "C") {
+                // TODO
+                // navigator.clipboard.writeText(copyText.value);
             }
         }
 
