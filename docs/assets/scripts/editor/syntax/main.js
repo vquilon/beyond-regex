@@ -1421,7 +1421,7 @@ function EditorSyntaxis(options = {}) {
                 $editor.internalDrag = true;
             }
             else {
-                skipCaretsBlink();
+                pauseCaretsBlink();
                 $editor.selecting = true;
                 updateCaretPos({x: event.clientX, y: event.clientY}, {$caret: undefined, ctrlKey: event.ctrlKey});
             }
@@ -1432,7 +1432,6 @@ function EditorSyntaxis(options = {}) {
             if (!$editor.hasOwnProperty("selecting") && event.which === 1) $editor.selecting = false;
             window.getSelection().removeAllRanges();
             if ($editor.selecting) {
-                pauseCaretsBlink();
                 let carets = Array.from($inputCarets.children);
                 updateCaretPos({x: event.clientX, y: event.clientY}, {$caret: carets[carets.length-1], ctrlKey: event.ctrlKey});
             }
