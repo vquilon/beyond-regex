@@ -47,11 +47,7 @@
 
 
 /* EDITOR */
-#editor-actions .actions-container .only-mobile {
-    display: initial;
-}
-
-.input.editing .input-editor {
+/* .input.editing .input-editor {
     z-index: 4;
     pointer-events: all;
 }
@@ -69,4 +65,4 @@
 .input.editing .input-syntax .syntax *:before {
     color: transparent;
     background: transparent;
-}
+} */

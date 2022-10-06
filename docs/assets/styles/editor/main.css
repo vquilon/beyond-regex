@@ -50,10 +50,6 @@
   --editor-margin: 20px;
 }
 
-/* #editor-actions .actions-container .only-mobile {
-  display: none;
-} */
-
 .regex-quotes {
   width: 3ch;
   text-align: center;
@@ -281,6 +277,12 @@
   -webkit-background-clip: initial;
   -moz-background-clip: initial;
   -webkit-text-fill-color: var(--color-editor);
+}
+.input.editing .input-editor .editor::selection {
+  background: transparent;
+}
+.input.editing .input-editor .editor::-moz-selection {
+  background: transparent;
 }
 
 .input.editing .input-syntax .syntax,

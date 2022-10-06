@@ -66,7 +66,7 @@ var EditorParser = (options) => {
         var $editorTerminal = $containerEditor.querySelector('#editor-terminal');
         var $terminalStats = $editorTerminal.querySelector('#terminal-stats');
         var $realTimeCheck = $containerEditor.querySelector('#real-time-check');
-        var $editMobile = $containerEditor.querySelector('#mobile-edit')
+        var $highlight_editor = $containerEditor.querySelector('#highlighted-editor')
         var $terminalError = $containerEditor.querySelector('#terminal-error');
         var $errorDef = $terminalError.querySelector("#errorDef");
         var $errorBox = $terminalError.querySelector('#errorBox');
@@ -553,8 +553,8 @@ var EditorParser = (options) => {
             }
         }
 
-        $editMobile.addEventListener("change", (event) => {
-            if ($editMobile.checked) $input.classList.add("editing");
+        $highlight_editor.addEventListener("change", (event) => {
+            if (!$highlight_editor.checked) $input.classList.add("editing");
             else $input.classList.remove("editing");
         });
 
@@ -579,8 +579,6 @@ var EditorParser = (options) => {
         }
         if (params.re) {
             setRegexValue(`${params.re}\n`);
-        } else{
-            setRegexValue("^BEYOND ReGex(?P<TOOLS>builder|[bv]isualize|(?=de)bugger) Born to be a RegEx editor$\n");
         }
         if (params.reLang) {
             setRegexLanguage(params.reLang);
