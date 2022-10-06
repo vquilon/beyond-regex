@@ -44,25 +44,3 @@
 #editor-flags #container-input #container-values {
     display: none;
 }
-
-
-/* EDITOR */
-/* .input.editing .input-editor {
-    z-index: 4;
-    pointer-events: all;
-}
-
-.input.editing .input-editor .editor {
-    background-clip: initial;
-    -webkit-background-clip: initial;
-    -moz-background-clip: initial;
-    -webkit-text-fill-color: var(--color-editor);
-}
-
-.input.editing .input-syntax .syntax,
-.input.editing .input-syntax .syntax *,
-.input.editing .input-syntax .syntax *:after,
-.input.editing .input-syntax .syntax *:before {
-    color: transparent;
-    background: transparent;
-} */

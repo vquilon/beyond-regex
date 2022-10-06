@@ -224,7 +224,8 @@
 } */
 
 .editor::selection, .syntax::selection, .syntax *::selection, .syntax *::selection, .syntax * *::selection, .caret::selection {
-  background: #bcbcbc;
+  /* background: #bcbcbc; */
+  background: transparent;
 }
 
 .editor,
@@ -267,28 +268,34 @@
   -webkit-text-fill-color: #ffffff00;
 }
 
-.input.editing .input-editor {
+.input.no-highlighted .input-editor {
   z-index: 4;
   pointer-events: all;
 }
 
-.input.editing .input-editor .editor {
+.input.no-highlighted .input-editor .editor {
   background-clip: initial;
   -webkit-background-clip: initial;
   -moz-background-clip: initial;
   -webkit-text-fill-color: var(--color-editor);
 }
-.input.editing .input-editor .editor::selection {
+.input.no-highlighted .input-editor .editor::selection {
+  background: #bcbcbc;
+}
+.input.no-highlighted .input-editor .editor::-moz-selection {
+  background: #bcbcbc;
+}
+.input .input-editor .editor::selection {
   background: transparent;
 }
-.input.editing .input-editor .editor::-moz-selection {
+.input .input-editor .editor::-moz-selection {
   background: transparent;
 }
 
-.input.editing .input-syntax .syntax,
-.input.editing .input-syntax .syntax *,
-.input.editing .input-syntax .syntax *:after,
-.input.editing .input-syntax .syntax *:before {
+.input.no-highlighted .input-syntax .syntax,
+.input.no-highlighted .input-syntax .syntax *,
+.input.no-highlighted .input-syntax .syntax *:after,
+.input.no-highlighted .input-syntax .syntax *:before {
   color: transparent;
   background: transparent;
 }

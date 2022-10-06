@@ -554,8 +554,8 @@ var EditorParser = (options) => {
         }
 
         $highlight_editor.addEventListener("change", (event) => {
-            if (!$highlight_editor.checked) $input.classList.add("editing");
-            else $input.classList.remove("editing");
+            if (!$highlight_editor.checked) $input.classList.add("no-highlighted");
+            else $input.classList.remove("no-highlighted");
         });
 
     }
