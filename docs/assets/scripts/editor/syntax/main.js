@@ -25,11 +25,19 @@ function EditorSyntaxis(options = {}) {
 
     // Catch Listeners
     const init_listeners = () => {
-        const skipCaretsBlink = () => {
-            $inputCarets.classList.remove("blink");
+        const pauseCaretsBlink = () => {
             if ($inputCarets.timeoutBlink) {
                 clearTimeout($inputCarets.timeoutBlink);
             }
+            $inputCarets.classList.remove("blink");
+            
+            $inputCarets.timeoutBlink = window.setTimeout(() => {
+                $inputCarets.classList.add("blink");
+            }, 500);
+        }
+        const skipCaretsBlink = () => {
+            $inputCarets.classList.remove("blink");
+            
             $inputCarets.timeoutBlink = window.setTimeout(() => {
                 $inputCarets.classList.add("blink");
             }, 500);
@@ -946,7 +954,7 @@ function EditorSyntaxis(options = {}) {
             let caretBBounds = $editor.dragCaret.getBoundingClientRect();
             selectEditorFromPoint(caretBBounds.x, caretBBounds.y, caretBBounds.x, caretBBounds.y);
             execCommands($editor.ownerDocument, ["insertHTML"], false, text, keepZAction=true, customZActions=customZActions+1, nameZAction="DroppedElement");
-            
+            window.selRects = [];
             let [caretStart, caretEnd] = getCaretParentIndex($editor);
             selectSyntaxFromEditor(caretStart - text.length, caretEnd);
             let caretPos = getCaretPosFromSelection();
@@ -963,7 +971,6 @@ function EditorSyntaxis(options = {}) {
             updateCaretPos({x: caretPos.x, y: caretPos.y + caretPos.height/2}, {});
             let $caret = Array.from($inputCarets.children).slice(-1)[0];
             updateCaretPos({x: caretPos.x + caretPos.width, y: caretPos.y + caretPos.height/2}, {$caret: $caret});
-            window.selRects = [];
         }
         const dragEnterEvent = (event) => {
             let syntaxBB = $syntax.getBoundingClientRect();
@@ -1348,7 +1355,7 @@ function EditorSyntaxis(options = {}) {
 
             if(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'End', 'Home', 'PageUp', 'PageDown'].includes(event.key)) {
                 if ($containerEl !== $editor) {
-                    skipCaretsBlink();
+                    pauseCaretsBlink();
                     _ProcessMoveCarets(event);
                 }
             }
@@ -1359,9 +1366,12 @@ function EditorSyntaxis(options = {}) {
                 _ProcessHistory(event);
             }
             else {
+                if (["Shift", "CapsLock"].includes(event.key)) {
+                    // Nothing
+                }
                 // Si mi containerEl no es $editor entonces tengo que obtener el foco de este para cada caret
-                if ($containerEl !== $editor) {
-                    skipCaretsBlink();
+                else if ($containerEl !== $editor) {
+                    pauseCaretsBlink();
                     $input.editing = true;
                     let carets = getCaretsElements();
                     for (let $caret of carets) {
@@ -1394,7 +1404,6 @@ function EditorSyntaxis(options = {}) {
         $syntax.addEventListener("mousedown", (event) => {
             // TODO: El metodo isMousePosInSelection, hay que perfeccionar para que un $selection tenga asociado un id de $caret
             //  y de esta forma obtener el caret correspondiente de una seleccion, o agregar los mismos datos de start end del $caret
-            
             let [$selection, caretPos] = isMousePosInSelection(event.clientX, event.clientY);
             if ($selection !== undefined) {
                 window.getSelection().removeAllRanges();
@@ -1412,6 +1421,7 @@ function EditorSyntaxis(options = {}) {
                 $editor.internalDrag = true;
             }
             else {
+                skipCaretsBlink();
                 $editor.selecting = true;
                 updateCaretPos({x: event.clientX, y: event.clientY}, {$caret: undefined, ctrlKey: event.ctrlKey});
             }
@@ -1433,7 +1443,9 @@ function EditorSyntaxis(options = {}) {
         }, true);
         $syntax.addEventListener("mouseup", (event) => {
             window.getSelection().removeAllRanges();
-            if ($editor.selecting) $editor.selecting = false;
+            if ($editor.selecting) {
+                $editor.selecting = false;
+            }
             if ($editor.dragging) {
                 // TODO: Seleccionar antes
                 $inputSelections.innerHTML = "";

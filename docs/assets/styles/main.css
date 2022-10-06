@@ -869,7 +869,7 @@ span#close-side:hover .burger .strip, #container-main.menu-open span#close-side 
 }
 
 .checkbox__1 input:checked~label {
-    box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa, -0.2rem -0.2rem 0.5rem #ffffff;
+    box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa;
 }
 
 .checkbox__1 input:checked~label {
@@ -923,7 +923,7 @@ span#close-side:hover .burger .strip, #container-main.menu-open span#close-side 
 }
 
 .checkbox__3 input:checked~label {
-    box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa, -0.2rem -0.2rem 0.5rem #ffffff;
+    box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa;
     font-weight: 500;
     font-size: 85% !important;
 }
