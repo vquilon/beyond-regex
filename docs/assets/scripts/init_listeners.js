@@ -34,11 +34,9 @@ window.onload = function () {
     });
     document.addEventListener('touchmove', e => {
         sidebarMove(e, touch=true);
-
     }, {passive: false});
     document.addEventListener('mouseup', e => {
         sidebarUp(e, touch=false);
-
     });
     document.addEventListener('touchend', e => {
         sidebarUp(e, touch=true);

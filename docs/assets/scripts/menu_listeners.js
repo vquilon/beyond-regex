@@ -47,7 +47,7 @@ const init_menu_listeners = () => {
     });
     $closeSide.addEventListener('touchstart', e => {
         sideDown(e, touch=true);
-    });
+    },  {passive: true});
 
     const sideMove = (e, touch) => {
         let $sidebar = document.querySelector("#sidebar");

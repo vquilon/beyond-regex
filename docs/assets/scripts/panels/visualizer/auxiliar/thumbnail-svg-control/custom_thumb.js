@@ -59,7 +59,7 @@ var CustomThumbnailSVGControl = function (options) {
     // EventTarget.prototype._addEventListener = EventTarget.prototype.addEventListener;
     var _addEventListener_original = EventTarget.prototype.addEventListener;
     EventTarget.prototype.addEventListener = function (a, b, c) {
-        if (c == undefined) c = false;
+        if (c == undefined) c = {passive: false};
         this._addEventListener_original = _addEventListener_original;
         this._addEventListener_original(a, b, c);
         if (!this.eventListenerList) this.eventListenerList = {}, elements_with_listeners.push(this);
@@ -791,7 +791,7 @@ var CustomThumbnailSVGControl = function (options) {
                     $mainView.eventListenerList = [];
                     _options.svgElement.eventListenerList = [];
 
-                    _options.svgElement.addEventListener(support, wheelHandlerListener);
+                    _options.svgElement.addEventListener(support, wheelHandlerListener, {passive: false});
                 },
                 // Destroy custom events handler
                 destroy: function (_options) {
