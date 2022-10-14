@@ -950,16 +950,19 @@ function EditorSyntaxis(options = {}) {
 
     // DRAGS API
     const dragDropEvent = (text, event) => {
-        if($editor.internalDrag) {
+        if($editor.internalDrag && !getSelection().isCollapsed) {
             execCommands($editor.ownerDocument, "delete", {keepZAction: false});
         }
-        if ($editor.dragCaret === undefined) {
-            let [_pos, _$caret]  = updateCaretPos({x: event.clientX, y: event.clientY}, {$caret: $editor.dragCaret, ctrlKey: false, dragStyle: true});
-            $editor.dragCaretPos = _pos;
-            _$caret.classList.add("drag");
-            $editor.dragCaret = _$caret;
-        }
+        // if ($editor.dragCaret === undefined) {
+        //     let [_pos, _$caret]  = updateCaretPos({x: event.clientX, y: event.clientY}, {$caret: $editor.dragCaret, ctrlKey: false, dragStyle: true});
+        //     $editor.dragCaretPos = _pos;
+        //     _$caret.classList.add("drag");
+        //     $editor.dragCaret = _$caret;
+        // }
+        $inputCarets.classList.remove("nofocus")
         let caretBBounds = $editor.dragCaret.getBoundingClientRect();
+        // TOOD: Hay que corregir el numero de caracteres que se han borrado, para ajustar donde se
+        // pone el texto dragged
         selectEditorAt(caretBBounds.x, caretBBounds.y, caretBBounds.x, caretBBounds.y);
         execCommands($editor.ownerDocument, "insertHTML", {value: text, nameZAction: "DroppedElement"});
         window.selRects = [];
@@ -1306,25 +1309,25 @@ function EditorSyntaxis(options = {}) {
             event.preventDefault();
             // Select all
             let $caret;
-            let startTime, endTime;
+            // let startTime, endTime;
             let caretLine, caretChar, newLimitCaretChar;
 
-            startTime = performance.now();
+            // startTime = performance.now();
             [caretLine, caretChar, newLimitCaretChar] = fixLineCharOffset(getLastVisualLine(), Infinity);
             $caret = updateCaretLineChar(0, 0, {});
             $caret = updateCaretLineChar(caretLine, caretChar, {$caret: $caret});
-            endTime = performance.now();
-            console.log(`Select All Form 3 ${endTime - startTime} milliseconds`)
+            // endTime = performance.now();
+            // console.log(`Select All Form 3 ${endTime - startTime} milliseconds`)
 
             // FORMA 1 : (1.5, 0.5) ms
-            startTime = performance.now();
-            $inputCarets.innerHTML = "";
-            [caretLine, caretChar, newLimitCaretChar] = fixLineCharOffset(Infinity, getLastVisualLine());
-            $caret = addCaretElementWith(caretChar, caretLine);
-            writeCaretProps($caret, caretLine, caretChar, 0, 0, caretChar);
-            updateSelectionCarets();
-            endTime = performance.now();
-            console.log(`Select All Form 1 ${endTime - startTime} milliseconds`)
+            // startTime = performance.now();
+            // $inputCarets.innerHTML = "";
+            // [caretLine, caretChar, newLimitCaretChar] = fixLineCharOffset(Infinity, getLastVisualLine());
+            // $caret = addCaretElementWith(caretChar, caretLine);
+            // writeCaretProps($caret, caretLine, caretChar, 0, 0, caretChar);
+            // updateSelectionCarets();
+            // endTime = performance.now();
+            // console.log(`Select All Form 1 ${endTime - startTime} milliseconds`)
 
             // // FORMA 2 : (2.19999, 1.1000) ms
             // let editorBBounds = $editor.getBoundingClientRect();
@@ -1469,54 +1472,69 @@ function EditorSyntaxis(options = {}) {
                 $editor.dragging = false;
                 $editor.dragCaret = undefined;
                 $editor.internalDrag = false;
+                $editor.textSelection = {sx: 0, sy: 0, ex: 0, ey: 0};
             }
             if ($selection !== undefined) {
-                window.getSelection().removeAllRanges();
                 let selHeight = parseFloat($selection.style.getPropertyValue("--size-height"));
-                selectEditorAt(
-                    caretPos.sx, caretPos.sy - selHeight/2,
-                    caretPos.ex, caretPos.ey - selHeight/2
-                );
-                // Get dataset from event.target and select from Point
-                $editor.textDragged = window.getSelection().toString();
-
+                $editor.textSelection = {sx:caretPos.sx, sy: caretPos.sy + selHeight/2, ex: caretPos.ex, ey: caretPos.ey - selHeight/2}
                 $editor.selecting = false;
                 $inputCarets.innerHTML = "";
-                $editor.dragging = true;
                 $editor.internalDrag = true;
             }
             else {
                 pauseCaretsBlink();
-                $editor.selecting = true;
+                $editor.initSelecting = true;
                 updateCaretPos({x: event.clientX, y: event.clientY}, {$caret: undefined, ctrlKey: event.ctrlKey});
             }
 
         }, true);
         $syntax.addEventListener("mousemove", (event) => {
-            // which === 2 // Check if middle wheel is pressed
-            if (!$editor.hasOwnProperty("selecting") && event.which === 1) $editor.selecting = false;
-            window.getSelection().removeAllRanges();
-            if ($editor.selecting) {
-                let carets = Array.from($inputCarets.children);
-                updateCaretPos({x: event.clientX, y: event.clientY}, {$caret: carets[carets.length-1], ctrlKey: event.ctrlKey, wheelKey: event.which === 2});
+            if ($editor.initSelecting) {
+                $editor.initSelecting = false;
+                $editor.selecting = true;
             }
-            if ($editor.dragging && event.which === 1) {
-                $editor.dragCaretPos = {x: event.clientX, y: event.clientY};
-                let [_pos, _$caret]  = updateCaretPos($editor.dragCaretPos, {$caret: $editor.dragCaret, ctrlKey: false, dragStyle: true});
-                $editor.dragCaretPos = _pos;
-                _$caret.classList.add("drag");
-                $editor.dragCaret = _$caret;
+            if ($editor.selecting) {
+                let $caret = $inputCarets.lastChild;
+                updateCaretPos({x: event.clientX, y: event.clientY}, {$caret: $caret, wheelKey: event.which === 2});
+            }
+            if (($editor.internalDrag || $editor.dragging) && event.which === 1) {
+                let [$selection, caretPos] = isMousePosInSelection(event.clientX, event.clientY);
+                if ($selection === undefined) {
+                    $editor.dragCaretPos = {x: event.clientX, y: event.clientY};
+                    let [_pos, _$caret]  = updateCaretPos($editor.dragCaretPos, {$caret: $editor.dragCaret, ctrlKey: false, dragStyle: true});
+                    $editor.dragCaretPos = _pos;
+                    _$caret.classList.add("drag");
+                    $editor.dragCaret = _$caret;
+                }
+                else {
+                    $editor.dragging = true;
+                }
             }
         }, true);
         $syntax.addEventListener("mouseup", (event) => {
-            window.getSelection().removeAllRanges();
-            if ($editor.selecting) {
-                $editor.selecting = false;
-            }
+            $editor.selecting = false;
+
             if ($editor.dragging) {
-                // TODO: Seleccionar antes
-                $inputSelections.innerHTML = "";
-                dragDropEvent("TODO", event);
+                let [$selection, caretPos] = isMousePosInSelection(event.clientX, event.clientY);
+                if ($selection === undefined) {
+                    $inputSelections.innerHTML = "";
+                    window.getSelection().removeAllRanges();
+                    selectEditorAt(
+                        $editor.textSelection.sx,  $editor.textSelection.sy,
+                        $editor.textSelection.ex,  $editor.textSelection.ey,
+                    );
+                    // Get dataset from event.target and select from Point
+                    let textDragged = window.getSelection().toString();
+                    dragDropEvent(textDragged, event);
+                }
+            }
+            else {
+                if (!event.ctrlKey && $editor.initSelecting) {
+                    $editor.initSelecting = false;
+                    $editor.internalDrag = false;
+                    pauseCaretsBlink();
+                    updateCaretPos({x: event.clientX, y: event.clientY}, {$caret: undefined});
+                }
             }
         }, true);
         $syntax.addEventListener("dragstart", function(event) {
@@ -1525,6 +1543,10 @@ function EditorSyntaxis(options = {}) {
             $inputCarets.innerHTML = "";
             $editor.dragging = true;
             $editor.internalDrag = true;
+
+            let [$selection, caretPos] = isMousePosInSelection(event.clientX, event.clientY);
+            let selHeight = parseFloat($selection.style.getPropertyValue("--size-height"));
+            $editor.textSelection = {sx:caretPos.sx, sy: caretPos.sy + selHeight/2, ex: caretPos.ex, ey: caretPos.ey - selHeight/2}
         }, false);
         // $syntax.addEventListener("dragend", function(event) {
         //   // reset the transparency
@@ -1541,6 +1563,14 @@ function EditorSyntaxis(options = {}) {
             // prevent default action (open as link for some elements)
             event.preventDefault();
             let textDragged = event.dataTransfer.getData("Text");
+            if ($editor.internalDrag) {
+                $inputSelections.innerHTML = "";
+                window.getSelection().removeAllRanges();
+                selectEditorAt(
+                    $editor.textSelection.sx,  $editor.textSelection.sy,
+                    $editor.textSelection.ex,  $editor.textSelection.ey,
+                );
+            }
             dragDropEvent(textDragged, event);
         }, false);
 

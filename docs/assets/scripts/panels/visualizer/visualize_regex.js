@@ -676,8 +676,8 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
             )
             // Agrega un offset a la izquierda para mover todos los items a la derecha y que se centre el dashed group que lo engloba
             addsOffset([container_comment_item], 10, 0);
-            var group_decorator_width = subgroups_items_element.width + 20;
-            var group_decorator_height = subgroups_items_element.height + 20;
+            var group_decorator_width = commentContent.width + 20;
+            var group_decorator_height = commentContent.height + 20;
 
             var groupinfo_rect_item = {
                 type: "rect",
@@ -685,7 +685,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
                 indices: regexJSONInfo.indices,
                 class: `rect:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
                 x: 0,
-                y: subgroups_items_element.y - 10,
+                y: commentContent.y - 10,
                 r: 6,
                 width: group_decorator_width,
                 height: group_decorator_height,
@@ -714,8 +714,8 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
                 height: container_item.height,
                 x: container_item.x,
                 y: container_item.y + groupinfo_text_item.y,
-                lineInX: offset_x + offset_x_width + subgroups_items_element.lineInX + 10,
-                lineOutX: offset_x + offset_x_width + subgroups_items_element.lineOutX + 10
+                lineInX: offset_x + offset_x_width + commentContent.lineInX + 10,
+                lineOutX: offset_x + offset_x_width + commentContent.lineOutX + 10
             }
         },
         dot: function (regexJSONInfo, offset_x, offset_y) {

@@ -214,7 +214,7 @@ function RegexHighlighter($editor, $syntax) {
 
             return regexTag;
         }
-        const _parseAssert = (reToken) => {
+        const _parseAssert = (reToken, i, tokenStack) => {
             let assertMap = {
                 "AssertBegin": [reToken.raw, ""],
                 "AssertLookahead": [
@@ -229,8 +229,8 @@ function RegexHighlighter($editor, $syntax) {
             };
             let subTokens = "";
             if ("sub" in reToken) {
-                reToken.sub.forEach(subToken => {
-                    subTokens += _parseRegexSON(subToken);
+                reToken.sub.forEach((subToken, isub) => {
+                    subTokens += _parseRegexSON(subToken, isub, reToken.sub);
                 });
             }
 
@@ -244,10 +244,10 @@ function RegexHighlighter($editor, $syntax) {
 
             return _parseDefault(reToken, assertHTML, reToken.assertionType);
         }
-        const _parseGroup = (reToken) => {
+        const _parseGroup = (reToken, i, tokenStack) => {
             let subTokens = "";
-            reToken.sub.forEach(subToken => {
-                subTokens += _parseRegexSON(subToken);
+            reToken.sub.forEach((subToken, isub) => {
+                subTokens += _parseRegexSON(subToken, isub, reToken.sub);
             });
             let groupAttributes = `non-capture="${reToken.nonCapture || 'false'}" group-number="${reToken.num || ''}" group-name="${reToken.name || ''}"`;
 
@@ -272,7 +272,7 @@ function RegexHighlighter($editor, $syntax) {
             }
             let groupHTML = `<span class="parenthesis">(</span>${groupMod}${subTokens}${endParen}`;
             if (reToken.repeat) {
-                let quant = `<i>${reToken.raw.slice(reToken.repeat.beginIndex)}</i>`;
+                let quant = `<i>${reToken.repeat.raw}</i>`;
                 groupHTML += quant;
             }
 
@@ -280,12 +280,33 @@ function RegexHighlighter($editor, $syntax) {
 
             return regexGroupTag;
         }
-        const _parseChoice = (reToken) => {
+        const _parseComment = (reToken, i, tokenStack) => {
+            let groupMod = "?#";
+            let endParen = `<span class="parenthesis">)</span>`;
+            if (reToken.errors) {
+                if (reToken.errors.some(e => e.type === 'UnterminatedGroup')) {
+                    endParen = "";
+                }
+            }
+            if (! reToken.raw.endsWith(")")){
+                endParen = "";
+            }
+            let groupHTML = `<span class="parenthesis">(</span>${groupMod}${reToken.comment}${endParen}`;
+            if (reToken.repeat) {
+                let quant = `<i>${reToken.raw.slice(reToken.repeat.beginIndex)}</i>`;
+                groupHTML += quant;
+            }
+
+            let regexGroupTag = _parseDefault(reToken, groupHTML);
+
+            return regexGroupTag;
+        }
+        const _parseChoice = (reToken, i, tokenStack) => {
             let branches = "";
             reToken.branches.forEach((subBranch, idx, arr) => {
                 let parsedBranch = "";
-                subBranch.forEach(subToken => {
-                    parsedBranch += _parseRegexSON(subToken);
+                subBranch.forEach((subToken, isub) => {
+                    parsedBranch += _parseRegexSON(subToken, isub, subBranch);
                 });
                 branches += `<span class="branch">${parsedBranch}</span>`;
                 if (idx !== (arr.length - 1)) {
@@ -303,7 +324,7 @@ function RegexHighlighter($editor, $syntax) {
 
             return regexChoiceTag;
         }
-        const _parseCharset = (reToken) => {
+        const _parseCharset = (reToken, i, tokenStack) => {
             // clases
             // [d, D, w, W, s, S]
             // ranges
@@ -323,16 +344,19 @@ function RegexHighlighter($editor, $syntax) {
             let regexCarsetTag = _parseDefault(reToken, charsetHTML);
             return regexCarsetTag;
         }
-        const _parseExact = (reToken) => {
+        const _parseExact = (reToken, i, tokenStack) => {
             let exactHTML = expandHtmlEntities(reToken.raw);
             if (reToken.repeat) {
-                let quant = `<i>${reToken.raw.slice(reToken.repeat.beginIndex)}</i>`;
+                if (tokenStack[i+1] && tokenStack[i+1].type === "comment") {
+                    console.log("Comment in middle")
+                }
+                let quant = `<i>${reToken.repeat.raw}</i>`;
                 exactHTML = expandHtmlEntities(reToken.raw.slice(0, reToken.repeat.beginIndex));
                 exactHTML += quant;
             }
             return _parseDefault(reToken, exactHTML);
         }
-        const _parseDot = (reToken) => {
+        const _parseDot = (reToken, i, tokenStack) => {
             return _parseDefault(reToken, ".", extraClass="dot");
         }
 
@@ -343,11 +367,12 @@ function RegexHighlighter($editor, $syntax) {
             "charset": _parseCharset,
             "exact": _parseExact,
             "dot": _parseDot,
+            "comment": _parseComment,
         };
-        const _parseRegexSON = (_reToken) => {
-            let _parsedRegexHTML = ""
+        const _parseRegexSON = (_reToken, _i, _tokenStack) => {
+            let _parsedRegexHTML = "";
             if (_reToken.type in typeMap) {
-                _parsedRegexHTML += typeMap[_reToken.type](_reToken);
+                _parsedRegexHTML += typeMap[_reToken.type](_reToken, _i, _tokenStack);
             }
 
             return _parsedRegexHTML;
@@ -359,13 +384,8 @@ function RegexHighlighter($editor, $syntax) {
             htmlParsed = `<span>${escapeHTMLChars(regexRaw)}</span>`;
         }
         else {
-            regexson.tree.forEach(reToken => {
-                // id
-                // type
-                // indices
-                // raw
-                // Check type
-                htmlParsed += _parseRegexSON(reToken);
+            regexson.tree.forEach((reToken, i) => {
+                htmlParsed += _parseRegexSON(reToken, i, regexson.tree);
             });
         }
 
