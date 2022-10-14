@@ -658,6 +658,66 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
         exact: function (regexJSONInfo, offset_x, offset_y) {
             return createExactCharItem(regexJSONInfo, regexJSONInfo.chars, offset_x, offset_y, "skyblue",)
         },
+        unicode: function (regexJSONInfo, offset_x, offset_y) {
+            return createExactCharItem(regexJSONInfo, regexJSONInfo.chars, offset_x, offset_y, "skyblue",)
+        },
+        hexadecimal: function (regexJSONInfo, offset_x, offset_y) {
+            return createExactCharItem(regexJSONInfo, regexJSONInfo.chars, offset_x, offset_y, "skyblue",)
+        },
+        octal: function (regexJSONInfo, offset_x, offset_y) {
+            return createExactCharItem(regexJSONInfo, regexJSONInfo.chars, offset_x, offset_y, "skyblue",)
+        },
+        comment: function (regexJSONInfo, offset_x, offset_y) {
+            let commentContent = createExactCharItem(regexJSONInfo, regexJSONInfo.comment, offset_x, offset_y, "skyblue",)
+            var container_comment_item = createGroupContainerItem(
+                regexJSONInfo, commentContent,
+                0, 0,
+                commentContent.width, commentContent.height
+            )
+            // Agrega un offset a la izquierda para mover todos los items a la derecha y que se centre el dashed group que lo engloba
+            addsOffset([container_comment_item], 10, 0);
+            var group_decorator_width = subgroups_items_element.width + 20;
+            var group_decorator_height = subgroups_items_element.height + 20;
+
+            var groupinfo_rect_item = {
+                type: "rect",
+                id: regexJSONInfo.id,
+                indices: regexJSONInfo.indices,
+                class: `rect:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+                x: 0,
+                y: subgroups_items_element.y - 10,
+                r: 6,
+                width: group_decorator_width,
+                height: group_decorator_height,
+                "stroke-dasharray": ".",
+                stroke: "silver",
+                "stroke-width": 2
+            };
+            var groupinfo_text_item = createTextItemElement(
+                regexJSONInfo,
+                groupinfo_rect_item.width / 2, groupinfo_rect_item.y - 2,
+                `Comment`
+            );
+
+            var max_width = Math.max(groupinfo_text_item.width, group_decorator_width);
+            var offset_x_width = (max_width - group_decorator_width) / 2;
+
+            var container_item = createGroupContainerItem(
+                regexJSONInfo, [container_comment_item, groupinfo_rect_item, groupinfo_text_item.label],
+                offset_x + offset_x_width, offset_y,
+                max_width, group_decorator_height + groupinfo_text_item.height + 4
+            );
+
+            return {
+                items: [container_item],
+                width: container_item.width,
+                height: container_item.height,
+                x: container_item.x,
+                y: container_item.y + groupinfo_text_item.y,
+                lineInX: offset_x + offset_x_width + subgroups_items_element.lineInX + 10,
+                lineOutX: offset_x + offset_x_width + subgroups_items_element.lineOutX + 10
+            }
+        },
         dot: function (regexJSONInfo, offset_x, offset_y) {
             var dot_item = createExactCharItem(regexJSONInfo, "AnyCharExceptNewLine", offset_x, offset_y, "DarkGreen", "white");
 
@@ -945,12 +1005,13 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
                 0, 0,
                 subgroups_items_element.width, subgroups_items_element.height
             )
-            if (regexJSONInfo.num) {
-                // Agrega un offset a la izquierda para mover todos los items a la derecha y que se centre el dashed group que lo engloba
-                addsOffset([container_group_item], 10, 0);
-                var group_decorator_width = subgroups_items_element.width + 20;
-                var group_decorator_height = subgroups_items_element.height + 20;
 
+            // Agrega un offset a la izquierda para mover todos los items a la derecha y que se centre el dashed group que lo engloba
+            addsOffset([container_group_item], 10, 0);
+            var group_decorator_width = subgroups_items_element.width + 20;
+            var group_decorator_height = subgroups_items_element.height + 20;
+            
+            if (regexJSONInfo.num) {
                 var groupinfo_rect_item = {
                     type: "rect",
                     id: regexJSONInfo.id,
@@ -970,39 +1031,57 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
                     groupinfo_rect_item.width / 2, groupinfo_rect_item.y - 2,
                     `Group ${regexJSONInfo.name}#${regexJSONInfo.num}`
                 );
-
-                var max_width = Math.max(groupinfo_text_item.width, group_decorator_width);
-                var offset_x_width = (max_width - group_decorator_width) / 2;
-
-                var container_item = createGroupContainerItem(
-                    regexJSONInfo, [container_group_item, groupinfo_rect_item, groupinfo_text_item.label],
-                    offset_x + offset_x_width, offset_y,
-                    max_width, group_decorator_height + groupinfo_text_item.height + 4
-                );
-
-                // offset_x_width && addsOffset([container_item], offset_x_width, 0);
-
-                return {
-                    items: [container_item],
-                    width: container_item.width,
-                    height: container_item.height,
-                    x: container_item.x,
-                    y: container_item.y + groupinfo_text_item.y,
-                    lineInX: offset_x + offset_x_width + subgroups_items_element.lineInX + 10,
-                    lineOutX: offset_x + offset_x_width + subgroups_items_element.lineOutX + 10
-                }
             }
-            // Llega aqui si es grupo un non-capturing
-            addsOffset([container_group_item], offset_x, offset_y);
+            else {
+                var groupinfo_rect_item = {
+                    type: "rect",
+                    id: regexJSONInfo.id,
+                    indices: regexJSONInfo.indices,
+                    class: `rect:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+                    x: 0,
+                    y: subgroups_items_element.y - 10,
+                    r: 6,
+                    width: group_decorator_width,
+                    height: group_decorator_height,
+                    "stroke-dasharray": ".",
+                    stroke: "silver",
+                    "stroke-width": 2
+                };
+                var groupinfo_text_item = createTextItemElement(
+                    regexJSONInfo,
+                    groupinfo_rect_item.width / 2, groupinfo_rect_item.y - 2,
+                    `Group Non-Capturing`
+                );
+            }
+
+            var max_width = Math.max(groupinfo_text_item.width, group_decorator_width);
+            var offset_x_width = (max_width - group_decorator_width) / 2;
+
+            var container_item = createGroupContainerItem(
+                regexJSONInfo, [container_group_item, groupinfo_rect_item, groupinfo_text_item.label],
+                offset_x + offset_x_width, offset_y,
+                max_width, group_decorator_height + groupinfo_text_item.height + 4
+            );
+
             return {
-                items: [container_group_item],
-                width: container_group_item.width,
-                height: container_group_item.height,
-                x: offset_x + subgroups_items_element.x,
-                y: offset_y + subgroups_items_element.y,
-                lineInX: offset_x + subgroups_items_element.lineInX,
-                lineOutX: offset_x + subgroups_items_element.lineOutX
-            };
+                items: [container_item],
+                width: container_item.width,
+                height: container_item.height,
+                x: container_item.x,
+                y: container_item.y + groupinfo_text_item.y,
+                lineInX: offset_x + offset_x_width + subgroups_items_element.lineInX + 10,
+                lineOutX: offset_x + offset_x_width + subgroups_items_element.lineOutX + 10
+            }
+            // addsOffset([container_group_item], offset_x, offset_y);
+            // return {
+            //     items: [container_group_item],
+            //     width: container_group_item.width,
+            //     height: container_group_item.height,
+            //     x: offset_x + subgroups_items_element.x,
+            //     y: offset_y + subgroups_items_element.y,
+            //     lineInX: offset_x + subgroups_items_element.lineInX,
+            //     lineOutX: offset_x + subgroups_items_element.lineOutX
+            // };
         },
         assert: function (regexJSONInfo, offsetX, offsetY) {
             var n;

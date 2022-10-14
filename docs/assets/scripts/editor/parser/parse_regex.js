@@ -274,18 +274,20 @@
       });
     }
     nodeType = {
-      UNEXPECTED_NODE: "unexpected",
+      ASSERT_NODE: "assert",
+      BACKREF_NODE: "backref",
+      CHARSET_NODE: "charset",
+      CHOICE_NODE: "choice",
+      DOT_NODE: "dot",
+      EMPTY_NODE: "empty",
       EXACT_NODE: "exact",
+      GROUP_NODE: "group",
       HEXADECIMAL_NODE: "hexadecimal",
       UNICODE_NODE: "unicode",
       OCTAL_NODE: "octal",
-      CHARSET_NODE: "charset",
-      CHOICE_NODE: "choice",
-      GROUP_NODE: "group",
-      ASSERT_NODE: "assert",
-      DOT_NODE: "dot",
-      BACKREF_NODE: "backref",
-      EMPTY_NODE: "empty",
+      GROUP_COMMENT: "comment",
+      UNEXPECTED_NODE: "unexpected",
+      // assert subtypes
       AssertLookahead: "AssertLookahead",
       AssertNegativeLookahead: "AssertNegativeLookahead",
       AssertNonWordBoundary: "AssertNonWordBoundary",
@@ -546,9 +548,9 @@
         };
         return (t = i.sub), s(t, "_parentGroup", i), (t.groupCounter = n), t;
       }
-      function f_groupNonCapture(t) {
-        var e = t._parentGroup;
-        (e.nonCapture = !0), (e.num = void 0), t.groupCounter.i--;
+      function f_groupNonCapture(lastStack) {
+        var parentGroup = lastStack._parentGroup;
+        (parentGroup.nonCapture = !0), (parentGroup.num = void 0), lastStack.groupCounter.i--;
       }
       function f_groupNamedContent(t, e) {
         var n = t._parentGroup;
@@ -571,6 +573,30 @@
         }
         n.errors.push(objectError);
         
+      }
+      function f_groupComment(lastStack) {
+        var parentGroup = lastStack._parentGroup;
+        parentGroup.num = void 0;
+        lastStack.groupCounter.i--;
+        parentGroup.type = GROUP_COMMENT;
+        parentGroup.comment = "";
+        delete parentGroup.sub;
+      }
+      function f_groupCommentContent(lastStack, actualChar, lastIndex) {
+        var parentGroup = lastStack._parentGroup;
+        parentGroup.comment += actualChar;
+      }
+      function f_groupCommentEnd(lastStack, actualChar, lastIndex, lastState, regexRaw, callback) {
+        var parentGroup = lastStack._parentGroup;
+        return (
+          delete lastStack._parentGroup,
+          delete lastStack.groupCounter,
+          (lastStack = parentGroup._parentStack),
+          delete parentGroup._parentStack,
+          lastStack.unshift(parentGroup),
+          (parentGroup.endParenIndex = lastIndex),
+          lastStack
+        );
       }
       function f_groupToAssertion(t, e, r) {
         var n = t._parentGroup;
@@ -1113,6 +1139,9 @@
         groupNonCapture: f_groupNonCapture,
         groupNamedContent: f_groupNamedContent,
         groupNamedBadName: f_groupNamedBadName,
+        groupComment: f_groupComment,
+        groupCommentContent: f_groupCommentContent,
+        groupCommentEnd: f_groupCommentEnd,
         backref: f_backref,
         groupToAssertion: f_groupToAssertion,
         groupEnd: f_groupEnd,
@@ -1581,7 +1610,33 @@
           "0-9a-zA-Z_",
           elementsCallback.groupNamedContent
         ],
-        ["groupNamedBadName,groupNamedContent>groupQualifiedStart", ">"]
+        ["groupNamedBadName,groupNamedContent>groupQualifiedStart", ">"],
+        // Group comment
+        ["groupQualify>groupCommentContent", "#", elementsCallback.groupComment],
+        [
+          "groupCommentContent>groupCommentEscape",
+          "\\"
+        ],
+        [
+          "groupCommentEscape>groupCommentContent",
+          ")",
+          elementsCallback.groupCommentContent
+        ],
+        [
+          "groupCommentEscape>groupCommentContent",
+          "^)",
+          elementsCallback.groupCommentContent
+        ],
+        [
+          "groupCommentContent>groupCommentContent",
+          "^)",
+          elementsCallback.groupCommentContent
+        ],
+        [
+          "groupCommentContent>exact",
+          ")",
+          elementsCallback.groupCommentEnd
+        ]
       ]),
       unexpectedToken: elementsCallback.unexpectedChar,
       unexpectedRouter: {
