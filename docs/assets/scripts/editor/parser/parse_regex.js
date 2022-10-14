@@ -3,470 +3,493 @@
 // var { NFA }  = require("./NFA_parser");
 
 // if (define("parse", ["./NFA", "./Kit"], function(t, e) {
-  function RegexParser() {
-    var auxKit = Kit();
-    var nodeType = {};
-    function r() {
-      var t = Object.keys(nodeType)
-        .map(function (t) {
-          return t + "=" + JSON.stringify(nodeType[t]);
-        })
-        .join(";");
-      (function () {
-        return this;
-      })().eval(t);
+function RegexParser() {
+  var auxKit = Kit();
+  var nodeType = {};
+  function r() {
+    var t = Object.keys(nodeType)
+      .map(function (t) {
+        return t + "=" + JSON.stringify(nodeType[t]);
+      })
+      .join(";");
+    (function () {
+      return this;
+    })().eval(t);
+  }
+  function create_regexObject(_regexObject) {
+    this.raw = _regexObject.raw;
+    this.tree = _regexObject.tree;
+    this.groupCount = _regexObject.groupCount;
+    this.errors = init_object.RegexSyntaxThrows;
+  }
+  function analizeForErrors(_processedStack, _raw_regex_input, _error_lastState) {
+    if (_processedStack._parentGroup) {
+      let errorObject = {
+        type: "UnterminatedGroup",
+        message: "Unterminated group!",
+        lastIndex: _processedStack._parentGroup.indices[0],
+        lastState: _error_lastState,
+        // lastStack: _processedStack
+      }
+      init_object.RegexSyntaxThrows.push(errorObject);
+      if (!_processedStack._parentGroup.errors) _processedStack._parentGroup.errors = [];
+      _processedStack._parentGroup.errors.push(errorObject);
+
+      // Se parsea el ultimo grupo
+      _processedStack = elementsCallback.groupEnd(_processedStack, "", _raw_regex_input.length, _error_lastState, _raw_regex_input);
     }
-    function create_regexObject(_regexObject) {
-      this.raw = _regexObject.raw;
-      this.tree = _regexObject.tree;
-      this.groupCount = _regexObject.groupCount;
-      this.errors = init_object.RegexSyntaxThrows;
+    else if (_processedStack._parentChoice) {
+      let errorObject = {
+        type: "UnterminatedGroup",
+        message: "Unterminated group!",
+        lastIndex: _processedStack._parentChoice.indices[0],
+        lastState: _error_lastState,
+        // lastStack: _processedStack
+      }
+      init_object.RegexSyntaxThrows.push(errorObject);
+      if (!_processedStack._parentChoice.errors) _processedStack._parentChoice.errors = [];
+      _processedStack._parentChoice.errors.push(errorObject);
+
+      // Se parsea el ultimo choice
+      _processedStack = elementsCallback.endChoice(_processedStack, "", _raw_regex_input.length, _error_lastState, _raw_regex_input);
     }
-    function init_object(raw_regex_input, e, language) {
-      init_object.RegexSyntaxThrows = [];
-      d = e;
-      var r, i;
-      var error_lastState;
-      var NFA_instance = load_NFA_Parser((language = language));
-      r = NFA_instance.input(raw_regex_input, 0, e);
-      i = r.stack;
-      i = elementsCallback.endChoice(i);
-      error_lastState = r.lastState;
-  
-      // Gestor errores al final del parseo
-      var g = r.acceptable && r.lastIndex === raw_regex_input.length - 1;
-      if (!g) {
-        var x;
-        switch (error_lastState) {
-          case "charsetRangeEndWithNullChar":
-            x = {
-              type: "CharsetRangeEndWithNullChar",
-              message:
-                "Charset range end with NUL char does not make sense!\nBecause [a-\\0] is not a valid range.\nAnd [\\0-\\0] should be rewritten into [\\0]."
-            };
-            break;
-          case "tokenIncomplete":
-            x = {
-              type: "TokenIncomplete",
-              message: "The token is not completed!"
-            };
-            break;
-          case "repeatErrorFinal":
-            x = {
-              type: "NothingRepeat",
-              message: "Nothing to repeat!"
-            };
-            break;
-          case "digitFollowNullError":
-            x = {
-              type: "DigitFollowNullError",
-              message:
-                "The '\\0' represents the <NUL> char and cannot be followed by a decimal digit!"
-            };
-            break;
-          case "charsetRangeEndClass":
-            x = {
-              type: "CharsetRangeEndClass",
-              message:
-                'Charset range ends with class such as "\\w\\W\\d\\D\\s\\S" is invalid!'
-            };
-            break;
-          case "charsetOctEscape":
-            x = {
-              type: "DecimalEscape",
-              message:
-                "Decimal escape appears in charset is invalid.Because it can't be explained as  backreference.And octal escape is deprecated!"
-            };
-            break;
-          default:
-            0 === error_lastState.indexOf("charset")
+    else {
+      return _processedStack;
+    }
+    return analizeForErrors(_processedStack, _raw_regex_input, _error_lastState=null);
+  }
+  function init_object(raw_regex_input, e, language) {
+    init_object.RegexSyntaxThrows = [];
+    d = e;
+    var processedRegex, processedStack;
+    var error_lastState;
+    var NFA_instance = load_NFA_Parser((language = language));
+    processedRegex = NFA_instance.input(raw_regex_input, 0, e);
+    processedStack = processedRegex.stack;
+    processedStack = elementsCallback.endChoice(processedStack);
+    error_lastState = processedRegex.lastState;
+
+    // Gestor errores al final del parseo
+    var g = processedRegex.acceptable && processedRegex.lastIndex === raw_regex_input.length - 1;
+    if (!g) {
+      var x;
+      switch (error_lastState) {
+        case "charsetRangeEndWithNullChar":
+          x = {
+            type: "CharsetRangeEndWithNullChar",
+            message:
+              "Charset range end with NUL char does not make sense!\nBecause [a-\\0] is not a valid range.\nAnd [\\0-\\0] should be rewritten into [\\0]."
+          };
+          break;
+        case "tokenIncomplete":
+          x = {
+            type: "TokenIncomplete",
+            message: "The token is not completed!"
+          };
+          break;
+        case "repeatErrorFinal":
+          x = {
+            type: "NothingRepeat",
+            message: "Nothing to repeat!"
+          };
+          break;
+        case "digitFollowNullError":
+          x = {
+            type: "DigitFollowNullError",
+            message:
+              "The '\\0' represents the <NUL> char and cannot be followed by a decimal digit!"
+          };
+          break;
+        case "charsetRangeEndClass":
+          x = {
+            type: "CharsetRangeEndClass",
+            message:
+              'Charset range ends with class such as "\\w\\W\\d\\D\\s\\S" is invalid!'
+          };
+          break;
+        case "charsetOctEscape":
+          x = {
+            type: "DecimalEscape",
+            message:
+              "Decimal escape appears in charset is invalid.Because it can't be explained as  backreference.And octal escape is deprecated!"
+          };
+          break;
+        default:
+          0 === error_lastState.indexOf("charset")
+            ? (x = {
+              type: "UnclosedCharset",
+              message: "Unterminated character class!"
+            })
+            : ")" === raw_regex_input[processedRegex.lastIndex]
               ? (x = {
-                  type: "UnclosedCharset",
-                  message: "Unterminated character class!"
-                })
-              : ")" === raw_regex_input[r.lastIndex]
-              ? (x = {
-                  type: "UnmatchedParen",
-                  message: "Unmatched end parenthesis!"
-                })
+                type: "UnmatchedParen",
+                message: "Unmatched end parenthesis!"
+              })
               : ((x = {
-                  type: "UnexpectedChar",
-                  message: "Unexpected char!"
-                }),
-                r.lastIndex++);
-        }
-        if (x) {
-          x.lastIndex = r.lastIndex
-          // x.lastStack = r.stack
-          x.lastState = error_lastState
-          
-          init_object.RegexSyntaxThrows.push(x);
-        }
+                type: "UnexpectedChar",
+                message: "Unexpected char!"
+              }),
+                processedRegex.lastIndex++);
       }
-      if (i._parentGroup) {
-        let errorObject = {
-          type: "UnterminatedGroup",
-          message: "Unterminated group!",
-          lastIndex: i._parentGroup.indices[0],
-          lastState: error_lastState,
-          // lastStack: i
-        }
-        init_object.RegexSyntaxThrows.push(errorObject);
-        if (!i._parentGroup.errors) i._parentGroup.errors=[];
-        i._parentGroup.errors.push(errorObject);
-        
-        // Se parsea el ultimo grupo
-        i = elementsCallback.groupEnd(i, "", raw_regex_input.length, r.lastState, raw_regex_input);
-        
+      if (x) {
+        x.lastIndex = processedRegex.lastIndex
+        // x.lastStack = r.stack
+        x.lastState = error_lastState
+
+        init_object.RegexSyntaxThrows.push(x);
       }
-      // Check if no errors, but we want to parse and return
-      // the regex procesed after, we check the errors
-      // if (g) {
-      var y = i.groupCounter ? i.groupCounter.i : 0;
-      delete i.groupCounter,
-        h(i, raw_regex_input, raw_regex_input.length),
-        (i = o(i));
-      var m = new create_regexObject({
-        raw: raw_regex_input,
-        groupCount: y,
-        tree: i
+    }
+
+    processedStack = analizeForErrors(processedStack, raw_regex_input, error_lastState)
+
+    // Check if no errors, but we want to parse and return
+    // the regex procesed after, we check the errors
+    // if (g) {
+    var y = processedStack.groupCounter ? processedStack.groupCounter.i : 0;
+    delete processedStack.groupCounter,
+      h(processedStack, raw_regex_input, raw_regex_input.length),
+      (processedStack = o(processedStack));
+    var m = new create_regexObject({
+      raw: raw_regex_input,
+      groupCount: y,
+      tree: processedStack
+    });
+    return (
+      m.traverse(define_error_out_order_charset, CHARSET_NODE, language),
+      m.traverse(
+        define_error_assert_non_quantificable,
+        ASSERT_NODE,
+        language
+      ),
+      c(processedStack),
+      (d = !1),
+      m
+    );
+    // }
+  }
+  function load_NFA_Parser(language = "javascript6") {
+    // TODO: Check no existing language
+    var selected_language_validStructs = validStructs[language];
+    return (
+      NFAparser || (NFAparser = new NFA(selected_language_validStructs)),
+      NFAparser
+    );
+  }
+  function s(t, e, r) {
+    Object.defineProperty(t, e, {
+      value: r,
+      enumerable: d,
+      writable: !0,
+      configurable: !0
+    });
+  }
+  function o(t) {
+    return t.filter(function (t) {
+      return t.type == EXACT_NODE && t.concatTemp
+        ? (delete t.concatTemp, !!t.chars)
+        : (t.sub
+          ? (t.sub = o(t.sub))
+          : t.branches && (t.branches = t.branches.map(o)),
+          !0);
+    });
+  }
+  function c(t) {
+    function e(t) {
+      t.sub ? c(t.sub) : t.branches && t.branches.map(c);
+    }
+    var r = t[0];
+    e(r);
+    for (var n, i = 1, a = 1, s = t.length; i < s; i++) {
+      if (((n = t[i]), n.type === EXACT_NODE)) {
+        if (r.type === EXACT_NODE && !r.repeat && !n.repeat) {
+          (r.indices[1] = n.indices[1]), (r.raw += n.raw), (r.chars += n.chars);
+          continue;
+        }
+      } else e(n);
+      (t[a++] = n), (r = n);
+    }
+    r && (t.length = a);
+  }
+  function h(t, e, r) {
+    if (!t.length)
+      return void t.push({
+        type: EMPTY_NODE,
+        indices: [r, r]
       });
+    t.reduce(function (t, r) {
       return (
-        m.traverse(define_error_out_order_charset, CHARSET_NODE, language),
-        m.traverse(
-          define_error_assert_non_quantificable,
-          ASSERT_NODE,
-          language
-        ),
-        c(i),
-        (d = !1),
-        m
-      );
-      // }
-    }
-    function load_NFA_Parser(language = "javascript6") {
-      // TODO: Check no existing language
-      var selected_language_validStructs = validStructs[language];
-      return (
-        NFAparser || (NFAparser = new NFA(selected_language_validStructs)),
-        NFAparser
-      );
-    }
-    function s(t, e, r) {
-      Object.defineProperty(t, e, {
-        value: r,
-        enumerable: d,
-        writable: !0,
-        configurable: !0
-      });
-    }
-    function o(t) {
-      return t.filter(function (t) {
-        return t.type == EXACT_NODE && t.concatTemp
-          ? (delete t.concatTemp, !!t.chars)
-          : (t.sub
-              ? (t.sub = o(t.sub))
-              : t.branches && (t.branches = t.branches.map(o)),
-            !0);
-      });
-    }
-    function c(t) {
-      function e(t) {
-        t.sub ? c(t.sub) : t.branches && t.branches.map(c);
-      }
-      var r = t[0];
-      e(r);
-      for (var n, i = 1, a = 1, s = t.length; i < s; i++) {
-        if (((n = t[i]), n.type === EXACT_NODE)) {
-          if (r.type === EXACT_NODE && !r.repeat && !n.repeat) {
-            (r.indices[1] = n.indices[1]), (r.raw += n.raw), (r.chars += n.chars);
-            continue;
-          }
-        } else e(n);
-        (t[a++] = n), (r = n);
-      }
-      r && (t.length = a);
-    }
-    function h(t, e, r) {
-      if (!t.length)
-        return void t.push({
-          type: EMPTY_NODE,
-          indices: [r, r]
-        });
-      t.reduce(function (t, r) {
-        return (
-          r.indices.push(t),
-          (r.raw = e.slice(r.indices[0], t)),
-          r.type === GROUP_NODE || (r.type === ASSERT_NODE && r.sub)
-            ? h(r.sub, e, r.endParenIndex)
-            : r.type === CHOICE_NODE
+        r.indices.push(t),
+        (r.raw = e.slice(r.indices[0], t)),
+        r.type === GROUP_NODE || (r.type === ASSERT_NODE && r.sub)
+          ? h(r.sub, e, r.endParenIndex)
+          : r.type === CHOICE_NODE
             ? (r.branches.reduce(function (t, r) {
-                h(r, e, t);
-                var n = r[0];
-                return (n ? n.indices[0] : t) - 1;
-              }, t),
+              h(r, e, t);
+              var n = r[0];
+              return (n ? n.indices[0] : t) - 1;
+            }, t),
               r.branches.reverse())
             : r.type === EXACT_NODE &&
-              (r.concatTemp || (r.chars = r.chars || r.raw)),
-          r.indices[0]
-        );
-      }, r),
-        t.reverse();
-    }
-    /**
-     * Comprueba si un assert tiene un quantificador, si es asi lanza un error
-     * @param {*} regex_object
-     */
-    function define_error_assert_non_quantificable(regex_object, regex_language) {
-      // Defino en que idiomas esto es posible
-      if (regex_object.repeat && regex_language != "python") {
-        var e = regex_object.assertionType,
-          r = "Nothing to repeat! Repeat after assertion doesn't make sense!";
-        if ("AssertLookahead" === e || "AssertNegativeLookahead" === e) {
-          var n = "AssertLookahead" === e ? "?=" : "?!",
-            i = "(" + n + "b)";
-          r +=
-            "\n/a" +
-            i +
-            "+/、/a" +
-            i +
-            "{1,n}/ are the same as /a" +
-            i +
-            "/。\n/a" +
-            i +
-            "*/、/a" +
-            i +
-            "{0,n}/、/a" +
-            i +
-            "?/ are the same as /a/。";
-        }
-        init_object.RegexSyntaxThrows.push({
-          type: "NothingRepeat",
-          lastIndex: regex_object.indices[1] - 1,
-          message: r
-        });
-      }
-    }
-    function define_error_out_order_charset(regex_json_tree, regex_language) {
-      regex_json_tree.ranges = auxKit.sortUnique(
-        regex_json_tree.ranges.map(function (t) {
-          if (t[0] > t[1])
-            init_object.RegexSyntaxThrows.push({
-              type: "OutOfOrder",
-              lastIndex: t.lastIndex,
-              message:
-                "Range [" + t.join("-") + "] out of order in character class!"
-            });
-          return t.join("");
-        })
+            (r.concatTemp || (r.chars = r.chars || r.raw)),
+        r.indices[0]
       );
-    }
-    function define_regexError(t) {
-      this.name = "RegexSyntaxError";
-      this.type = t.type;
-      this.lastIndex = t.lastIndex;
-      this.lastState = t.lastState;
-      this.lastStack = t.lastStack;
-      this.message = t.message;
-      Object.defineProperty(this, "stack", {
-        value: new Error(t.message).stack,
-        enumerable: !1
-      });
-    }
-    nodeType = {
-      ASSERT_NODE: "assert",
-      BACKREF_NODE: "backref",
-      CHARSET_NODE: "charset",
-      CHOICE_NODE: "choice",
-      DOT_NODE: "dot",
-      EMPTY_NODE: "empty",
-      EXACT_NODE: "exact",
-      GROUP_NODE: "group",
-      HEXADECIMAL_NODE: "hexadecimal",
-      UNICODE_NODE: "unicode",
-      OCTAL_NODE: "octal",
-      GROUP_COMMENT: "comment",
-      UNEXPECTED_NODE: "unexpected",
-      // assert subtypes
-      AssertLookahead: "AssertLookahead",
-      AssertNegativeLookahead: "AssertNegativeLookahead",
-      AssertNonWordBoundary: "AssertNonWordBoundary",
-      AssertWordBoundary: "AssertWordBoundary",
-      AssertEnd: "AssertEnd",
-      AssertBegin: "AssertBegin"
-    };
-    r(),
-      (create_regexObject.prototype.traverse = function (
-        has_error_callback,
-        re_token_type,
-        re_language
-      ) {
-        function recursive_search_tree(regex_tree, _error_cb, _re_language) {
-          regex_tree.forEach(function (branch) {
-            (re_token_type && branch.type !== re_token_type) ||
-              _error_cb(branch, _re_language),
-              branch.sub
-                ? recursive_search_tree(branch.sub, _error_cb, _re_language)
-                : branch.branches &&
-                  branch.branches.forEach(function (branch_leaf) {
-                    recursive_search_tree(branch_leaf, _error_cb, _re_language);
-                  });
-          });
-        }
-        recursive_search_tree(this.tree, has_error_callback, re_language);
-      });
-  
-    var d;
-    (init_object.Constants = nodeType),
-      (init_object.exportConstants = r),
-      (init_object.RegexSyntaxError = define_regexError),
-      (init_object.RegexSyntaxThrows = []),
-      (init_object.getNFAParser = load_NFA_Parser);
-  
-    var NFAparser;
-    define_regexError.prototype.toString = function () {
-      return this.name + " " + this.type + ":" + this.message;
-    };
-    var specialChars = {
-      n: "\n",
-      r: "\r",
-      t: "\t",
-      v: "\v",
-      f: "\f"
-    };
-    const escapeSpecialChars = (specialRaw) => {
-      return specialRaw
-        .replace(/(\n)/g, "\\n")
-        .replace(/(\r)/g, "\\r")
-        .replace(/(\t)/g, "\\t")
-        .replace(/(\v)/g, "\\v")
-        .replace(/(\f)/g, "\\f")
-    }
-    
-    var charset_hex = "0-9a-fA-F";
-    var names_repeat = "repeatnStart,repeatn_1,repeatn_2,repeatnErrorStart,repeatnError_1,repeatnError_2";
-    var names_hexEscape = "hexEscape1,hexEscape2";
-    var names_unicodeEscape = "unicodeEscape1,unicodeEscape2,unicodeEscape3,unicodeEscape4";
-    var names_charsetUnicodeHexEscape = "charsetUnicodeEscape1,charsetUnicodeEscape2,charsetUnicodeEscape3,charsetUnicodeEscape4,charsetHexEscape1,charsetHexEscape2";
-    
-    var elementsCallback = (function () {
-      function f_exact(t, e, r) {
-        var n = t[0];
-        (!n || n.type != EXACT_NODE || n.repeat || (n.chars && !n.concatTemp)) &&
-          t.unshift({
-            id: Math.random().toString(36).substr(2, 9),
-            type: EXACT_NODE,
-            indices: [r]
-          }),
-          n && n.concatTemp && (n.chars += e);
+    }, r),
+      t.reverse();
+  }
+  /**
+   * Comprueba si un assert tiene un quantificador, si es asi lanza un error
+   * @param {*} regex_object
+   */
+  function define_error_assert_non_quantificable(regex_object, regex_language) {
+    // Defino en que idiomas esto es posible
+    if (regex_object.repeat && regex_language != "python") {
+      var e = regex_object.assertionType,
+        r = "Nothing to repeat! Repeat after assertion doesn't make sense!";
+      if ("AssertLookahead" === e || "AssertNegativeLookahead" === e) {
+        var n = "AssertLookahead" === e ? "?=" : "?!",
+          i = "(" + n + "b)";
+        r +=
+          "\n/a" +
+          i +
+          "+/、/a" +
+          i +
+          "{1,n}/ are the same as /a" +
+          i +
+          "/。\n/a" +
+          i +
+          "*/、/a" +
+          i +
+          "{0,n}/、/a" +
+          i +
+          "?/ are the same as /a/。";
       }
-      function f_dot(t, e, r) {
-        t.unshift({
-          id: Math.random().toString(36).substr(2, 9),
-          type: DOT_NODE,
-          indices: [r]
+      init_object.RegexSyntaxThrows.push({
+        type: "NothingRepeat",
+        lastIndex: regex_object.indices[1] - 1,
+        message: r
+      });
+    }
+  }
+  function define_error_out_order_charset(regex_json_tree, regex_language) {
+    regex_json_tree.ranges = auxKit.sortUnique(
+      regex_json_tree.ranges.map(function (t) {
+        if (t[0] > t[1])
+          init_object.RegexSyntaxThrows.push({
+            type: "OutOfOrder",
+            lastIndex: t.lastIndex,
+            message:
+              "Range [" + t.join("-") + "] out of order in character class!"
+          });
+        return t.join("");
+      })
+    );
+  }
+  function define_regexError(t) {
+    this.name = "RegexSyntaxError";
+    this.type = t.type;
+    this.lastIndex = t.lastIndex;
+    this.lastState = t.lastState;
+    this.lastStack = t.lastStack;
+    this.message = t.message;
+    Object.defineProperty(this, "stack", {
+      value: new Error(t.message).stack,
+      enumerable: !1
+    });
+  }
+  nodeType = {
+    ASSERT_NODE: "assert",
+    BACKREF_NODE: "backref",
+    CHARSET_NODE: "charset",
+    CHOICE_NODE: "choice",
+    DOT_NODE: "dot",
+    EMPTY_NODE: "empty",
+    EXACT_NODE: "exact",
+    GROUP_NODE: "group",
+    HEXADECIMAL_NODE: "hexadecimal",
+    UNICODE_NODE: "unicode",
+    OCTAL_NODE: "octal",
+    GROUP_COMMENT: "comment",
+    UNEXPECTED_NODE: "unexpected",
+    // assert subtypes
+    AssertLookahead: "AssertLookahead",
+    AssertNegativeLookahead: "AssertNegativeLookahead",
+    AssertNonWordBoundary: "AssertNonWordBoundary",
+    AssertWordBoundary: "AssertWordBoundary",
+    AssertEnd: "AssertEnd",
+    AssertBegin: "AssertBegin"
+  };
+  r(),
+    (create_regexObject.prototype.traverse = function (
+      has_error_callback,
+      re_token_type,
+      re_language
+    ) {
+      function recursive_search_tree(regex_tree, _error_cb, _re_language) {
+        regex_tree.forEach(function (branch) {
+          (re_token_type && branch.type !== re_token_type) ||
+            _error_cb(branch, _re_language),
+            branch.sub
+              ? recursive_search_tree(branch.sub, _error_cb, _re_language)
+              : branch.branches &&
+              branch.branches.forEach(function (branch_leaf) {
+                recursive_search_tree(branch_leaf, _error_cb, _re_language);
+              });
         });
       }
-      function f_nullChar(t, e, r) {
+      recursive_search_tree(this.tree, has_error_callback, re_language);
+    });
+
+  var d;
+  (init_object.Constants = nodeType),
+    (init_object.exportConstants = r),
+    (init_object.RegexSyntaxError = define_regexError),
+    (init_object.RegexSyntaxThrows = []),
+    (init_object.getNFAParser = load_NFA_Parser);
+
+  var NFAparser;
+  define_regexError.prototype.toString = function () {
+    return this.name + " " + this.type + ":" + this.message;
+  };
+  var specialChars = {
+    n: "\n",
+    r: "\r",
+    t: "\t",
+    v: "\v",
+    f: "\f"
+  };
+  const escapeSpecialChars = (specialRaw) => {
+    return specialRaw
+      .replace(/(\n)/g, "\\n")
+      .replace(/(\r)/g, "\\r")
+      .replace(/(\t)/g, "\\t")
+      .replace(/(\v)/g, "\\v")
+      .replace(/(\f)/g, "\\f")
+  }
+
+  var charset_hex = "0-9a-fA-F";
+  var names_repeat = "repeatnStart,repeatn_1,repeatn_2,repeatnErrorStart,repeatnError_1,repeatnError_2";
+  var names_hexEscape = "hexEscape1,hexEscape2";
+  var names_unicodeEscape = "unicodeEscape1,unicodeEscape2,unicodeEscape3,unicodeEscape4";
+  var names_charsetUnicodeHexEscape = "charsetUnicodeEscape1,charsetUnicodeEscape2,charsetUnicodeEscape3,charsetUnicodeEscape4,charsetHexEscape1,charsetHexEscape2";
+
+  var elementsCallback = (function () {
+    function f_exact(t, e, r) {
+      var n = t[0];
+      (!n || n.type != EXACT_NODE || n.repeat || (n.chars && !n.concatTemp)) &&
         t.unshift({
           id: Math.random().toString(36).substr(2, 9),
           type: EXACT_NODE,
-          chars: "\0",
-          indices: [r - 1]
-        });
-      }
-      function f_assertBegin(t, e, r) {
+          indices: [r]
+        }),
+        n && n.concatTemp && (n.chars += e);
+    }
+    function f_dot(t, e, r) {
+      t.unshift({
+        id: Math.random().toString(36).substr(2, 9),
+        type: DOT_NODE,
+        indices: [r]
+      });
+    }
+    function f_nullChar(t, e, r) {
+      t.unshift({
+        id: Math.random().toString(36).substr(2, 9),
+        type: EXACT_NODE,
+        chars: "\0",
+        indices: [r - 1]
+      });
+    }
+    function f_assertBegin(t, e, r) {
+      t.unshift({
+        id: Math.random().toString(36).substr(2, 9),
+        type: ASSERT_NODE,
+        indices: [r],
+        assertionType: AssertBegin
+      });
+    }
+    function f_assertEnd(t, e, r, n, i) {
+      t.unshift({
+        id: Math.random().toString(36).substr(2, 9),
+        type: ASSERT_NODE,
+        indices: [r],
+        assertionType: AssertEnd
+      });
+    }
+    function f_assertWordBoundary(t, e, r) {
+      t.unshift({
+        id: Math.random().toString(36).substr(2, 9),
+        type: ASSERT_NODE,
+        indices: [r - 1],
+        assertionType: "b" == e ? AssertWordBoundary : AssertNonWordBoundary
+      });
+    }
+    function f_repeatnStart(t, e, r) {
+      t[0].type !== EXACT_NODE &&
         t.unshift({
           id: Math.random().toString(36).substr(2, 9),
-          type: ASSERT_NODE,
-          indices: [r],
-          assertionType: AssertBegin
+          type: EXACT_NODE,
+          indices: [r]
         });
-      }
-      function f_assertEnd(t, e, r, n, i) {
-        t.unshift({
-          id: Math.random().toString(36).substr(2, 9),
-          type: ASSERT_NODE,
-          indices: [r],
-          assertionType: AssertEnd
-        });
-      }
-      function f_assertWordBoundary(t, e, r) {
-        t.unshift({
-          id: Math.random().toString(36).substr(2, 9),
-          type: ASSERT_NODE,
-          indices: [r - 1],
-          assertionType: "b" == e ? AssertWordBoundary : AssertNonWordBoundary
-        });
-      }
-      function f_repeatnStart(t, e, r) {
-        t[0].type !== EXACT_NODE &&
-          t.unshift({
-            id: Math.random().toString(36).substr(2, 9),
-            type: EXACT_NODE,
-            indices: [r]
-          });
-      }
-      /**
-       *
-       * @param {*} t
-       * @param {*} e
-       * @param {*} r
-       */
-      function f_repeatnComma(t, e, r) {
-        s(t[0], "_commaIndex", r);
-      }
-      /**
-       * Captura las repeticiones dentro de llaves, como {}
-       * @summary If the description is long, write your summary here. Otherwise, feel free to remove this.
-       * @param {*} t
-       * @param {*} e
-       * @param {*} r
-       * @param {*} n
-       * @param {*} i
-       */
-      function f_repeatnEnd(t, e, r, n, i) {
-        var a,
-          s = t[0],
-          o = i.lastIndexOf("{", r),
-          c = parseInt(i.slice(o + 1, s._commaIndex || r), 10);
-        if (s._commaIndex) {
-          if (
-            (a =
-              s._commaIndex + 1 == r
-                ? 1 / 0
-                : parseInt(i.slice(s._commaIndex + 1, r), 10)) < c
-          )
-            init_object.RegexSyntaxThrows.push({
-              type: "OutOfOrder",
-              lastState: n,
-              lastIndex: r,
-              // lastStack: t,
-              message: "Numbers out of order in {} quantifier!"
-            });
-          delete s._commaIndex;
-        } else a = c;
-        s.indices[0] >= o && t.shift(), f_aux_repeated(t, c, a, o, i);
-      }
-      function f_repeat0ToInf(t, e, r, n, i) {
-        f_aux_repeated(t, 0, 1 / 0, r, i);
-      }
-      function f_repeat0To1(t, e, r, n, i) {
-        f_aux_repeated(t, 0, 1, r, i);
-      }
-      function f_repeat1ToInf(t, e, r, n, i) {
-        f_aux_repeated(t, 1, 1 / 0, r, i);
-      }
-      function f_aux_repeated(t, e, r, n, i) {
-        var a = t[0],
-          o = {
-            min: e,
-            max: r,
-            nonGreedy: !1
-          },
-          c = n - 1;
+    }
+    /**
+     *
+     * @param {*} t
+     * @param {*} e
+     * @param {*} r
+     */
+    function f_repeatnComma(t, e, r) {
+      s(t[0], "_commaIndex", r);
+    }
+    /**
+     * Captura las repeticiones dentro de llaves, como {}
+     * @summary If the description is long, write your summary here. Otherwise, feel free to remove this.
+     * @param {*} t
+     * @param {*} e
+     * @param {*} r
+     * @param {*} n
+     * @param {*} i
+     */
+    function f_repeatnEnd(t, e, r, n, i) {
+      var a,
+        s = t[0],
+        o = i.lastIndexOf("{", r),
+        c = parseInt(i.slice(o + 1, s._commaIndex || r), 10);
+      if (s._commaIndex) {
         if (
-          (a.chars && 1 === a.chars.length && (c = a.indices[0]),
+          (a =
+            s._commaIndex + 1 == r
+              ? 1 / 0
+              : parseInt(i.slice(s._commaIndex + 1, r), 10)) < c
+        )
+          init_object.RegexSyntaxThrows.push({
+            type: "OutOfOrder",
+            lastState: n,
+            lastIndex: r,
+            // lastStack: t,
+            message: "Numbers out of order in {} quantifier!"
+          });
+        delete s._commaIndex;
+      } else a = c;
+      s.indices[0] >= o && t.shift(), f_aux_repeated(t, c, a, o, i);
+    }
+    function f_repeat0ToInf(t, e, r, n, i) {
+      f_aux_repeated(t, 0, 1 / 0, r, i);
+    }
+    function f_repeat0To1(t, e, r, n, i) {
+      f_aux_repeated(t, 0, 1, r, i);
+    }
+    function f_repeat1ToInf(t, e, r, n, i) {
+      f_aux_repeated(t, 1, 1 / 0, r, i);
+    }
+    function f_aux_repeated(t, e, r, n, i) {
+      var a = t[0],
+        o = {
+          min: e,
+          max: r,
+          nonGreedy: !1
+        },
+        c = n - 1;
+      if (
+        (a.chars && 1 === a.chars.length && (c = a.indices[0]),
           a.type === EXACT_NODE)
         ) {
           var h = {
@@ -548,9 +571,9 @@
         };
         return (t = i.sub), s(t, "_parentGroup", i), (t.groupCounter = n), t;
       }
-      function f_groupNonCapture(lastStack) {
-        var parentGroup = lastStack._parentGroup;
-        (parentGroup.nonCapture = !0), (parentGroup.num = void 0), lastStack.groupCounter.i--;
+      function f_groupNonCapture(t) {
+        var e = t._parentGroup;
+        (e.nonCapture = !0), (e.num = void 0), t.groupCounter.i--;
       }
       function f_groupNamedContent(t, e) {
         var n = t._parentGroup;
@@ -573,30 +596,6 @@
         }
         n.errors.push(objectError);
         
-      }
-      function f_groupComment(lastStack) {
-        var parentGroup = lastStack._parentGroup;
-        parentGroup.num = void 0;
-        lastStack.groupCounter.i--;
-        parentGroup.type = GROUP_COMMENT;
-        parentGroup.comment = "";
-        delete parentGroup.sub;
-      }
-      function f_groupCommentContent(lastStack, actualChar, lastIndex) {
-        var parentGroup = lastStack._parentGroup;
-        parentGroup.comment += actualChar;
-      }
-      function f_groupCommentEnd(lastStack, actualChar, lastIndex, lastState, regexRaw, callback) {
-        var parentGroup = lastStack._parentGroup;
-        return (
-          delete lastStack._parentGroup,
-          delete lastStack.groupCounter,
-          (lastStack = parentGroup._parentStack),
-          delete parentGroup._parentStack,
-          lastStack.unshift(parentGroup),
-          (parentGroup.endParenIndex = lastIndex),
-          lastStack
-        );
       }
       function f_groupToAssertion(t, e, r) {
         var n = t._parentGroup;
@@ -747,104 +746,104 @@
         let charRangeStart = actualToken.chars.slice(-2);
         charRangeStart = [charRangeStart[0], actualChar],
         charRangeStart.lastIndex = lastIndex;
-        actualToken.ranges.push(charRangeStart);
-        actualToken.chars = actualToken.chars.slice(0, -2);
-        
-        let startToken = actualToken.tokens.slice(-2)[0];
-        let endToken = {
-          type: "char",
-          indices: [lastEscaped ? lastIndex-1:lastIndex, lastIndex+1],
-          raw: lastEscaped ? escapeSpecialChars(actualChar) : actualChar
-        }
-        actualToken.tokens = actualToken.tokens.slice(0, -2);
-        actualToken.tokens.push({
-          type: "range",
-          range: [startToken, endToken],
-          indices: [startToken.indices[0], lastIndex+1],
-          raw: `${startToken.raw}-${endToken.raw}`
-        });
+      actualToken.ranges.push(charRangeStart);
+      actualToken.chars = actualToken.chars.slice(0, -2);
+
+      let startToken = actualToken.tokens.slice(-2)[0];
+      let endToken = {
+        type: "char",
+        indices: [lastEscaped ? lastIndex - 1 : lastIndex, lastIndex + 1],
+        raw: lastEscaped ? escapeSpecialChars(actualChar) : actualChar
       }
-      function f_charsetRangeEndNormalEscape(lastStack, actualChar, lastIndex, n, i) {
-        if (specialChars.hasOwnProperty(actualChar)) {
-          let prevChar = actualChar;
-          actualChar = specialChars[actualChar];
-          return f_charsetRangeEnd(lastStack, actualChar, lastIndex, n, i, lastEscaped=true);
-        }
-        
+      actualToken.tokens = actualToken.tokens.slice(0, -2);
+      actualToken.tokens.push({
+        type: "range",
+        range: [startToken, endToken],
+        indices: [startToken.indices[0], lastIndex + 1],
+        raw: `${startToken.raw}-${endToken.raw}`
+      });
+    }
+    function f_charsetRangeEndNormalEscape(lastStack, actualChar, lastIndex, n, i) {
+      if (specialChars.hasOwnProperty(actualChar)) {
+        let prevChar = actualChar;
+        actualChar = specialChars[actualChar];
+        return f_charsetRangeEnd(lastStack, actualChar, lastIndex, n, i, lastEscaped = true);
       }
-      function f_charsetRangeEndUnicodeEscape(lastStack, actualChar, lastIndex) {
-        let actualToken = lastStack[0];
-        let charsRangeEnd = actualToken.chars.slice(-3) + actualChar;
-        actualToken.chars = actualToken.chars.slice(0, -3);
-        var charsRangeStart = actualToken.ranges.pop();
-        actualChar = String.fromCharCode(parseInt(charsRangeEnd, 16));
-        charsRangeStart = [charsRangeStart[0], actualChar];
-        charsRangeStart.lastIndex = lastIndex;
-        actualToken.ranges.push(charsRangeStart);
-        
-        let rangeToken = actualToken.tokens.slice(-4)[0];
-        let startToken = rangeToken.range[0];
-        let endToken = {
-          type: "char",
-          escaped: actualChar,
-          indices: [lastIndex-5, lastIndex+1],
-          raw: `\\u${charsRangeEnd}`
-        }
-        actualToken.tokens = actualToken.tokens.slice(0, -4);
-        actualToken.tokens.push({
-          type: "range",
-          range: [startToken, endToken],
-          indices: [rangeToken.indices[0], lastIndex+1],
-          raw: `${startToken.raw}-${endToken.raw}`
-        });
+
+    }
+    function f_charsetRangeEndUnicodeEscape(lastStack, actualChar, lastIndex) {
+      let actualToken = lastStack[0];
+      let charsRangeEnd = actualToken.chars.slice(-3) + actualChar;
+      actualToken.chars = actualToken.chars.slice(0, -3);
+      var charsRangeStart = actualToken.ranges.pop();
+      actualChar = String.fromCharCode(parseInt(charsRangeEnd, 16));
+      charsRangeStart = [charsRangeStart[0], actualChar];
+      charsRangeStart.lastIndex = lastIndex;
+      actualToken.ranges.push(charsRangeStart);
+
+      let rangeToken = actualToken.tokens.slice(-4)[0];
+      let startToken = rangeToken.range[0];
+      let endToken = {
+        type: "char",
+        escaped: actualChar,
+        indices: [lastIndex - 5, lastIndex + 1],
+        raw: `\\u${charsRangeEnd}`
       }
-      function f_charsetRangeEndHexEscape(lastStack, actualChar, lastIndex) {
-        var actualToken = lastStack[0];
-        let charsRangeEnd = actualToken.chars.slice(-1) + actualChar;
-        actualToken.chars = actualToken.chars.slice(0, -1);
-        var charsRangeStart = actualToken.ranges.pop();
-        actualChar = String.fromCharCode(parseInt(charsRangeEnd, 16));
-        charsRangeStart = [charsRangeStart[0], actualChar];
-        charsRangeStart.lastIndex = lastIndex;
-        actualToken.ranges.push(charsRangeStart);
-        
-        let rangeToken = actualToken.tokens.slice(-2)[0];
-        let startToken = rangeToken.range[0];
-        let endToken = {
-          type: "char",
-          escaped: actualChar,
-          indices: [lastIndex-3, lastIndex+1],
-          raw: `\\x${charsRangeEnd}`
-        }
-        actualToken.tokens = actualToken.tokens.slice(0, -2);
-        actualToken.tokens.push({
-          type: "range",
-          range: [startToken, endToken],
-          indices: [rangeToken.indices[0], lastIndex+1],
-          raw: `${startToken.raw}-${endToken.raw}`
-        });
+      actualToken.tokens = actualToken.tokens.slice(0, -4);
+      actualToken.tokens.push({
+        type: "range",
+        range: [startToken, endToken],
+        indices: [rangeToken.indices[0], lastIndex + 1],
+        raw: `${startToken.raw}-${endToken.raw}`
+      });
+    }
+    function f_charsetRangeEndHexEscape(lastStack, actualChar, lastIndex) {
+      var actualToken = lastStack[0];
+      let charsRangeEnd = actualToken.chars.slice(-1) + actualChar;
+      actualToken.chars = actualToken.chars.slice(0, -1);
+      var charsRangeStart = actualToken.ranges.pop();
+      actualChar = String.fromCharCode(parseInt(charsRangeEnd, 16));
+      charsRangeStart = [charsRangeStart[0], actualChar];
+      charsRangeStart.lastIndex = lastIndex;
+      actualToken.ranges.push(charsRangeStart);
+
+      let rangeToken = actualToken.tokens.slice(-2)[0];
+      let startToken = rangeToken.range[0];
+      let endToken = {
+        type: "char",
+        escaped: actualChar,
+        indices: [lastIndex - 3, lastIndex + 1],
+        raw: `\\x${charsRangeEnd}`
       }
-      function f_backref(t, e, r, n) {
-        function i(t, e) {
-          return (
-            !!e._parentGroup &&
-            (e._parentGroup.num == t ? t : i(t, e._parentGroup._parentStack))
-          );
-        }
-        var a = t[0],
-          s = parseInt(e, 10),
-          o = "escape" === n,
-          c = t.groupCounter,
-          h = (c && c.i) || 0;
-        if (
-          (o
-            ? ((a = {
-                id: Math.random().toString(36).substr(2, 9),
-                type: BACKREF_NODE,
-                indices: [r - 1]
-              }),
-              t.unshift(a))
-            : (s = parseInt(a.num + "" + s, 10)),
+      actualToken.tokens = actualToken.tokens.slice(0, -2);
+      actualToken.tokens.push({
+        type: "range",
+        range: [startToken, endToken],
+        indices: [rangeToken.indices[0], lastIndex + 1],
+        raw: `${startToken.raw}-${endToken.raw}`
+      });
+    }
+    function f_backref(t, e, r, n) {
+      function i(t, e) {
+        return (
+          !!e._parentGroup &&
+          (e._parentGroup.num == t ? t : i(t, e._parentGroup._parentStack))
+        );
+      }
+      var a = t[0],
+        s = parseInt(e, 10),
+        o = "escape" === n,
+        c = t.groupCounter,
+        h = (c && c.i) || 0;
+      if (
+        (o
+          ? ((a = {
+            id: Math.random().toString(36).substr(2, 9),
+            type: BACKREF_NODE,
+            indices: [r - 1]
+          }),
+            t.unshift(a))
+          : (s = parseInt(a.num + "" + s, 10)),
           s > h)
         )
           init_object.RegexSyntaxThrows.push({

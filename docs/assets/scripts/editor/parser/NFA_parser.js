@@ -102,28 +102,28 @@ class NFA {
         return !0
     }
     input(e, r, n) {
-        function i(e, r, o, c, h) {
+        function i(regexRaw, lastIndex, lastState, lastStack, h) {
             t: for (; ;) {
-                var u, l, f, p, d = a.router[o];
+                var actualChar, l, f, p, d = a.router[lastState];
                 if (!d)
                     break;
                 var g, x = d.eMove, v = d.charMove;
-                r < e.length ? (u = e[r], g = v.hasOwnProperty(u) ? v[u] : (l = a._escapeChar(d.ranges, u)) ? v[l] : x) : g = x;
-                for (var y, m, b, _ = c.length, w = h, E = 0, C = g.length; E < C; E++) {
-                    if (y = g[E], f = y.eMove ? 0 : 1, h = w, c.splice(0, c.length - _), _ = c.length, y.assert) {
-                        if (!1 === (m = y.assert(c, u, r, o, e)))
+                lastIndex < regexRaw.length ? (actualChar = regexRaw[lastIndex], g = v.hasOwnProperty(actualChar) ? v[actualChar] : (l = a._escapeChar(d.ranges, actualChar)) ? v[l] : x) : g = x;
+                for (var y, m, b, _ = lastStack.length, w = h, E = 0, C = g.length; E < C; E++) {
+                    if (y = g[E], f = y.eMove ? 0 : 1, h = w, lastStack.splice(0, lastStack.length - _), _ = lastStack.length, y.assert) {
+                        if (!1 === (m = y.assert(lastStack, actualChar, lastIndex, lastState, regexRaw)))
                             continue;
-                        "number" == typeof m && (r += m, h += m)
+                        "number" == typeof m && (lastIndex += m, h += m)
                     }
-                    if (y.action && (c = y.action(c, u, r, o, e) || c),
-                        h = y.eMove ? h : r,
-                        n && _auxKit.log(u + ":" + o + ">" + y.to),
+                    if (y.action && (lastStack = y.action(lastStack, actualChar, lastIndex, lastState, regexRaw) || lastStack),
+                        h = y.eMove ? h : lastIndex,
+                        n && _auxKit.log(actualChar + ":" + lastState + ">" + y.to),
                         E === C - 1) {
-                        r += f,
-                            o = y.to;
+                        lastIndex += f,
+                            lastState = y.to;
                         continue t
                     }
-                    if (b = i(e, r + f, y.to, c, h), b.acceptable)
+                    if (b = i(regexRaw, lastIndex + f, y.to, lastStack, h), b.acceptable)
                         return b;
                     p = b
                 }
@@ -132,10 +132,10 @@ class NFA {
                 break
             }
             return {
-                stack: c,
+                stack: lastStack,
                 lastIndex: h,
-                lastState: o,
-                acceptable: a.accept(o)
+                lastState: lastState,
+                acceptable: a.accept(lastState)
             }
         }
         r = r || 0;

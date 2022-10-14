@@ -14,7 +14,9 @@
   --background-grad-px: 60%;
   --background-grad-py: 60%;
 
-  --color-editor: #4b0082;
+  --color-editor: #2a2a2a;
+  --color-caret: #4b0082;
+  --color-syntax: #4b0082;
   --back-editor: #e2e2e2;
   --color-editor-margin: #e2e2e2;
   --tools-back: #6ebefc;
@@ -41,6 +43,8 @@
   --background-grad-py: 0%;
 
   --color-editor: #fff;
+  --color-caret: #fff;
+  --color-syntax: #fff;
   --back-editor: #1a1a1a;
   --color-editor-margin: #202020;
   --tools-back: #2e1279;
@@ -49,10 +53,6 @@
   --line-height-ratio: 1.4;
   --editor-margin: 20px;
 }
-
-/* #editor-actions .actions-container .only-mobile {
-  display: none;
-} */
 
 .regex-quotes {
   width: 3ch;
@@ -104,7 +104,7 @@
   top: calc(var(--pos-y) * 1px);
   width: calc(var(--size-width) * 1px);
   height: calc(var(--size-height) * 1px);
-  background: var(--color-editor);
+  background: var(--color-syntax);
   opacity: 0.2;
 }
 
@@ -123,13 +123,13 @@
 .input-carets .caret {
   display: inline-block;
   position: absolute;
-  width: 0.1em;
+  width: 2px;
   height: calc(var(--line-height-ratio) * var(--font-size));
   left: calc(var(--pos-char) * 1ch - 0.1em/2);
   top: calc(var(--pos-line) * var(--line-height-ratio) * var(--font-size));
-  background: var(--color-editor);
+  background: var(--color-caret);
   opacity: 1;
-  color: var(--color-editor);
+  color: var(--color-caret);
   -webkit-animation: none;
   -moz-animation: none;
   -ms-animation: none;
@@ -151,13 +151,13 @@
 
 .input-carets .caret.drag {
   background: linear-gradient(
-    var(--color-editor), var(--color-editor),
+    var(--color-caret), var(--color-caret),
     transparent, transparent,
-    var(--color-editor), var(--color-editor),
+    var(--color-caret), var(--color-caret),
     transparent, transparent,
-    var(--color-editor), var(--color-editor),
+    var(--color-caret), var(--color-caret),
     transparent, transparent,
-    var(--color-editor), var(--color-editor)
+    var(--color-caret), var(--color-caret)
   );
   -webkit-animation: none;
   -moz-animation: none;
@@ -228,7 +228,8 @@
 } */
 
 .editor::selection, .syntax::selection, .syntax *::selection, .syntax *::selection, .syntax * *::selection, .caret::selection {
-  background: #bcbcbc;
+  /* background: #bcbcbc; */
+  background: transparent;
 }
 
 .editor,
@@ -253,40 +254,46 @@
 .editor {
   display: inline-block;
   width: 100%;
-  /*  text-align: justify; */
   overflow: hidden;
   height: max-content;
   outline: none;
-  /* color: white; */
-  /* background: #2c2c2c; */
-  /* Tiene que estar debido a que sino el caret no se ve */
-  color: var(--color-editor);
-  /*   color: transparent; */
+  color: transparent;
   background: transparent;
-
-  background: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
+  /* background-clip: text; */
+  /* -webkit-background-clip: text;
   -moz-background-clip: text;
-  -webkit-text-fill-color: #ffffff00;
+  -webkit-text-fill-color: #ffffff00; */
 }
 
-.input.editing .input-editor {
+.input.no-highlighted .input-editor {
   z-index: 4;
   pointer-events: all;
 }
 
-.input.editing .input-editor .editor {
-  background-clip: initial;
+.input.no-highlighted .input-editor .editor {
+  /* background-clip: initial;
   -webkit-background-clip: initial;
   -moz-background-clip: initial;
-  -webkit-text-fill-color: var(--color-editor);
+  -webkit-text-fill-color: var(--color-editor); */
+  color: var(--color-editor);
+}
+.input.no-highlighted .input-editor .editor::selection {
+  background: var(--color-editor);
+}
+.input.no-highlighted .input-editor .editor::-moz-selection {
+  background: var(--color-editor);
+}
+.input .input-editor .editor::selection {
+  background: transparent;
+}
+.input .input-editor .editor::-moz-selection {
+  background: transparent;
 }
 
-.input.editing .input-syntax .syntax,
-.input.editing .input-syntax .syntax *,
-.input.editing .input-syntax .syntax *:after,
-.input.editing .input-syntax .syntax *:before {
+.input.no-highlighted .input-syntax .syntax,
+.input.no-highlighted .input-syntax .syntax *,
+.input.no-highlighted .input-syntax .syntax *:after,
+.input.no-highlighted .input-syntax .syntax *:before {
   color: transparent;
   background: transparent;
 }
@@ -295,7 +302,7 @@
   cursor: text;
   /* background-color: var(--back-editor); */
   word-break: break-all;
-  color: var(--color-editor);
+  color: var(--color-syntax);
 }
 
 .syntax *,

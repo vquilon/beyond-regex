@@ -234,7 +234,9 @@ function RegexHighlighter($editor, $syntax) {
                 });
             }
 
-            let assertHTML = `${assertMap[reToken.assertionType][0]}${subTokens}${assertMap[reToken.assertionType][1]}`;
+            let assertHTML = `${assertMap[reToken.assertionType][0]}${subTokens}`;
+            assertHTML += reToken.raw.endsWith(")") ? assertMap[reToken.assertionType][1] : "";
+
             if (reToken.repeat) {
                 let quant = `<i>${reToken.raw.slice(reToken.repeat.beginIndex)}</i>`;
                 assertHTML += quant;
@@ -264,6 +266,9 @@ function RegexHighlighter($editor, $syntax) {
                 if (reToken.errors.some(e => e.type === 'UnterminatedGroup')) {
                     endParen = "";
                 }
+            }
+            if (! reToken.raw.endsWith(")")){
+                endParen = "";
             }
             let groupHTML = `<span class="parenthesis">(</span>${groupMod}${subTokens}${endParen}`;
             if (reToken.repeat) {
@@ -370,7 +375,7 @@ function RegexHighlighter($editor, $syntax) {
         
         
         if ($testDiv.innerText !== regexRaw) {
-            if ($testDiv.innerText.length < regexRaw.length) {
+            if ($testDiv.innerText.length < regexRaw.length && regexRaw.startsWith($testDiv.innerText)) {
                 // showErrorsParser("Cannot render well that regex!");
                 let noParsed = regexRaw.slice($testDiv.innerText.length);
                 htmlParsed = `<span>${htmlParsed}</span><span>${expandHtmlEntities(noParsed)}</span>`;
