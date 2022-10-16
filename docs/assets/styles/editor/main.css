@@ -140,6 +140,9 @@
 .input-carets.nofocus .caret {
   display: none;
 }
+.input-carets.nofocus .caret.drag {
+  display: inline-block;
+}
 
 .input-carets.blink .caret {
   -webkit-animation: 1s blink step-end infinite;
@@ -507,4 +510,9 @@ span.assert.AssertLookahead > .parenthesis {
   font-weight: normal;
   font-style: normal;
   text-decoration: none;
+}
+
+.regex i {
+  font-style: italic;
+  color: #028061;
 }

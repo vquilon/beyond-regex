@@ -714,8 +714,8 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
                 height: container_item.height,
                 x: container_item.x,
                 y: container_item.y + groupinfo_text_item.y,
-                lineInX: offset_x + offset_x_width + commentContent.lineInX + 10,
-                lineOutX: offset_x + offset_x_width + commentContent.lineOutX + 10
+                lineInX: offset_x + offset_x_width + commentContent.x + 10,
+                lineOutX: offset_x + offset_x_width + commentContent.x + commentContent.width + 10
             }
         },
         dot: function (regexJSONInfo, offset_x, offset_y) {

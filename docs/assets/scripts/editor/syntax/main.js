@@ -170,6 +170,7 @@ function EditorSyntaxis(options = {}) {
         return getTextOffsetFrom($syntax);
     };
     const selectWith = (caretStart, caretEnd, $toNode=undefined) => {
+        window.scrollTo(0, 0);
         let initCaretStart = caretStart;
         let initCaretEnd = caretEnd;
         if (caretStart === 0 && caretEnd === 0) {
@@ -216,6 +217,7 @@ function EditorSyntaxis(options = {}) {
     };
     const selectEditorAt = (startX, startY, endX, endY) => {
         // Needs to are a global reference
+        window.scrollTo(0, 0);
         let [caretStart, caretEnd] = selectSyntaxAt(startX, startY, endX, endY);
         selectEditorFromSyntaxWith(caretStart, caretEnd);
         return [caretStart, caretEnd];
@@ -932,7 +934,7 @@ function EditorSyntaxis(options = {}) {
 
     }
 
-    const isMousePosInSelection = (mouseX, mouseY) => {
+    const isMouseInSelection = (mouseX, mouseY) => {
         let selections = Array.from($inputSelections.children);
         let $selection;
         let editorBBounds = $editor.getBoundingClientRect();
@@ -959,7 +961,6 @@ function EditorSyntaxis(options = {}) {
         //     _$caret.classList.add("drag");
         //     $editor.dragCaret = _$caret;
         // }
-        $inputCarets.classList.remove("nofocus")
         let caretBBounds = $editor.dragCaret.getBoundingClientRect();
         // TOOD: Hay que corregir el numero de caracteres que se han borrado, para ajustar donde se
         // pone el texto dragged
@@ -976,11 +977,13 @@ function EditorSyntaxis(options = {}) {
         $editor.dragging = false;
         $editor.dragCaret = undefined;
         $editor.internalDrag = false;
+        $editor.textSelection = {sx: 0, sy: 0, ex: 0, ey: 0};
 
         // Se crea la seleccion para el texto arrastrado
         updateCaretPos({x: caretPos.x, y: caretPos.y + caretPos.height/2}, {});
         let $caret = Array.from($inputCarets.children).slice(-1)[0];
         updateCaretPos({x: caretPos.x + caretPos.width, y: caretPos.y + caretPos.height/2}, {$caret: $caret});
+        $input.focus();
     }
     const dragEnterEvent = (event) => {
         let syntaxBB = $syntax.getBoundingClientRect();
@@ -1390,7 +1393,6 @@ function EditorSyntaxis(options = {}) {
     const keydownEditor = (event, $containerEl, {pressedEvent=false}) => {
         // if ($containerEl !== $editor) return;
         // console.log(event);
-        window.scrollTo(0, 0);
 
         if(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'End', 'Home', 'PageUp', 'PageDown'].includes(event.key)) {
             if ($containerEl !== $editor) {
@@ -1464,7 +1466,6 @@ function EditorSyntaxis(options = {}) {
         $syntax.addEventListener("mousedown", (event) => {
             // TODO: El metodo isMousePosInSelection, hay que perfeccionar para que un $selection tenga asociado un id de $caret
             //  y de esta forma obtener el caret correspondiente de una seleccion, o agregar los mismos datos de start end del $caret
-            let [$selection, caretPos] = isMousePosInSelection(event.clientX, event.clientY);
             if ($editor.dragging) {
                 if ($inputCarets.contains($editor.dragCaret)) {
                     $inputCarets.removeChild($editor.dragCaret);
@@ -1474,12 +1475,14 @@ function EditorSyntaxis(options = {}) {
                 $editor.internalDrag = false;
                 $editor.textSelection = {sx: 0, sy: 0, ex: 0, ey: 0};
             }
+
+            let [$selection, caretPos] = isMouseInSelection(event.clientX, event.clientY);
             if ($selection !== undefined) {
                 let selHeight = parseFloat($selection.style.getPropertyValue("--size-height"));
                 $editor.textSelection = {sx:caretPos.sx, sy: caretPos.sy + selHeight/2, ex: caretPos.ex, ey: caretPos.ey - selHeight/2}
                 $editor.selecting = false;
-                $inputCarets.innerHTML = "";
                 $editor.internalDrag = true;
+                $editor.initSelecting = true;
             }
             else {
                 pauseCaretsBlink();
@@ -1489,7 +1492,7 @@ function EditorSyntaxis(options = {}) {
 
         }, true);
         $syntax.addEventListener("mousemove", (event) => {
-            if ($editor.initSelecting) {
+            if ($editor.initSelecting && !$editor.internalDrag) {
                 $editor.initSelecting = false;
                 $editor.selecting = true;
             }
@@ -1498,7 +1501,7 @@ function EditorSyntaxis(options = {}) {
                 updateCaretPos({x: event.clientX, y: event.clientY}, {$caret: $caret, wheelKey: event.which === 2});
             }
             if (($editor.internalDrag || $editor.dragging) && event.which === 1) {
-                let [$selection, caretPos] = isMousePosInSelection(event.clientX, event.clientY);
+                let [$selection, caretPos] = isMouseInSelection(event.clientX, event.clientY);
                 if ($selection === undefined) {
                     $editor.dragCaretPos = {x: event.clientX, y: event.clientY};
                     let [_pos, _$caret]  = updateCaretPos($editor.dragCaretPos, {$caret: $editor.dragCaret, ctrlKey: false, dragStyle: true});
@@ -1507,7 +1510,12 @@ function EditorSyntaxis(options = {}) {
                     $editor.dragCaret = _$caret;
                 }
                 else {
+                    if ($inputCarets.contains($editor.dragCaret)) {
+                        $inputCarets.removeChild($editor.dragCaret);
+                    }
                     $editor.dragging = true;
+                    $editor.dragCaret = undefined;
+                    $editor.initSelecting = false;
                 }
             }
         }, true);
@@ -1515,7 +1523,7 @@ function EditorSyntaxis(options = {}) {
             $editor.selecting = false;
 
             if ($editor.dragging) {
-                let [$selection, caretPos] = isMousePosInSelection(event.clientX, event.clientY);
+                let [$selection, caretPos] = isMouseInSelection(event.clientX, event.clientY);
                 if ($selection === undefined) {
                     $inputSelections.innerHTML = "";
                     window.getSelection().removeAllRanges();
@@ -1526,6 +1534,13 @@ function EditorSyntaxis(options = {}) {
                     // Get dataset from event.target and select from Point
                     let textDragged = window.getSelection().toString();
                     dragDropEvent(textDragged, event);
+                }
+                else {
+                    // Recover the selecting state
+                    $editor.dragging = false;
+                    $editor.dragCaret = undefined;
+                    $editor.internalDrag = false;
+                    $editor.textSelection = {sx: 0, sy: 0, ex: 0, ey: 0};
                 }
             }
             else {
@@ -1538,15 +1553,16 @@ function EditorSyntaxis(options = {}) {
             }
         }, true);
         $syntax.addEventListener("dragstart", function(event) {
+            event.preventDefault();
             // Nunca se tendra este evento, a no ser que se seleccione texto interno
-            $editor.selecting = false;
-            $inputCarets.innerHTML = "";
-            $editor.dragging = true;
-            $editor.internalDrag = true;
+            // $editor.selecting = false;
+            // $inputCarets.innerHTML = "";
+            // $editor.dragging = true;
+            // $editor.internalDrag = true;
 
-            let [$selection, caretPos] = isMousePosInSelection(event.clientX, event.clientY);
-            let selHeight = parseFloat($selection.style.getPropertyValue("--size-height"));
-            $editor.textSelection = {sx:caretPos.sx, sy: caretPos.sy + selHeight/2, ex: caretPos.ex, ey: caretPos.ey - selHeight/2}
+            // let [$selection, caretPos] = isMousePosInSelection(event.clientX, event.clientY);
+            // let selHeight = parseFloat($selection.style.getPropertyValue("--size-height"));
+            // $editor.textSelection = {sx:caretPos.sx, sy: caretPos.sy + selHeight/2, ex: caretPos.ex, ey: caretPos.ey - selHeight/2}
         }, false);
         // $syntax.addEventListener("dragend", function(event) {
         //   // reset the transparency
@@ -1580,7 +1596,7 @@ function EditorSyntaxis(options = {}) {
         //         $inputEditor.querySelector(".input-carets").innerHTML = "";
         //     }
         // });
-        $containerEditor.querySelector('.input').addEventListener("blur", event => {
+        $input.addEventListener("blur", event => {
             if (!$input.editing) {
                 // $inputCarets.innerHTML = "";
                 disableCaretsBlink();
@@ -1588,7 +1604,7 @@ function EditorSyntaxis(options = {}) {
                 $inputSelections.classList.add("nofocus");
             }
         });
-        $containerEditor.querySelector('.input').addEventListener("focus", event => {
+        $input.addEventListener("focus", event => {
             $inputCarets.classList.remove("nofocus");
             $inputSelections.classList.remove("nofocus");
             pauseCaretsBlink();

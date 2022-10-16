@@ -469,7 +469,7 @@ function RegexParser() {
           });
         delete prevToken._commaIndex;
       } else maxRepeat = minRepeat;
-      let repeatRaw = regexRaw.substr(startRepeatIndex, lastIndex);
+      let repeatRaw = regexRaw.substr(startRepeatIndex, lastIndex - startRepeatIndex + 1);
       prevToken.indices[0] >= startRepeatIndex && lastStack.shift(), f_aux_repeated(lastStack, minRepeat, maxRepeat, startRepeatIndex, repeatRaw, regexRaw);
     }
     function f_repeat0ToInf(lastStack, actualChar, lastIndex, lastState, regexRaw) {
@@ -491,33 +491,46 @@ function RegexParser() {
       let repeatTimes = {
         min: minRepeat,
         max: maxRepeat,
-        nonGreedy: !1
+        nonGreedy: false
       }
+      let exactPrevIndex = startRepeatIndex - 1;
       if (
-        (prevToken.chars && 1 === prevToken.chars.length && (c = prevToken.indices[0]),
+        (prevToken.chars && 1 === prevToken.chars.length && (exactPrevIndex = prevToken.indices[0]),
         prevToken.type === EXACT_NODE)
-        ) {
-        let exactPrevIndex = startRepeatIndex - 1;
+      ) {
+        let commentToken;
         if (middleComment) {
           // Restar la longitud del comentario
-          exactPrevIndex = startRepeatIndex - 1 - lastStack[0].indices[0];
+          commentToken = lastStack.shift();
+          exactPrevIndex = commentToken.indices[0] - 1;
         }
-        var h = {
+        var exactTokenRepeated = {
           id: Math.random().toString(36).substr(2, 9),
           type: EXACT_NODE,
           repeat: repeatTimes,
           chars: prevToken.chars ? prevToken.chars : regexRaw[exactPrevIndex],
           indices: [exactPrevIndex]
         };
-        prevToken.indices[0] === exactPrevIndex && lastStack.shift(), lastStack.unshift(h);
+        prevToken.indices[0] === exactPrevIndex && lastStack.shift();
+        lastStack.unshift(exactTokenRepeated);
+        prevToken = lastStack[0];
+        if (middleComment) lastStack.unshift(commentToken);
+
       }
       else prevToken.repeat = repeatTimes;
       setProperty(repeatTimes, "raw", repeatRaw);
       setProperty(repeatTimes, "beginIndex", startRepeatIndex - prevToken.indices[0]);
       setProperty(repeatTimes, "beginAbsIndex", startRepeatIndex);
+      if (middleComment) setProperty(prevToken, "commentRepeatId", lastStack[0].id);
     }
     function f_repeatNonGreedy(lastStack) {
-      lastStack[0].repeat.nonGreedy = !0;
+      let prevToken = lastStack[0];
+      let middleComment = false;
+      if (prevToken.type === GROUP_COMMENT) {
+        prevToken = lastStack[1];
+        middleComment = true;
+      }
+      prevToken.repeat.nonGreedy = true;
     }
     function f_escapeStart(lastStack, actualChar, lastIndex) {
       lastStack.unshift({
