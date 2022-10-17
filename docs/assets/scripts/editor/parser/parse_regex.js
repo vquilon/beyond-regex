@@ -70,45 +70,45 @@ function RegexParser() {
     error_lastState = processedRegex.lastState;
 
     // Gestor errores al final del parseo
-    var g = processedRegex.acceptable && processedRegex.lastIndex === raw_regex_input.length - 1;
-    if (!g) {
-      var x;
+    var wellParsed = processedRegex.acceptable && processedRegex.lastIndex === raw_regex_input.length - 1;
+    if (!wellParsed) {
+      var errorObj;
       switch (error_lastState) {
         case "charsetRangeEndWithNullChar":
-          x = {
+          errorObj = {
             type: "CharsetRangeEndWithNullChar",
             message:
               "Charset range end with NUL char does not make sense!\nBecause [a-\\0] is not a valid range.\nAnd [\\0-\\0] should be rewritten into [\\0]."
           };
           break;
         case "tokenIncomplete":
-          x = {
+          errorObj = {
             type: "TokenIncomplete",
             message: "The token is not completed!"
           };
           break;
         case "repeatErrorFinal":
-          x = {
+          errorObj = {
             type: "NothingRepeat",
             message: "Nothing to repeat!"
           };
           break;
         case "digitFollowNullError":
-          x = {
+          errorObj = {
             type: "DigitFollowNullError",
             message:
               "The '\\0' represents the <NUL> char and cannot be followed by a decimal digit!"
           };
           break;
         case "charsetRangeEndClass":
-          x = {
+          errorObj = {
             type: "CharsetRangeEndClass",
             message:
               'Charset range ends with class such as "\\w\\W\\d\\D\\s\\S" is invalid!'
           };
           break;
         case "charsetOctEscape":
-          x = {
+          errorObj = {
             type: "DecimalEscape",
             message:
               "Decimal escape appears in charset is invalid.Because it can't be explained as  backreference.And octal escape is deprecated!"
@@ -116,27 +116,27 @@ function RegexParser() {
           break;
         default:
           0 === error_lastState.indexOf("charset")
-            ? (x = {
+            ? (errorObj = {
               type: "UnclosedCharset",
               message: "Unterminated character class!"
             })
             : ")" === raw_regex_input[processedRegex.lastIndex]
-              ? (x = {
+              ? (errorObj = {
                 type: "UnmatchedParen",
                 message: "Unmatched end parenthesis!"
               })
-              : ((x = {
+              : ((errorObj = {
                 type: "UnexpectedChar",
                 message: "Unexpected char!"
               }),
                 processedRegex.lastIndex++);
       }
-      if (x) {
-        x.lastIndex = processedRegex.lastIndex
+      if (errorObj) {
+        errorObj.lastIndex = processedRegex.lastIndex
         // x.lastStack = r.stack
-        x.lastState = error_lastState
+        errorObj.lastState = error_lastState
 
-        init_object.RegexSyntaxThrows.push(x);
+        init_object.RegexSyntaxThrows.push(errorObj);
       }
     }
 
@@ -156,11 +156,7 @@ function RegexParser() {
     });
     return (
       m.traverse(define_error_out_order_charset, CHARSET_NODE, language),
-      m.traverse(
-        define_error_assert_non_quantificable,
-        ASSERT_NODE,
-        language
-      ),
+      m.traverse(define_error_assert_non_quantificable, ASSERT_NODE, language),
       c(processedStack),
       (d = !1),
       m
@@ -238,12 +234,12 @@ function RegexParser() {
   }
   /**
    * Comprueba si un assert tiene un quantificador, si es asi lanza un error
-   * @param {*} regex_object
+   * @param {*} assertToken
    */
-  function define_error_assert_non_quantificable(regex_object, regex_language) {
+  function define_error_assert_non_quantificable(assertToken, regex_language) {
     // Defino en que idiomas esto es posible
-    if (regex_object.repeat && regex_language != "python") {
-      var e = regex_object.assertionType,
+    if (assertToken.repeat && regex_language != "python") {
+      var e = assertToken.assertionType,
         r = "Nothing to repeat! Repeat after assertion doesn't make sense!";
       if ("AssertLookahead" === e || "AssertNegativeLookahead" === e) {
         var n = "AssertLookahead" === e ? "?=" : "?!",
@@ -263,23 +259,31 @@ function RegexParser() {
           i +
           "?/ are the same as /a/。";
       }
-      init_object.RegexSyntaxThrows.push({
+      let erroObj = {
         type: "NothingRepeat",
-        lastIndex: regex_object.indices[1] - 1,
+        lastIndex: assertToken.indices[1] - 1,
         message: r
-      });
+      }
+      init_object.RegexSyntaxThrows.push(erroObj);
+      if (!assertToken.errors) assertToken.errors = [];
+      assertToken.push(erroObj);
     }
   }
-  function define_error_out_order_charset(regex_json_tree, regex_language) {
-    regex_json_tree.ranges = auxKit.sortUnique(
-      regex_json_tree.ranges.map(function (t) {
-        if (t[0] > t[1])
-          init_object.RegexSyntaxThrows.push({
+  function define_error_out_order_charset(charsetToken, regex_language) {
+    charsetToken.ranges = auxKit.sortUnique(
+      charsetToken.ranges.map(function (t) {
+        if (t[0] > t[1]) {
+          let errorObj = {
             type: "OutOfOrder",
             lastIndex: t.lastIndex,
             message:
               "Range [" + t.join("-") + "] out of order in character class!"
-          });
+          }
+          init_object.RegexSyntaxThrows.push(errorObj);
+          if (!charsetToken.errors) charsetToken.errors = [];
+          charsetToken.errors.push(errorObj)
+
+        }
         return t.join("");
       })
     );
@@ -459,14 +463,18 @@ function RegexParser() {
             prevToken._commaIndex + 1 == lastIndex
               ? 1 / 0
               : parseInt(regexRaw.slice(prevToken._commaIndex + 1, lastIndex), 10)) < minRepeat
-        )
-          init_object.RegexSyntaxThrows.push({
+        ) {
+          let errObj = {
             type: "OutOfOrder",
             lastState: lastState,
             lastIndex: lastIndex,
             // lastStack: t,
             message: "Numbers out of order in {} quantifier!"
-          });
+          }
+          init_object.RegexSyntaxThrows.push(errObj);
+          if (!prevToken.errors) prevToken.errors = [];
+          prevToken.errors.push(erroObj);
+        }
         delete prevToken._commaIndex;
       } else maxRepeat = minRepeat;
       let repeatRaw = regexRaw.substr(startRepeatIndex, lastIndex - startRepeatIndex + 1);
@@ -512,6 +520,7 @@ function RegexParser() {
           indices: [exactPrevIndex]
         };
         prevToken.indices[0] === exactPrevIndex && lastStack.shift();
+        exactTokenRepeated.errors = commentToken.errors;
         lastStack.unshift(exactTokenRepeated);
         prevToken = lastStack[0];
         if (middleComment) lastStack.unshift(commentToken);
@@ -614,13 +623,11 @@ function RegexParser() {
         message: `The group name cannot has the char "${actualChar}"`
       }
       init_object.RegexSyntaxThrows.push(objectError);
-      var n = lastStack._parentGroup;
-      n.name += actualChar;
+      var parentGroup = lastStack._parentGroup;
+      parentGroup.name += actualChar;
 
-      if (!n.errors) {
-        n.errors = [];
-      }
-      n.errors.push(objectError);
+      if (!parentGroup.errors) parentGroup.errors = [];
+      parentGroup.errors.push(objectError);
 
     }
     function f_groupComment(lastStack) {
@@ -659,13 +666,16 @@ function RegexParser() {
       lastStack = f_endChoice(lastStack);
       var parentGroup = lastStack._parentGroup;
       if (!parentGroup) {
-        init_object.RegexSyntaxThrows.push({
+        let errObj = {
           type: "UnexpectedChar",
           lastIndex: lastIndex,
           lastState: lastState,
           // lastStack: t,
           message: "Unexpected end parenthesis!"
-        });
+        }
+        init_object.RegexSyntaxThrows.push(errObj);
+        if (!lastStack[0].errors) lastStack[0].errors = [];
+        lastStack[0].errors.push(errObj);
         return lastStack;
       }
 
@@ -883,26 +893,26 @@ function RegexParser() {
           (e._parentGroup.num == t ? t : i(t, e._parentGroup._parentStack))
         );
       }
-      var a = lastStack[0],
+      var prevToken = lastStack[0],
         s = parseInt(actualChar, 10),
         o = "escape" === lastState,
         c = lastStack.groupCounter,
         h = (c && c.i) || 0;
       if (
         (o
-          ? ((a = {
+          ? ((prevToken = {
             id: Math.random().toString(36).substr(2, 9),
             type: BACKREF_NODE,
             indices: [lastIndex - 1]
           }),
-            lastStack.unshift(a))
-          : (s = parseInt(a.num + "" + s, 10)),
+            lastStack.unshift(prevToken))
+          : (s = parseInt(prevToken.num + "" + s, 10)),
           s > h)
-      )
-        init_object.RegexSyntaxThrows.push({
+      ) {
+        let errObj = {
           type: "InvalidBackReference",
           lastIndex: lastIndex,
-          lastStack: lastStack,
+          // lastStack: lastStack,
           lastState: lastState,
           message:
             "Back reference number(" +
@@ -910,16 +920,24 @@ function RegexParser() {
             ") greater than current groups count(" +
             h +
             ")."
-        });
-      if (i(s, lastStack))
-        init_object.RegexSyntaxThrows.push({
+        }
+        init_object.RegexSyntaxThrows.push(errObj);
+        if (!prevToken.errors) prevToken.errors = [];
+        prevToken.errors.push(errObj);
+      }
+      if (i(s, lastStack)) {
+        let errObj = {
           type: "InvalidBackReference",
           lastIndex: lastIndex,
-          lastStack: lastStack,
+          // lastStack: lastStack,
           lastState: lastState,
           message: "Recursive back reference in group (" + s + ") itself."
-        });
-      a.num = s;
+        }
+        init_object.RegexSyntaxThrows.push(errObj);
+        if (!prevToken.errors) prevToken.errors = [];
+        prevToken.errors.push(errObj);
+      }
+      prevToken.num = s;
     }
 
     function f_tokenIncomlpete(lastStack, actualChar, lastIndex, lastState, regexRaw) {
@@ -967,13 +985,16 @@ function RegexParser() {
       const _charsetIncompleteEscaped = (tokenEscaped, tokenClass) => {
         let lastIndexIncomplete = regexRaw.slice(0, lastIndex).lastIndexOf(`\\${tokenEscaped}`) + 1;
         let numberIncomplete = lastIndex - lastIndexIncomplete;
-        init_object.RegexSyntaxThrows.push({
+        let errObj = {
           type: "TokenIncomplete",
           lastIndex: lastIndexIncomplete,
-          lastStack: lastStack,
+          // lastStack: lastStack,
           lastState: lastState,
           message: `The ${tokenClass} escaped char is incomplete!`
-        });
+        }
+        init_object.RegexSyntaxThrows.push(errObj);
+        if (!lastStack[0].errors) lastStack[0].errors = [];
+        lastStack[0].errors.push(errObj);
 
         // We need to add to the `chars` field the chars non escape chars, and left the \xAA not added
         let badCharsCaptured = lastStack[0].chars.slice(lastStack[0].chars.length - numberIncomplete,).slice(1,);
@@ -1009,22 +1030,27 @@ function RegexParser() {
         actualToken.chars += badCharsCaptured;
 
         // Now add the errors, first a bad range
-        init_object.RegexSyntaxThrows.push({
+        let errObj1 = {
           type: "InvalidRange",
           // -2 because the lastIndexIncomplete is for the letter u, and this error is for the `-` range
           lastIndex: lastIndexIncomplete - 2,
-          lastStack: lastStack,
+          // lastStack: lastStack,
           lastState: lastState,
           message: `The right ${tokenClass} escaped token is invalid!`
-        });
+        }
         // Then the token incomplete error
-        init_object.RegexSyntaxThrows.push({
+        let errObj2 = {
           type: "TokenIncomplete",
           lastIndex: lastIndexIncomplete,
-          lastStack: lastStack,
+          // lastStack: lastStack,
           lastState: lastState,
           message: `The ${tokenClass} escaped char is incomplete!`
-        });
+        }
+        init_object.RegexSyntaxThrows.push(errObj1);
+        init_object.RegexSyntaxThrows.push(errObj2);
+        if(!lastStack[0].errors) lastStack[0].errors = [];
+        lastStack[0].errors.push(errObj1);
+        lastStack[0].errors.push(errObj2);
 
         // Charset Tokens
         // Capture the wrong token at -2 positions
@@ -1061,60 +1087,63 @@ function RegexParser() {
     function f_tokenIncompleteHex(lastStack, actualChar, lastIndex, lastState, regexRaw, callback) {
       let lastIndexIncomplete = regexRaw.slice(0, lastIndex).lastIndexOf("\\x") + 1;
 
-      init_object.RegexSyntaxThrows.push({
+      let errObj = {
         type: "TokenIncomplete",
         lastIndex: lastIndexIncomplete,
         // lastStack: lastStack,
         lastState: lastState,
         message: "The hexadecimal escaped char is incomplete!"
-      });
-      lastStack.shift();
+      }
+      init_object.RegexSyntaxThrows.push(errObj);
+      // lastStack.shift();
       // Add the wrong escaped hex
       lastStack.unshift({
         id: Math.random().toString(36).substr(2, 9),
         type: HEXADECIMAL_NODE,
-        chars: "",
-        indices: [lastIndexIncomplete - 1]
+        chars: regexRaw.slice(lastIndexIncomplete + 1, lastIndex),
+        indices: [lastIndexIncomplete - 1],
+        errors: [errObj]
       });
       // Add the other tokens
-      if (regexRaw.slice(lastIndexIncomplete + 1, lastIndex) !== "") {
-        lastStack.unshift({
-          id: Math.random().toString(36).substr(2, 9),
-          type: EXACT_NODE,
-          chars: regexRaw.slice(lastIndexIncomplete + 1, lastIndex),
-          indices: [lastIndexIncomplete + 1]
-        });
-      }
+      // if (regexRaw.slice(lastIndexIncomplete + 1, lastIndex) !== "") {
+      //   lastStack.unshift({
+      //     id: Math.random().toString(36).substr(2, 9),
+      //     type: EXACT_NODE,
+      //     chars: regexRaw.slice(lastIndexIncomplete + 1, lastIndex),
+      //     indices: [lastIndexIncomplete + 1]
+      //   });
+      // }
 
       return callback(lastStack, actualChar, lastIndex, lastState, regexRaw);
     }
     function f_tokenIncompleteUnicode(lastStack, actualChar, lastIndex, lastState, regexRaw, callback) {
       let lastIndexIncomplete = regexRaw.slice(0, lastIndex).lastIndexOf("\\u") + 1;
-
-      init_object.RegexSyntaxThrows.push({
+      let errObj = {
         type: "TokenIncomplete",
         lastIndex: lastIndexIncomplete,
         // lastStack: lastStack,
         lastState: lastState,
         message: "The unicode escaped char is incomplete!"
-      });
-      lastStack.shift();
+      }
+      init_object.RegexSyntaxThrows.push(errObj);
+      // lastStack.shift();
       // Add the wrong escaped hex
       lastStack.unshift({
         id: Math.random().toString(36).substr(2, 9),
         type: UNICODE_NODE,
-        chars: "",
-        indices: [lastIndexIncomplete - 1]
+        chars: regexRaw.slice(lastIndexIncomplete + 1, lastIndex),
+        indices: [lastIndexIncomplete - 1],
+        errors: [errObj]
       });
       // Add the other tokens only can be exact, because the others are added in the callback function
-      if (regexRaw.slice(lastIndexIncomplete + 1, lastIndex) !== "") {
-        lastStack.unshift({
-          id: Math.random().toString(36).substr(2, 9),
-          type: EXACT_NODE,
-          chars: regexRaw.slice(lastIndexIncomplete + 1, lastIndex),
-          indices: [lastIndexIncomplete + 1]
-        });
-      }
+      // if (regexRaw.slice(lastIndexIncomplete + 1, lastIndex) !== "") {
+      //   lastStack.unshift({
+      //     id: Math.random().toString(36).substr(2, 9),
+      //     type: EXACT_NODE,
+      //     chars: regexRaw.slice(lastIndexIncomplete + 1, lastIndex),
+      //     indices: [lastIndexIncomplete + 1]
+      //   });
+      // }
 
       return callback(lastStack, actualChar, lastIndex, lastState, regexRaw);
     }

@@ -219,6 +219,15 @@ label.label-input {
     box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa;
 }
 
+#editor-flags input#flag-i:active~label[for="flag-i"],
+#editor-flags input#flag-m:active~label[for="flag-m"],
+#editor-flags input#flag-g:active~label[for="flag-g"] {
+    font-weight: 500;
+    font-size: 85% !important;
+    box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa;
+}
+
+
 #editor-flags input#flag-i:checked~label[for="flag-i"]>*,
 #editor-flags input#flag-m:checked~label[for="flag-m"]>*,
 #editor-flags input#flag-g:checked~label[for="flag-g"]>* {

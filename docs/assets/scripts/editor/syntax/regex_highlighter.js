@@ -208,13 +208,15 @@ function RegexHighlighter($editor, $syntax) {
     // Parser Regex to JSON Object
 
     const parseRegexToHTML = (regexson, regexRaw) => {
-        const _parseDefault = (reToken, htmlRaw, extraClass = "", extraAttributes = "", closeTag = true) => {
-            let regexTag = `<span class="${reToken.type} ${extraClass}" tokenId="${reToken.id}" tokenIndices="${reToken.indices.join(',')}" ${extraAttributes}>${htmlRaw}`;
+        const _parseDefault = (reToken, htmlRaw, {extraClass = "", extraAttributes = "", closeTag = true}) => {
+            let classes = [reToken.type];
+            if (extraClass !== "") classes.push(extraClass);
+            let regexTag = `<span class="${classes.join(' ')}" tokenId="${reToken.id}" tokenIndices="${reToken.indices.join(',')}" ${extraAttributes}>${htmlRaw}`;
             if (closeTag) regexTag += `</span>`;
 
             return regexTag;
         }
-        const _parseQuantifier = (reToken, i, tokenStack) => {
+        const _auxParseQuantifier = (reToken, i, tokenStack) => {
             quant = "";
             if (!reToken.commentRepeatId) quant = `<i>${reToken.repeat.raw}</i>`;
             else {
@@ -248,11 +250,11 @@ function RegexHighlighter($editor, $syntax) {
             assertHTML += reToken.raw.endsWith(")") ? assertMap[reToken.assertionType][1] : "";
 
             if (reToken.repeat) {
-                let quant = _parseQuantifier(reToken, i, tokenStack);
+                let quant = _auxParseQuantifier(reToken, i, tokenStack);
                 assertHTML += quant;
             }
 
-            return _parseDefault(reToken, assertHTML, reToken.assertionType);
+            return _parseDefault(reToken, assertHTML, {extraClass: reToken.assertionType});
         }
         const _parseGroup = (reToken, i, tokenStack) => {
             let subTokens = "";
@@ -282,13 +284,11 @@ function RegexHighlighter($editor, $syntax) {
             }
             let groupHTML = `<span class="parenthesis">(</span>${groupMod}${subTokens}${endParen}`;
             if (reToken.repeat) {
-                let quant = _parseQuantifier(reToken, i, tokenStack);
+                let quant = _auxParseQuantifier(reToken, i, tokenStack);
                 groupHTML += quant;
             }
 
-            let regexGroupTag = _parseDefault(reToken, groupHTML,extraAttributes=groupAttributes);
-
-            return regexGroupTag;
+            return _parseDefault(reToken, groupHTML, {extraAttributes: groupAttributes});
         }
         const _parseComment = (reToken, i, tokenStack) => {
             let groupMod = "?#";
@@ -309,9 +309,7 @@ function RegexHighlighter($editor, $syntax) {
                 groupHTML += quant;
             }
 
-            let regexGroupTag = _parseDefault(reToken, groupHTML);
-
-            return regexGroupTag;
+            return _parseDefault(reToken, groupHTML, {});
         }
         const _parseChoice = (reToken, i, tokenStack) => {
             let branches = "";
@@ -328,11 +326,11 @@ function RegexHighlighter($editor, $syntax) {
             });
             
             if (reToken.repeat) {
-                let quant = _parseQuantifier(reToken, i, tokenStack);
+                let quant = _auxParseQuantifier(reToken, i, tokenStack);
                 branches += quant;
             }
 
-            let regexChoiceTag = _parseDefault(reToken, branches);
+            let regexChoiceTag = _parseDefault(reToken, branches, {});
 
             return regexChoiceTag;
         }
@@ -349,26 +347,25 @@ function RegexHighlighter($editor, $syntax) {
             // );
             let charsetHTML = expandHtmlEntities(reToken.raw);
             if (reToken.repeat) {
-                let quant = _parseQuantifier(reToken, i, tokenStack);
+                let quant = _auxParseQuantifier(reToken, i, tokenStack);
                 charsetHTML = expandHtmlEntities(reToken.raw.slice(0, reToken.repeat.beginIndex));
                 charsetHTML += quant;
             }
-            let regexCarsetTag = _parseDefault(reToken, charsetHTML);
-            return regexCarsetTag;
+            return _parseDefault(reToken, charsetHTML, {});
         }
         const _parseExact = (reToken, i, tokenStack) => {
             let exactHTML = expandHtmlEntities(reToken.raw);
             if (reToken.repeat) {
-                let quant = _parseQuantifier(reToken, i, tokenStack);
+                let quant = _auxParseQuantifier(reToken, i, tokenStack);
                 exactHTML = expandHtmlEntities(reToken.raw.slice(0, reToken.repeat.beginIndex));
                 exactHTML += quant;
             }
-            return _parseDefault(reToken, exactHTML);
+            return _parseDefault(reToken, exactHTML, {});
         }
         const _parseDot = (reToken, i, tokenStack) => {
             let quant = "";
-            if (reToken.repeat) quant = _parseQuantifier(reToken, i, tokenStack);
-            return _parseDefault(reToken, `.${quant}`, extraClass="dot");
+            if (reToken.repeat) quant = _auxParseQuantifier(reToken, i, tokenStack);
+            return _parseDefault(reToken, `.${quant}`, {extraClass: "dot"});
         }
 
         const typeMap = {
