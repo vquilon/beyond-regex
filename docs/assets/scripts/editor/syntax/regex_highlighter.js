@@ -367,6 +367,15 @@ function RegexHighlighter($editor, $syntax) {
             if (reToken.repeat) quant = _auxParseQuantifier(reToken, i, tokenStack);
             return _parseDefault(reToken, `.${quant}`, {extraClass: "dot"});
         }
+        const _parseEscapeChars = (reToken, i, tokenStack) => {
+            let escapeCharHTML = expandHtmlEntities(reToken.raw);
+            if (reToken.repeat) {
+                let quant = _auxParseQuantifier(reToken, i, tokenStack);
+                escapeCharHTML = expandHtmlEntities(reToken.raw.slice(0, reToken.repeat.beginIndex));
+                escapeCharHTML += quant;
+            }
+            return _parseDefault(reToken, escapeCharHTML, {extraAttributes: `chars="${reToken.chars}"`});
+        }
 
         const typeMap = {
             "assert": _parseAssert,
@@ -375,6 +384,9 @@ function RegexHighlighter($editor, $syntax) {
             "charset": _parseCharset,
             "exact": _parseExact,
             "dot": _parseDot,
+            "hexadecimal": _parseEscapeChars,
+            "unicode": _parseEscapeChars,
+            "octal": _parseEscapeChars,
             "comment": _parseComment,
         };
         const _parseRegexSON = (_reToken, _i, _tokenStack) => {

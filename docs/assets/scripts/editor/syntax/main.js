@@ -16,6 +16,7 @@ function EditorSyntaxis(options = {}) {
     let synxtaxHighlighter = RegexHighlighter($editor, $syntax);
     let debug = false;
     let $debugCont = undefined;
+
     if (options.hasOwnProperty('debugInputClass')) {
         debug = true;
         $debugCont = document.createElement("div");
@@ -953,7 +954,7 @@ function EditorSyntaxis(options = {}) {
     // DRAGS API
     const dragDropEvent = (text, event) => {
         if($editor.internalDrag && !getSelection().isCollapsed) {
-            execCommands($editor.ownerDocument, "delete", {keepZAction: false});
+            execCommand($editor.ownerDocument, "delete", {keepZAction: false});
         }
         // if ($editor.dragCaret === undefined) {
         //     let [_pos, _$caret]  = updateCaretPos({x: event.clientX, y: event.clientY}, {$caret: $editor.dragCaret, ctrlKey: false, dragStyle: true});
@@ -965,7 +966,7 @@ function EditorSyntaxis(options = {}) {
         // TOOD: Hay que corregir el numero de caracteres que se han borrado, para ajustar donde se
         // pone el texto dragged
         selectEditorAt(caretBBounds.x, caretBBounds.y, caretBBounds.x, caretBBounds.y);
-        execCommands($editor.ownerDocument, "insertHTML", {value: text, nameZAction: "DroppedElement"});
+        execCommand($editor.ownerDocument, "insertHTML", {value: text, nameZAction: "DroppedElement"});
         window.selRects = [];
         let [caretStart, caretEnd] = getTextOffsetFrom($editor);
         selectSyntaxFromEditorWith(caretStart - text.length, caretEnd);
@@ -1068,7 +1069,7 @@ function EditorSyntaxis(options = {}) {
             recoverCaretElementsFrom(caretsOffset);
         }
     }
-    const execCommands = (doc, command, {showUI=false, value=null, keepZAction=true, nameZAction=""}) => {
+    const execCommand = (doc, command, {showUI=false, value=null, keepZAction=true, nameZAction=""}) => {
         if (command === "undo") return execCommandUndo(doc, {showUI: showUI, value: value});
         if (command === "redo") return execCommandRedo(doc, {showUI: showUI, value: value});
         doc.execCommand(command, showUI, value);
@@ -1107,29 +1108,29 @@ function EditorSyntaxis(options = {}) {
     const execCommandAt = (index, $el, command, {showUI=false, value=null, keepZAction=true, nameZAction=""}) => {
         let doc = $el.ownerDocument;
         let docView = $el.ownerDocument.defaultView;
-        let sel = doc.getSelection();
-        let range = sel.getRangeAt(0);
+        let sel = docView.getSelection();
+        let range = new Range();
         let $tNodeStart;
         [$tNodeStart, index] = getTextNodeRelPos(index, $el);
         range.setStart($tNodeStart, index);
         range.setEnd($tNodeStart, index);
         sel.removeAllRanges();
         sel.addRange(range);
-        execCommands(doc, command, {showUI: showUI, value: value, keepZAction: keepZAction, nameZAction: nameZAction});
+        execCommand(doc, command, {showUI: showUI, value: value, keepZAction: keepZAction, nameZAction: nameZAction});
     }
     const execCommandWithin = (indexStart, indexEnd, $el, command, {showUI=false, value=null, keepZAction=true, nameZAction=""}) => {
         let doc = $el.ownerDocument;
         let docView = $el.ownerDocument.defaultView;
         let sel = docView.getSelection();
-        let range = sel.getRangeAt(0);
+        let range = new Range();
         let $tNodeStart, $tNodeEnd;
         [$tNodeStart, indexStart] = getTextNodeRelPos(indexStart, $el);
         [$tNodeEnd, indexEnd] = getTextNodeRelPos(indexEnd, $el);
-        range.setStart($tNodeStart, index);
-        range.setEnd($tNodeEnd, index);
+        range.setStart($tNodeStart, indexStart);
+        range.setEnd($tNodeEnd, indexEnd);
         sel.removeAllRanges();
         sel.addRange(range);
-        execCommands(doc, command, {showUI: showUI, value: value, keepZAction: keepZAction, nameZAction: nameZAction});
+        execCommand(doc, command, {showUI: showUI, value: value, keepZAction: keepZAction, nameZAction: nameZAction});
     }
 
     const ProcessInput = (event, {pressedEvent=false}) => {
@@ -1142,11 +1143,11 @@ function EditorSyntaxis(options = {}) {
         }
         if (pressedEvent) {
             if (event.key === "Enter") {
-                execCommands($editor.ownerDocument, "insertHTML", {value: "\n"});
+                execCommand($editor.ownerDocument, "insertHTML", {value: "\n"});
                 return true;
             }
             if (event.key.length === 1) {
-                execCommands($editor.ownerDocument, "insertHTML", {value: event.key});
+                execCommand($editor.ownerDocument, "insertHTML", {value: event.key});
                 return true;
             }
         }
@@ -1161,7 +1162,7 @@ function EditorSyntaxis(options = {}) {
                 // now insert four non-breaking spaces for the tab key
                 if (!event.shiftKey) {
                     if (caretStartPos === caretEndPos) {
-                        execCommands($editor.ownerDocument, "insertHTML", {value: "\t"});
+                        execCommand($editor.ownerDocument, "insertHTML", {value: "\t"});
                     }
                     else {
                         // TODO: Para cada linea que este el rango hay que agregar en el frimer \n de cada linea un \t
@@ -1189,7 +1190,7 @@ function EditorSyntaxis(options = {}) {
                 else {
                     if (caretStartPos === caretEndPos) {
                         if ($editor.innerText[caretStartPos-1] === "\t") {
-                            execCommands($editor.ownerDocument, "delete", {});
+                            execCommand($editor.ownerDocument, "delete", {});
                         }
                     }
                     else {
@@ -1229,11 +1230,11 @@ function EditorSyntaxis(options = {}) {
                 return true;
             }
             else if (event.key === "Backspace") {
-                execCommands($editor.ownerDocument, "delete", {});
+                execCommand($editor.ownerDocument, "delete", {});
                 return true;
             }
             else if (event.key === "Delete") {
-                execCommands($editor.ownerDocument, "forwardDelete", {});
+                execCommand($editor.ownerDocument, "forwardDelete", {});
                 return true;
             }
         }
@@ -1346,6 +1347,7 @@ function EditorSyntaxis(options = {}) {
         if (event.key.toUpperCase() === "C") {
             let carets = Array.from($inputCarets.children);
             let $caret;
+            let selectedText = [];
             for ($caret of carets) {
                 let [firstCaretPos, caretPos] = readCaretXYPos($caret);
                 // Se carga de cada caret a una seleccion de editor
@@ -1376,17 +1378,29 @@ function EditorSyntaxis(options = {}) {
             // Por lo que, tendre este comportamiento, siendo m los carets actuales.
             // | Si n > m o n < m -> Pegar el contenido en cada uno de los m carets y mover la longitud del contenido copiado a los carets
             // | Si n === m -> Se pega cada linea en cada caret
-            let textCopied = navigator.clipboard.readText();
-            if (textCopied.split("\n").length < carets.length || textCopied.split("\n").length > carets.length) {
-                textCopied = textCopied.repeat(carets.length);
+            const readClipboard = async () => {
+                $editor.focus();
+                let textCopied = await navigator.clipboard.readText();
+                let carets = getCaretsElements();
+                if (textCopied.split("\n").length < carets.length || textCopied.split("\n").length > carets.length) {
+                    textCopied = Array(carets.length).fill(textCopied)
+                }
+                else {
+                    textCopied = [textCopied];
+                }
+                for (let i=0; i < carets.length; i++) {
+                    let $caret = carets[i];
+                    let [firstCaretPos, caretPos] = readCaretXYPos($caret);
+                    let [startCaretLine, startCaretChar, endCaretLine, endCaretChar, backward] = convertXYPosToLineCharOffset(firstCaretPos, caretPos);
+                    let [startOffset, endOffset] = convertLineCharOffsetToTextOffset(startCaretLine, startCaretChar, endCaretLine, endCaretChar);
+                    // Por cada caret se agrega la informacion del clipboard
+                    // Seleccionar el texto e insertarlo
+                    execCommandWithin(startOffset, endOffset, $editor, "insertHTML", {value: textCopied[i]})
+                    // Actualizar todos los carets en el DOM la posicion, incrementada a cada caret
+                }
+                $input.focus();
             }
-            for (let i=0; i < Array.from($inputCarets.children).length; i++) {
-                let $caret = Array.from($inputCarets.children)[i];
-                let [firstCaretPos, caretPos] = readCaretXYPos($caret);
-                // Por cada caret se agrega la informacion del clipboard
-                // Seleccionar el texto e insertarlo
-                // Actualizar todos los carets en el DOM la posicion, incrementada a cada caret
-            }
+            readClipboard();
         }
     }
 

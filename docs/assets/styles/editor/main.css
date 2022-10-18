@@ -472,6 +472,65 @@ span.assert.AssertLookahead > .parenthesis {
   color: #018f07;
 }
 
+.regex .unicode,
+.regex .hexadecimal,
+.regex .octal {
+  position: relative;
+}
+
+.regex .unicode:after,
+.regex .hexadecimal:after,
+.regex .octal:after {
+  content: attr(chars);
+  position: absolute;
+  top: calc(-2.5ch - 0.1em);
+  padding: 0 0.5ch;
+  border-radius: 0.5ch;
+  left: calc(50% + 0.5ch);
+  background: #3b036e;
+  color: white;
+}
+.regex .unicode:before,
+.regex .hexadecimal:before,
+.regex .octal:before {
+  content: "";
+  position: absolute;
+  top: 0.1em;
+  left: calc(50% + 0.5ch + 0.2em);
+  width: 0;
+  height: 0;
+  border-left: 0.4em solid transparent;
+  border-right: 0.4em solid transparent;
+  border-top: 0.4em solid #3b036e;
+}
+.regex .unicode:before,
+.regex .hexadecimal:before,
+.regex .octal:before,
+.regex .unicode:after,
+.regex .hexadecimal:after,
+.regex .octal:after {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.regex .unicode:hover:before,
+.regex .hexadecimal:hover:before,
+.regex .octal:hover:before,
+.regex .unicode:hover:after,
+.regex .hexadecimal:hover:after,
+.regex .octal:hover:after {
+  opacity: 1;
+}
+
+.regex .unicode {
+  color:rgb(78, 122, 204);
+}
+.regex .hexadecimal {
+  color:rgb(78, 204, 163);
+}
+.regex .octal {
+  color:rgb(101, 78, 204);
+}
+
 /* group: depth 1 */
 .regex .g2 {
   background: #c0c00063;
