@@ -71,23 +71,16 @@
 
 #beyond-editor div.container-editor #editor-input .input > div {
   position: relative;
+  width: 100%;
   flex: none;
   margin-left: -100%;
   box-sizing: border-box;
+  /* background-color: var(--margin-editor); */
+  transition: transform 1s, background 1s, opacity 1s;
 }
 
 #beyond-editor div.container-editor #editor-input .input > div:first-child {
   margin: 0;
-}
-
-.input-editor,
-.input-syntax,
-.input-carets,
-.input-selects {
-  width: 100%;
-  box-sizing: border-box;
-  /* background-color: var(--margin-editor); */
-  transition: transform 1s, background 1s, opacity 1s;
 }
 
 .input-selects {
@@ -251,7 +244,8 @@
   -moz-tab-size: 4;
 
   word-break: break-all;
-  white-space: break-spaces;
+  /* white-space: break-spaces; */
+  white-space: normal;
 }
 
 .editor {
@@ -304,7 +298,6 @@
 .syntax {
   cursor: text;
   /* background-color: var(--back-editor); */
-  word-break: break-all;
   color: var(--color-syntax);
 }
 
@@ -471,7 +464,7 @@ span.assert.AssertLookahead > .parenthesis {
   background: #00c0004a;
   color: #018f07;
 }
-
+/* 
 .regex .unicode,
 .regex .hexadecimal,
 .regex .octal {
@@ -495,7 +488,7 @@ span.assert.AssertLookahead > .parenthesis {
 .regex .octal:before {
   content: "";
   position: absolute;
-  top: 0.1em;
+  top: -0.1em;
   left: calc(50% + 0.5ch + 0.2em);
   width: 0;
   height: 0;
@@ -519,7 +512,7 @@ span.assert.AssertLookahead > .parenthesis {
 .regex .hexadecimal:hover:after,
 .regex .octal:hover:after {
   opacity: 1;
-}
+} */
 
 .regex .unicode {
   color:rgb(78, 122, 204);
