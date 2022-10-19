@@ -668,16 +668,17 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
             return createExactCharItem(regexJSONInfo, regexJSONInfo.chars, offset_x, offset_y, "skyblue",)
         },
         comment: function (regexJSONInfo, offset_x, offset_y) {
-            let commentContent = createExactCharItem(regexJSONInfo, regexJSONInfo.comment, offset_x, offset_y, "skyblue",)
-            var container_comment_item = createGroupContainerItem(
-                regexJSONInfo, commentContent,
+            let commentElement = createExactCharItem(regexJSONInfo, regexJSONInfo.comment, 0, 0, "grey", "white")
+            var container_group_item = createGroupContainerItem(
+                regexJSONInfo, commentElement.items,
                 0, 0,
-                commentContent.width, commentContent.height
+                commentElement.width, commentElement.height
             )
+
             // Agrega un offset a la izquierda para mover todos los items a la derecha y que se centre el dashed group que lo engloba
-            addsOffset([container_comment_item], 10, 0);
-            var group_decorator_width = commentContent.width + 20;
-            var group_decorator_height = commentContent.height + 20;
+            addsOffset([container_group_item], 10, 0);
+            var group_decorator_width = commentElement.width + 20;
+            var group_decorator_height = commentElement.height + 20;
 
             var groupinfo_rect_item = {
                 type: "rect",
@@ -685,7 +686,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
                 indices: regexJSONInfo.indices,
                 class: `rect:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
                 x: 0,
-                y: commentContent.y - 10,
+                y: commentElement.y - 10,
                 r: 6,
                 width: group_decorator_width,
                 height: group_decorator_height,
@@ -703,7 +704,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
             var offset_x_width = (max_width - group_decorator_width) / 2;
 
             var container_item = createGroupContainerItem(
-                regexJSONInfo, [container_comment_item, groupinfo_rect_item, groupinfo_text_item.label],
+                regexJSONInfo, [container_group_item, groupinfo_rect_item, groupinfo_text_item.label],
                 offset_x + offset_x_width, offset_y,
                 max_width, group_decorator_height + groupinfo_text_item.height + 4
             );
@@ -714,8 +715,8 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
                 height: container_item.height,
                 x: container_item.x,
                 y: container_item.y + groupinfo_text_item.y,
-                lineInX: offset_x + offset_x_width + commentContent.x + 10,
-                lineOutX: offset_x + offset_x_width + commentContent.x + commentContent.width + 10
+                lineInX: offset_x + offset_x_width + commentElement.lineInX + 10,
+                lineOutX: offset_x + offset_x_width + commentElement.lineOutX + 10
             }
         },
         dot: function (regexJSONInfo, offset_x, offset_y) {

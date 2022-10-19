@@ -437,7 +437,7 @@ var EditorParser = (options) => {
         });
     
         $shareBtn.addEventListener('click', function () {
-            if (regexParsed) return false;
+            if (!regexParsed) return false;
 
             var src = location.href;
             var indexHashParams = src.indexOf('#');
