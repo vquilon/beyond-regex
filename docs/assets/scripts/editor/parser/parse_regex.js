@@ -520,10 +520,12 @@ function RegexParser() {
           indices: [exactPrevIndex]
         };
         prevToken.indices[0] === exactPrevIndex && lastStack.shift();
-        exactTokenRepeated.errors = commentToken.errors;
         lastStack.unshift(exactTokenRepeated);
         prevToken = lastStack[0];
-        if (middleComment) lastStack.unshift(commentToken);
+        if (middleComment) {
+          lastStack.unshift(commentToken);
+          exactTokenRepeated.errors = commentToken.errors;
+        }
 
       }
       else prevToken.repeat = repeatTimes;
@@ -540,6 +542,7 @@ function RegexParser() {
         middleComment = true;
       }
       prevToken.repeat.nonGreedy = true;
+      prevToken.repeat.raw = `${prevToken.repeat.raw}?`;
     }
     function f_escapeStart(lastStack, actualChar, lastIndex) {
       lastStack.unshift({

@@ -109,7 +109,13 @@ function RegexHighlighter($editor, $syntax) {
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;")
-            .replace(/ /g, `<span class="space special-chars"> </span>`)
+            .replace(/ |&nbsp;/g, `<span class="space special-chars"> </span>`)
+            .replace(/\n/g, `<span class="endline special-chars">\n</span>`)
+            .replace(/\t/g, `<span class="tab special-chars">\t</span>`);
+    }
+    function cleanSpecialChars(str) {
+        return str
+            .replace(/&nbsp;/g, `<span class="space special-chars"> </span>`)
             .replace(/\n/g, `<span class="endline special-chars">\n</span>`)
             .replace(/\t/g, `<span class="tab special-chars">\t</span>`);
     }
@@ -218,7 +224,7 @@ function RegexHighlighter($editor, $syntax) {
         }
         const _auxParseQuantifier = (reToken, i, tokenStack) => {
             quant = "";
-            if (!reToken.commentRepeatId) quant = `<i>${reToken.repeat.raw}</i>`;
+            if (!reToken.commentRepeatId) quant = `<i greedy="${!reToken.repeat.nonGreedy}">${reToken.repeat.raw}</i>`;
             else {
                 let commentToken = tokenStack.filter(el => el.id === reToken.commentRepeatId)[0];
                 commentToken.repeatComment = reToken.repeat.raw;
@@ -274,14 +280,11 @@ function RegexHighlighter($editor, $syntax) {
                 groupMod = expandHtmlEntities(groupMod);
             }
             let endParen = `<span class="parenthesis">)</span>`;
-            if (reToken.errors) {
-                if (reToken.errors.some(e => e.type === 'UnterminatedGroup')) {
-                    endParen = "";
-                }
-            }
-            if (! reToken.raw.endsWith(")")){
+
+            if (! reToken.raw.slice(reToken.endParenIndex - reToken.indices[0]).startsWith(")")) {
                 endParen = "";
             }
+
             let groupHTML = `<span class="parenthesis">(</span>${groupMod}${subTokens}${endParen}`;
             if (reToken.repeat) {
                 let quant = _auxParseQuantifier(reToken, i, tokenStack);
@@ -411,7 +414,7 @@ function RegexHighlighter($editor, $syntax) {
 
         // Tests if its generated well
         let $testDiv = document.createElement("div");
-        $testDiv.innerHTML = htmlParsed;
+        $testDiv.innerHTML = htmlParsed
         
         
         if ($testDiv.innerText !== regexRaw) {

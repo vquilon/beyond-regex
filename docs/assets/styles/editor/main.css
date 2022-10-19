@@ -256,6 +256,7 @@
   outline: none;
   color: transparent;
   background: transparent;
+  white-space: break-spaces;
   /* background-clip: text; */
   /* -webkit-background-clip: text;
   -moz-background-clip: text;

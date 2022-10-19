@@ -761,11 +761,14 @@ span#close-side:hover .burger .strip, #container-main.menu-open span#close-side 
     font-size: 24px;
     font-weight: bold;
     line-height: 1;
-    white-space: pre;
+    white-space: normal;
     word-wrap: break-word;
     word-break: break-all;
-    white-space: normal;
     font-variant-ligatures: none;
+}
+
+#beyond-editor .container-editor #errorBox, #beyond-editor .container-editor #errorDef {
+    white-space: pre;
 }
 
 #beyond-editor .container-editor #editor-actions #shareIt {
@@ -988,13 +991,14 @@ span#close-side:hover .burger .strip, #container-main.menu-open span#close-side 
     color: #339eef;
     overflow-x: auto;
     overflow-y: hidden;
-    display: block;
+    /* display: block; */
+    display: none;
     height: 1.8em;
 }
 
 #terminal-error #errorDef {
-    height: 1em;
-    margin-top: 1em;
+    height: 4em;
+    margin-top: 0em;
     margin-left: 1em;
     overflow-x: hidden;
     overflow-y: auto;

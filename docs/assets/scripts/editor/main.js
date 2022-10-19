@@ -55,13 +55,18 @@ var EditorParser = (options) => {
         var $input = $containerEditor.querySelector(`#editor-input > .${options.inputClass}`);
         var $editorRegex = $input.querySelector('.editor');
 
-        var syntaxProcessor = EditorSyntaxis({
+        var syntaxHighlighter = EditorSyntaxis({
+            $editorRegex: $editorRegex,
+            $syntaxRegex: $input.querySelector('.syntax'),
+        });
+        EditorAdvance({
             $containerEditor: $containerEditor,
             $inputRegex: $editorRegex,
             $syntaxRegex: $input.querySelector('.syntax'),
             // TODO: SOLO PARA TESTING
             // debugInputClass: '.input-debug'
         });
+
 
         var $editorTerminal = $containerEditor.querySelector('#editor-terminal');
         var $terminalStats = $editorTerminal.querySelector('#terminal-stats');
@@ -98,9 +103,9 @@ var EditorParser = (options) => {
         $terminalError.classList.add("correct-syntax");
         // $editorError.style.display = 'none';
     }
-    const showError = function (regular_exp, err) {
+    const showError = function (regular_exp, err, {append=false}) {
         $terminalError.classList.remove("correct-syntax");
-        
+
         const fireError = () => {
             Swal.fire({
                 toast: true,
@@ -118,48 +123,51 @@ var EditorParser = (options) => {
         }
         fireError();
         $terminalError.style.display = 'block';
-        var msg_re = [];
-        var msg_def = [];
+        let msg_re = [];
+        let msg_def = [];
+
         if (typeof err.lastIndex === 'number') {
             msg_re.push(` ${regular_exp}`);
-            // msg_re.push(Kit().repeats('-', err.lastIndex) + "^");
         }
-        msg_def.push("Error:" + err.message);
+        msg_def.push(`Error [${err.lastIndex}]: ${err.message}`);
         msg_def.push("");
-        $errorBox.style.setProperty("--position-error-ch", `${err.lastIndex + 1}ch`)
-        
-        let prevScrollLeft = 0;
-        prevScrollLeft = $errorBox.scrollLeft;
 
-        setInnerText($errorBox, msg_re.join("\n"));
-        setInnerText($errorDef, msg_def.join("\n"));
+        if (append) {
+            appendInnerText($errorBox, msg_re.join("\n"));
+            appendInnerText($errorDef, msg_def.join("\n"));
+        }
+        else {
+            setInnerText($errorBox, msg_re.join("\n"));
+            setInnerText($errorDef, msg_def.join("\n"));
+        }
 
-        $errorBox.scrollLeft = prevScrollLeft;
-
-        const animateScroll = (absScroll) => {
-            if (absScroll < 0 ) absScroll = 0;
-            let magScroll = 10;
-            if ( Math.abs( $errorBox.scrollLeft - maxScrollLeft ) < 10 ) {
-                magScroll = Math.abs( $errorBox.scrollLeft - maxScrollLeft );
-                $errorBox.scrollLeft = absScroll;
-            }
-            else {
-                let relScroll = absScroll - $errorBox.scrollLeft
-                let dirScroll = relScroll / Math.abs(relScroll);
+        // $errorBox.style.setProperty("--position-error-ch", `${err.lastIndex + 1}ch`)
+        // let prevScrollLeft = 0;
+        // prevScrollLeft = $errorBox.scrollLeft;
+        // $errorBox.scrollLeft = prevScrollLeft;
+        // const animateScroll = (absScroll) => {
+        //     if (absScroll < 0 ) absScroll = 0;
+        //     let magScroll = 10;
+        //     if ( Math.abs( $errorBox.scrollLeft - maxScrollLeft ) < 10 ) {
+        //         magScroll = Math.abs( $errorBox.scrollLeft - maxScrollLeft );
+        //         $errorBox.scrollLeft = absScroll;
+        //     }
+        //     else {
+        //         let relScroll = absScroll - $errorBox.scrollLeft
+        //         let dirScroll = relScroll / Math.abs(relScroll);
                 
-                $errorBox.scrollLeft += dirScroll*magScroll;
+        //         $errorBox.scrollLeft += dirScroll*magScroll;
 
-                if ( dirScroll * (absScroll - $errorBox.scrollLeft) > 0 ) {
-                    requestAnimationFrame(() => {
-                        animateScroll(absScroll);
-                    });
-                }
-            }
-        };
-        var maxScrollLeft = ( $errorBox.scrollWidth - $errorBox.clientWidth );
-        let boxErrorScrollLeft = (( $errorBox.scrollWidth / $errorBox.textContent.length ) * (err.lastIndex + 1)) - $errorBox.clientWidth/2;
-        // animateScroll(boxErrorScrollLeft);
-        $errorBox.scrollLeft = boxErrorScrollLeft;
+        //         if ( dirScroll * (absScroll - $errorBox.scrollLeft) > 0 ) {
+        //             requestAnimationFrame(() => {
+        //                 animateScroll(absScroll);
+        //             });
+        //         }
+        //     }
+        // };
+        // var maxScrollLeft = ( $errorBox.scrollWidth - $errorBox.clientWidth );
+        // let boxErrorScrollLeft = (( $errorBox.scrollWidth / $errorBox.textContent.length ) * (err.lastIndex + 1)) - $errorBox.clientWidth/2;
+        // $errorBox.scrollLeft = boxErrorScrollLeft;
     }
     
 
@@ -179,6 +187,12 @@ var EditorParser = (options) => {
     }
     const setInnerText = function (ele, s) {
         ele.innerHTML = '';
+        var t = document.createTextNode('');
+        t.nodeValue = s;
+        ele.appendChild(t);
+        return s;
+    }
+    const appendInnerText = function (ele, s) {
         var t = document.createTextNode('');
         t.nodeValue = s;
         ele.appendChild(t);
@@ -254,10 +268,10 @@ var EditorParser = (options) => {
 
             let errors = regexson.errors;
             if (errors.length !== 0 && !skipError) {
+                $errorDef.innerHTML = "";
                 errors.forEach((error) => {
-                    // if (error instanceof init_parse.RegexSyntaxError) {
-                        showError(regExpresion, error);
-                    // }
+                    showError(regExpresion, error, {append: true});
+                    // console.error(error);
                 });
             }
 
@@ -269,10 +283,11 @@ var EditorParser = (options) => {
                 reLang: language_selected,
                 flags: getFlags()
             }
-        } catch (e) {
+        }
+        catch (e) {
             if (e instanceof init_parse.RegexSyntaxError) {
                 if (!skipError) {
-                    showError(regExpresion, e);
+                    showError(regExpresion, e, );
                 }
             } else {
                 console.error(e);
@@ -283,7 +298,7 @@ var EditorParser = (options) => {
             $containerEditor.regexson = regexson;
         }
 
-        syntaxProcessor.onInput(regexson, getRegex(), { target: $editorRegex });
+        syntaxHighlighter.onInput(regexson, getRegex(), { target: $editorRegex });
         regexParsed = true;
     };
 
