@@ -213,194 +213,194 @@ function RegexHighlighter($editor, $syntax) {
 
     // Parser Regex to JSON Object
 
-    const parseRegexToHTML = (regexson, regexRaw) => {
-        const _parseDefault = (reToken, htmlRaw, {extraClass = "", extraAttributes = "", closeTag = true}) => {
-            let classes = [reToken.type];
-            if (extraClass !== "") classes.push(extraClass);
-            let regexTag = `<span class="${classes.join(' ')}" tokenId="${reToken.id}" tokenIndices="${reToken.indices.join(',')}" ${extraAttributes}>${htmlRaw}`;
-            if (closeTag) regexTag += `</span>`;
+    const _parseDefault = (reToken, htmlRaw, {extraClass = "", extraAttributes = "", closeTag = true}) => {
+        let classes = [reToken.type];
+        if (extraClass !== "") classes.push(extraClass);
+        let regexTag = `<span class="${classes.join(' ')}" tokenId="${reToken.id}" tokenIndices="${reToken.indices.join(',')}" ${extraAttributes}>${htmlRaw}`;
+        if (closeTag) regexTag += `</span>`;
 
-            return regexTag;
+        return regexTag;
+    }
+    const _auxParseQuantifier = (reToken, i, tokenStack) => {
+        quant = "";
+        if (!reToken.commentRepeatId) quant = `<i greedy="${!reToken.repeat.nonGreedy}">${reToken.repeat.raw}</i>`;
+        else {
+            let commentToken = tokenStack.filter(el => el.id === reToken.commentRepeatId)[0];
+            commentToken.repeatComment = reToken.repeat.raw;
+            commentToken.repeatTokenId = reToken.id;
         }
-        const _auxParseQuantifier = (reToken, i, tokenStack) => {
-            quant = "";
-            if (!reToken.commentRepeatId) quant = `<i greedy="${!reToken.repeat.nonGreedy}">${reToken.repeat.raw}</i>`;
-            else {
-                let commentToken = tokenStack.filter(el => el.id === reToken.commentRepeatId)[0];
-                commentToken.repeatComment = reToken.repeat.raw;
-                commentToken.repeatTokenId = reToken.id;
-            }
-            return quant;
-        }
-        const _parseAssert = (reToken, i, tokenStack) => {
-            let assertMap = {
-                "AssertBegin": [reToken.raw, ""],
-                "AssertLookahead": [
-                    `<span class="parenthesis">(</span>?=`, `<span class="parenthesis">)</span>`
-                ],
-                "AssertNegativeLookahead": [
-                    `<span class="parenthesis">(</span>?!`, `<span class="parenthesis">)</span>`
-                ],
-                "AssertNonWordBoundary": ["\\B", ""],
-                "AssertWordBoundary": ["\\b", ""],
-                "AssertEnd": [reToken.raw, ""],
-            };
-            let subTokens = "";
-            if ("sub" in reToken) {
-                reToken.sub.forEach((subToken, isub) => {
-                    subTokens += _parseRegexSON(subToken, isub, reToken.sub);
-                });
-            }
-
-            let assertHTML = `${assertMap[reToken.assertionType][0]}${subTokens}`;
-            assertHTML += reToken.raw.endsWith(")") ? assertMap[reToken.assertionType][1] : "";
-
-            if (reToken.repeat) {
-                let quant = _auxParseQuantifier(reToken, i, tokenStack);
-                assertHTML += quant;
-            }
-
-            return _parseDefault(reToken, assertHTML, {extraClass: reToken.assertionType});
-        }
-        const _parseGroup = (reToken, i, tokenStack) => {
-            let subTokens = "";
+        return quant;
+    }
+    const _parseAssert = (reToken, i, tokenStack) => {
+        let assertMap = {
+            "AssertBegin": [reToken.raw, ""],
+            "AssertLookahead": [
+                `<span class="parenthesis">(</span>?=`, `<span class="parenthesis">)</span>`
+            ],
+            "AssertNegativeLookahead": [
+                `<span class="parenthesis">(</span>?!`, `<span class="parenthesis">)</span>`
+            ],
+            "AssertNonWordBoundary": ["\\B", ""],
+            "AssertWordBoundary": ["\\b", ""],
+            "AssertEnd": [reToken.raw, ""],
+        };
+        let subTokens = "";
+        if ("sub" in reToken) {
             reToken.sub.forEach((subToken, isub) => {
                 subTokens += _parseRegexSON(subToken, isub, reToken.sub);
             });
-            let groupAttributes = `non-capture="${reToken.nonCapture || 'false'}" group-number="${reToken.num || ''}" group-name="${reToken.name || ''}"`;
+        }
 
-            let groupMod = reToken.nonCapture ? "?:" : "";
-            let groupNameMap = {
-                "(?P": `?P<${reToken.name}>`,
-                "(?<": `?<${reToken.name}>`,
-                "(?'": `?'${reToken.name}'`,
-            }
-            if (reToken.raw.slice(0, 3) in groupNameMap) {
-                groupMod = reToken.name ? groupNameMap[reToken.raw.slice(0, 3)] : '';
-                groupMod = expandHtmlEntities(groupMod);
-            }
-            let endParen = `<span class="parenthesis">)</span>`;
+        let assertHTML = `${assertMap[reToken.assertionType][0]}${subTokens}`;
+        assertHTML += reToken.raw.endsWith(")") ? assertMap[reToken.assertionType][1] : "";
 
-            if (! reToken.raw.slice(reToken.endParenIndex - reToken.indices[0]).startsWith(")")) {
+        if (reToken.repeat) {
+            let quant = _auxParseQuantifier(reToken, i, tokenStack);
+            assertHTML += quant;
+        }
+
+        return _parseDefault(reToken, assertHTML, {extraClass: reToken.assertionType});
+    }
+    const _parseGroup = (reToken, i, tokenStack) => {
+        let subTokens = "";
+        reToken.sub.forEach((subToken, isub) => {
+            subTokens += _parseRegexSON(subToken, isub, reToken.sub);
+        });
+        let groupAttributes = `non-capture="${reToken.nonCapture || 'false'}" group-number="${reToken.num || ''}" group-name="${reToken.name || ''}"`;
+
+        let groupMod = reToken.nonCapture ? "?:" : "";
+        let groupNameMap = {
+            "(?P": `?P<${reToken.name}>`,
+            "(?<": `?<${reToken.name}>`,
+            "(?'": `?'${reToken.name}'`,
+        }
+        if (reToken.raw.slice(0, 3) in groupNameMap) {
+            groupMod = reToken.name ? groupNameMap[reToken.raw.slice(0, 3)] : '';
+            groupMod = expandHtmlEntities(groupMod);
+        }
+        let endParen = `<span class="parenthesis">)</span>`;
+
+        if (! reToken.raw.slice(reToken.endParenIndex - reToken.indices[0]).startsWith(")")) {
+            endParen = "";
+        }
+
+        let groupHTML = `<span class="parenthesis">(</span>${groupMod}${subTokens}${endParen}`;
+        if (reToken.repeat) {
+            let quant = _auxParseQuantifier(reToken, i, tokenStack);
+            groupHTML += quant;
+        }
+
+        return _parseDefault(reToken, groupHTML, {extraAttributes: groupAttributes});
+    }
+    const _parseComment = (reToken, i, tokenStack) => {
+        let groupMod = "?#";
+        let endParen = `<span class="parenthesis">)</span>`;
+        if (reToken.errors) {
+            if (reToken.errors.some(e => e.type === 'UnterminatedGroup')) {
                 endParen = "";
             }
-
-            let groupHTML = `<span class="parenthesis">(</span>${groupMod}${subTokens}${endParen}`;
-            if (reToken.repeat) {
-                let quant = _auxParseQuantifier(reToken, i, tokenStack);
-                groupHTML += quant;
-            }
-
-            return _parseDefault(reToken, groupHTML, {extraAttributes: groupAttributes});
         }
-        const _parseComment = (reToken, i, tokenStack) => {
-            let groupMod = "?#";
-            let endParen = `<span class="parenthesis">)</span>`;
-            if (reToken.errors) {
-                if (reToken.errors.some(e => e.type === 'UnterminatedGroup')) {
-                    endParen = "";
-                }
-            }
-            let repeatLen = 0;
-            if (reToken.repeatComment)repeatLen = reToken.repeatComment.length;
-            if (!reToken.raw.substr(0, reToken.raw.length - repeatLen).endsWith(")")){
-                endParen = "";
-            }
-            let groupHTML = `<span class="parenthesis">(</span>${groupMod}${reToken.comment}${endParen}`;
-            if (reToken.repeatComment) {
-                let quant = `<i data-repeattokenid="${reToken.repeatTokenId}">${reToken.repeatComment}</i>`;
-                groupHTML += quant;
-            }
-
-            return _parseDefault(reToken, groupHTML, {});
+        let repeatLen = 0;
+        if (reToken.repeatComment)repeatLen = reToken.repeatComment.length;
+        if (!reToken.raw.substr(0, reToken.raw.length - repeatLen).endsWith(")")){
+            endParen = "";
         }
-        const _parseChoice = (reToken, i, tokenStack) => {
-            let branches = "";
-            reToken.branches.forEach((subBranch, idx, arr) => {
-                let parsedBranch = "";
-                subBranch.forEach((subToken, isub) => {
-                    parsedBranch += _parseRegexSON(subToken, isub, subBranch);
-                });
-                branches += `<span class="branch">${parsedBranch}</span>`;
-                if (idx !== (arr.length - 1)) {
-                    branches += `<span class="or">|</span>`
-                }
+        let groupHTML = `<span class="parenthesis">(</span>${groupMod}${reToken.comment}${endParen}`;
+        if (reToken.repeatComment) {
+            let quant = `<i data-repeattokenid="${reToken.repeatTokenId}">${reToken.repeatComment}</i>`;
+            groupHTML += quant;
+        }
 
+        return _parseDefault(reToken, groupHTML, {});
+    }
+    const _parseChoice = (reToken, i, tokenStack) => {
+        let branches = "";
+        reToken.branches.forEach((subBranch, idx, arr) => {
+            let parsedBranch = "";
+            subBranch.forEach((subToken, isub) => {
+                parsedBranch += _parseRegexSON(subToken, isub, subBranch);
             });
-            
-            if (reToken.repeat) {
-                let quant = _auxParseQuantifier(reToken, i, tokenStack);
-                branches += quant;
+            branches += `<span class="branch">${parsedBranch}</span>`;
+            if (idx !== (arr.length - 1)) {
+                branches += `<span class="or">|</span>`
             }
 
-            let regexChoiceTag = _parseDefault(reToken, branches, {});
-
-            return regexChoiceTag;
-        }
-        const _parseCharset = (reToken, i, tokenStack) => {
-            // clases
-            // [d, D, w, W, s, S]
-            // ranges
-            // 0, 1, lastIndex
-            // chars
-            // "acd"
-
-            // let charset = expandHtmlEntities(
-            //   reToken.raw.replace(new RegExp(`[\\\\${reToken.classes.join("\\\\")}]`))
-            // );
-            let charsetHTML = expandHtmlEntities(reToken.raw);
-            if (reToken.repeat) {
-                let quant = _auxParseQuantifier(reToken, i, tokenStack);
-                charsetHTML = expandHtmlEntities(reToken.raw.slice(0, reToken.repeat.beginIndex));
-                charsetHTML += quant;
-            }
-            return _parseDefault(reToken, charsetHTML, {});
-        }
-        const _parseExact = (reToken, i, tokenStack) => {
-            let exactHTML = expandHtmlEntities(reToken.raw);
-            if (reToken.repeat) {
-                let quant = _auxParseQuantifier(reToken, i, tokenStack);
-                exactHTML = expandHtmlEntities(reToken.raw.slice(0, reToken.repeat.beginIndex));
-                exactHTML += quant;
-            }
-            return _parseDefault(reToken, exactHTML, {});
-        }
-        const _parseDot = (reToken, i, tokenStack) => {
-            let quant = "";
-            if (reToken.repeat) quant = _auxParseQuantifier(reToken, i, tokenStack);
-            return _parseDefault(reToken, `.${quant}`, {extraClass: "dot"});
-        }
-        const _parseEscapeChars = (reToken, i, tokenStack) => {
-            let escapeCharHTML = expandHtmlEntities(reToken.raw);
-            if (reToken.repeat) {
-                let quant = _auxParseQuantifier(reToken, i, tokenStack);
-                escapeCharHTML = expandHtmlEntities(reToken.raw.slice(0, reToken.repeat.beginIndex));
-                escapeCharHTML += quant;
-            }
-            return _parseDefault(reToken, escapeCharHTML, {extraAttributes: `chars="${reToken.chars}"`});
+        });
+        
+        if (reToken.repeat) {
+            let quant = _auxParseQuantifier(reToken, i, tokenStack);
+            branches += quant;
         }
 
-        const typeMap = {
-            "assert": _parseAssert,
-            "group": _parseGroup,
-            "choice": _parseChoice,
-            "charset": _parseCharset,
-            "exact": _parseExact,
-            "dot": _parseDot,
-            "hexadecimal": _parseEscapeChars,
-            "unicode": _parseEscapeChars,
-            "octal": _parseEscapeChars,
-            "comment": _parseComment,
-        };
-        const _parseRegexSON = (_reToken, _i, _tokenStack) => {
-            let _parsedRegexHTML = "";
-            if (_reToken.type in typeMap) {
-                _parsedRegexHTML += typeMap[_reToken.type](_reToken, _i, _tokenStack);
-            }
+        let regexChoiceTag = _parseDefault(reToken, branches, {});
 
-            return _parsedRegexHTML;
-        };
+        return regexChoiceTag;
+    }
+    const _parseCharset = (reToken, i, tokenStack) => {
+        // clases
+        // [d, D, w, W, s, S]
+        // ranges
+        // 0, 1, lastIndex
+        // chars
+        // "acd"
 
+        // let charset = expandHtmlEntities(
+        //   reToken.raw.replace(new RegExp(`[\\\\${reToken.classes.join("\\\\")}]`))
+        // );
+        let charsetHTML = expandHtmlEntities(reToken.raw);
+        if (reToken.repeat) {
+            let quant = _auxParseQuantifier(reToken, i, tokenStack);
+            charsetHTML = expandHtmlEntities(reToken.raw.slice(0, reToken.repeat.beginIndex));
+            charsetHTML += quant;
+        }
+        return _parseDefault(reToken, charsetHTML, {});
+    }
+    const _parseExact = (reToken, i, tokenStack) => {
+        let exactHTML = expandHtmlEntities(reToken.raw);
+        if (reToken.repeat) {
+            let quant = _auxParseQuantifier(reToken, i, tokenStack);
+            exactHTML = expandHtmlEntities(reToken.raw.slice(0, reToken.repeat.beginIndex));
+            exactHTML += quant;
+        }
+        return _parseDefault(reToken, exactHTML, {});
+    }
+    const _parseDot = (reToken, i, tokenStack) => {
+        let quant = "";
+        if (reToken.repeat) quant = _auxParseQuantifier(reToken, i, tokenStack);
+        return _parseDefault(reToken, `.${quant}`, {extraClass: "dot"});
+    }
+    const _parseEscapeChars = (reToken, i, tokenStack) => {
+        let escapeCharHTML = expandHtmlEntities(reToken.raw);
+        if (reToken.repeat) {
+            let quant = _auxParseQuantifier(reToken, i, tokenStack);
+            escapeCharHTML = expandHtmlEntities(reToken.raw.slice(0, reToken.repeat.beginIndex));
+            escapeCharHTML += quant;
+        }
+        return _parseDefault(reToken, escapeCharHTML, {extraAttributes: `chars="${reToken.chars}"`});
+    }
+
+    const typeMap = {
+        "assert": _parseAssert,
+        "group": _parseGroup,
+        "choice": _parseChoice,
+        "charset": _parseCharset,
+        "exact": _parseExact,
+        "dot": _parseDot,
+        "hexadecimal": _parseEscapeChars,
+        "unicode": _parseEscapeChars,
+        "octal": _parseEscapeChars,
+        "comment": _parseComment,
+    };
+    const _parseRegexSON = (_reToken, _i, _tokenStack) => {
+        let _parsedRegexHTML = "";
+        if (_reToken.type in typeMap) {
+            _parsedRegexHTML += typeMap[_reToken.type](_reToken, _i, _tokenStack);
+        }
+
+        return _parsedRegexHTML;
+    };
+
+    const parseRegexToHTML = (regexson, regexRaw) => {
         let htmlParsed = "";
 
         if (regexson === undefined) {

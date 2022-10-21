@@ -228,16 +228,22 @@
   background: transparent;
 }
 
+.linter .error{
+  text-decoration: underline red;
+}
+
 .editor,
 .syntax,
-.caret {
+.caret,
+.linter {
   font-family: VictorMono, monospace;
   font-size: var(--font-size);
   cursor: text;
 }
 
 .editor,
-.syntax {
+.syntax,
+.linter {
   line-height: calc(var(--line-height-ratio) * var(--font-size));
   min-height: calc(var(--line-height-ratio) * var(--font-size));
   tab-size: 4;

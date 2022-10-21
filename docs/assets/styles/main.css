@@ -129,9 +129,11 @@ span#close-side .burger {
     justify-content: center;
     align-items: center;
 }
+
 span#close-side .strip {
     font-size: 0.75em;
 }
+
 span#close-side .strip div {
     height: 0.2em;
     background: white;
@@ -139,25 +141,29 @@ span#close-side .strip div {
     transition: transform .65s cubic-bezier(0.075, 0.82, 0.165, 1), margin .65s cubic-bezier(0.075, 0.82, 0.165, 1);
     width: 1.5em;
 }
-span#close-side:hover .burger .strip div:first-child, #container-main.menu-open span#close-side .burger .strip div:first-child{
+
+span#close-side:hover .burger .strip div:first-child, #container-main.menu-open span#close-side .burger .strip div:first-child {
     transform: translateY(0.2em) rotate(-15deg);
     margin: 0;
 }
+
 span#close-side:hover .burger .strip div:nth-child(2), #container-main.menu-open span#close-side .burger .strip div:nth-child(2) {
-    transform: rotate(45deg) ;
+    transform: rotate(45deg);
     margin: 0;
 }
+
 span#close-side:hover .burger .strip div:last-child, #container-main.menu-open span#close-side .burger .strip div:last-child {
     transform: translateY(-0.2em) rotate(-75deg);
     margin: 0;
 }
+
 span#close-side:hover .burger .strip, #container-main.menu-open span#close-side .burger .strip {
     transform: rotate(45deg);
     transition: transform .25s ease .05s;
 }
 
 /* span#close-side:hover:after { */
-    span#close-side:hover .burger {
+span#close-side:hover .burger {
     background-position: 0% 50%;
     background: linear-gradient(135deg, #03a9f4, #ff0058, #d61c71, #f9005c);
     border: none;
@@ -631,6 +637,7 @@ span#close-side:hover .burger .strip, #container-main.menu-open span#close-side 
     #main {
         padding: 40px 0px 0 10px;
     }
+
     #container-main.menu-open #sidebar {
         transform: translateX(calc(-450px + 100vw + -100px)) !important;
     }
@@ -694,7 +701,7 @@ span#close-side:hover .burger .strip, #container-main.menu-open span#close-side 
     display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
-    
+
     grid-row: 1;
     grid-column: 1/4;
     border-top-right-radius: 10px;
@@ -769,6 +776,8 @@ span#close-side:hover .burger .strip, #container-main.menu-open span#close-side 
 
 #beyond-editor .container-editor #errorBox, #beyond-editor .container-editor #errorDef {
     white-space: pre;
+    line-height: normal;
+    font-size: 0.85em;
 }
 
 #beyond-editor .container-editor #editor-actions #shareIt {
@@ -890,10 +899,10 @@ span#close-side:hover .burger .strip, #container-main.menu-open span#close-side 
 }
 
 /* .checkbox__3 input:checked~label>* { */
-    /* color: white;
+/* color: white;
     -webkit-text-fill-color: white;
     text-shadow: 0 0 10px #ffffff, -1px 0px 5px #03a9f4, 1px 0px 5px #ff0058; */
-    /* text-shadow: 0 0 20px #00000087; */
+/* text-shadow: 0 0 20px #00000087; */
 /* } */
 
 .checkbox__3 label {
@@ -1173,9 +1182,9 @@ span#close-side:hover .burger .strip, #container-main.menu-open span#close-side 
     /* text-decoration: none; */
 }
 
-.button-panel:active {
+/* .button-panel:active {
     font-size: 95%;
-}
+} */
 
 footer {
     /* z-index: 200; */
@@ -1630,6 +1639,7 @@ button.copy-btn.copied span.confetti-container {
     opacity: 0;
     animation: confetti-container 0.5s;
 }
+
 button.copy-btn.copied span.confetti-container .confetti {
     position: absolute;
     width: 0.2em;
@@ -1637,26 +1647,32 @@ button.copy-btn.copied span.confetti-container .confetti {
     background: #5c81dc;
     animation: confetti 0.5s;
 }
+
 button.copy-btn.copied span.confetti-container .confetti:nth-child(1) {
     top: 1em;
     left: 1em;
 }
+
 button.copy-btn.copied span.confetti-container .confetti:nth-child(2) {
     top: -1em;
     left: -1em;
 }
+
 button.copy-btn.copied span.confetti-container .confetti:nth-child(3) {
     top: -1em;
     left: 0em;
 }
+
 button.copy-btn.copied span.confetti-container .confetti:nth-child(4) {
     top: 1em;
     left: 0em;
 }
+
 button.copy-btn.copied span.confetti-container .confetti:nth-child(5) {
     top: 0em;
     left: 1em;
 }
+
 button.copy-btn.copied span.confetti-container .confetti:nth-child(6) {
     top: 0em;
     left: -1em;
@@ -1667,17 +1683,20 @@ button.copy-btn.copied span.confetti-container .confetti:nth-child(6) {
         opacity: 1;
         transform: rotate(0deg) scale(1);
     }
+
     to {
         opacity: 0;
         transform: rotate(360deg) scale(0);
     }
-    
+
 }
+
 @keyframes confetti-container {
     from {
         opacity: 1;
         transform: rotate(-45deg) scale(1);
     }
+
     to {
         transform: rotate(-45deg) scale(2);
     }

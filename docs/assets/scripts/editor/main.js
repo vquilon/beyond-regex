@@ -66,6 +66,9 @@ var EditorParser = (options) => {
             // TODO: SOLO PARA TESTING
             // debugInputClass: '.input-debug'
         });
+        var linterCalls = EditorLinter({
+            $editorLinter: $input.querySelector('.linter')
+        });
 
 
         var $editorTerminal = $containerEditor.querySelector('#editor-terminal');
@@ -268,6 +271,8 @@ var EditorParser = (options) => {
 
             let errors = regexson.errors;
             if (errors.length !== 0 && !skipError) {
+                linterCalls.onRegexErrors(regExpresion, regexson);
+
                 $errorDef.innerHTML = "";
                 errors.forEach((error) => {
                     showError(regExpresion, error, {append: true});
