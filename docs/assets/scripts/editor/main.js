@@ -77,7 +77,6 @@ var EditorParser = (options) => {
         var $highlight_editor = $containerEditor.querySelector('#highlighted-editor')
         var $terminalError = $containerEditor.querySelector('#terminal-error');
         var $errorDef = $terminalError.querySelector("#errorDef");
-        var $errorBox = $terminalError.querySelector('#errorBox');
         var $flags = $containerEditor.querySelectorAll('input[name="flag"]');
         var $shareBtn = $containerEditor.querySelector('#shareIt');
 
@@ -101,13 +100,28 @@ var EditorParser = (options) => {
         setInnerText($terminalStats.querySelector("#re-groups .stat-value"), reGroups);
     }
     const hideError = function () {
-        setInnerText($errorBox, "");
         setInnerText($errorDef, "Correct syntax");
         $terminalError.classList.add("correct-syntax");
         // $editorError.style.display = 'none';
     }
-    const showError = function (regular_exp, err, {append=false}) {
+    const showErrors = function (regular_exp, regexson) {
+        linterCalls.onRegexErrors(regular_exp, regexson);
+
+        let errors = regexson.errors;
         $terminalError.classList.remove("correct-syntax");
+        $errorDef.innerHTML = "";
+        errors.forEach((error) => {
+            $terminalError.style.display = 'block';
+            let msg_re = [];
+            let msg_def = [];
+
+            if (typeof error.lastIndex === 'number') {
+                msg_re.push(` ${regular_exp}`);
+            }
+            msg_def.push(`Error [${error.lastIndex}]: ${error.message}`);
+            msg_def.push("");
+            appendInnerText($errorDef, msg_def.join("\n"));
+        });
 
         const fireError = () => {
             Swal.fire({
@@ -120,57 +134,11 @@ var EditorParser = (options) => {
                     popup: 'colored-toast'
                 },
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 1000,
                 timerProgressBar: true
             })
         }
         fireError();
-        $terminalError.style.display = 'block';
-        let msg_re = [];
-        let msg_def = [];
-
-        if (typeof err.lastIndex === 'number') {
-            msg_re.push(` ${regular_exp}`);
-        }
-        msg_def.push(`Error [${err.lastIndex}]: ${err.message}`);
-        msg_def.push("");
-
-        if (append) {
-            appendInnerText($errorBox, msg_re.join("\n"));
-            appendInnerText($errorDef, msg_def.join("\n"));
-        }
-        else {
-            setInnerText($errorBox, msg_re.join("\n"));
-            setInnerText($errorDef, msg_def.join("\n"));
-        }
-
-        // $errorBox.style.setProperty("--position-error-ch", `${err.lastIndex + 1}ch`)
-        // let prevScrollLeft = 0;
-        // prevScrollLeft = $errorBox.scrollLeft;
-        // $errorBox.scrollLeft = prevScrollLeft;
-        // const animateScroll = (absScroll) => {
-        //     if (absScroll < 0 ) absScroll = 0;
-        //     let magScroll = 10;
-        //     if ( Math.abs( $errorBox.scrollLeft - maxScrollLeft ) < 10 ) {
-        //         magScroll = Math.abs( $errorBox.scrollLeft - maxScrollLeft );
-        //         $errorBox.scrollLeft = absScroll;
-        //     }
-        //     else {
-        //         let relScroll = absScroll - $errorBox.scrollLeft
-        //         let dirScroll = relScroll / Math.abs(relScroll);
-                
-        //         $errorBox.scrollLeft += dirScroll*magScroll;
-
-        //         if ( dirScroll * (absScroll - $errorBox.scrollLeft) > 0 ) {
-        //             requestAnimationFrame(() => {
-        //                 animateScroll(absScroll);
-        //             });
-        //         }
-        //     }
-        // };
-        // var maxScrollLeft = ( $errorBox.scrollWidth - $errorBox.clientWidth );
-        // let boxErrorScrollLeft = (( $errorBox.scrollWidth / $errorBox.textContent.length ) * (err.lastIndex + 1)) - $errorBox.clientWidth/2;
-        // $errorBox.scrollLeft = boxErrorScrollLeft;
     }
     
 
@@ -271,13 +239,7 @@ var EditorParser = (options) => {
 
             let errors = regexson.errors;
             if (errors.length !== 0 && !skipError) {
-                linterCalls.onRegexErrors(regExpresion, regexson);
-
-                $errorDef.innerHTML = "";
-                errors.forEach((error) => {
-                    showError(regExpresion, error, {append: true});
-                    // console.error(error);
-                });
+                showErrors(regExpresion, regexson);
             }
 
             updateStats(regExpresion, regexson);
@@ -289,14 +251,9 @@ var EditorParser = (options) => {
                 flags: getFlags()
             }
         }
-        catch (e) {
-            if (e instanceof init_parse.RegexSyntaxError) {
-                if (!skipError) {
-                    showError(regExpresion, e, );
-                }
-            } else {
-                console.error(e);
-            }
+        catch (error) {
+            // Send with firebase the parser errors
+            console.error(error);
         }
         if (regexson) {
             _updateRegexson(regexson);
@@ -542,11 +499,6 @@ var EditorParser = (options) => {
                     Swal.hideLoading();
                 }
             });
-        });
-
-        // Scroll on terminal
-        $errorBox.addEventListener("scroll", (ev) => {
-            $editorRegex.scrollLeft = ev.currentTarget.scrollLeft;
         });
 
         // parseBtn.addEventListener("click", (event) => {

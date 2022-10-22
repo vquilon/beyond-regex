@@ -19,11 +19,20 @@ function EditorLinter(options = {}) {
     //     return errorHTML;
     // }
 
-    const escapeHTML = (unsafe) => {
+    function escapeHTML(unsafe) {
         return unsafe
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;");
+    }
+    function expandHtmlEntities(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/ |&nbsp;/g, `<span class="space special-chars"> </span>`)
+            .replace(/\n/g, `<span class="endline special-chars">\n</span>`)
+            .replace(/\t/g, `<span class="tab special-chars">\t</span>`);
     }
 
     const onErrors = (regExpresion, regexson) => {
@@ -45,8 +54,8 @@ function EditorLinter(options = {}) {
             let indices = error.indices;
             if (indices[0] === indices[1]) indices = [indices[0], indices[1] + 1];
             // Por cada error sustituir 
-            let preCorrectRegex = escapeHTML(regExpresion.slice(actualChar, indices[0]));
-            let errorHTML = `<span class="error" errortype="${error.type}" tooltip="${error.message}">${escapeHTML(regExpresion.slice(indices[0], indices[1]))}</span>`
+            let preCorrectRegex = expandHtmlEntities(regExpresion.slice(actualChar, indices[0]));
+            let errorHTML = `<span class="error" errortype="${error.type}" tooltip="${error.message}">${expandHtmlEntities(regExpresion.slice(indices[0], indices[1]))}</span>`
             actualChar = indices[1];
             linterHTML += `${preCorrectRegex}${errorHTML}`;
         }

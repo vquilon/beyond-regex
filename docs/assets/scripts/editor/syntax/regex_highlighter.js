@@ -252,7 +252,10 @@ function RegexHighlighter($editor, $syntax) {
         }
 
         let assertHTML = `${assertMap[reToken.assertionType][0]}${subTokens}`;
-        assertHTML += reToken.raw.endsWith(")") ? assertMap[reToken.assertionType][1] : "";
+
+        if (reToken.raw.slice(reToken.endParenIndex - reToken.indices[0]).startsWith(")")) {
+            assertHTML += assertMap[reToken.assertionType][1]
+        }
 
         if (reToken.repeat) {
             let quant = _auxParseQuantifier(reToken, i, tokenStack);

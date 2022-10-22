@@ -29,7 +29,7 @@ function RegexParser() {
         message: "Unterminated group!",
         lastIndex: _processedStack._parentGroup.indices[0],
         lastState: _error_lastState,
-        indices: _processedStack._parentGroup.indices,
+        indices: [_processedStack._parentGroup.indices[0], _processedStack._parentGroup.indices[0]],
         // lastStack: _processedStack
       }
       init_object.RegexSyntaxThrows.push(errorObject);
@@ -45,7 +45,7 @@ function RegexParser() {
         message: "Unterminated group!",
         lastIndex: _processedStack._parentChoice.indices[0],
         lastState: _error_lastState,
-        indices: _processedStack._parentGroup.indices,
+        indices: [_processedStack._parentChoice.indices[0], _processedStack._parentChoice.indices[0]],
         // lastStack: _processedStack
       }
       init_object.RegexSyntaxThrows.push(errorObject);
