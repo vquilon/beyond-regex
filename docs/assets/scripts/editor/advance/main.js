@@ -1,11 +1,11 @@
 function EditorAdvance(options = {}) {
     // Tendra claves como la fecha 
-    window.editorHistory = [{ date: Date.now(), zActions: 1, name: "init" }];
+    let editorHistory = [{ date: Date.now(), zActions: 1, name: "init" }];
     let actualHist = 0;
     let maxHistory = 10000;
     let _commandsExecuted = [];
 
-    window.selRects = [];
+    let selRects = [];
 
     let $containerEditor = options.$containerEditor;
     let $inputCarets = $containerEditor.querySelector(".input-carets");
@@ -14,11 +14,9 @@ function EditorAdvance(options = {}) {
     let $syntax = options.$syntaxRegex;
     let $input = $inputCarets.parentElement;
     let $editorInput = $containerEditor.querySelector("#editor-input");
-    let debug = false;
     let $debugCont = undefined;
 
-    if (options.hasOwnProperty('debugInputClass')) {
-        debug = true;
+    if (options.debugInputClass) {
         $debugCont = document.createElement("div");
         $debugCont.classList.add(options.debugInputClass);
         $input.appendChild($debugCont);
@@ -56,10 +54,10 @@ function EditorAdvance(options = {}) {
         return parseFloat(fontSizeRaw.substring(0, fontSizeRaw.length - 2));
     }
     const cacheWidthChar = () => {
-        if (!window.hasOwnProperty("selRects")) window.selRects = [];
-        if (window.selRects.length === 0) calculateAllRects();
+        if (!window.hasOwnProperty("selRects")) selRects = [];
+        if (selRects.length === 0) calculateAllRects();
 
-        let widthChar = [...window.selRects].reduce((a, b) => a + b.width, 0) / selectionCaret.toString().length;
+        let widthChar = [...selRects].reduce((a, b) => a + b.width, 0) / selectionCaret.toString().length;
         widthCharMap[fontSize] = widthChar;
     }
     const getCharWidthAt = ($element) => {
@@ -511,7 +509,7 @@ function EditorAdvance(options = {}) {
         sel.removeAllRanges();
         if (prevRange) sel.addRange(prevRange);
         allRects = allRects.sort((a, b) => a.y - b.y);
-        window.selRects = [];
+        selRects = [];
         window.newLines = {};
 
         if (allRects.length === 0) {
@@ -547,7 +545,7 @@ function EditorAdvance(options = {}) {
                 y = rect.y;
                 _wholeRectLine.width = _wholeRectLine.right - _wholeRectLine.left;
                 _wholeRectLine.height = _wholeRectLine.bottom - _wholeRectLine.top;
-                window.selRects.push(_wholeRectLine);
+                selRects.push(_wholeRectLine);
                 _wholeRectLine = {
                     bottom: 0,
                     height: 0,
@@ -572,7 +570,7 @@ function EditorAdvance(options = {}) {
             if (i >= allRects.length - 1) {
                 _wholeRectLine.width = _wholeRectLine.right - _wholeRectLine.left;
                 _wholeRectLine.height = _wholeRectLine.bottom - _wholeRectLine.top;
-                window.selRects.push(_wholeRectLine);
+                selRects.push(_wholeRectLine);
             }
         }
 
@@ -580,7 +578,7 @@ function EditorAdvance(options = {}) {
         // y se cuentan los indices, despues teniendo en cuenta los selRects, se obtendran los contenidos
         // de cada linea
         // if(debug) {
-        //     for (let rect of window.selRects.sort((a, b) => a.y - b.y )) {
+        //     for (let rect of selRects.sort((a, b) => a.y - b.y )) {
         //         let midHeight = (rect.top + rect.bottom) / 2;
         //         let [caretStart, caretEnd] = selectSyntaxFromPoint(rect.left+1, midHeight, rect.right, midHeight);
         //         let newLine = false;
@@ -593,7 +591,7 @@ function EditorAdvance(options = {}) {
         //     }
         // }
 
-        for (let rect of window.selRects) {
+        for (let rect of selRects) {
             rect.y -= editorBBounds.y;
             rect.x -= editorBBounds.x;
             rect.top -= editorBBounds.top;
@@ -604,9 +602,9 @@ function EditorAdvance(options = {}) {
 
         if ($editor.textContent.slice(-2) === "\n\n") {
             // Hay una nueva linea al final, por lo que hay que agregar un nuevo sel rect win width
-            let lastRect = window.selRects[window.selRects.length - 1];
-            let firstRect = window.selRects[0];
-            window.selRects.push({
+            let lastRect = selRects[selRects.length - 1];
+            let firstRect = selRects[0];
+            selRects.push({
                 bottom: lastRect.bottom + firstRect.top + lastRect.height,
                 height: lastRect.height,
                 left: lastRect.left,
@@ -621,7 +619,7 @@ function EditorAdvance(options = {}) {
 
         if ($debugCont !== undefined) {
             $debugCont.innerHTML = "";
-            for (let rect of window.selRects) {
+            for (let rect of selRects) {
                 let $boxSel = document.createElement("span");
                 $boxSel.style.width = `${rect.width}px`;
                 $boxSel.style.height = `${rect.height}px`;
@@ -638,17 +636,17 @@ function EditorAdvance(options = {}) {
     }
     const calculateActualRect = (clientY, absolutePos = false) => {
         // Se comprueba que donde se ha hecho mousedown no corresponde con la posicion de una seleccion
-        if (window.selRects.length === 0) calculateAllRects();
+        if (selRects.length === 0) calculateAllRects();
 
         let selRect;
         // let lineHeight = getLineHeight();
 
         // TODO: Hay que ordenar los rects, y quedarse con los cuadros de las diferentes lineas, despues
         // Generar una funcion que los pinte para obvservar bien como se van cambiando y generando
-        // modificar en la funcion de resize, y de input, es decir cada vez que se cambia el window.selRects
+        // modificar en la funcion de resize, y de input, es decir cada vez que se cambia el selRects
 
-        for (let i in window.selRects) {
-            var _rect = window.selRects[i];
+        for (let i in selRects) {
+            var _rect = selRects[i];
             if (clientY >= _rect.y) selRect = _rect;
         }
         if (selRect) {
@@ -672,12 +670,12 @@ function EditorAdvance(options = {}) {
         return selRect;
     }
     const getLastVisualLine = () => {
-        if (window.selRects.length === 0) calculateAllRects();
-        // window.selRects.sort((a, b) => b.y - a.y);
-        // let lastPosLine = window.selRects[0].y;
+        if (selRects.length === 0) calculateAllRects();
+        // selRects.sort((a, b) => b.y - a.y);
+        // let lastPosLine = selRects[0].y;
         // let lineHeight = getLineHeight();
         // return parseInt(lastPosLine / lineHeight);
-        return window.selRects.length - 1;
+        return selRects.length - 1;
     }
     // FIXED LINE CHAR OFFSETS
     const fixLineCharOffset = (caretLine, caretChar) => {
@@ -947,7 +945,7 @@ function EditorAdvance(options = {}) {
         // pone el texto dragged
         selectEditorAt(caretBBounds.x, caretBBounds.y, caretBBounds.x, caretBBounds.y);
         execCommand($editor.ownerDocument, "insertHTML", { value: text, nameZAction: "DroppedElement" });
-        window.selRects = [];
+        selRects = [];
         let [caretStart, caretEnd] = getTextOffsetFrom($editor);
         selectSyntaxFromEditorWith(caretStart - text.length, caretEnd);
         let caretPos = getCaretPosFromSelection();
@@ -1070,6 +1068,7 @@ function EditorAdvance(options = {}) {
             let initHistory = editorHistory[0];
             let firstHist = 0;
             if (editorHistory.length >= maxHistory) {
+                // TODO: Controlar que si se hace undo o redo se compruebe que ha hecho cambios
                 // Actualmente solo se quita el primer historico despues del inicial, mantenemos el primero que es el abrir la regex
                 // No se puede poner el texto original de la regex, ya que para hacerlo habria que borrar toda la regex y generar
                 // otro pseudo hitosrico en el cual cuando se baya a hacer un undo de 1 a init, borrar y poner, generando 2 zActions
@@ -1115,7 +1114,7 @@ function EditorAdvance(options = {}) {
 
     // MAIN BEHAVIOUR
     const ProcessInput = (event, { pressedEvent = false }) => {
-        window.selRects = [];
+        selRects = [];
         let that = event.target;
 
         if (["Shift", "Alt"].includes(event.key)) {
@@ -1279,6 +1278,7 @@ function EditorAdvance(options = {}) {
     }
     const ProcessHistory = (event) => {
         if (event.key.toUpperCase() === "Z") {
+            selRects = [];
             event.preventDefault();
             // Mirar en un historico privado variable local, el numero de veces que se tiene que realizar un undo
             if (event.shiftKey) {
@@ -1360,6 +1360,7 @@ function EditorAdvance(options = {}) {
             }
         }
         if (event.key.toUpperCase() === "V") {
+            selRects = [];
             $inputSelections.innerHTML = "";
 
             // Si el numero de elementos copiados es 2 y el numero total de carets actuales es igual a 2
@@ -1618,7 +1619,7 @@ function EditorAdvance(options = {}) {
             pauseCaretsBlink();
         });
 
-        $editor.addEventListener('change', event => { window.selRects = [] });
+        $editor.addEventListener('change', event => { selRects = [] });
         $input.addEventListener('keypress', event => { keydownEditor(event, event.target, { pressedEvent: true }) });
         $input.addEventListener('keydown', event => { keydownEditor(event, event.target, {}) });
 
@@ -1632,7 +1633,7 @@ function EditorAdvance(options = {}) {
         });
 
         const ro = new ResizeObserver(entries => {
-            window.selRects = [];
+            selRects = [];
             refreshCarets();
         });
         ro.observe($editorInput);

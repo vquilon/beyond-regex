@@ -6,7 +6,7 @@
     position: fixed;
     width: 100%;
     height: calc(var(--normal-height) + var(--minimized-height));
-    bottom: 0;
+    bottom: calc(-1 * (var(--normal-height) + var(--minimized-height)));
     box-sizing: border-box;
     padding: 0 var(--padding-sides);
 
@@ -28,7 +28,7 @@
 
     z-index: 201;
 
-    transform: translateY(calc(var(--normal-height) + var(--minimized-height)));
+    transform: translateY(0);
 
     transition: background 0.2s linear, transform 0.2s linear, padding 0.2s linear;
 }
@@ -96,10 +96,10 @@
 #connection-status-box #offline-info, #connection-status-box #online-info {
     display: none;
 }
-
+#connection-status-box.online, #connection-status-box.offline {
+    transform: translateY(calc(-1 * (var(--normal-height) + var(--minimized-height))));
+}
 #connection-status-box.offline {
-    transform: translateY(0);
-
     background: #ff006690;
 }
 #connection-status-box.offline #box-connect #box-show {
@@ -112,13 +112,9 @@
     display: none;
 }
 
-
 #connection-status-box.online {
-    transform: translateY(0);
-
     background: #00ffa090;
 }
-
 #connection-status-box.online #online-info {
     display: block;
 }
@@ -127,7 +123,7 @@
 }
 
 #connection-status-box.offline.minimized, #connection-status-box.online.minimized{
-    transform: translateY(calc(var(--normal-height)));
+    transform: translateY(calc(-1 * var(--minimized-height)));
 }
 
 #connection-status-box.minimized #connection-arrow{

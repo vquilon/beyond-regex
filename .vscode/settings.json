@@ -19,5 +19,6 @@
         // "*.html": "jekyll",
         "*.liquid": "jekyll"
     },
-    "scss.validate": false
+    "scss.validate": false,
+    "liquid.format.enable": false
 }

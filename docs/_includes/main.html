@@ -9,6 +9,8 @@
             {% include panels/visualizer/visualizer.html %}
         </div>
 
-        {% include editor/debug/debug.html %}
+        {% if site.debug %}
+            {% include editor/debug/debug.html %}
+        {% endif %}
     </div>
 </div>

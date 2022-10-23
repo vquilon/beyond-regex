@@ -223,15 +223,42 @@ function RegexHighlighter($editor, $syntax) {
     }
     const _auxParseQuantifier = (reToken, i, tokenStack) => {
         quant = "";
-        if (!reToken.commentRepeatId) quant = `<i greedy="${!reToken.repeat.nonGreedy}">${reToken.repeat.raw}</i>`;
-        else {
-            let commentToken = tokenStack.filter(el => el.id === reToken.commentRepeatId)[0];
-            commentToken.repeatComment = reToken.repeat.raw;
-            commentToken.repeatTokenId = reToken.id;
+        if (reToken.repeat) {
+            if (!reToken.commentRepeatId) quant = `<i greedy="${!reToken.repeat.nonGreedy}">${reToken.repeat.raw}</i>`;
+            else {
+                let commentToken = tokenStack.filter(el => el.id === reToken.commentRepeatId)[0];
+                commentToken.repeatComment = reToken.repeat.raw;
+                commentToken.repeatTokenId = reToken.id;
+            }
         }
         return quant;
     }
     const _parseAssert = (reToken, i, tokenStack) => {
+        // {
+        //    assertionType: "AssertBegin",
+        //    id: "54zvarqq0",
+        //    indices: [0, 1],
+        //    raw: "^",
+        //    type: "assert"
+        // }
+        // {
+        //    id: "34vgg1wrg", 
+        //    type: "assert",
+        //    name: "",
+        //    sub: [], 
+        //    indices: [44,51], 
+        //    assertionType: "AssertLookahead",
+        //    repeat: {
+        //        max: 1,
+        //        min: 0,
+        //        nonGreedy: false,
+        //        beginAbsIndex: 50,
+        //        beginIndex: 6,
+        //        raw: "?",
+        //    }
+        //    endParenIndex: 49,
+        //    raw: "(?=de)?"
+        // }
         let assertMap = {
             "AssertBegin": [reToken.raw, ""],
             "AssertLookahead": [
@@ -257,10 +284,7 @@ function RegexHighlighter($editor, $syntax) {
             assertHTML += assertMap[reToken.assertionType][1]
         }
 
-        if (reToken.repeat) {
-            let quant = _auxParseQuantifier(reToken, i, tokenStack);
-            assertHTML += quant;
-        }
+        assertHTML += _auxParseQuantifier(reToken, i, tokenStack);
 
         return _parseDefault(reToken, assertHTML, {extraClass: reToken.assertionType});
     }

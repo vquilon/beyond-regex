@@ -239,10 +239,21 @@
   /* background: #bcbcbc; */
   background: transparent;
 }
-.linter {
-  color: transparent;
+
+.tooltips {
+  z-index: 7;
+  user-select: none;
+  pointer-events: none;
 }
-.linter .error {
+
+.linters {
+  z-index: 6;
+  color: transparent;
+  user-select: none;
+  pointer-events: none;
+}
+
+.linters .error {
   /* text-decoration: underline red 2px; */
   /* text-decoration-thickness: auto; */
   text-decoration-line: underline;
@@ -257,7 +268,7 @@
 .editor,
 .syntax,
 .caret,
-.linter {
+.linters {
   font-family: VictorMono, monospace;
   font-size: var(--font-size);
   cursor: text;
@@ -265,7 +276,7 @@
 
 .editor,
 .syntax,
-.linter {
+.linters {
   line-height: calc(var(--line-height-ratio) * var(--font-size));
   min-height: calc(var(--line-height-ratio) * var(--font-size));
   tab-size: 4;

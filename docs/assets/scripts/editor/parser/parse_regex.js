@@ -60,13 +60,13 @@ function RegexParser() {
     }
     return analizeForErrors(_processedStack, _raw_regex_input, _error_lastState = null);
   }
-  function init_object(raw_regex_input, e, language) {
+  function init_object(raw_regex_input, debug, language) {
     init_object.RegexSyntaxThrows = [];
-    d = e;
+    d = debug;
     var processedRegex, processedStack;
     var error_lastState;
     var NFA_instance = load_NFA_Parser((language = language));
-    processedRegex = NFA_instance.input(raw_regex_input, 0, e);
+    processedRegex = NFA_instance.input(raw_regex_input, 0, debug);
     processedStack = processedRegex.stack;
     processedStack = elementsCallback.endChoice(processedStack);
     error_lastState = processedRegex.lastState;

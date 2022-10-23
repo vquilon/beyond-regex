@@ -4,7 +4,7 @@
 class NFA {
     constructor(e) {
         // Inicializacion de funciones auxiliares
-        var _auxKit = Kit();
+        let _auxKit = Kit();
 
         e = e.compact ? this._expandNames(e) : e;
         var s, o = {}, h = e.trans, _router = {}
@@ -75,6 +75,7 @@ class NFA {
 
         this.router = _router;
         this.accepts = o;
+        this.auxKit = _auxKit;
         // this.NFAobject = {
         //   accepts: this.accepts,
         //   router: _router,
@@ -93,7 +94,7 @@ class NFA {
                 throw new Error("DFA Assertion Fail!\nFrom state `" + n[i] + "` can goto to multi ε-move states!");
             for (var s = e.charMove, o = Object.keys(s), c = 0, h = o.length; c < h; c++) {
                 if (1 !== s[o[c]].length)
-                    throw _auxKit.log(s),
+                    throw this.auxKit.log(s),
                     new Error("DFA Assertion Fail!\nFrom state `" + n[i] + "` via charset `" + o[c] + "` can goto to multi states!")
             }
             if (o.length && e.eMove.length)
@@ -101,47 +102,70 @@ class NFA {
         }
         return !0
     }
-    input(e, r, n) {
-        function i(regexRaw, lastIndex, lastState, lastStack, h) {
+    input(inRegexRaw, inLastIndex, debug) {
+        function parseInput(regexRaw, lastIndex, lastState, lastStack, prevIndex) {
             t: for (; ;) {
-                var actualChar, l, f, p, d = a.router[lastState];
-                if (!d)
-                    break;
-                var g, x = d.eMove, v = d.charMove;
-                lastIndex < regexRaw.length ? (actualChar = regexRaw[lastIndex], g = v.hasOwnProperty(actualChar) ? v[actualChar] : (l = a._escapeChar(d.ranges, actualChar)) ? v[l] : x) : g = x;
-                for (var y, m, b, _ = lastStack.length, w = h, E = 0, C = g.length; E < C; E++) {
-                    if (y = g[E], f = y.eMove ? 0 : 1, h = w, lastStack.splice(0, lastStack.length - _), _ = lastStack.length, y.assert) {
-                        if (!1 === (m = y.assert(lastStack, actualChar, lastIndex, lastState, regexRaw)))
-                            continue;
-                        "number" == typeof m && (lastIndex += m, h += m)
+                var actualChar, l, f, regexObj, nodeMove = that.router[lastState];
+                if (!nodeMove) break;
+                var nextStates, _eMove = nodeMove.eMove, _charMove = nodeMove.charMove;
+                if (lastIndex < regexRaw.length) {
+                    actualChar = regexRaw[lastIndex];
+                    if (_charMove.hasOwnProperty(actualChar)) {
+                        nextStates = _charMove[actualChar];
                     }
-                    if (y.action && (lastStack = y.action(lastStack, actualChar, lastIndex, lastState, regexRaw) || lastStack),
-                        h = y.eMove ? h : lastIndex,
-                        n && _auxKit.log(actualChar + ":" + lastState + ">" + y.to),
-                        E === C - 1) {
-                        lastIndex += f,
-                            lastState = y.to;
+                    else {
+                        l = that._escapeChar(nodeMove.ranges, actualChar);
+                        if (l) {
+                            nextStates = _charMove[l];
+                        }
+                        else {
+                            nextStates = _eMove;
+                        }
+                    }
+                }
+                else {
+                    nextStates = _eMove;
+                }
+                for (var _hypState, m, _regexObj, lastStackLength = lastStack.length, w = prevIndex, iState = 0, sizeStates = nextStates.length; iState < sizeStates; iState++) {
+                    if (_hypState = nextStates[iState], f = _hypState.eMove ? 0 : 1, prevIndex = w, lastStack.splice(0, lastStack.length - lastStackLength), lastStackLength = lastStack.length, _hypState.assert) {
+                        m = _hypState.assert(lastStack, actualChar, lastIndex, lastState, regexRaw);
+                        if (!m) continue;
+                        if (typeof m == "number") {
+                            lastIndex += m;
+                            prevIndex += m;
+                        }
+                    }
+                    // 
+                    if (_hypState.action) {
+                        let _nAction = _hypState.action(lastStack, actualChar, lastIndex, lastState, regexRaw);
+                        if (_nAction) lastStack = _nAction;
+                    }
+                    prevIndex = _hypState.eMove ? prevIndex : lastIndex;
+                    debug && that.auxKit.log(`${actualChar}:${lastState}>${_hypState.to}`);
+                    if (iState === sizeStates - 1) {
+                        lastIndex += f;
+                        lastState = _hypState.to;
                         continue t
                     }
-                    if (b = i(regexRaw, lastIndex + f, y.to, lastStack, h), b.acceptable)
-                        return b;
-                    p = b
+                    if (_regexObj = parseInput(regexRaw, lastIndex + f, _hypState.to, lastStack, prevIndex), _regexObj.acceptable)
+                        return _regexObj;
+                    regexObj = _regexObj
                 }
-                if (p)
-                    return p;
+                if (regexObj)
+                    return regexObj;
                 break
             }
             return {
                 stack: lastStack,
-                lastIndex: h,
+                lastIndex: prevIndex,
                 lastState: lastState,
-                acceptable: a.accept(lastState)
+                acceptable: that.accept(lastState)
             }
         }
-        r = r || 0;
+        inLastIndex = inLastIndex || 0;
         // Capturo el objeto en una variable accesible a la funcion interior, ya que es recursiva
-        var a = this;
-        return i(e, r, "start", [], r - 1)
+        var that = this;
+        return parseInput(inRegexRaw, inLastIndex, "start", [], inLastIndex - 1)
     }
 
     // Funciones auxiliares

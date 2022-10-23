@@ -1,20 +1,48 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <!-- SEO tags -->
-  {% seo %}
 
-  <!-- <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }}</title> -->
-  {% include head/meta.html %}
-</head>
+  <head>
 
-<body>
+    {% include head/meta.html %}
+    <!-- SEO tags -->
+    {% seo %}
 
-  <div id="main">
-    {{ content }}
-  </div>
+    {% include head/base_styles.html %}
+    {% include head/building-styles.html %}
 
-  {% include sidebar/footer.html %}
-</body>
+    <!-- Estilos propios del PWA -->
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/pwa.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/install-as-app.css">
 
-</html>
+    {% include mobile/styles.html %}
+
+    <!-- VENDORS SCRIPTS -->
+    {% include head/base_scripts.html %}
+
+    <!-- Scripts para el control de la barra de conexion -->
+    {% include offline-status/scripts.html %}
+
+    <!-- DEFINE / INITIALIZE LISTENERS -->
+    <script defer src="{{ site.baseurl }}/assets/scripts/switch_theme.js"></script>
+    <script defer src="{{ site.baseurl }}/assets/scripts/menu_listeners.js"></script>
+    <script type="text/javascript">
+      {% include head/on_load.js %}
+    </script>
+
+    <noscript>
+      <h2 id="noscript">Please enable JavaScript in order to use all features</h2>
+    </noscript>
+  </head>
+
+  <body>
+    <script defer>
+      document.body.classList.add("js-enabled");
+    </script>
+    {% include svg-utils/svg-filters.html %}
+    <div id="container-main">
+      {{ content }}
+    </div>
+    {% include offline-status/connection-box.html %}
+  </body>
+
+</html>>

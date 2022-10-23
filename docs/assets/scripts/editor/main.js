@@ -63,11 +63,10 @@ var EditorParser = (options) => {
             $containerEditor: $containerEditor,
             $inputRegex: $editorRegex,
             $syntaxRegex: $input.querySelector('.syntax'),
-            // TODO: SOLO PARA TESTING
-            // debugInputClass: '.input-debug'
+            debugInputClass: DEBUG ? '.input-debug': undefined
         });
         var linterCalls = EditorLinter({
-            $editorLinter: $input.querySelector('.linter')
+            $editorLinter: $input.querySelector('.linters')
         });
 
 
@@ -235,7 +234,7 @@ var EditorParser = (options) => {
         try {
             var init_parse = RegexParser();
             var language_selected = getReLanguage();
-            regexson = init_parse(regExpresion, null, language_selected);
+            regexson = init_parse(regExpresion, DEBUG, language_selected);
 
             let errors = regexson.errors;
             if (errors.length !== 0 && !skipError) {
@@ -313,7 +312,7 @@ var EditorParser = (options) => {
         var regEXSON = null;
         try {
             var init_parse = RegexParser();
-            regEXSON = init_parse(regExpresion, null, language_selected);
+            regEXSON = init_parse(regExpresion, DEBUG, language_selected);
         } catch (e) {
             if (e instanceof init_parse.RegexSyntaxError) {
                 showErrorShared(regExpresion, e);

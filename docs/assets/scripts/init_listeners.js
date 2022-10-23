@@ -52,7 +52,7 @@ window.onload = function () {
 
 
     let beyondEditor = Editor({
-        debug: false
+        debug: window.DEBUG
     });
     let beyondEditorIns = beyondEditor.init();
     // CREAR UN FICHERO CON VARIABLES GLOBALES CON LOS NOMBRES DE CLASES o IDs

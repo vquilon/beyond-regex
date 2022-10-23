@@ -109,9 +109,12 @@ gtag: "G-005J77BYYB"
 # Any item listed under the `exclude:` key here will be automatically added to
 # the internal "default list".
 defaults:
-  -
-    scope:
+  - scope:
       path: 'advent/**'
+    values:
+      sitemap: false
+  - scope:
+      path: 'debug/**'
     values:
       sitemap: false
 
@@ -121,6 +124,7 @@ redirects: yes
 # their entries' file path in the `include:` list.
 #
 exclude:
+  - debug/
   - advent/
   - .sass-cache/
   - .jekyll-cache/
