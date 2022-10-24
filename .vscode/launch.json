@@ -1,0 +1,47 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.1.0",
+    "configurations": [
+        {
+            "name": "Run jekyll start",
+            "preLaunchTask": "start jekyll",
+            "postDebugTask": "postdebugKill",
+            "command": "echo Closed",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        // Para utilizar esta configuracion, primero se lanza el navegador
+        // En es ventana abrir la ruta del index.html
+        // Hacer alguna accion, y se parara en el punto de debug que este en el codigo del Visual Code
+        {
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ],
+            "name": "Run Chrome",
+            "request": "launch",
+            "type": "chrome",
+            "url": "http://localhost:4000/beyond-regex/",
+            "webRoot": "${workspaceFolder}/docs/_site/"
+            // "url": "http://localhost:4000/beyond-regex/",
+            // "file": "${workspaceFolder}/docs/_site/index.html"
+        },
+        {
+            // "preLaunchTask": "run chrome",
+            "type": "chrome",
+            "request": "attach",
+            "name": "Attach to Chrome",
+            "port": 9222,
+            "url": "http://localhost:4000/beyond-regex/",
+            "webRoot": "${workspaceFolder}/docs/_site/"
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Start Jekyll and Debug",
+            "configurations": ["Run jekyll start", "Run Chrome"],
+            "stopAll": true
+        }
+    ]
+}

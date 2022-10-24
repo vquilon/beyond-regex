@@ -26,15 +26,12 @@ window.onload = function() {
             });
             document.addEventListener('touchmove', e => {
                 sidebarMove(e, touch=true);
-
             });
-            document.addEventListener('mouseUp', e => {
+            document.addEventListener('mouseup', e => {
                 sidebarUp(e, touch=false);
-
             });
             document.addEventListener('touchend', e => {
                 sidebarUp(e, touch=true);
-                
             });
             advent_listeners();
         };

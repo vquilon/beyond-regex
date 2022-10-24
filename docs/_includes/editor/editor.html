@@ -58,10 +58,10 @@
 <input id="real-time-check" type="checkbox">
 <label for="real-time-check"><span class="material-icons">dashboard</span></label>
 </div>
-<div title="Edit" class="checkbox checkbox__1 only-mobile">
-<input id="mobile-edit" type="checkbox">
-<label for="mobile-edit">
-<span class="material-icons material-symbols-outlined">edit_note</span>
+<div title="Edit" class="checkbox checkbox__3">
+<input id="highlighted-editor" type="checkbox" checked="checked">
+<label for="highlighted-editor">
+<span class="material-icons material-symbols-outlined">highlight</span>
 </label>
 </div>
 </div>
@@ -70,13 +70,15 @@
 <span class="regex-quotes">/</span>
 <!-- <input id="input" class="input" value="" /> -->
 <div tabindex="0" class="input">
+<div class="tooltips"></div>
+<div class="linters"></div>
 <div class="input-carets"></div>
 <div class="input-selects"></div>
 <div class="input-syntax">
-<div class="regex syntax"></div>
+<div class="regex syntax">^BEYOND ReGex(?P&ltTOOLS&gtbuilder|[bv]isualize|(?=de)bugger) Born to be a RegEx editor$</div>
 </div>
 <div class="input-editor">
-<pre class="editor" spellcheck="false" contenteditable="true"></pre>
+<pre class="editor" spellcheck="false" contenteditable="true">^BEYOND ReGex(?P&ltTOOLS&gtbuilder|[bv]isualize|(?=de)bugger) Born to be a RegEx editor$</pre>
 </div>
 </div>
 <span class="regex-quotes">/</span>
@@ -118,7 +120,6 @@
 <span title="Group count" class="stats" id="re-groups">#groups:<span class="stat-value"></span></span>
 </div>
 <div id="terminal-error" class="correct-syntax">
-<p id="errorBox"></p>
 <p id="errorDef"></p>
 </div>
 </div>

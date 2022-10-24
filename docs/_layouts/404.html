@@ -16,26 +16,7 @@
 <script defer="defer" src="{{ site.baseurl }}/assets/scripts/switch_theme.js"></script>
 <script defer="defer" src="{{ site.baseurl }}/assets/scripts/menu_listeners.js"></script>
 <script type="text/javascript">
-window.onload = function() {
-      changeDark2LightTheme();
-      let [sidebarMove, sidebarUp] = init_menu_listeners();
-      document.addEventListener('mousemove', e => {
-          sidebarMove(e, touch=false);
-
-      });
-      document.addEventListener('touchmove', e => {
-          sidebarMove(e, touch=true);
-
-      });
-      document.addEventListener('mouseUp', e => {
-          sidebarUp(e, touch=false);
-
-      });
-      document.addEventListener('touchend', e => {
-          sidebarUp(e, touch=true);
-          
-      });
-    };
+{% include head/on_load.js %}
 </script>
 <noscript>
 <h2 id="noscript">Please enable JavaScript in order to use all features</h2>

@@ -1,0 +1,109 @@
+<style>
+#cookie-notice {
+    padding: 1.5em 1em 1em;
+    display: none;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 2em);
+    background: #242424ed;
+    backdrop-filter: blur(5px);
+    color: rgba(255, 255, 255, 0.8);
+    z-index: 99;
+  }
+  #cookie-options {
+    display: flex;
+    margin-top: 0.5em;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1em;
+  }
+  #cookie-options a{
+    padding: 0.5em;
+  }
+  .cookie-btn {
+    background: indigo;
+    cursor: pointer;
+    border-radius: 10px;
+  }
+  #cookie-notice-deny.cookie-btn {
+    background: #2d004c;
+  }
+  .cookie-link {
+    color: #3cace6;
+  }
+  
+  .cookie-btn:hover {
+    text-shadow: 0 0 10px #ffffff, -1px 0px 2px #03a9f4, 1px 0px 2px #ff0058, -1px 0px 4px #03a9f4, 1px 0px 4px #ff0058, -4px 0px 8px #03a9f4, 4px 0px 8px #ff0058;
+  }
+  /* @media (max-width: 767px) {
+    #cookie-notice span {
+      display: block;
+      padding-top: 3px;
+      margin-bottom: 1rem;
+    }
+    #cookie-notice a {
+      position: relative;
+      bottom: 4px;
+    }
+  } */
+</style>
+<div id="cookie-notice">
+<span>
+We would like to use third party cookies and scripts to improve the functionality of this website.
+</span>
+<br>
+<div id="cookie-options">
+<a id="cookie-notice-accept" class="cookie-btn">Approve</a>
+<a id="cookie-notice-deny" class="cookie-btn">Deny</a>
+<a href="/privacy" class="cookie-link">More info</a>
+</div>
+</div>
+<script defer="defer" type="text/javascript">
+function createCookie(name, value, days) {
+      var expires = "";
+      if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + value + expires + "; path=/";
+    }
+    function readCookie(name) {
+      var nameEQ = name + "=";
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ')
+          c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0)
+          return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+    }
+    function eraseCookie(name) {
+      createCookie(name, "", -1);
+    }
+    function processCookies () {
+      {% include google-analytics/ga.js %}
+    }
+    if (readCookie('cookie-notice-option') == 'true') {
+      processCookies();
+    }
+    else if (readCookie('cookie-notice-option') != 'false') {
+      document.getElementById('cookie-notice').style.display = 'block';
+    }
+
+    document.getElementById('cookie-notice-accept').addEventListener("click", function() {
+      createCookie('cookie-notice-option', 'true', 31);
+      document.getElementById('cookie-notice').style.display = 'none';
+      processCookies();
+      // location.reload();
+    });
+
+    document.getElementById('cookie-notice-deny').addEventListener("click", function() {
+      createCookie('cookie-notice-option', 'false', 31);
+      document.getElementById('cookie-notice').style.display = 'none';
+      // location.reload();
+    });
+</script>
