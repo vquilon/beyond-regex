@@ -32,5 +32,10 @@ const CHANGELOG = {
       "Non-Blocking render visual regex v2",
       "Show actual version in sidebar"
     ],
+    "19": [
+      "Linter (preview)",
+      "Cleaning error interface",
+      "Accept/Reject Analytics Cookies"
+    ]
   }
 }
