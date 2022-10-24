@@ -2,23 +2,35 @@
 
 // if (define("NFA", ["./Kit"], function(t) {
 class NFA {
-    constructor(e) {
+    constructor(validStructs) {
         // Inicializacion de funciones auxiliares
         let _auxKit = Kit();
+        this.auxKit = _auxKit;
 
-        e = e.compact ? this._expandNames(e) : e;
-        var s, o = {}, h = e.trans, _router = {}
+        // Parseo y preparacion de las transiciones de estado
+        let [accepts, router] = this.prepareValidStructs(validStructs);
+
+        this.router = router;
+        this.accepts = accepts;
+        this.unexpectedRouter = validStructs.unexpectedRouter;
+        this.unexpectedToken = validStructs.unexpectedToken;
+    }
+    prepareValidStructs(validStructs) {
+        let auxKit = this.auxKit;
+
+        validStructs = validStructs.compact ? this._expandNames(validStructs) : validStructs;
+        var s, accepts = {}, h = validStructs.trans, router = {}
         var n;
-        for (s = 0, n = e.accepts.length; s < n; s++) {
-            o[e.accepts[s]] = !0;
+        for (s = 0, n = validStructs.accepts.length; s < n; s++) {
+            accepts[validStructs.accepts[s]] = !0;
         }
 
         var l;
         for (s = 0, n = h.length; s < n; s++)
             l = h[s],
-                l.charset ? l.ranges = "string" == typeof l.charset ? _auxKit.parseCharset(l.charset) : l.charset : l.eMove = !0,
+                l.charset ? l.ranges = "string" == typeof l.charset ? this.auxKit.parseCharset(l.charset) : l.charset : l.eMove = !0,
                 l.from.forEach(function (t) {
-                    var e = _router[t] = _router[t] || {
+                    var e = router[t] = router[t] || {
                         eMoveStates: [],
                         eMove: [],
                         charMove: {},
@@ -28,13 +40,13 @@ class NFA {
                     l.eMove ? e.eMoveStates = e.eMoveStates.concat(l.to) : e.ranges = e.ranges.concat(l.ranges),
                         e.trans.push(l)
                 });
-        Object.keys(_router).forEach(function (e) {
-            var r = _router[e],
+        Object.keys(router).forEach(function (e) {
+            var r = router[e],
                 n = r.trans,
                 i = r.charMove,
                 a = r.eMove,
                 s = r.ranges,
-                o = _auxKit.classify(s),
+                o = auxKit.classify(s),
                 c = o.map;
             n.forEach(function (e) {
                 e.eMove ? e.to.forEach(function (t) {
@@ -44,13 +56,13 @@ class NFA {
                         assert: e.assert,
                         eMove: !0
                     })
-                }) : _auxKit.flatten2(e.ranges.map(function (t) {
+                }) : auxKit.flatten2(e.ranges.map(function (t) {
                     return c[t]
                 })).forEach(function (t) {
                     (i[t] = i[t] || []).push(e)
                 })
             }),
-                s = _auxKit.Set(o.ranges.filter(function (t) {
+                s = auxKit.Set(o.ranges.filter(function (t) {
                     return !!t[1]
                 })),
                 r.ranges = s,
@@ -72,20 +84,10 @@ class NFA {
                 delete r.trans,
                 delete r.eMoveStates
         });
-
-        this.router = _router;
-        this.accepts = o;
-        this.auxKit = _auxKit;
-        // this.NFAobject = {
-        //   accepts: this.accepts,
-        //   router: _router,
-        //   input: this.input,
-        //   assertDFA: this.assertDFA,
-        //   accept: this.accept
-        // }
+        return [accepts, router];
     }
-    accept(t) {
-        return this.accepts.hasOwnProperty(t)
+    accept(prop) {
+        return this.accepts.hasOwnProperty(prop)
     }
     assertDFA() {
         for (var e, r = this.router, n = Object.keys(r), i = 0, a = n.length; i < a; i++) {
@@ -119,20 +121,26 @@ class NFA {
                             nextStates = _charMove[l];
                         }
                         else {
-                            nextStates = _eMove;
+                            // No se tiene este caracter, el nextStates debera ser unexpected_char
+                            nextStates = _eMove.length === 0 ? [{
+                                action: that.unexpectedToken,
+                                assert: undefined,
+                                eMove: undefined,
+                                to: "exact"
+                            }] : _eMove;
                         }
                     }
                 }
                 else {
                     nextStates = _eMove;
                 }
-                for (var _hypState, m, _regexObj, lastStackLength = lastStack.length, w = prevIndex, iState = 0, sizeStates = nextStates.length; iState < sizeStates; iState++) {
+                for (var _hypState, resAssertedState, _regexObj, lastStackLength = lastStack.length, w = prevIndex, iState = 0, sizeStates = nextStates.length; iState < sizeStates; iState++) {
                     if (_hypState = nextStates[iState], f = _hypState.eMove ? 0 : 1, prevIndex = w, lastStack.splice(0, lastStack.length - lastStackLength), lastStackLength = lastStack.length, _hypState.assert) {
-                        m = _hypState.assert(lastStack, actualChar, lastIndex, lastState, regexRaw);
-                        if (!m) continue;
-                        if (typeof m == "number") {
-                            lastIndex += m;
-                            prevIndex += m;
+                        resAssertedState = _hypState.assert(lastStack, actualChar, lastIndex, lastState, regexRaw);
+                        if (!resAssertedState) continue;
+                        if (typeof resAssertedState == "number") {
+                            lastIndex += resAssertedState;
+                            prevIndex += resAssertedState;
                         }
                     }
                     // 

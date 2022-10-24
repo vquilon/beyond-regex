@@ -6,6 +6,7 @@
 function RegexParser() {
   var auxKit = Kit();
   var nodeType = {};
+  var cachedNFA = {};
   function r() {
     var t = Object.keys(nodeType)
       .map(function (t) {
@@ -65,7 +66,7 @@ function RegexParser() {
     d = debug;
     var processedRegex, processedStack;
     var error_lastState;
-    var NFA_instance = load_NFA_Parser((language = language));
+    var NFA_instance = load_NFA_Parser(language);
     processedRegex = NFA_instance.input(raw_regex_input, 0, debug);
     processedStack = processedRegex.stack;
     processedStack = elementsCallback.endChoice(processedStack);
@@ -169,10 +170,13 @@ function RegexParser() {
   function load_NFA_Parser(language = "javascript6") {
     // TODO: Check no existing language
     var selected_language_validStructs = validStructs[language];
-    return (
-      NFAparser || (NFAparser = new NFA(selected_language_validStructs)),
-      NFAparser
-    );
+    if (cachedNFA.hasOwnProperty(language)) {
+      NFAparser = cachedNFA[language];
+    }
+    else {
+      NFAparser = new NFA(selected_language_validStructs);
+    }
+    return NFAparser;
   }
   function setProperty(t, e, r) {
     Object.defineProperty(t, e, {
@@ -478,7 +482,7 @@ function RegexParser() {
           }
           init_object.RegexSyntaxThrows.push(errObj);
           if (!prevToken.errors) prevToken.errors = [];
-          prevToken.errors.push(erroObj);
+          prevToken.errors.push(errObj);
         }
         delete prevToken._commaIndex;
       } else maxRepeat = minRepeat;

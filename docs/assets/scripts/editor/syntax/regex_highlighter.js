@@ -408,15 +408,18 @@ function RegexHighlighter($editor, $syntax) {
 
     const typeMap = {
         "assert": _parseAssert,
-        "group": _parseGroup,
-        "choice": _parseChoice,
+        "backref": _parseExact,  // TODO
         "charset": _parseCharset,
-        "exact": _parseExact,
+        "choice": _parseChoice,
         "dot": _parseDot,
+        "empty": _parseExact,  // TODO
+        "exact": _parseExact,
+        "group": _parseGroup,
         "hexadecimal": _parseEscapeChars,
         "unicode": _parseEscapeChars,
         "octal": _parseEscapeChars,
         "comment": _parseComment,
+        "unexpected": _parseExact
     };
     const _parseRegexSON = (_reToken, _i, _tokenStack) => {
         let _parsedRegexHTML = "";

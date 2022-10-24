@@ -86,7 +86,7 @@
 .input-selects {
   background: none;
   padding: 0;
-  z-index: 4;
+  z-index: 5;
   pointer-events: none;
   min-height: calc(var(--line-height-ratio) * var(--font-size));
 }
@@ -108,7 +108,7 @@
 .input-carets {
   background: none;
   padding: 0;
-  z-index: 5;
+  z-index: 6;
   pointer-events: none;
   min-height: calc(var(--line-height-ratio) * var(--font-size));
 }
@@ -247,8 +247,8 @@
 }
 
 .linters {
-  z-index: 6;
   color: transparent;
+  z-index: 4;
   user-select: none;
   pointer-events: none;
 }
@@ -256,10 +256,11 @@
 .linters .error {
   /* text-decoration: underline red 2px; */
   /* text-decoration-thickness: auto; */
-  text-decoration-line: underline;
-  text-decoration-color: red;
-  text-decoration-style: wavy;
-  background: #ff000030;
+  /* text-decoration-line: underline; */
+  /* text-decoration-color: red; */
+  /* text-decoration-style: wavy; */
+  color: white;
+  background: #d93a3a;
   border-radius: 10px;
   min-height: calc(var(--line-height-ratio) * var(--font-size));
   min-width: 1ch;
