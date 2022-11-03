@@ -1,0 +1,46 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "run chrome",
+            "type": "shell",
+            "command": "Start-Process 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe' 'www.google.com' '--remote-debugging-port=9222'",
+        },
+        {
+            "label": "start jekyll",
+            "command": "/bin/bash", // Could be any other shell command
+            "args": [
+                "\"../bash/start.sh\""
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/docs"
+            },
+            "runOptions": {"instanceLimit": 1},
+            "type": "shell",
+        },
+        {
+            "label": "postdebugKill",
+            "type": "process",
+            "command": "workbench.action.tasks.terminate",
+            "args": [
+                "start jekyll"
+            ]
+        },
+        {
+            "label": "Terminate All Tasks",
+            "command": "echo ${input:terminate}",
+            "type": "shell",
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "terminate",
+            "type": "command",
+            "command": "workbench.action.tasks.terminate",
+            "args": "terminateAll"
+        }
+    ]
+}

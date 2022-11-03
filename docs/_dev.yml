@@ -119,3 +119,6 @@ exclude:
   - gemfiles/
   - Gemfile
   - Gemfile.lock
+
+# DEBUG
+debug: true

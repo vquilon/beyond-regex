@@ -1,0 +1,24 @@
+{
+    "regexhighlighter.stoppingRegexHighlighting": false,
+    "editor.formatOnSave": false,
+    "liquid.format": true,
+    "[jekyll]": {
+        "editor.quickSuggestions": {
+            "comments": "on",
+            "strings": "on",
+            "other": "on"
+        },
+        "editor.formatOnSave": true,
+        "editor.wordWrap": "on",
+        "editor.renderWhitespace": "all",
+        "editor.acceptSuggestionOnEnter": "off"
+    },
+    "files.associations": {
+        "*.md": "jekyll",
+        "*.markdown": "jekyll",
+        // "*.html": "jekyll",
+        "*.liquid": "jekyll"
+    },
+    "scss.validate": false,
+    "liquid.format.enable": false
+}
