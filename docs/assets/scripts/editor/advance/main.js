@@ -25,6 +25,14 @@ function EditorAdvance(options = {}) {
     let widthCharMap = {};
 
     // FUNCTIONS
+    const escapeHTML = (unsafe) => {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
     const pauseCaretsBlink = () => {
         if ($inputCarets.timeoutBlink) {
             clearTimeout($inputCarets.timeoutBlink);
@@ -705,6 +713,14 @@ function EditorAdvance(options = {}) {
         // TODO: Actualizar los carets teniendo en cuenta sus posiciones x/y a las actuales que valen
         //  para evitar el layout sifting con texto que se borre etc etc. U operaciones que se elimina o se agrega
         //  texto de repente.
+        let carets = getCaretsElements();
+        for (let $caret of carets) {
+            let [startOffset, endOffset] = readCaretTextOffset($caret);
+            let [fPosLine, fPosChar, posLine, posChar] = convertTextOffsetToLineCharOffset(startOffset, endOffset);
+            writeCaretProps($caret, posLine, posChar, fPosLine, fPosChar, posChar);
+        }
+        updateSelectionCarets();
+
     }
     // CARETS/SELECTIONS CREATE/UPDATE
     const updateCaretPos = (caretPos, { $caret = undefined, ctrlKey = false, wheelKey = false, dragStyle = false, resetFirst = false }) => {
@@ -770,7 +786,7 @@ function EditorAdvance(options = {}) {
         return $caret;
     }
     const updateSelectionCarets = () => {
-        let carets = Array.from($inputCarets.children);
+        let carets = getCaretsElements();
         let lineHeight = getLineHeight();
         let caretRects = []
         $inputSelections.innerHTML = "";
@@ -885,6 +901,14 @@ function EditorAdvance(options = {}) {
         if (fPosLine !== undefined) $caret.style.setProperty("--fpos-line", fPosLine);
         if (fPosChar !== undefined) $caret.style.setProperty("--fpos-char", fPosChar);
         $caret.style.setProperty("--max-pos-char", maxPosChar);
+
+        let initCaretLine = fPosLine || parseFloat($caret.style.getPropertyValue("--fpos-line"));
+        let initCaretChar = fPosChar || parseFloat($caret.style.getPropertyValue("--fpos-char"));
+        let caretLine = posLine;
+        let caretChar = posChar;
+        let [startOffset, endOffset] = convertLineCharOffsetToTextOffset(initCaretLine, initCaretChar, caretLine, caretChar);
+        $caret.style.setProperty("--offset-start", startOffset);
+        $caret.style.setProperty("--offset-end", endOffset);
     }
 
     const readCaretXYPos = ($caret) => {
@@ -910,7 +934,9 @@ function EditorAdvance(options = {}) {
         return [firstCaretPos, caretPos];
     }
     const readCaretTextOffset = ($caret) => {
-
+        let startOffset = parseFloat($caret.style.getPropertyValue("--offset-start"));
+        let endOffset = parseFloat($caret.style.getPropertyValue("--offset-end"));
+        return [startOffset, endOffset];
     }
 
     const isMouseInSelection = (mouseX, mouseY) => {
@@ -1387,7 +1413,7 @@ function EditorAdvance(options = {}) {
                     let [startOffset, endOffset] = convertLineCharOffsetToTextOffset(startCaretLine, startCaretChar, endCaretLine, endCaretChar);
                     // Por cada caret se agrega la informacion del clipboard
                     // Seleccionar el texto e insertarlo
-                    execCommandWithin(startOffset, endOffset, $editor, "insertHTML", { value: textCopied[i] })
+                    execCommandWithin(startOffset, endOffset, $editor, "insertText", { value: textCopied[i] })
                     // Actualizar todos los carets en el DOM la posicion, incrementada a cada caret
                 }
                 $input.focus();
@@ -1498,6 +1524,10 @@ function EditorAdvance(options = {}) {
 
         }, true);
         $syntax.addEventListener("mousemove", (event) => {
+            if(event.which === 0) {
+                $editor.selecting = false;
+                return
+            }
             if ($editor.initSelecting && !$editor.internalDrag) {
                 $editor.initSelecting = false;
                 $editor.selecting = true;
@@ -1634,6 +1664,7 @@ function EditorAdvance(options = {}) {
 
         const ro = new ResizeObserver(entries => {
             selRects = [];
+            calculateAllRects();
             refreshCarets();
         });
         ro.observe($editorInput);

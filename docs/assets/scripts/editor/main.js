@@ -101,6 +101,7 @@ var EditorParser = (options) => {
     const hideError = function () {
         setInnerText($errorDef, "Correct syntax");
         $terminalError.classList.add("correct-syntax");
+        linterCalls.cleanLinter();
         // $editorError.style.display = 'none';
     }
     const showErrors = function (regular_exp, regexson) {

@@ -412,7 +412,7 @@ function RegexHighlighter($editor, $syntax) {
         "charset": _parseCharset,
         "choice": _parseChoice,
         "dot": _parseDot,
-        "empty": _parseExact,  // TODO
+        "empty": () => "",  // TODO
         "exact": _parseExact,
         "group": _parseGroup,
         "hexadecimal": _parseEscapeChars,

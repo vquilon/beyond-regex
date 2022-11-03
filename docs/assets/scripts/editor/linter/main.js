@@ -104,7 +104,8 @@ function EditorLinter(options = {}) {
     }
 
     return {
-        onRegexErrors: onErrors
+        onRegexErrors: onErrors,
+        cleanLinter: () => {$editorLinter.innerHTML=""}
     }
 }
 
