@@ -1,6 +1,6 @@
 /* Color Variables */
-
 :root {
+  --font-family: VictorMono, monospace;
   --color-codepen: #000;
   --color-github: #4284c0;
   --color-twitter: #2b97f1;
@@ -8,6 +8,194 @@
   --color-instagram: #527fa6;
   --color-linkedin: #006599;
   --color-facebook: #3b5a9b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --icon-theme: #fff;
+    --shadow-icon-light: #000000a8;
+    --shadow-icon-dark: #ffffff25;
+    --shadow-icon-theme: #fff;
+
+    --background-grad-l0: #fff;
+    --background-grad-l1: #bde5ff;
+    --background-grad-l2: #608fff;
+    --background-grad-d0: #0f4398;
+    --background-grad-d1: #321d6a;
+    --background-grad-d2: #000;
+
+    --background-grad-px: 0%;
+    --background-grad-py: 0%;
+
+    --color-editor: #fff;
+    --back-editor: #1a1a1a;
+    --color-editor-margin: #202020;
+    --tools-back: #2e1279;
+
+    --font-size: 25px;
+    --line-height-ratio: 1.4;
+    --editor-margin: 20px;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --icon-theme: #fff;
+    --shadow-icon-light: #ffffff26;
+    --shadow-icon-dark: #00000099;
+    --shadow-icon-theme: #ffdd1d;
+
+    --background-grad-l0: #fff;
+    --background-grad-l1: #bde5ff;
+    --background-grad-l2: #608fff;
+    --background-grad-d0: #0f4398;
+    --background-grad-d1: #321d6a;
+    --background-grad-d2: #000;
+
+    --background-grad-px: 60%;
+    --background-grad-py: 60%;
+
+    --color-editor: #000;
+    --back-editor: #fafafa;
+    --color-editor-margin: #efefef;
+    --tools-back: #6ebefc;
+
+    --font-size: 25px;
+    --line-height-ratio: 1.4;
+    --editor-margin: 20px;
+  }
+}
+
+[data-theme="light"] {
+  --icon-theme: #fff;
+  --shadow-icon-light: #ffffff26;
+  --shadow-icon-dark: #00000099;
+  --shadow-icon-theme: #ffdd1d;
+
+  --background-grad-l0: #fff;
+  --background-grad-l1: #bde5ff;
+  --background-grad-l2: #608fff;
+  --background-grad-d0: #0f4398;
+  --background-grad-d1: #321d6a;
+  --background-grad-d2: #000;
+
+  --background-grad-px: 60%;
+  --background-grad-py: 60%;
+
+  --color-editor: #2a2a2a;
+  --color-caret: #4b0082;
+  --color-syntax: #4b0082;
+  --back-editor: #e2e2e2;
+  --color-editor-margin: #e2e2e2;
+  --tools-back: #6ebefc;
+
+  --font-size: 25px;
+  --line-height-ratio: 1.4;
+  --editor-margin: 20px;
+}
+
+[data-theme="dark"] {
+  --icon-theme: #fff;
+  --shadow-icon-light: #000000a8;
+  --shadow-icon-dark: #ffffff25;
+  --shadow-icon-theme: #fff;
+
+  --background-grad-l0: #fff;
+  --background-grad-l1: #bde5ff;
+  --background-grad-l2: #608fff;
+  --background-grad-d0: #0f4398;
+  --background-grad-d1: #321d6a;
+  --background-grad-d2: #000;
+
+  --background-grad-px: 0%;
+  --background-grad-py: 0%;
+
+  --color-editor: #fff;
+  --color-caret: #fff;
+  --color-syntax: #fff;
+  --back-editor: #1a1a1a;
+  --color-editor-margin: #202020;
+  --tools-back: #2e1279;
+
+  --font-size: 25px;
+  --line-height-ratio: 1.4;
+  --editor-margin: 20px;
+}
+
+#theme-switch {
+  z-index: 10;
+  position: fixed;
+  right: -1em;
+  top: 0;
+  padding-right: 1em;
+  width: 5em;
+  height: 5em;
+  display: flex;
+  background: #343434;
+  justify-content: center;
+  align-items: center;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+#theme-switch label::after {
+  user-select: none;
+  font-family: "Material Icons";
+  content: "light_mode";
+  color: var(--icon-theme);
+  background: transparent;
+  justify-content: center;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  text-shadow: 0 0 1rem var(--shadow-icon-theme),
+    0 0 1rem var(--shadow-icon-theme), 0 0 1rem var(--shadow-icon-theme);
+}
+#theme-switch input:checked ~ label::after {
+  content: "dark_mode";
+}
+#theme-switch .switchElement input {
+  display: none;
+}
+#theme-switch .switchElement {
+  width: 60px;
+}
+#theme-switch .switchElement label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 30px;
+  box-shadow: 0.3rem 0.3rem 0.6rem #00000099,
+    -0.2rem -0.2rem 0.5rem #ffffff26;
+  background: rgba(255, 255, 255, 0);
+  position: relative;
+  cursor: pointer;
+  border-radius: 30px;
+}
+#theme-switch .switchElement label::after {
+  position: absolute;
+  width: 50%;
+  left: 0;
+  border-radius: 50%;
+  /* background: var(--shadow-icon-dark); */
+
+  transition-property: background-color, left;
+  transition-duration: 1s;
+  transition-timing-function: ease;
+}
+#theme-switch .switchElement label::before {
+  content: "";
+  border-radius: inherit;
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: 1s;
+  transition-timing-function: ease;
+}
+#theme-switch .switchElement input:checked ~ label::before {
+  opacity: 1;
+}
+#theme-switch .switchElement input:checked ~ label::after {
+  left: 50%;
+  /* background: var(--shadow-icon-light); */
 }
 
 html,
@@ -39,7 +227,7 @@ html,
 * {
   margin: 0;
   padding: 0;
-  font-family: "VictorMono", monospace;
+  font-family: var(--font-family);
 }
 
 body:before {
@@ -366,7 +554,7 @@ span#close-side:hover .burger {
   /* text-shadow: 0 0 10px #e9cff6, 0 0 5px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff; */
   /* text-shadow: 0 0 10px #ffffff78, 10px 0 5px #03a9f4, -10px 0 5px #ff0058, 0 0 10px #03a9f4, 0 0 20px #03a9f4; */
   color: white;
-  font-family: "VictorMono", monospace;
+  font-family: var(--font-family);
   font-size: 20px;
   font-style: italic;
   font-weight: 500;
@@ -749,7 +937,7 @@ span#close-side:hover .burger {
 }
 
 #beyond-editor .container-editor #editor-flags {
-  font-family: "VictorMono", monospace;
+  font-family: var(--font-family);
   padding: 10px;
   display: flex;
   flex-direction: row;
@@ -765,7 +953,7 @@ span#close-side:hover .burger {
 }
 
 #beyond-editor div.container-editor #editor-input .input {
-  font-family: "VictorMono", monospace;
+  font-family: var(--font-family);
   color: #4b0082;
   padding: 0 10px;
   border: none;
@@ -1049,16 +1237,6 @@ span#close-side:hover .burger {
   border-top-left-radius: 10px;
 }
 
-:root {
-  --primary-light: #8abdff;
-  --primary: #6d5dfc;
-  --primary-dark: #5b0eeb;
-  --white: #ffffff;
-  --greyLight-1: #e4ebf5;
-  --greyLight-2: #c8d0e7;
-  --greyLight-3: #bec8e4;
-  --greyDark: #878787;
-}
 
 /*  BUTTONS  */
 
@@ -1144,7 +1322,7 @@ span#close-side:hover .burger {
 /* } */
 
 .button-panel {
-  font-family: "VictorMono", monospace;
+  font-family: var(--font-family);
   user-select: none;
   outline: none;
   font-size: 16px;
