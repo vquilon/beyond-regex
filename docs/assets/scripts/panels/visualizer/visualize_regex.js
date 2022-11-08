@@ -206,7 +206,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
         elementsRaphael.forEach(el => el.remove());
 
         let regexBoxRect = canvasRaph.rect(0, 0, 0, 0);
-        regexBoxRect.attr("fill", STROKE_COLOR), regexBoxRect.attr("stroke", STROKE_COLOR);
+        regexBoxRect.attr("class", "backContainer")
         createTextNodeWithFontFamilySize(canvasRaph);
 
         let sizeTextItem = getFontSizes(GRAPH_FONTSIZE, "bold");
@@ -622,9 +622,9 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
     }
 
     var AUX_FONT_STYLE_ELEMENT;
-    var FONT_FAMILY = "DejaVu Sans Mono,monospace";
+    var FONT_FAMILY = "VictorMono, monospace";
     var GRAPH_FONTSIZE = 16, REGEX_FONTSIZE = 14, LINE_ITEMS_GAP = 16;
-    var STROKE_COLOR = "#e2e2e2", HAS_FLAG_MULTILINE = !1, ITEMS_MARGIN = 10, FONT_STYLE_MAP = {};
+    var HAS_FLAG_MULTILINE = !1, ITEMS_MARGIN = 10, FONT_STYLE_MAP = {};
     var generator_Raph_map = {
         startPoint: function (regexJSONInfo, offset_x, offset_y) {
             return createCircleItem(

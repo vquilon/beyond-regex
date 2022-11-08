@@ -5,7 +5,7 @@ div#install-app {
     right: 0;
     z-index: 300;
     border-radius: 0.5em;
-    box-shadow: 0 10px 20px -10px #0000008c;
+    box-shadow: 0 10px 20px -10px var(--dark-soft);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s, visibility 0s 0.3s;
@@ -17,11 +17,10 @@ div#cont-install-app {
 
 span#desc-install {
     display: flex;
-    /* background: #00000057; */
-    color: white;
     align-content: center;
     align-items: center;
     padding: 0em 2em;
+    color: var(--font-color);
 }
 
 div#install-actions {
@@ -39,7 +38,7 @@ div#container-install-app {
     flex-wrap: nowrap;
     align-items: flex-end;
     grid-gap: 1em;
-    background: #242424d9;
+    background: var(--panel-fixed-background);
     backdrop-filter: unset;
     padding: 1em;
     border-radius: 0.5em;
@@ -49,24 +48,24 @@ div#container-install-app {
 #install-actions > button {
     border: none;
     cursor: pointer;
-    color: white;
 }
 
 button#btn-close-install {
     border-radius: 50%;
     padding: 0.25em;
-    color: #959595;
+    color: var(--font-soft-color);
     background: transparent;
 }
 button#btn-close-install:hover {
-    background: #ffffff1f;
+    background: var(--font-shadow-soft-background);
 }
 button#btn-install-app {
     font-size: 1em;
     font-weight: bold;
     padding: 0 2em;
     border-radius: 0.5em;
-    background: linear-gradient(315deg, #03a9f4bf, #ff0058bf);
+    color: white;
+    background: linear-gradient(315deg, var(--gradient-color-1), var(--gradient-color-2));
 }
 
 button#btn-install-app:hover {

@@ -34,11 +34,11 @@
 
     border-radius: 50%;
     pointer-events: all;
-    background: linear-gradient(315deg, #cececee8, #fffffff0);
+    background: linear-gradient(315deg, var(--panel-background-grad-1), var(--panel-background-grad-2));
     /* background: transparent; */
-    color: #4b0082;
+    color: var(--font-color);
     /* backdrop-filter: blur(5px); */
-    box-shadow: 0 8px 32px 0 rgb(31 38 135 / 37%);
+    box-shadow: 0 8px 32px 0 var(--shadow-highlight);
 
     transition: color 0.2s linear;
 }
@@ -56,9 +56,8 @@
     z-index: -1;
     opacity: 0;
     border-radius: 50%;
-    background: linear-gradient(315deg, #03a9f4, #ff0058);
-    box-shadow: 0 8px 32px 0 rgb(31 38 135 / 37%);
-
+    background: linear-gradient(315deg, var(--gradient-color-1), var(--gradient-color-2));
+    box-shadow: 0 8px 32px 0 var(--shadow-highlight);
     transition: opacity 0.2s linear;
 }
 
@@ -71,5 +70,10 @@
 }
 
 span.sweetalert-icon.material-icons {
+    color: var(--font-color);
     font-size: 1em;
+}
+
+.swal2-icon .swal2-icon-content {
+    color: var(--font-color);
 }

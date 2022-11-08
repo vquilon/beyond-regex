@@ -36,8 +36,7 @@
     column-gap: 10px;
     justify-content: space-between;
     align-items: flex-start;
-    /* background: linear-gradient(145deg, #3b3b3b, #242424); */
-    background: #242424;
+    background: var(--panel-background);
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     padding: 1em;
@@ -53,14 +52,14 @@
 }
 
 #visualizer-graph .control-panel .hide-button  {
-    color: white;
     display: block;
     position: absolute;
     top: -0.8em;
     width: 100%;
     left: 0;
     height: 1em;
-    background: #1f1f1f;
+    background: var(--panel-border-color);
+    color: var(--font-color);
     text-align: center;
     pointer-events: all;
 
@@ -94,8 +93,6 @@
     width: 100%;
     height: calc(80% - 20px);
     min-height: calc(80% - 20px);
-    /* box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c; */
-    /* display: inline; */
 }
 
 #visualizer-graphSVG {
@@ -108,7 +105,6 @@
     width: 100%;
     display: inline;
     border-radius: 10px;
-    background: #e2e2e2;
 }
 
 #thumbViewContainer {
@@ -120,13 +116,9 @@
     height: calc(100% + 20px);
     width: calc(30% + 20px);
     margin: 0;
-    /* box-shadow: 6px 6px 12px #00000063, -6px -6px 12px #00000063; */
     transition: all 0.2s linear;
     border: unset;
-    /* background: radial-gradient(circle at 50% 50%, #e2e2e2a8 70%, #e2e2e236); */
     border-radius: 10px;
-    background: rgb(255 255 255 / 20%);
-    box-shadow: inset 0 0 10px 0px #ffffff80, 0 0 5px 0px #ffffff80;
 }
 
 .thumbViewClass {
@@ -156,7 +148,6 @@
 
 #thumbView {
     z-index: 110;
-    /* background: white; */
     box-sizing: border-box;
     width: 100%;
     flex: none;
@@ -168,17 +159,14 @@
     box-shadow: none;
 }
 
-.icon {
-    /* background: rgb(255 255 255 / 30%); */
-    /* box-shadow: inset 0 0 10px 0px #ffffff4d, 0 0 5px 0px #ffffffb3; */
-    /* box-shadow: 0.3rem 0.3rem 0.5rem #0a0a0a, -0.2rem -0.2rem 0.5rem #6c6c6c; */
-    background: #00000042;
+/* .icon {
+    background: var(--dark-soft);
     box-shadow: none;
-}
+} */
 
-.icon svg circle {
+/* .icon svg circle {
     fill: white !important;
-}
+} */
 
 .control-zoom {
     column-gap: 10px;
@@ -194,12 +182,10 @@
 }
 
 .icon:hover {
-    /* box-shadow: inset 0 0 20px 0px #efefef, 0 0 15px 0px #ffffff; */
     box-shadow: none;
 }
 
 .icon:active {
-    /* box-shadow: inset 0 0 20px 0px #efefef, 0 0 15px 0px #ffffff, inset 5px 0px 20px -5px #ff0058, inset -5px 0px 20px -5px #03a9f4; */
     box-shadow: none;
 }
 
@@ -222,9 +208,9 @@
 }
 
 
-.icon .lens g.gradient path {
+/* .icon .lens g.gradient path {
     fill: url(#gradient);;
-}
+} */
 /* 
 .icon .lens g.shine-accent-dark path {
     fill: url(#shine-accent-dark) !important;

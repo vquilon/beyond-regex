@@ -9,7 +9,7 @@ const changeDark2LightTheme = () => {
         dark: "dark"
     }
 
-    window.enableSweetAlert2Theme = (theme = SWEETALERT_THEMES[THEMES.light]) => {
+    window.enableSweetAlert2Theme = (theme = SWEETALERT_THEMES.light) => {
         // deactivate actual
         let $activateLinkTheme = document.head.querySelector(".sweetalert-theme[rel='stylesheet']");
         $activateLinkTheme.rel = "alternate stylesheet";
@@ -19,53 +19,58 @@ const changeDark2LightTheme = () => {
     window.runExampleSwalThemeSwitch = async () => {
         let $actualLink = document.head.querySelector(".sweetalert-theme[rel='stylesheet']");
         let actualTheme = $actualLink.id.substring($actualLink.id.indexOf("-") + 1);
+        window.enableSweetAlert2Theme(SWEETALERT_THEMES.dark);
         await Swal.fire({
-            title: `I'm dark`,
-            onBeforeOpen: () => window.enableSweetAlert2Theme('dark')
-        })
+            title: `I'm dark`
+        });
 
+        window.enableSweetAlert2Theme(SWEETALERT_THEMES.light);
         await Swal.fire({
-            title: `I'm default`,
-            onBeforeOpen: () => window.enableSweetAlert2Theme('default')
-        })
+            title: `I'm default`
+        });
+
         window.enableSweetAlert2Theme(actualTheme);
+    }
+
+    let currentTheme = THEMES.light;
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        currentTheme = THEMES.dark;
+    }
+    if (localStorage.hasOwnProperty(THEME_NAME)) {
+        currentTheme = localStorage.getItem(THEME_NAME);
     }
 
     const themeSwitcherHTML = 
     `<div class="switchElement">
-        <input id="switch-theme" type="checkbox" name="status" />
+        <input id="switch-theme" type="checkbox" name="status" ${currentTheme === "dark" ? "checked" : ""}/>
         <label for="switch-theme"></label>
     </div>`;
     let $themeSwitch = document.createElement("div");
     $themeSwitch.id = "theme-switch";
     $themeSwitch.innerHTML += themeSwitcherHTML;
     document.body.appendChild($themeSwitch);
-
+    let $changeSpanTheme = document.createElement("span");
+    $changeSpanTheme.id = "theme-filter"
+    document.body.appendChild($changeSpanTheme);
     var toggleSwitch = document.querySelector(
         '#theme-switch input[type="checkbox"]'
     );
 
-    let currentTheme = THEMES.light;
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        currentTheme = THEMES.dark;
-    }
-    
-    if (localStorage.hasOwnProperty(THEME_NAME)) {
-        currentTheme = localStorage.getItem(THEME_NAME);
-    }
-
-    document.documentElement.setAttribute("data-theme", currentTheme);
-    if (currentTheme === "dark") {
-        toggleSwitch.checked = true;
-    }
+    setTimeout(() => {
+        document.documentElement.setAttribute("data-theme", currentTheme);
+        window.enableSweetAlert2Theme(SWEETALERT_THEMES[currentTheme]);
+    }, 1000);
+   
 
     const switchTheme = (e) => {
         if (toggleSwitch.checked) {
             document.documentElement.setAttribute("data-theme", "dark");
             localStorage.setItem(THEME_NAME, "dark");
+            window.enableSweetAlert2Theme(SWEETALERT_THEMES.dark);
         } else {
             document.documentElement.setAttribute("data-theme", "light");
             localStorage.setItem(THEME_NAME, "light");
+            window.enableSweetAlert2Theme(SWEETALERT_THEMES.light);
         }
     };
 

@@ -1,7 +1,7 @@
 #thumbSVG {
 	height: 100%;
 	width: 100%;
-	background: #e2e2e2;
+	background: var(--back-editor);
 }
 
 #thumbSVG .svg-pan-zoom_viewport {
@@ -11,7 +11,7 @@
 #thumbViewContainer:hover {
 	/* transform: scale(1.4);
 	transform-origin: left bottom; */
-	box-shadow: 0 8px 32px 0 #1f268747, 0 0 32px 0px #ffffff, 5px 8px 32px -5px #ff0058b8, -5px 8px 32px -5px #03a9f4;
+	box-shadow: 0 0 32px 0px var(--black-white), 5px 8px 32px -5px var(--gradient-color-soft-1), -5px 8px 32px -5px var(--gradient-color-2);
 }
 
 #thumbViewContainer {
@@ -33,13 +33,7 @@
 	flex-flow: row nowrap;
 	position: static;
 	border-radius: 10px;
-	/* border: 2px solid black; */
-	/* border: 1px solid rgba( 255, 255, 255, 0.18); */
-	/* background: radial-gradient(circle at 50% 50%, #e2e2e2a8 70%, #e2e2e236); */
-	background: rgb(0 0 0 / 20%);
-	/* box-shadow: 6px 6px 12px #00000063, -6px -6px 12px #00000063; */
-	box-shadow: 0 8px 32px 0 #1f268747;
-	/* box-shadow: inset 0 0 10px 0px #00000080, 0 0 5px 0px #00000080; */
+	box-shadow: 0 8px 32px 0 var(--dark-soft);
 	transition: all 0.2s linear;
 }
 
@@ -48,10 +42,6 @@
 	height: 100%;
 	width: 100%;
 	overflow: hidden;
-}
-
-#thumbView {
-	background-color: rgba(255, 255, 255, .5);
 }
 
 #thumbView {
@@ -79,8 +69,7 @@
 /* slightly transparent fallback */
 
 #masked {
-	background-color: rgb(75 0 130 / 30%);
-	background-color: rgb(0 0 0 / 20%);
+	background-color: var(--contrast-traslucent-background);
 }
 
 /* if backdrop support: very transparent and blurred */

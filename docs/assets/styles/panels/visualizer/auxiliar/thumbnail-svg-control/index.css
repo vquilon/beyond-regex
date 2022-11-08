@@ -1,8 +1,4 @@
 #visualizer-graph {
-    /* padding: 4px; */
-    /* border: 1px solid black; */
-    /* background: #e2e2e2; */
-    /* overflow: auto; */
     cursor: grab;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -10,27 +6,17 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    /* min-height: 100px;
-    max-height: 500px; */
 }
 
 #visualizer-graph:active, div#visualizer-graphView:active {
     cursor: grabbing;
 }
 
-/* #visualizer-graph svg {
-    display: block;
-    margin: 0 auto;
-} */
 
 #visualizer-graph {
-    /* max-width: 80vw; */
     max-height: 50vw;
     width: 100%;
     height: 50vh;
-    /* height: 80%; */
-    border: 1px solid black;
-    /* margin: 10px; */
     overflow: hidden;
     border-radius: unset !important;
     background: transparent;
@@ -51,8 +37,7 @@
     z-index: -1;
     width: 100%;
     height: 100%;
-    background: #0000004d;
-    background: #e2e2e2;
+    background: var(--back-editor);
     pointer-events: none;
     position: absolute;
     border-radius: 10px;
@@ -66,7 +51,7 @@
     pointer-events: none;
     position: absolute;
     border-radius: 10px;
-    box-shadow: inset 4px 4px 5px #00000099, inset -10px -10px 15px -15px #ffffff3b, 10px 10px 15px -15px #ffffff24;
+    box-shadow: inset 4px 4px 5px var(--shadow-dark), inset -10px -10px 15px -15px var(--shadow-light), 10px 10px 15px -15px var(--shadow-dark);
 }
 
 #visualizer-graph > *, #visualizer-graph i.disabledJS-JS, #visualizer-graph:before, #visualizer-graph:after {
@@ -88,11 +73,8 @@
     width: 100%;
     height: 100%;
     min-height: 100%;
-    /* display: inline; */
     overflow: hidden;
     border-radius: unset !important;
-    /* border: solid 2px #000000cc; */
-    /* box-shadow: inset 0.3rem 0.3rem 0.5rem #0a0a0acc, inset -0.2rem -0.2rem 0.5rem rgb(83 83 83 / 80%); */
     position: relative;
 }
 
@@ -100,14 +82,14 @@
     height: 100%;
     width: 100%;
     display: inline;
-    /* width: inherit; */
     min-width: inherit;
     max-width: inherit;
-    /* height: inherit; */
     min-height: inherit;
     max-height: inherit;
-    background: #e2e2e2;
+    background: var(--back-editor);
     border-radius: 10px;
+    border-top-right-radius: unset;
+    border-top-left-radius: unset;
     /* Solve issue add Raphael a default position */
     top: 0 !important;
     left: 0 !important;

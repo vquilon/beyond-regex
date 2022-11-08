@@ -1,0 +1,8 @@
+#mainSVGContainer .backContainer {
+    fill: var(--back-editor);
+    stroke: none;
+}
+
+.swal2-icon {
+    border: none;
+}
