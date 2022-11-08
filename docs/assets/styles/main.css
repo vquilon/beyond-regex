@@ -61,8 +61,8 @@
   --shadow-highlight: #00000073;
 
   --panel-fixed-background: #efefefd9;
-  --panel-background: #dfdfdf;
-  --panel-border-color: #c5c5c5;
+  --panel-background: #d2d2d2;
+  --panel-border-color: #b2b2b2;
   --panel-background-grad-1: #cecece;
   --panel-background-grad-2: #ffffff;
 
@@ -79,6 +79,8 @@
 
   --contrast-traslucent-background: #00000030;
   --contrast-soft-background: #0000009c;
+
+  --border-primary-color: #9c9c9c;
 }
 
 [data-theme="dark"] {
@@ -105,9 +107,9 @@
   --background-grad-px: 0%;
   --background-grad-py: 0%;
 
-  --color-editor: #fff;
-  --color-caret: #fff;
-  --color-syntax: #fff;
+  --color-editor: #cecece;
+  --color-caret: #b34cff;
+  --color-syntax: #b34cff;
   --back-editor: #202020;
   --editor-border-line: #e0e0e042;
   --color-editor-margin: #3b3b3b;
@@ -115,6 +117,8 @@
 
   --contrast-traslucent-background: #cfcfcf30;
   --contrast-soft-background: #ffffff3b;
+
+  --border-primary-color: var(--primary-electric-color);
 }
 
 /* Short props */
@@ -136,6 +140,7 @@
   height: 5em;
   display: flex;
   background: var(--panel-background);
+  border: 4px dashed var(--border-primary-color);
   justify-content: center;
   align-items: center;
   border-top-left-radius: 10px;
@@ -214,7 +219,7 @@ body {
 
 html {
   /* background: linear-gradient(145deg, #3b3b3b, #242424); */
-  background: #2f2f2f;
+  background: #414141;
 }
 
 body {
@@ -933,7 +938,7 @@ span#close-side:hover .burger {
   padding: 10px;
   grid-row: 2;
   z-index: 4;
-  background: #e2e2e2;
+  background: var(--back-editor);
 }
 
 #beyond-editor .container-editor #editor-actions {
@@ -983,7 +988,7 @@ span#close-side:hover .burger {
   align-items: flex-start;
   justify-content: flex-end;
   grid-row: 2;
-  background: #e2e2e2;
+  background: var(--back-editor);
   z-index: 4;
   /* Solo para mostrar los flags a la izquierda no se necesita */
   /* width: 5em; */
@@ -994,7 +999,7 @@ span#close-side:hover .burger {
   color: #4b0082;
   padding: 0 10px;
   border: none;
-  background: #e2e2e2;
+  background: var(--back-editor);
   margin: 0;
   width: 100%;
   height: 100%;
@@ -1091,7 +1096,7 @@ span#close-side:hover .burger {
 }
 
 .checkbox__1 label {
-  background: #e2e2e2;
+  background: var(--back-editor);
   box-shadow: inset 0.2rem 0.2rem 0.8rem #fafafa,
     inset -0.2rem -0.2rem 0.8rem #7b7b7b, inset -1px -1px 2px #838383,
     1px 1px 0.5px #838383, 3px 3px 5px #838383, -0.2rem -0.2rem 0.5rem #ffffff;
@@ -1151,7 +1156,7 @@ span#close-side:hover .burger {
 /* } */
 
 .checkbox__3 label {
-  background: #e2e2e2;
+  background: var(--back-editor);
   box-shadow: inset 0.2rem 0.2rem 0.8rem #fafafa,
     inset -0.2rem -0.2rem 0.8rem #7b7b7b, inset -1px -1px 2px #838383,
     1px 1px 0.5px #838383, 3px 3px 5px #838383, -0.2rem -0.2rem 0.5rem #ffffff;
@@ -1594,7 +1599,7 @@ select:focus > option:checked {
   height: 100%;
   position: relative;
   z-index: 20;
-  background: #e2e2e2a6;
+  background: var(--back-editor);
   border-radius: 10px;
   display: flex;
   align-items: flex-start;

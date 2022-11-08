@@ -1,6 +1,7 @@
 .regex-quotes {
   width: 3ch;
   text-align: center;
+  color: var(--font-color);
 }
 
 #beyond-editor div.container-editor #editor-input .input:focus-within,
