@@ -125,7 +125,8 @@
 
 [data-theme="light"] {
   --font-color: #404040;
-  --font-soft-color: #959595;
+  /* --font-soft-color: #959595; */
+  --font-soft-color: #00000091;
   --font-shadow-soft-background: #ffffff52;
 
   --black-white: white;
@@ -168,7 +169,7 @@
 
 [data-theme="dark"] {
   --font-color: #f3f3f3;
-  --font-soft-color: #959595;
+  --font-soft-color: #ffffff9c;
   --font-shadow-soft-background: #56555554;
 
   --black-white: black;
