@@ -368,11 +368,13 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
     function createGroupContainerItem(regexJSONInfo, children_items, offset_x, offset_y, width, height) {
         return {
             type: "group",
-            id: regexJSONInfo.id || "",
+            // id: regexJSONInfo.id || "",
             dataset: {
-                indices: [regexJSONInfo.indices[0] + 1, regexJSONInfo.indices[1] - 1].join(","),
+                id: regexJSONInfo.id,
+                indices: regexJSONInfo.indices.join(","),
+                type: regexJSONInfo.type
             },
-            class: `g:${regexJSONInfo.type}:${[regexJSONInfo.indices[0] + 1, regexJSONInfo.indices[1] - 1].join(';')}`,
+            class: `group ${regexJSONInfo.type}`,
             children: children_items,
             transform: `t${offset_x},${offset_y}`,
             x: offset_x,
@@ -395,7 +397,12 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
         var rect_item_width = text_item_width + 12;
         var rect_item = {
             type: "rect",
-            class: `rect:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+            dataset: {
+                id: regexJSONInfo.id,
+                indices: regexJSONInfo.indices.join(","),
+                type: regexJSONInfo.type
+            },
+            class: `rect ${regexJSONInfo.type}`,
             x: 0,// offset_x,
             y: 0, // offset_y - rect_item_height / 2,
             width: rect_item_width,
@@ -405,7 +412,12 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
         };
         var text_item = {
             type: "text",
-            class: `text:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+            dataset: {
+                id: regexJSONInfo.id,
+                indices: regexJSONInfo.indices.join(","),
+                type: regexJSONInfo.type
+            },
+            class: `text ${regexJSONInfo.type}`,
             x: rect_item_width / 2, // offset_x + text_item_width / 2,
             y: rect_item_height / 2, // offset_y,
             text: rawText,
@@ -428,7 +440,7 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
             lineOutX: offset_x + rect_item_width
         }
     }
-    function createTextItemElement(regexJSONInfo, offset_x, offset_y, raw_text, background_color) {
+    function createTextItemElement(regexJSONInfo, offset_x, offset_y, raw_text, text_color) {
         var text_width, text_size_attr = getFontSizes(REGEX_FONTSIZE);
         var text_splitted = raw_text.split("\n");
         var textlines_height = text_splitted.length * text_size_attr.height;
@@ -439,13 +451,18 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
         return {
             label: {
                 type: "text",
-                class: `text:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+                dataset: {
+                    id: regexJSONInfo.id,
+                    indices: regexJSONInfo.indices.join(","),
+                    type: regexJSONInfo.type
+                },
+                class: `text ${regexJSONInfo.type} noBack`,
                 x: offset_x,
                 y: offset_y - textlines_height / 2 - 4,
                 text: raw_text,
                 "font-size": REGEX_FONTSIZE,
                 "font-family": FONT_FAMILY,
-                fill: background_color || "#444"
+                fill: text_color || "#444"
             },
             x: offset_x - text_width / 2,
             y: offset_y - textlines_height - 4,
@@ -455,21 +472,29 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
     }
     function createLinesPathItem(regexJSONInfo, offset_x, offset_y, offset_x_to, _fromItem = null, _toItem = null) {
         // Se generan al final todos los paths por lo que no hay informacion en los paths util
-        let idInfo = "linejoint";
+        // let idInfo = "linejoint";
+        let dataset = {
+            path: "linejoint",
+            type: regexJSONInfo.type
+        }
         if (_fromItem !== null) {
             // El filter es para comprobar que tiene la propiedad
-            idInfo = `${idInfo}::${_fromItem.items.map(item => item.class)/*.filter(x => x)*/.join('_')}`;
+            // idInfo = `${idInfo}::${_fromItem.items.map(item => item.class)/*.filter(x => x)*/.join('_')}`;
+            dataset.fromitem = _fromItem.items.map(item => item.dataset.id).join(',');
         }
         if (_toItem !== null) {
-            idInfo = `${idInfo}::${_toItem.items.map(item => item.class)/*.filter(x => x)*/.join('_')}::`;
+            // idInfo = `${idInfo}::${_toItem.items.map(item => item.class)/*.filter(x => x)*/.join('_')}::`;
+            dataset.toitem = _toItem.items.map(item => item.dataset.id).join(',');
         }
 
         if (regexJSONInfo.hasOwnProperty('indices')) {
-            idInfo = `any:${regexJSONInfo.indices.join(';')}`;
+            dataset.indices = regexJSONInfo.indices.join(",")
+            dataset.path = "any";
         }
         return {
             type: "path",
-            class: `path:${idInfo}`,
+            dataset: dataset,
+            class: `path ${regexJSONInfo.type} ${dataset.path}`,
             x: offset_x,
             y: offset_y,
             path: ["M", offset_x, offset_y, "H", offset_x_to],
@@ -507,7 +532,13 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
         }
         return {
             type: "path",
-            class: `path:curve:${regexJSONInfo.indices.join(';')}`,
+            dataset: {
+                id: regexJSONInfo.id,
+                indices: regexJSONInfo.indices.join(","),
+                type: regexJSONInfo.type,
+                path: "curve"
+            },
+            class: `path curve ${regexJSONInfo.type}`,
             path: path,
             "stroke-linecap": "butt",
             "stroke-linejoin": "round",
@@ -520,8 +551,12 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
         var _circle_radius = 10;
         var circle_item = {
             type: "circle",
-            id: regexJSONInfo.id,
-            class: `circle:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+            dataset: {
+                id: regexJSONInfo.id,
+                indices: regexJSONInfo.indices.join(","),
+                type: regexJSONInfo.type
+            },
+            class: `circle ${regexJSONInfo.type}`,
             fill: fillColor,
             cx: _circle_radius, // offset_x + _circle_radius,
             cy: 0, // offset_y,
@@ -682,9 +717,14 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
 
             var groupinfo_rect_item = {
                 type: "rect",
-                id: regexJSONInfo.id,
-                indices: regexJSONInfo.indices,
-                class: `rect:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+                // id: regexJSONInfo.id,
+                // indices: regexJSONInfo.indices,
+                dataset: {
+                    id: regexJSONInfo.id,
+                    indices: regexJSONInfo.indices.join(","),
+                    type: regexJSONInfo.type,
+                },
+                class: `rect ${regexJSONInfo.type}`,
                 x: 0,
                 y: commentElement.y - 10,
                 r: 6,
@@ -784,7 +824,13 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
                 f += 10,
                 m = {
                     type: "path",
-                    class: `path:repeat:${regexJSONInfo.indices.join(';')}`,
+                    dataset: {
+                        id: regexJSONInfo.id,
+                        indices: regexJSONInfo.indices.join(","),
+                        type: regexJSONInfo.type,
+                        path: "repeat"
+                    },
+                    class: `path repeat ${regexJSONInfo.type}`,
                     path: ["M", u.x + 10, offset_y, "Q", offset_x, offset_y, offset_x, offset_y + x, "V", offset_y + v - x, "Q", offset_x, offset_y + v, offset_x + x, offset_y + v, "H", offset_x + y - x, "Q", offset_x + y, offset_y + v, offset_x + y, offset_y + v - x, "V", offset_y + x, "Q", offset_x + y, offset_y, u.x + u.width + 10, offset_y],
                     _translate: _translateFunc,
                     stroke: "maroon",
@@ -803,7 +849,13 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
                     f += 10,
                     b = {
                         type: "path",
-                        class: `path:repeat:${regexJSONInfo.indices.join(';')}`,
+                        dataset: {
+                            id: regexJSONInfo.id,
+                            indices: regexJSONInfo.indices.join(","),
+                            type: regexJSONInfo.type,
+                            path: "repeat"
+                        },
+                        class: `path repeat ${regexJSONInfo.type}`,
                         path: ["M", offset_x, offset_y, "Q", offset_x + x, offset_y, offset_x + x, offset_y - x, "V", offset_y - _ + x, "Q", offset_x + x, offset_y - _, offset_x + 20, offset_y - _, "H", offset_x + w - 20, "Q", offset_x + w - x, offset_y - _, offset_x + w - x, offset_y - _ + x, "V", offset_y - x, "Q", offset_x + w - x, offset_y, offset_x + w, offset_y],
                         _translate: _translateFunc,
                         stroke: repeat_info.nonGreedy ? "darkgreen" : "#333",
@@ -962,7 +1014,12 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
             p += 12, m = 4 * (y.length - 1) + y.length * x + 12;
             var C = {
                 type: "rect",
-                class: `rect:charsetgroup:${regexJSONInfo.indices.join(';')}`,
+                dataset: {
+                    id: regexJSONInfo.id,
+                    indices: regexJSONInfo.indices.join(","),
+                    type: regexJSONInfo.type,
+                },
+                class: `rect charsetgroup ${regexJSONInfo.type}`,
                 x: offset_x,
                 y: offset_y - m / 2,
                 r: 4,
@@ -1015,9 +1072,14 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
             if (regexJSONInfo.num) {
                 var groupinfo_rect_item = {
                     type: "rect",
-                    id: regexJSONInfo.id,
-                    indices: regexJSONInfo.indices,
-                    class: `rect:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+                    // id: regexJSONInfo.id,
+                    // indices: regexJSONInfo.indices,
+                    dataset: {
+                        id: regexJSONInfo.id,
+                        indices: regexJSONInfo.indices.join(","),
+                        type: regexJSONInfo.type,
+                    },
+                    class: `rect ${regexJSONInfo.type}`,
                     x: 0,
                     y: subgroups_items_element.y - 10,
                     r: 6,
@@ -1036,9 +1098,14 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
             else {
                 var groupinfo_rect_item = {
                     type: "rect",
-                    id: regexJSONInfo.id,
-                    indices: regexJSONInfo.indices,
-                    class: `rect:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+                    // id: regexJSONInfo.id,
+                    // indices: regexJSONInfo.indices,
+                    dataset: {
+                        id: regexJSONInfo.id,
+                        indices: regexJSONInfo.indices.join(","),
+                        type: regexJSONInfo.type,
+                    },
+                    class: `rect ${regexJSONInfo.type}`,
                     x: 0,
                     y: subgroups_items_element.y - 10,
                     r: 6,
@@ -1134,7 +1201,12 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
 
             var rect_item = {
                 type: "rect",
-                class: `rect:${regexJSONInfo.type}:${regexJSONInfo.indices.join(';')}`,
+                dataset: {
+                    id: regexJSONInfo.id,
+                    indices: regexJSONInfo.indices.join(","),
+                    type: regexJSONInfo.type,
+                },
+                class: `rect ${regexJSONInfo.type}`,
                 x: offsetX,
                 y: group_items_result.y - 8,
                 r: 6,

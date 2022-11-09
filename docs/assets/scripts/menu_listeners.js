@@ -17,9 +17,9 @@ const init_menu_listeners = () => {
         let translateSidebar = $sidebar.sideOffset + _x - $sidebar.offsetX;
         let closeBounds = $closeSide.getBoundingClientRect();
         let lefPaddingSidebar = parseInt(window.getComputedStyle($sidebar).paddingLeft);
-        
+
         // Limites de movimiento
-        if ( translateSidebar + lefPaddingSidebar < 0 && _x > closeBounds.width*2 ) {
+        if (translateSidebar + lefPaddingSidebar < 0 && _x > closeBounds.width * 2) {
             $sidebar.style.setProperty("transform", `translateX(${translateSidebar}px)`, "important");
         }
     }
@@ -43,15 +43,15 @@ const init_menu_listeners = () => {
     };
 
     $closeSide.addEventListener('mousedown', e => {
-        sideDown(e, touch=false);
+        sideDown(e, touch = false);
     });
     $closeSide.addEventListener('touchstart', e => {
-        sideDown(e, touch=true);
-    },  {passive: true});
+        sideDown(e, touch = true);
+    }, { passive: true });
 
     const sideMove = (e, touch) => {
         let $sidebar = document.querySelector("#sidebar");
-        if ( $sidebar.isGrabbed ) {
+        if ($sidebar.isGrabbed) {
             e.preventDefault();
             $sidebar.style.transition = "none";
             $sidebar.isDragging = true;
@@ -69,40 +69,40 @@ const init_menu_listeners = () => {
         }
     };
 
-     const sideUp = (e, touch) => {
+    const sideUp = (e, touch) => {
         let $sidebar = document.querySelector("#sidebar");
         let $closeSide = document.querySelector("#close-side");
-        if ( $sidebar.isDragging ) {
+        if ($sidebar.isDragging) {
             let _posX = $sidebar.posX;
 
             $sidebar.isGrabbed = false;
             $sidebar.isDragging = false;
             $sidebar.style.transform = "";
             $sidebar.style.transition = "";
-            
+
             $sidebar.sideOffset = 0;
             $sidebar.posX = 0;
 
             // Check si se encuentra cerrado, y se mueve mas de 100px respecto al mousedown
             // se abre el menu
-            if ( e.target != $closeSide || touch ) {
-                if ( ! $mainContainer.classList.contains("menu-open") ) {
-                    if ( _posX - $sidebar.offsetX > 100 ) {
+            if (e.target != $closeSide || touch) {
+                if (!$mainContainer.classList.contains("menu-open")) {
+                    if (_posX - $sidebar.offsetX > 100) {
                         $mainContainer.classList.add("menu-open");
                     }
                 }
                 // Check si se encuentra abierto, y se ha movido mas de 100px respecto al mousedown
                 // Se cierra
-                if ( $mainContainer.classList.contains("menu-open") ) {
-                    if ( _posX - $sidebar.offsetX < -100 ) {
+                if ($mainContainer.classList.contains("menu-open")) {
+                    if (_posX - $sidebar.offsetX < -100) {
                         $mainContainer.classList.remove("menu-open");
                     }
                 }
             }
-            
+
             $sidebar.offsetX = 0;
         }
-        else if ( $sidebar.isGrabbed ) {
+        else if ($sidebar.isGrabbed) {
             $sidebar.isGrabbed = false;
             $sidebar.style.transform = "";
             $sidebar.style.transition = "";

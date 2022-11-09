@@ -6,3 +6,17 @@
 .swal2-icon {
     border: none;
 }
+
+#mainSVGContainer g > text.noBack {
+    fill: var(--font-color);
+}
+
+#mainSVGContainer path {
+    /* stroke: var(--primary-electric-color); */
+    stroke: var(--font-color);
+}
+
+#mainSVGContainer path.curve.choice {
+    /* stroke: var(--primary-color); */
+    stroke: var(--font-color)
+}

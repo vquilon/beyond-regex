@@ -14,12 +14,12 @@
     <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/install-as-app.css">
     {% include editor/circle-selector/styles.html %}
     {% include editor/flag-selector/styles.html %}
-    
+
     {% include mobile/styles.html %}
 
     {% include advent/styles.html %}
-    
-    
+
+
     <!-- Scripts para el control de la barra de conexion -->
     {% include offline-status/scripts.html %}
 
@@ -32,24 +32,7 @@
     <script defer src="{{ site.baseurl }}/assets/scripts/menu_listeners.js"></script>
     <script defer src="{{ site.baseurl }}/assets/scripts/advent/advent_listeners.js"></script>
     <script type="text/javascript">
-        window.onload = function() {
-            changeDark2LightTheme();
-            let [sidebarMove, sidebarUp] = init_menu_listeners();
-            document.addEventListener('mousemove', e => {
-                sidebarMove(e, touch=false);
-
-            });
-            document.addEventListener('touchmove', e => {
-                sidebarMove(e, touch=true);
-            });
-            document.addEventListener('mouseup', e => {
-                sidebarUp(e, touch=false);
-            });
-            document.addEventListener('touchend', e => {
-                sidebarUp(e, touch=true);
-            });
-            advent_listeners();
-        };
+        {% include head / on_load.js %}
     </script>
 
 
