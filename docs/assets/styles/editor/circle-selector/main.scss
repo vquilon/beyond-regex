@@ -211,12 +211,12 @@ $i: 1;
 }
 
 .select-box .select-box__current .select-box__value .select-box__input-text .code-icon {
-    text-shadow: -10px -10px 30px #ffffff82;
+    text-shadow: -10px -10px 30px var(--text-highlight-icon);
     // filter: drop-shadow(2px 2px 2px #838383);
 }
 
 .select-box:hover .select-box__current .select-box__value .select-box__input-text .code-icon {
-  background: linear-gradient(90deg, #03a9f4, #ff0058);
+  background: linear-gradient(90deg, var(--gradient-color-1), var(--gradient-color-2));
   -webkit-background-clip: text;
   -moz-background-clip: text;
   -webkit-text-fill-color: #47474700;

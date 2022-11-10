@@ -33,7 +33,7 @@
     height: calc((30px + 5px) * 3 + 10px + 1em);
     top: calc(100% - 1em);
     right: 0;
-    background: #e2e2e2;
+    background: var(--back-editor);
     border-radius: 0.5em;
     box-shadow: unset;
     z-index: -1;
@@ -47,12 +47,12 @@
     transition: visibility 0s, transform 0.3s, box-shadow 0.1s;
     transform: none;
     visibility: visible;
-    box-shadow: 0 0 20px #0000007d;
+    box-shadow: 0 0 20px var(--shadow-dark);
 }
 
 
 label.label-input {
-    background: #e2e2e2;
+    background: var(--back-editor);
     cursor: pointer;
 }
 
@@ -63,7 +63,7 @@ label.label-input {
     line-height: 1;
     font-size: 1em;
     height: 1em;
-    box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa;
+    box-shadow: inset 0.2rem 0.2rem 0.5rem var(--shadow-icon-light), inset -0.2rem -0.2rem 0.5rem var(--shadow-icon-dark);
     border-radius: 0.5em;
     padding: 0.2em 0.5em;
     box-sizing: content-box;
@@ -87,13 +87,13 @@ div#container-show {
     grid-column: 2;
 }
 
-#container-input:hover #container-show #input-show {
-    text-shadow: -10px -10px 30px #ffffff82;
-    background: linear-gradient(90deg, #03a9f4, #ff0058);
+#container-input:hover #container-show #input-show, div#container-input:has(input:checked) #input-show {
+    /* text-shadow: -10px -10px 30px var(--text-highlight-icon); */
+    background: linear-gradient(90deg, var(--gradient-color-1), var(--gradient-color-2));
     background-clip: text;
     -webkit-background-clip: text;
     -moz-background-clip: text;
-    -webkit-text-fill-color: #47474700;
+    -webkit-text-fill-color: transparent;
 }
 
 label.label-input,
@@ -178,16 +178,8 @@ label.label-input {
     user-select: none;
 }
 
-
-/* .checkbox__2 label:hover i { */
-/* color: white; */
-/* text-shadow: 0 0 10px white, 0 0 2px #c81aff, 0 0 10px #c81aff, 0 0 10px #c81aff, 0 0 20px #c81aff; */
-/* text-shadow: 0 0 10px #ffffff, -1px 0px 2px #03a9f4, 1px 0px 2px #ff0058, -1px 0px 4px #03a9f4, 1px 0px 4px #ff0058, -4px 0px 8px #03a9f4, 4px 0px 8px #ff0058; */
-/* -webkit-text-fill-color: white; */
-/* } */
-
 .checkbox__2 label>* {
-    color: #474747;
+    color: var(--font-soft-color);
 }
 
 #editor-flags label {
@@ -196,9 +188,9 @@ label.label-input {
     justify-content: center;
     font-weight: 500;
     line-height: 1;
-    color: #313030c2;
+    color: var(--font-soft-color);
     /* transition: 0.3s ease; */
-    box-shadow: inset 0.2rem 0.2rem 0.8rem #fafafa, inset -0.2rem -0.2rem 0.8rem #7b7b7b, inset -1px -1px 2px #838383, 1px 1px 0.5px #838383, 3px 3px 5px #838383, -0.2rem -0.2rem 0.5rem #ffffff;
+    box-shadow: inset 0.2rem 0.2rem 0.8rem var(--shadow-inset-light-neuro), inset -0.2rem -0.2rem 0.8rem var(--shadow-inset-dark-neuro), inset -1px -1px 2px var(--shadow-inset-dark-neuro), 1px 1px 0.5px var(--shadow-dark-neuro), 3px 3px 5px var(--shadow-dark-neuro), -0.2rem -0.2rem 0.5rem var(--shadow-light-neuro);
     cursor: pointer;
     position: relative;
     border-radius: 0.5rem;
@@ -215,25 +207,28 @@ label.label-input {
 #editor-flags input#flag-m:checked~label[for="flag-m"],
 #editor-flags input#flag-g:checked~label[for="flag-g"] {
     font-weight: 500;
-    font-size: 85% !important;
-    box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa;
+    font-size: 90% !important;
+    /* box-shadow: inset 0.2rem 0.2rem 0.5rem var(--shadow-dark-neuro), inset -0.2rem -0.2rem 0.5rem var(--shadow-light-neuro); */
+    box-shadow: none;
+    border: 1px dashed var(--panel-border-color);
 }
 
 #editor-flags input#flag-i:active~label[for="flag-i"],
 #editor-flags input#flag-m:active~label[for="flag-m"],
 #editor-flags input#flag-g:active~label[for="flag-g"] {
     font-weight: 500;
-    font-size: 85% !important;
-    box-shadow: inset 0.2rem 0.2rem 0.5rem #7b7b7b, inset -0.2rem -0.2rem 0.5rem #fafafa;
+    font-size: 90% !important;
+    box-shadow: inset 0.2rem 0.2rem 0.5rem var(--shadow-dark-neuro), inset -0.2rem -0.2rem 0.5rem var(--shadow-light-neuro);
+    border: 1px dashed var(--panel-border-color);
 }
 
 
 #editor-flags input#flag-i:checked~label[for="flag-i"]>*,
 #editor-flags input#flag-m:checked~label[for="flag-m"]>*,
 #editor-flags input#flag-g:checked~label[for="flag-g"]>* {
-    background: linear-gradient(0deg, #03a9f4, #ff0058);
+    background: linear-gradient(0deg, var(--gradient-color-1), var(--gradient-color-2));
     background-clip: text;
     -webkit-background-clip: text;
     -moz-background-clip: text;
-    -webkit-text-fill-color: #47474700;
+    -webkit-text-fill-color: transparent;
 }
