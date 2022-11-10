@@ -1190,12 +1190,6 @@ span#close-side:hover .burger {
   user-select: none;
 }
 
-.checkbox__1 input:checked~label>* {
-  /* color: white;
-    -webkit-text-fill-color: white;
-    text-shadow: 0 0 10px #ffffff, -1px 0px 5px #03a9f4, 1px 0px 5px #ff0058; */
-  text-shadow: 0 0 20px #00000087;
-}
 
 .checkbox__1 label {
   background: var(--back-editor);
