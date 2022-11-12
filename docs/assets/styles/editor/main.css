@@ -294,6 +294,7 @@
 }
 
 /*Estilos de sintaxis*/
+/*
 .code-inline {
   color: rgb(78, 204, 163);
   background-color: rgba(78, 204, 163, 0.08);
@@ -322,6 +323,7 @@ ins {
   color: #ed6663;
   text-decoration: none;
 }
+*/
 
 .special-chars {
   position: relative;
@@ -393,57 +395,53 @@ ins {
   font-weight: bold;
 }
 .regex .assert {
-  background: #03c5c845;
-  color: #000080;
-  font-weight: bold;
+  background: var(--assert-background);
+  color: var(--assert-color);
+  /* font-weight: bold; */
 }
 .regex .AssertBegin {
-  background: #4b00823d;
-  color: #4b0082;
+  background: var(--assert-begin-background);
+  color: var(--assert-begin-color);
 }
 
 .regex .assert.AssertEnd {
-  background: #4b00823d;
-  color: #4b0082;
+  background: var(--assert-end-background);
+  color: var(--assert-end-color);
 }
 
 .regex .assert.AssertLookahead {
-  background: #6495ed75; /* color: #004f72; */
-}
-
-.regex .parenthesis {
-  color: green;
-  font-weight: bold;
-}
-
-.regex span.group:hover {
-  background: #4df06a0f;
-  outline: 2px #00961b8f solid;
+  background: var(--assert-look-ahead-background);
+  /* color: var(--assert-look-ahead-color); */
 }
 
 span.assert.AssertLookahead > .parenthesis {
-  color: #004f72;
+  color: var(--assert-look-ahead-parenthesis);
+}
+
+.regex .parenthesis {
+  color: var(--parenthesis);
+  /* font-weight: bold; */
+}
+
+.regex span.group:hover {
+  background: var(--group-background);
+  outline: 2px var(--group-outline) solid;
 }
 
 /* metasequence */
 .regex .or {
-  font-weight: bold;
-  color: #c204c2;
+  /* font-weight: bold; */
+  color: var(--meta-or);
 }
 .regex .charset {
-  background: #f47f0859;
-  color: #603000;
+  background: var(--charset-background);
+  color: var(--charset-color);
 }
 
 /* char class */
 .regex .charset span {
-  background: #e0a060;
-  color: #302000;
-}
-
-/* char class: metasequence */
-.regex .charset span {
-  color: #cd6e0f;
+  background: var(--charset-token-background);
+  color: var(--charset-token-color);
 }
 
 /* char class: range-hyphen */
@@ -451,6 +449,31 @@ span.assert.AssertLookahead > .parenthesis {
   background: #00c0004a;
   color: #018f07;
 }
+
+/* group: depth 1 */
+.regex .g2 {
+  background: #c0c00063;
+  color: #646402;
+}
+
+/* group: depth 2 */
+.regex .g3 {
+  background: #008000;
+  color: #ffffff;
+}
+
+/* group: depth 3 */
+.regex .g4 {
+  background: #808000;
+  color: #ffffff;
+}
+
+/* group: depth 4 */
+.regex .g5 {
+  background: #00ff00;
+  color: #000000;
+}
+
 /* 
 .regex .unicode,
 .regex .hexadecimal,
@@ -502,45 +525,20 @@ span.assert.AssertLookahead > .parenthesis {
 } */
 
 .regex .unicode {
-  color: rgb(78, 122, 204);
+  color: var(--escape-unicode-color);
 }
 .regex .hexadecimal {
-  color: rgb(78, 204, 163);
+  color: var(--escape-hexadecimal-color);
 }
 .regex .octal {
-  color: rgb(101, 78, 204);
+  color: var(--escape-octal-color);
 }
 
-/* group: depth 1 */
-.regex .g2 {
-  background: #c0c00063;
-  color: #646402;
-}
-
-/* group: depth 2 */
-.regex .g3 {
-  background: #008000;
-  color: #ffffff;
-}
-
-/* group: depth 3 */
-.regex .g4 {
-  background: #808000;
-  color: #ffffff;
-}
-
-/* group: depth 4 */
-.regex .g5 {
-  background: #00ff00;
-  color: #000000;
-}
-
-/* group: depth 5 */
-.regex .err {
+/* .regex .err {
   background: #ff00004d;
   color: #a50000;
   text-decoration: underline 0.05em red wavy;
-}
+} */
 
 /* error */
 .regex b,
@@ -553,5 +551,5 @@ span.assert.AssertLookahead > .parenthesis {
 
 .regex i {
   font-style: italic;
-  color: #028061;
+  color: var(--quantifier-color);
 }

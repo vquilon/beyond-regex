@@ -33,6 +33,10 @@
     grid-column: 1/4;
 }
 
+#editor-terminal {
+    grid-column: 1/4;
+}
+
 
 /* FLAGS */
 #editor-flags #container-input {

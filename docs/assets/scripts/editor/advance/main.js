@@ -1005,7 +1005,7 @@ function EditorAdvance(options = {}) {
                 $inputCarets.innerHTML = "";
                 $inputSelections.innerHTML = "";
                 $editor.dragging = true;
-                $editor.internalDrag = true;
+                if ($editor.mousedown) $editor.internalDrag = true;
             }
             $input.focus();
         }
@@ -1498,6 +1498,7 @@ function EditorAdvance(options = {}) {
         $syntax.addEventListener("mousedown", (event) => {
             // TODO: El metodo isMousePosInSelection, hay que perfeccionar para que un $selection tenga asociado un id de $caret
             //  y de esta forma obtener el caret correspondiente de una seleccion, o agregar los mismos datos de start end del $caret
+            $editor.mousedown = true;
             if ($editor.dragging) {
                 if ($inputCarets.contains($editor.dragCaret)) {
                     $inputCarets.removeChild($editor.dragCaret);
@@ -1557,6 +1558,7 @@ function EditorAdvance(options = {}) {
         }, true);
         $syntax.addEventListener("mouseup", (event) => {
             $editor.selecting = false;
+            $editor.mousedown = false;
 
             if ($editor.dragging) {
                 let [$selection, caretPos] = isMouseInSelection(event.clientX, event.clientY);

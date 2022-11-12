@@ -71,7 +71,7 @@ var EditorParser = (options) => {
 
 
         var $editorTerminal = $containerEditor.querySelector('#editor-terminal');
-        var $terminalStats = $editorTerminal.querySelector('#terminal-stats');
+        var $terminalStats = $containerEditor.querySelector('#editor-stats');
         var $realTimeCheck = $containerEditor.querySelector('#real-time-check');
         var $highlight_editor = $containerEditor.querySelector('#highlighted-editor')
         var $terminalError = $containerEditor.querySelector('#terminal-error');
