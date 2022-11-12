@@ -204,9 +204,9 @@
   /* text-decoration-line: underline; */
   /* text-decoration-color: red; */
   /* text-decoration-style: wavy; */
-  color: white;
-  background: #d93a3a;
-  border-radius: 10px;
+  color:var(--error-font-color);
+  background: var(--error-background);
+  border-radius: 5px;
   min-height: calc(var(--line-height-ratio) * var(--font-size));
   min-width: 1ch;
 }

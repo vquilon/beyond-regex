@@ -5,9 +5,9 @@
 #beyond-editor div.container-editor>div#editor-language {
     grid-row: 1;
     grid-column: 1;
-    background: #d2d2d2;
+    background: var(--panel-background);
     border-top-left-radius: 10px;
-    border-bottom: 2px #0000003d;
+    border-bottom: 2px var(--border-primary-color);
     border-bottom-style: dashed;
 }
 
@@ -21,9 +21,9 @@
 #beyond-editor div.container-editor>div#editor-flags {
     grid-row: 1;
     grid-column: 3;
-    background: #d2d2d2;
+    background: var(--panel-background);
     border-top-right-radius: 10px;
-    border-bottom: 2px #0000003d;
+    border-bottom: 2px var(--border-primary-color);
     border-bottom-style: dashed;
     justify-content: center;
 }

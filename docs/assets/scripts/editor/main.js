@@ -99,7 +99,7 @@ var EditorParser = (options) => {
         setInnerText($terminalStats.querySelector("#re-groups .stat-value"), reGroups);
     }
     const hideError = function () {
-        setInnerText($errorDef, "Correct syntax");
+        setInnerText($errorDef, "");
         $terminalError.classList.add("correct-syntax");
         linterCalls.cleanLinter();
         // $editorError.style.display = 'none';
