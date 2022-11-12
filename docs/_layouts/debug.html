@@ -19,32 +19,7 @@ window.onbeforeunload = function (e) {
                 return confirmationMessage; //Webkit, Safari, Chrome
             }
         }
-
-        window.onload = function () {
-            changeDark2LightTheme();
-            let [sidebarMove, sidebarUp] = init_menu_listeners();
-            document.addEventListener('mousemove', e => {
-                sidebarMove(e, touch=false);
-            });
-            document.addEventListener('touchmove', e => {
-                sidebarMove(e, touch=true);
-            }, {passive: false});
-            document.addEventListener('mouseup', e => {
-                sidebarUp(e, touch=false);
-            });
-            document.addEventListener('touchend', e => {
-                sidebarUp(e, touch=true);
-            });
-            // OFFLINE HANDLER
-            offlineHandler();
-            let editorParser = EditorParser({
-                containerSelector: ".container-editor",
-                debug: true,
-                regexSONId: "regex-json",
-                raphaelJSONId: "raphael-json",
-                loader_view_id: "graph-loader",
-            });
-        }
+        {% include head/on_load.js %}
 </script>
 <noscript>
 <h2 id="noscript">Please enable JavaScript in order to use all features</h2>

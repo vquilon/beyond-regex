@@ -15,9 +15,7 @@
 <!-- seo tags (meta, icons, Open graph, etc) -->
 <!-- noscript -->
 <!-- template -->
-{% include head/meta.html %}
-<!-- SEO tags -->
-{% seo %} {% include head/base_styles.html %} {% include head/building-styles.html %}
+{% include head/meta.html %} {% include head/base_styles.html %} {% include head/building-styles.html %}
 <!-- Estilos propios del PWA -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/pwa.css"><link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/install-as-app.css">
 {% include panels/visualizer/auxiliar/thumbnail-svg-control/styles.html %} {% include panels/visualizer/styles.html %} {% include editor/circle-selector/styles.html %} {% include editor/flag-selector/styles.html %} {% include editor/styles.html %} {% include mobile/styles.html %}
@@ -30,12 +28,15 @@
 <!-- {% include dom-physics-engine/styles.html %} -->
 {% include panels/visualizer/scripts.html %} {% include panels/visualizer/auxiliar/thumbnail-svg-control/scripts.html %}
 <!-- {% include dom-physics-engine/scripts.html %} -->
-<!-- ON LOADERS --><script defer="defer" src="{{ site.baseurl }}/assets/scripts/editor/on_load.js"></script>
+<!-- ON LOADERS -->
+<script defer="defer" src="{{ site.baseurl }}/assets/scripts/editor/on_load.js"></script>
 <script defer="defer" src="{{ site.baseurl }}/assets/scripts/panels/visualizer/on_load.js"></script>
 <!-- DEFINE / INITIALIZE LISTENERS -->
 <script defer="defer" src="{{ site.baseurl }}/assets/scripts/switch_theme.js"></script>
 <script defer="defer" src="{{ site.baseurl }}/assets/scripts/menu_listeners.js"></script>
 <script defer="defer" src="{{ site.baseurl }}/assets/scripts/init_listeners.js"></script>
+<!-- SEO tags -->
+{% seo %}
 <noscript>
 <h2 id="noscript">Please enable JavaScript in order to use all features</h2>
 </noscript>
@@ -52,4 +53,4 @@ document.body.classList.add("js-enabled");
 </div>
 {% include offline-status/connection-box.html %} {% if site.environment == "production" and site.gtag %} {% include cookie-consent.html %} {% endif %}
 </body>
-</html>>
+</html>

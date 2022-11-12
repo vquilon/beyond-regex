@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-{% include head/meta.html %} {% include head/base_styles.html %} {% include mobile/styles.html %}
+{% include head/meta.html %} {% include head/base_styles.html %} {% include mobile/styles.html %} {% include head/building-styles.html %}
 <!-- VENDORS SCRIPTS -->
 {% include head/base_scripts.html %}
+<!-- DEFINE / INITIALIZE LISTENERS -->
+<script defer="defer" src="{{ site.baseurl }}/assets/scripts/switch_theme.js"></script>
+<script defer="defer" src="{{ site.baseurl }}/assets/scripts/menu_listeners.js"></script>
+<script type="text/javascript">
+{% include head/on_load.js %}
+</script>
 <!-- SEO tags -->
 {% seo %}
 <noscript>
@@ -14,6 +20,7 @@
 <script defer="defer">
 document.body.classList.add("js-enabled");
 </script>
+{% include svg-utils/svg-filters.html %}
 <div id="container-main">
 {{ content }}
 </div>
