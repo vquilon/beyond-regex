@@ -129,6 +129,7 @@
 
   body span#theme-filter {
     --focal-size: 0%;
+    transition: --focal-size 0s ease !important;
   }
 }
 
@@ -223,6 +224,7 @@
 
   body span#theme-filter {
     --focal-size: 100%;
+    transition: --focal-size 0s ease !important;
   }
 }
 
@@ -558,7 +560,17 @@ body:before {
   inherits: false;
 }
 
-body span#theme-filter {
+[data-theme="dark"] body #theme-filter {
+  --focal-size: 100% !important;
+  transition: --focal-size 1s ease !important;
+}
+
+[data-theme="light"] body #theme-filter {
+  --focal-size: 0% !important;
+  transition: --focal-size 1s ease !important;
+}
+
+[data-theme] body span#theme-filter {
   --focal-size: 0%;
   position: absolute;
   backdrop-filter: invert(1);
@@ -574,10 +586,6 @@ body span#theme-filter {
   -webkit-mask-image: radial-gradient(circle at 50% 0, transparent var(--focal-size), black 0%);
   mask-image: radial-gradient(circle at 50% 0, transparent var(--focal-size), black 0%);
   transition: --focal-size 1s ease;
-}
-
-[data-theme="dark"] body span#theme-filter {
-  --focal-size: 100%;
 }
 
 

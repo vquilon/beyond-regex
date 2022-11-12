@@ -36,6 +36,9 @@ const CHANGELOG = {
       "Linter (preview)",
       "Cleaning error interface",
       "Accept/Reject Analytics Cookies"
+    ],
+    "20":[
+        "Dark/Light Theme"
     ]
   }
 }
