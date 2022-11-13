@@ -506,10 +506,12 @@ var EditorParser = (options) => {
         //     _parseRegex(regExpresion);
         // });
 
-        let langs = document.querySelectorAll("[name='languageRegex']");
-        for (var i = 0, max = langs.length; i < max; i++) {
-            langs[i].onclick = function () {
-                processInput()
+        let langs = document.querySelectorAll("[name='languageRegex']").forEach(el=>{
+            el.addEventListener("click", event=>{
+                
+
+                // Cambiar la regex que hay a javascript ?
+                processInput();
                 // Aqui deberia notificar al resto de paneles que la regex se ha parseado
                 // Puede que utilizando los message de javascript y cada panel tiene un listener de escucha
                 if ($loader_view !== null) {
@@ -522,12 +524,34 @@ var EditorParser = (options) => {
                         }
                     }
                 }
-            }
-        }
+            });
+        });
 
-        $highlight_editor.addEventListener("change", (event) => {
+        $highlight_editor.addEventListener("change", event => {
             if (!$highlight_editor.checked) $input.classList.add("no-highlighted");
             else $input.classList.remove("no-highlighted");
+        });
+
+        // Gestionar el uso de un escape u otro para definir la regex, o las regex quotes
+        $containerEditor.querySelectorAll("#editor-input .regex-quotes").forEach((el, i) => {
+            el.addEventListener("click", event => {
+                let reLang = getReLanguage();
+                reLangQuotes = {
+                    python: [`"`, `'`, `"""`, `'''`],
+                    javascript6: [`/`, `'`, `"`, "`"]
+                }
+                reLangPrev = {
+                    python: "r",
+                    javascript6: ""
+                }
+                let actualQuote = el.innerText.slice(reLangPrev[python].length);
+                let _actualIndex = reLangQuotes[reLang].indexOf(actualQuote);
+                if (_actualIndex === -1) _actualIndex = 0;
+                let newQuote = (_actualIndex + 1) % reLangQuotes[reLang].length;
+                
+                if(i === 0) newQuote = `${reLangPrev[reLang]}${newQuote}`;
+                el.innerText = newQuote;
+            });
         });
 
     }
