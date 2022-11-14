@@ -389,6 +389,27 @@ var EditorParser = (options) => {
         }
     }
 
+    const changeRegexQuotes = (el, i, arr) => {
+        let reLang = getReLanguage();
+        reLangQuotes = {
+            python: [`"`, `'`, `"""`, `'''`],
+            javascript6: [`/`, `'`, `"`, "`"]
+        }
+        reLangPrev = {
+            python: "r",
+            javascript6: ""
+        }
+        let actualQuote = el.innerText.slice(reLangPrev[reLang].length);
+        let _actualIndex = reLangQuotes[reLang].indexOf(actualQuote);
+        let newQuote = reLangQuotes[reLang][(_actualIndex + 1) % reLangQuotes[reLang].length];
+
+        let otherEl = arr[(i+1) % arr.length];
+        otherEl.innerText = newQuote;
+
+        if(i === 0) newQuote = `${reLangPrev[reLang]}${newQuote}`;
+        el.innerText = newQuote;
+    }
+
     const initEventsListener = () => {
         $editorRegex.addEventListener('keydown', (event) => {
             let keyDownLabel = event.key.toLowerCase();
@@ -506,9 +527,10 @@ var EditorParser = (options) => {
         //     _parseRegex(regExpresion);
         // });
 
-        let langs = document.querySelectorAll("[name='languageRegex']").forEach(el=>{
+        document.querySelectorAll("[name='languageRegex']").forEach(el=>{
             el.addEventListener("click", event=>{
-                
+                let $quotes = Array.from($containerEditor.querySelectorAll("#editor-input .regex-quotes"));
+                changeRegexQuotes($quotes[0], 0, $quotes);
 
                 // Cambiar la regex que hay a javascript ?
                 processInput();
@@ -533,24 +555,9 @@ var EditorParser = (options) => {
         });
 
         // Gestionar el uso de un escape u otro para definir la regex, o las regex quotes
-        $containerEditor.querySelectorAll("#editor-input .regex-quotes").forEach((el, i) => {
+        $containerEditor.querySelectorAll("#editor-input .regex-quotes").forEach((el, i, arr) => {
             el.addEventListener("click", event => {
-                let reLang = getReLanguage();
-                reLangQuotes = {
-                    python: [`"`, `'`, `"""`, `'''`],
-                    javascript6: [`/`, `'`, `"`, "`"]
-                }
-                reLangPrev = {
-                    python: "r",
-                    javascript6: ""
-                }
-                let actualQuote = el.innerText.slice(reLangPrev[python].length);
-                let _actualIndex = reLangQuotes[reLang].indexOf(actualQuote);
-                if (_actualIndex === -1) _actualIndex = 0;
-                let newQuote = (_actualIndex + 1) % reLangQuotes[reLang].length;
-                
-                if(i === 0) newQuote = `${reLangPrev[reLang]}${newQuote}`;
-                el.innerText = newQuote;
+                changeRegexQuotes(el, i, arr)
             });
         });
 

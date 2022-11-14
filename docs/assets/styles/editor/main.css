@@ -1,5 +1,7 @@
 .regex-quotes {
-  width: 3ch;
+  width: max-content;
+  cursor: pointer;
+  
   text-align: center;
   color: var(--font-color);
 }
