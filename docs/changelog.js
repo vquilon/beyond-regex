@@ -39,6 +39,9 @@ const CHANGELOG = {
     ],
     "20":[
         "Dark/Light Theme"
-    ]
+    ],
+    "21":[
+      "Continuous Improoves"
+    ] 
   }
 }
