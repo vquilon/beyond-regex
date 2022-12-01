@@ -1,18 +1,18 @@
 /* VISUAL STYLE */
-#container-input * {
+#editor-flags #container-input * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-#container-input {
+#editor-flags #container-input {
     height: 2em;
     width: 2em;
     grid-row-gap: 5px;
     background: var(--back-editor);
     border-radius: 50%;
     box-shadow: inset 0.2rem 0.2rem 8px var(--shadow-inset-light-neuro), inset -0.2rem -0.2rem 8px var(--shadow-inset-dark-neuro), 0.3rem 0.3rem 0.5rem var(--shadow-dark-neuro), -0.2rem -0.2rem 8px var(--shadow-light-neuro);
-    transition: box-shadow 0.5s, transform 0.5s;
+    transition: transform 0.5s;
     position: relative;
 }
 
@@ -42,7 +42,7 @@
     transition: visibility 0s 0.3s, transform 0.3s, box-shadow 0.1s;
 }
 
-#container-input:hover #overlay-show,
+#editor-flags #container-input:hover #overlay-show,
 #container-show:hover~#overlay-show {
     transition: visibility 0s, transform 0.3s, box-shadow 0.1s;
     transform: none;
@@ -72,7 +72,7 @@ label.label-input {
 }
 
 /* FUNCTIONALITY */
-#container-input {
+#editor-flags #container-input {
     display: grid;
     grid-template-columns: 1fr;
     /* grid-template-columns: 3em 1fr; */
@@ -87,7 +87,7 @@ div#container-show {
     grid-column: 2;
 }
 
-#container-input:hover #container-show #input-show, div#container-input:has(input:checked) #input-show {
+#editor-flags #container-input:hover #container-show #input-show, #editor-flags #container-input:has(input:checked) #input-show {
     /* text-shadow: -10px -10px 30px var(--text-highlight-icon); */
     background: linear-gradient(90deg, var(--gradient-color-1), var(--gradient-color-2));
     background-clip: text;
@@ -103,8 +103,8 @@ input[name="flag"] {
     grid-column: 2;
 }
 
-#container-input:hover label.label-input,
-#container-input:hover input[name="flag"]{
+#editor-flags #container-input:hover label.label-input,
+#editor-flags #container-input:hover input[name="flag"]{
     visibility: visible;
     opacity: 1;
     transition: visibility 0s 0.3s, opacity 0.3s 0.3s;
@@ -154,9 +154,9 @@ label.label-input {
     display: none;
 }
 
-#container-input #flag-i:checked~#container-values #check-i,
-#container-input #flag-m:checked~#container-values #check-m,
-#container-input #flag-g:checked~#container-values #check-g {
+#editor-flags #container-input #flag-i:checked~#container-values #check-i,
+#editor-flags #container-input #flag-m:checked~#container-values #check-m,
+#editor-flags #container-input #flag-g:checked~#container-values #check-g {
     opacity: 1;
     display: inline-block;
 }
@@ -210,7 +210,7 @@ label.label-input {
     font-size: 90% !important;
     /* box-shadow: inset 0.2rem 0.2rem 0.5rem var(--shadow-dark-neuro), inset -0.2rem -0.2rem 0.5rem var(--shadow-light-neuro); */
     box-shadow: none;
-    border: 1px dashed var(--border-primary-color);
+    border: 1px solid var(--border-primary-color);
 }
 
 #editor-flags input#flag-i:active~label[for="flag-i"],
@@ -219,7 +219,7 @@ label.label-input {
     font-weight: 500;
     font-size: 90% !important;
     box-shadow: inset 0.2rem 0.2rem 0.5rem var(--shadow-dark-neuro), inset -0.2rem -0.2rem 0.5rem var(--shadow-light-neuro);
-    border: 1px dashed var(--panel-border-color);
+    border: 1px solid var(--panel-border-color);
 }
 
 

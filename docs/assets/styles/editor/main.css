@@ -8,7 +8,7 @@
 
 #beyond-editor div.container-editor #editor-input .input:focus-within,
 #beyond-editor div.container-editor #editor-input .input:active {
-  outline: #4b0082 solid 2px;
+  outline: var(--color-syntax) solid 2px;
 }
 
 .input {
@@ -263,10 +263,10 @@
   color: var(--color-editor);
 }
 .input.no-highlighted .input-editor .editor::selection {
-  background: var(--color-editor);
+  background: var(--color-transparent-syntax);
 }
 .input.no-highlighted .input-editor .editor::-moz-selection {
-  background: var(--color-editor);
+  background: var(--color-transparent-syntax);
 }
 .input .input-editor .editor::selection {
   background: transparent;

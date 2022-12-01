@@ -59,7 +59,7 @@ var EditorParser = (options) => {
             $editorRegex: $editorRegex,
             $syntaxRegex: $input.querySelector('.syntax'),
         });
-        EditorAdvance({
+        var editorAdvance = EditorAdvance({
             $containerEditor: $containerEditor,
             $inputRegex: $editorRegex,
             $syntaxRegex: $input.querySelector('.syntax'),
@@ -399,15 +399,20 @@ var EditorParser = (options) => {
             python: "r",
             javascript6: ""
         }
-        let actualQuote = el.innerText.slice(reLangPrev[reLang].length);
+        let actualQuote = el.innerText;
+        if (el.innerText[0] === reLangPrev[reLang]) actualQuote = el.innerText.slice(reLangPrev[reLang].length);
         let _actualIndex = reLangQuotes[reLang].indexOf(actualQuote);
         let newQuote = reLangQuotes[reLang][(_actualIndex + 1) % reLangQuotes[reLang].length];
 
         let otherEl = arr[(i+1) % arr.length];
-        otherEl.innerText = newQuote;
-
-        if(i === 0) newQuote = `${reLangPrev[reLang]}${newQuote}`;
-        el.innerText = newQuote;
+        if(i === 0) {
+            otherEl.innerText = newQuote;
+            el.innerText = `${reLangPrev[reLang]}${newQuote}`;
+        }
+        else {
+            el.innerText = newQuote;
+            otherEl.innerText = `${reLangPrev[reLang]}${newQuote}`;
+        }
     }
 
     const initEventsListener = () => {
@@ -526,6 +531,8 @@ var EditorParser = (options) => {
         //     var regExpresion = inputRegex.value;
         //     _parseRegex(regExpresion);
         // });
+        let $quotes = Array.from($containerEditor.querySelectorAll("#editor-input .regex-quotes"));
+        changeRegexQuotes($quotes[0], 0, $quotes);
 
         document.querySelectorAll("[name='languageRegex']").forEach(el=>{
             el.addEventListener("click", event=>{
@@ -550,8 +557,13 @@ var EditorParser = (options) => {
         });
 
         $highlight_editor.addEventListener("change", event => {
-            if (!$highlight_editor.checked) $input.classList.add("no-highlighted");
-            else $input.classList.remove("no-highlighted");
+            editorAdvance.cleanEditor();
+            if (!$highlight_editor.checked) {
+                $input.classList.add("no-highlighted");
+            }
+            else {
+                $input.classList.remove("no-highlighted");
+            }
         });
 
         // Gestionar el uso de un escape u otro para definir la regex, o las regex quotes

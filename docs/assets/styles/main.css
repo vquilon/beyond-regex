@@ -66,6 +66,7 @@
 
   --panel-fixed-background: #efefefd9;
   --panel-background: #d2d2d2;
+  --panel-transparent-background: #d2d2d280;
   --panel-dark-background: #b9b9b9;
   --panel-dark-transparent-background: #b9b9b996;
   --panel-border-color: #b2b2b2;
@@ -78,6 +79,7 @@
   --color-editor: #2a2a2a;
   --color-caret: #4b0082;
   --color-syntax: #4b0082;
+  --color-transparent-syntax: #4b008233;
   --back-editor: #e2e2e2;
   --editor-border-line: #0000003d;
   --color-editor-margin: #d2d2d2;
@@ -129,7 +131,7 @@
 
   body span#theme-filter {
     --focal-size: 0%;
-    transition: --focal-size 0s ease !important;
+    /* transition: --focal-size 0s ease !important; */
   }
 }
 
@@ -160,7 +162,8 @@
     --shadow-dark-neuro: #00000059;
 
     --panel-fixed-background: #242424ed;
-    --panel-background: #363636;
+    --panel-background: #202020;
+    --panel-transparent-background: #20202080;
     --panel-dark-background: #2b2b2b;
     --panel-dark-transparent-background: #2b2b2b96;
     --panel-border-color: #292929;
@@ -173,7 +176,8 @@
     --color-editor: #cecece;
     --color-caret: #b34cff;
     --color-syntax: #b34cff;
-    --back-editor: #202020;
+    --color-transparent-syntax: #b34cff33;
+    --back-editor: #363636;
     --editor-border-line: #e0e0e042;
     --color-editor-margin: #3b3b3b;
     --tools-back: #2e1279;
@@ -224,7 +228,7 @@
 
   body span#theme-filter {
     --focal-size: 100%;
-    transition: --focal-size 0s ease !important;
+    /* transition: --focal-size 0s ease !important; */
   }
 }
 
@@ -256,6 +260,7 @@
 
   --panel-fixed-background: #efefefd9;
   --panel-background: #d2d2d2;
+  --panel-transparent-background: #d2d2d280;
   --panel-dark-background: #b9b9b9;
   --panel-dark-transparent-background: #b9b9b996;
   --panel-border-color: #b2b2b2;
@@ -343,7 +348,8 @@
   --shadow-dark-neuro: #00000059;
 
   --panel-fixed-background: #242424ed;
-  --panel-background: #363636;
+  --panel-background: #202020;
+  --panel-transparent-background: #20202080;
   --panel-dark-background: #2b2b2b;
   --panel-dark-transparent-background: #2b2b2b96;
   --panel-border-color: #292929;
@@ -356,7 +362,7 @@
   --color-editor: #cecece;
   --color-caret: #b34cff;
   --color-syntax: #b34cff;
-  --back-editor: #202020;
+  --back-editor: #363636;
   --editor-border-line: #e0e0e042;
   --color-editor-margin: #3b3b3b;
   --tools-back: #2e1279;
@@ -416,14 +422,14 @@
 
 #theme-switch {
   z-index: 10;
-  position: fixed;
+  position: absolute;
   left: calc(50% - 5em/2);
   top: -1.5em;
   padding: 1em 0 0 0;
   width: 5em;
   height: 5em;
   display: flex;
-  background: var(--panel-background);
+  background: var(--back-editor);
   border: 3px dashed var(--border-primary-color);
   justify-content: center;
   align-items: center;
@@ -444,7 +450,7 @@
   justify-content: center;
   font-size: 1em;
   display: flex;
-  background: var(--panel-background);
+  background: var(--back-editor);
   align-items: center;
   text-shadow: 0 0 1rem var(--shadow-light), 0 0 1rem var(--shadow-light), 0 0 1rem var(--black-white);
 }
@@ -562,12 +568,12 @@ body:before {
 
 [data-theme="dark"] body #theme-filter {
   --focal-size: 100% !important;
-  transition: --focal-size 1s ease !important;
+  /* transition: --focal-size 1s ease !important; */
 }
 
 [data-theme="light"] body #theme-filter {
   --focal-size: 0% !important;
-  transition: --focal-size 1s ease !important;
+  /* transition: --focal-size 1s ease !important; */
 }
 
 [data-theme] body span#theme-filter {
@@ -585,7 +591,7 @@ body:before {
   backdrop-filter: invert(1);
   -webkit-mask-image: radial-gradient(circle at 50% 0, transparent var(--focal-size), black 0%);
   mask-image: radial-gradient(circle at 50% 0, transparent var(--focal-size), black 0%);
-  transition: --focal-size 1s ease;
+  /* transition: --focal-size 1s ease; */
 }
 
 
@@ -1217,7 +1223,6 @@ span#close-side:hover .burger {
 #beyond-editor div.container-editor {
   width: 100%;
   font-size: 24px;
-  /* background: #e2e2e2; */
   line-height: 1.4em;
   color: var(--font-soft-color);
   word-break: break-all;
@@ -1226,6 +1231,10 @@ span#close-side:hover .burger {
   border-radius: 10px;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
+  background: linear-gradient(90deg, var(--panel-background), var(--panel-transparent-background), var(--panel-background));
+  /* backdrop-filter: blur(5px); */
+  padding: 0 0.5em;
+  box-sizing: border-box;
 }
 
 #beyond-editor .container-editor #editor-language {
@@ -1237,7 +1246,8 @@ span#close-side:hover .burger {
   padding: 10px;
   grid-row: 2;
   z-index: 7;
-  background: var(--back-editor);
+  /* background: var(--back-editor); */
+  background: linear-gradient(0deg, var(--panel-background), #e9e9e900, var(--panel-background));
 }
 
 #beyond-editor .container-editor #editor-actions {
@@ -1249,8 +1259,8 @@ span#close-side:hover .burger {
   grid-column: 1/4;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
-  border-bottom: 2px var(--border-primary-color);
-  border-bottom-style: dashed;
+  /* border-bottom: 2px var(--border-primary-color); */
+  /* border-bottom-style: dashed; */
   background: var(--panel-background);
   overflow-x: auto;
 }
@@ -1269,7 +1279,8 @@ span#close-side:hover .burger {
   display: flex;
   flex-direction: row;
   grid-row: 2;
-  background: var(--back-editor);
+  /* background: var(--back-editor); */
+  background: linear-gradient(0deg, var(--panel-background), #e9e9e900, var(--panel-background));
   box-sizing: border-box;
   flex-wrap: nowrap;
   align-items: stretch;
@@ -1288,7 +1299,8 @@ span#close-side:hover .burger {
   align-items: flex-start;
   justify-content: flex-end;
   grid-row: 2;
-  background: var(--back-editor);
+  /* background: var(--back-editor); */
+  background: linear-gradient(0deg, var(--panel-background), #e9e9e900, var(--panel-background));
   z-index: 7;
   /* Solo para mostrar los flags a la izquierda no se necesita */
   /* width: 5em; */
@@ -1296,11 +1308,11 @@ span#close-side:hover .burger {
 
 #beyond-editor div.container-editor #editor-input .input {
   font-family: var(--font-family);
-  color: #4b0082;
-  padding: 0 10px;
+  color: var(--color-syntax);
+  padding: 0;
+  margin: 0 10px;
   border: none;
-  background: var(--back-editor);
-  margin: 0;
+  /* background: var(--back-editor); */
   width: 100%;
   height: 100%;
   font-weight: normal;
@@ -1430,7 +1442,7 @@ span#close-side:hover .burger {
   box-shadow: none;
   font-weight: 500;
   font-size: 90% !important;
-  border: 1px dashed var(--border-primary-color);
+  border: 1px solid var(--border-primary-color);
 }
 
 
@@ -1438,7 +1450,7 @@ span#close-side:hover .burger {
   box-shadow: inset 0.2rem 0.2rem 0.5rem var(--shadow-dark-neuro), inset -0.2rem -0.2rem 0.5rem var(--shadow-light-neuro);
   font-weight: 500;
   font-size: 90% !important;
-  border: 1px dashed var(--panel-border-color);
+  border: 1px solid var(--panel-border-color);
 }
 
 .checkbox__1 input:checked~label span {
@@ -1501,7 +1513,7 @@ span#close-side:hover .burger {
   box-shadow: none;
   font-weight: 500;
   font-size: 90% !important;
-  border: 1px dashed var(--border-primary-color);
+  border: 1px solid var(--border-primary-color);
 }
 
 
@@ -1509,7 +1521,7 @@ span#close-side:hover .burger {
   box-shadow: inset 0.2rem 0.2rem 0.5rem var(--shadow-dark-neuro), inset -0.2rem -0.2rem 0.5rem var(--shadow-light-neuro);
   font-weight: 500;
   font-size: 90% !important;
-  border: 1px dashed var(--panel-border-color);
+  border: 1px solid var(--panel-border-color);
 }
 
 .checkbox__3 input:checked~label span {
@@ -1545,7 +1557,7 @@ span#close-side:hover .burger {
 #editor-stats {
   grid-row: 4;
   grid-column: 1/4;
-  padding: 0 0.5em;
+  padding: 0 0.5em 0.5em;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
   color: var(--font-soft-color);
@@ -1558,6 +1570,7 @@ span#close-side:hover .burger {
 
 .stats {
   margin-left: 0.5em;
+  margin-left: 0;
 }
 
 #terminal-error.correct-syntax, #terminal-error.hide {
@@ -1587,8 +1600,6 @@ span#close-side:hover .burger {
 #terminal-error #errorDef {
   margin-top: 0em;
   margin-left: 1em;
-  overflow-x: hidden;
-  overflow-y: auto;
   color: #ff0058;
 }
 

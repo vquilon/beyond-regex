@@ -1673,4 +1673,14 @@ function EditorAdvance(options = {}) {
     }
 
     init_listeners();
+
+
+    const cleanEditor = () => {
+        $inputCarets.innerHTML = "";
+        $inputSelections.innerHTML = "";
+    }
+
+    return {
+        cleanEditor: cleanEditor
+    }
 }

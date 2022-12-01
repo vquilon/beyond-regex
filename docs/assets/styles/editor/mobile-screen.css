@@ -7,8 +7,8 @@
     grid-column: 1;
     background: var(--panel-background);
     border-top-left-radius: 10px;
-    border-bottom: 2px var(--border-primary-color);
-    border-bottom-style: dashed;
+    /* border-bottom: 2px var(--border-primary-color); */
+    /* border-bottom-style: dashed; */
 }
 
 #beyond-editor .container-editor #editor-actions {
@@ -23,8 +23,8 @@
     grid-column: 3;
     background: var(--panel-background);
     border-top-right-radius: 10px;
-    border-bottom: 2px var(--border-primary-color);
-    border-bottom-style: dashed;
+    /* border-bottom: 2px var(--border-primary-color); */
+    /* border-bottom-style: dashed; */
     justify-content: center;
 }
 
