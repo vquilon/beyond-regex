@@ -446,6 +446,10 @@ span.assert.AssertLookahead > .parenthesis {
   color: var(--charset-token-color);
 }
 
+.group-named .groupmod {
+  color: var(--group-named-color);
+}
+
 /* char class: range-hyphen */
 .regex .g1 {
   background: #00c0004a;

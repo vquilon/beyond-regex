@@ -124,6 +124,8 @@
 
   --quantifier-color: #028061;
 
+  --group-named-color: #309e0c;
+
   /* LINTER */
   --error-font-color: white;
   --error-background: #d93a3a;
@@ -221,6 +223,8 @@
 
     --quantifier-color: #fd7f9e;
 
+    --group-named-color: #f821f0;
+
     /* LINTER */
     --error-font-color: white;
     --error-background: #d93a3a;
@@ -317,6 +321,8 @@
 
   --quantifier-color: #028061;
 
+  --group-named-color: #309e0c;
+
   /* LINTER */
   --error-font-color: white;
   --error-background: #d93a3a;
@@ -405,6 +411,8 @@
   --escape-octal-color: #9ab133;
 
   --quantifier-color: #fd7f9e;
+
+  --group-named-color: #f821f0;
 
   /* LINTER */
   --error-font-color: white;
@@ -1461,6 +1469,19 @@ span#close-side:hover .burger {
   -webkit-text-fill-color: transparent;
 }
 
+label[for="highlighted-editor"] span {
+  rotate: 180deg;
+}
+
+label[for="highlighted-editor"] span:after {
+  content: "flashlight_off";
+}
+
+input#highlighted-editor:checked ~ label[for="highlighted-editor"] span:after {
+  content: "flashlight_on";
+}
+
+
 .checkbox__3 {
   height: 35px;
   width: 35px;
@@ -1609,11 +1630,14 @@ span#close-side:hover .burger {
 
 /* ERROR BOX END */
 
-#beyond-editor #actionButtons {
+#beyond-panels {
+  margin: 2em 0 0;
+}
+
+#beyond-panels #actionButtons {
   width: 100%;
   display: flex;
   grid-column-gap: 10px;
-  margin: 2em 0 0;
   padding: 0 0 0.5em 0;
   grid-gap: 20px;
   justify-content: center;

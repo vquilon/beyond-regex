@@ -34,7 +34,7 @@
 	position: static;
 	border-radius: 10px;
 	box-shadow: 0 8px 32px 0 var(--dark-soft);
-	transition: all 0.2s linear;
+	transition: box-shadow 0.2s linear;
 }
 
 .thumbViewClass {

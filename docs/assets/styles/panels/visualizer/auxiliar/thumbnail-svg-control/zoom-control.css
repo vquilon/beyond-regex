@@ -4,7 +4,7 @@
     margin-right: 20px;
 	pointer-events: none;
 	
-	transition: all 0.2s linear;
+	transition: column-gap 0.2s linear;
 }
 .control-zoom:hover {
   column-gap: 0px;
@@ -34,8 +34,9 @@
 }
 
 .icon {
+	cursor: pointer;
 	pointer-events: auto;
-	transition: all 0.2s linear;
+	transition: box-shadow 0.2s linear, margin 0.2s linear, transform 0.2s linear;
 	
 	width: 45px;
 	height: 45px;
@@ -52,9 +53,9 @@
 	filter: unset;
 }
 
-.icon .lens g, .icon .lens g path {
-	transition: all 0.5s ease;
-}
+/* .icon .lens g, .icon .lens g path {
+	transition: fill 0.5s ease;
+} */
 
 .icon:hover {
 	cursor: pointer;

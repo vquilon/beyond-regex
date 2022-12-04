@@ -38,7 +38,7 @@
     /* background: transparent; */
     color: var(--font-color);
     /* backdrop-filter: blur(5px); */
-    box-shadow: 0 8px 32px 0 var(--shadow-highlight);
+    /* box-shadow: 0 8px 32px 0 var(--shadow-highlight); */
 
     transition: color 0.2s linear;
 }

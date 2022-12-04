@@ -301,9 +301,11 @@ function RegexHighlighter($editor, $syntax) {
             "(?<": `?<${reToken.name}>`,
             "(?'": `?'${reToken.name}'`,
         }
+        let extraClass = "";
         if (reToken.raw.slice(0, 3) in groupNameMap) {
             groupMod = reToken.name ? groupNameMap[reToken.raw.slice(0, 3)] : '';
             groupMod = expandHtmlEntities(groupMod);
+            extraClass = "group-named";
         }
         let endParen = `<span class="parenthesis">)</span>`;
 
@@ -311,13 +313,13 @@ function RegexHighlighter($editor, $syntax) {
             endParen = "";
         }
 
-        let groupHTML = `<span class="parenthesis">(</span>${groupMod}${subTokens}${endParen}`;
+        let groupHTML = `<span class="parenthesis">(</span><span class="groupmod">${groupMod}</span>${subTokens}${endParen}`;
         if (reToken.repeat) {
             let quant = _auxParseQuantifier(reToken, i, tokenStack);
             groupHTML += quant;
         }
 
-        return _parseDefault(reToken, groupHTML, {extraAttributes: groupAttributes});
+        return _parseDefault(reToken, groupHTML, {extraClass: extraClass, extraAttributes: groupAttributes});
     }
     const _parseComment = (reToken, i, tokenStack) => {
         let groupMod = "?#";
