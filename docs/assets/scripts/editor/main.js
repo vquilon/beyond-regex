@@ -54,9 +54,11 @@ var EditorParser = (options) => {
         var $containerEditor = document.querySelector(options.containerSelector);
         var $input = $containerEditor.querySelector(`#editor-input > .${options.inputClass}`);
         var $editorRegex = $input.querySelector('.editor');
-
+        
+        var regexParser = RegexParser();
         var syntaxHighlighter = EditorSyntaxis({
             $editorRegex: $editorRegex,
+            // $syntaxRegex: $editorRegex,
             $syntaxRegex: $input.querySelector('.syntax'),
         });
         var editorAdvance = EditorAdvance({
@@ -73,11 +75,13 @@ var EditorParser = (options) => {
         var $editorTerminal = $containerEditor.querySelector('#editor-terminal');
         var $terminalStats = $containerEditor.querySelector('#editor-stats');
         var $realTimeCheck = $containerEditor.querySelector('#real-time-check');
-        var $highlight_editor = $containerEditor.querySelector('#highlighted-editor')
+        var $highlight_editor = $containerEditor.querySelector('#highlighted-editor');
         var $terminalError = $containerEditor.querySelector('#terminal-error');
         var $errorDef = $terminalError.querySelector("#errorDef");
         var $flags = $containerEditor.querySelectorAll('input[name="flag"]');
         var $shareBtn = $containerEditor.querySelector('#shareIt');
+
+        var $new_editor = $containerEditor.querySelector('#advance-editor');
 
         // En un futuro tiene que desaparecer, cuando se puedan editar los paneles, esta interaccion de desactivarlos
         // Tiene que venir por configuracion maestra.
@@ -233,9 +237,9 @@ var EditorParser = (options) => {
         hideError();
         var regexson = null;
         try {
-            var init_parse = RegexParser();
+            
             var language_selected = getReLanguage();
-            regexson = init_parse(regExpresion, DEBUG, language_selected);
+            regexson = regexParser.parse(regExpresion, DEBUG, language_selected);
 
             let errors = regexson.errors;
             if (errors.length !== 0 && !skipError) {
@@ -310,10 +314,9 @@ var EditorParser = (options) => {
 
     const parseSharedRegex = (regExpresion, language_selected = "python") => {
         // Aqui se realiza el parseo
-        var regEXSON = null;
+        var regexson = null;
         try {
-            var init_parse = RegexParser();
-            regEXSON = init_parse(regExpresion, DEBUG, language_selected);
+            regexson = regexParser.parse(regExpresion, DEBUG, language_selected);
         } catch (e) {
             if (e instanceof init_parse.RegexSyntaxError) {
                 showErrorShared(regExpresion, e);
@@ -322,7 +325,7 @@ var EditorParser = (options) => {
             }
         }
 
-        return regEXSON
+        return regexson
     };
 
     // Getters input
@@ -374,8 +377,12 @@ var EditorParser = (options) => {
         location.hash = generateURL(params);
     }
 
-    const processInput = () => {
+    const updateRegex = () => {
         parseRegex(getRegex());
+    }
+
+    const processInput = () => {
+        updateRegex();
         window.hasChanges = true;
         if ($visualBtn !== null) {
             $visualBtn.disabled = false;
@@ -413,6 +420,7 @@ var EditorParser = (options) => {
             el.innerText = newQuote;
             otherEl.innerText = `${reLangPrev[reLang]}${newQuote}`;
         }
+        editorAdvance.updateEditor();
     }
 
     const initEventsListener = () => {
@@ -560,9 +568,21 @@ var EditorParser = (options) => {
             editorAdvance.cleanEditor();
             if (!$highlight_editor.checked) {
                 $input.classList.add("no-highlighted");
+                $input.classList.remove("new-advance");
+                $new_editor.checked = false;
             }
             else {
                 $input.classList.remove("no-highlighted");
+            }
+        });
+
+        $new_editor.addEventListener("change", event => {
+            if ($new_editor.checked) {
+                editorAdvance.cleanEditor();
+                $input.classList.add("new-advance");
+            }
+            else {
+                $input.classList.remove("new-advance");
             }
         });
 
@@ -601,7 +621,7 @@ var EditorParser = (options) => {
             setRegexLanguage("python");
         }
 
-        parseRegex(getRegex());
+        updateRegex();
     }
 
 

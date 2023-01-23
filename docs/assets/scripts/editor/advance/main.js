@@ -636,7 +636,7 @@ function EditorAdvance(options = {}) {
                 $boxSel.style.top = `${rect.top}px`;
 
                 $boxSel.style.position = 'absolute';
-                $boxSel.style.background = '#0000ff1f';
+                $boxSel.style.background = '#0000ff66';
                 $boxSel.classList.add("boxSel");
                 $debugCont.appendChild($boxSel);
             }
@@ -1498,29 +1498,31 @@ function EditorAdvance(options = {}) {
         $syntax.addEventListener("mousedown", (event) => {
             // TODO: El metodo isMousePosInSelection, hay que perfeccionar para que un $selection tenga asociado un id de $caret
             //  y de esta forma obtener el caret correspondiente de una seleccion, o agregar los mismos datos de start end del $caret
-            $editor.mousedown = true;
-            if ($editor.dragging) {
-                if ($inputCarets.contains($editor.dragCaret)) {
-                    $inputCarets.removeChild($editor.dragCaret);
+            if($input.classList.contains("new-advance")){
+                $editor.mousedown = true;
+                if ($editor.dragging) {
+                    if ($inputCarets.contains($editor.dragCaret)) {
+                        $inputCarets.removeChild($editor.dragCaret);
+                    }
+                    $editor.dragging = false;
+                    $editor.dragCaret = undefined;
+                    $editor.internalDrag = false;
+                    $editor.textSelection = { sx: 0, sy: 0, ex: 0, ey: 0 };
                 }
-                $editor.dragging = false;
-                $editor.dragCaret = undefined;
-                $editor.internalDrag = false;
-                $editor.textSelection = { sx: 0, sy: 0, ex: 0, ey: 0 };
-            }
-
-            let [$selection, caretPos] = isMouseInSelection(event.clientX, event.clientY);
-            if ($selection !== undefined) {
-                let selHeight = parseFloat($selection.style.getPropertyValue("--size-height"));
-                $editor.textSelection = { sx: caretPos.sx, sy: caretPos.sy + selHeight / 2, ex: caretPos.ex, ey: caretPos.ey - selHeight / 2 }
-                $editor.selecting = false;
-                $editor.internalDrag = true;
-                $editor.initSelecting = true;
-            }
-            else {
-                pauseCaretsBlink();
-                $editor.initSelecting = true;
-                updateCaretPos({ x: event.clientX, y: event.clientY }, { $caret: undefined, ctrlKey: event.ctrlKey });
+    
+                let [$selection, caretPos] = isMouseInSelection(event.clientX, event.clientY);
+                if ($selection !== undefined) {
+                    let selHeight = parseFloat($selection.style.getPropertyValue("--size-height"));
+                    $editor.textSelection = { sx: caretPos.sx, sy: caretPos.sy + selHeight / 2, ex: caretPos.ex, ey: caretPos.ey - selHeight / 2 }
+                    $editor.selecting = false;
+                    $editor.internalDrag = true;
+                    $editor.initSelecting = true;
+                }
+                else {
+                    pauseCaretsBlink();
+                    $editor.initSelecting = true;
+                    updateCaretPos({ x: event.clientX, y: event.clientY }, { $caret: undefined, ctrlKey: event.ctrlKey });
+                }
             }
 
         }, true);
@@ -1637,19 +1639,24 @@ function EditorAdvance(options = {}) {
         //         $inputEditor.querySelector(".input-carets").innerHTML = "";
         //     }
         // });
-        $input.addEventListener("blur", event => {
+        const blurredEditor = (event) => {
             if (!$input.editing) {
-                // $inputCarets.innerHTML = "";
                 disableCaretsBlink();
                 $inputCarets.classList.add("nofocus");
                 $inputSelections.classList.add("nofocus");
             }
-        });
-        $input.addEventListener("focus", event => {
-            $inputCarets.classList.remove("nofocus");
-            $inputSelections.classList.remove("nofocus");
-            pauseCaretsBlink();
-        });
+        };
+        const focussedEditor = () => {
+            if($input.classList.contains("new-advance")){
+                $inputCarets.classList.remove("nofocus");
+                $inputSelections.classList.remove("nofocus");
+                pauseCaretsBlink();
+            }
+        };
+        $input.addEventListener("blur", blurredEditor);
+        $syntax.addEventListener("blur", blurredEditor);
+        $input.addEventListener("focus", focussedEditor);
+        $syntax.addEventListener("focus", focussedEditor);
 
         $editor.addEventListener('change', event => { selRects = [] });
         $input.addEventListener('keypress', event => { keydownEditor(event, event.target, { pressedEvent: true }) });
@@ -1675,12 +1682,17 @@ function EditorAdvance(options = {}) {
     init_listeners();
 
 
+    const updateEditor = () => {
+        cleanEditor();
+        calculateAllRects();
+    }
     const cleanEditor = () => {
         $inputCarets.innerHTML = "";
         $inputSelections.innerHTML = "";
     }
 
     return {
-        cleanEditor: cleanEditor
+        cleanEditor: cleanEditor,
+        updateEditor: updateEditor
     }
 }

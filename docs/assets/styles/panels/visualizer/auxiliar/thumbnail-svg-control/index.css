@@ -89,7 +89,7 @@
     min-height: inherit;
     max-height: inherit;
     background: var(--back-editor);
-    /* border-radius: 10px; */
+    border-radius: 10px;
     /* border-top-right-radius: unset; */
     /* border-top-left-radius: unset; */
     /* Solve issue add Raphael a default position */

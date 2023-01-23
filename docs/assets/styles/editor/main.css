@@ -250,6 +250,10 @@
   -webkit-text-fill-color: #ffffff00; */
 }
 
+.syntax {
+  outline: none;
+}
+
 .input.no-highlighted .input-editor {
   z-index: 4;
   pointer-events: all;
@@ -283,7 +287,22 @@
   background: transparent;
 }
 
-.syntax {
+.input.no-highlighted .input-editor .editor,
+.input.no-highlighted .input-editor .editor *,
+.input.no-highlighted .input-editor .editor *:after,
+.input.no-highlighted .input-editor .editor *:before {
+  color: var(--color-editor);
+  background: transparent;
+}
+
+.input:not(.no-highlighted) .input-editor .editor,
+.input:not(.no-highlighted) .input-editor .editor *,
+.input:not(.no-highlighted) .input-editor .editor *:after,
+.input:not(.no-highlighted) .input-editor .editor *:before {
+  color: var(--color-syntax);
+}
+
+.syntax, .input.new-advance .editor{
   cursor: text;
   /* background-color: var(--back-editor); */
   color: var(--color-syntax);
@@ -559,3 +578,9 @@ span.assert.AssertLookahead > .parenthesis {
   font-style: italic;
   color: var(--quantifier-color);
 }
+
+
+
+
+
+

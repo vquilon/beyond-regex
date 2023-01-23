@@ -1753,7 +1753,9 @@ function RegexParser() {
     python: python_validStructs
   };
 
-  return init_object;
+  return {
+    parse: init_object,
+  };
 }
 // ),
 

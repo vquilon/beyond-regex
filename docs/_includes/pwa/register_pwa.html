@@ -1,44 +1,5 @@
-<!-- <script type="module">
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register(`${location.href}sw.js`).then(
-        registration => {
-          console.log(`Service Worker registered! Scope: ${registration.scope}`);
-        },
-        error => {
-          console.error(`Service Worker registration failed: ${error}`);
-        },
-      );
-    });
-  }
-</script> -->
-
 {% if site.environment == "production" %}
 {% include pwa/registers/register_pwa_prod.html %}
-
 {% else %}
 {% include pwa/registers/register_pwa_dev.html %}
-<!-- <script type="module">
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-            navigator.serviceWorker.register(`${location.href}sw_ga.js`).then(
-                registration => {
-                    console.log(`Service Worker for Google Analytics registered! Scope: ${registration.scope}`);
-                },
-                error => {
-                    console.error(`Service Worker for Google Analytics registration failed: ${error}`);
-                },
-            );
-        });
-    }
-</script> -->
 {% endif %}
-
-<!-- Registry and Update the PWA -->
-<!-- <script type="module">
-  import { pwaupdate } from 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate';
-  var inst = new pwaupdate()
-  inst.swpath = "sw.js";
-  const updateComponent  = document.createElement('pwa-update');
-  document.body.appendChild(updateComponent);
-</script> -->
