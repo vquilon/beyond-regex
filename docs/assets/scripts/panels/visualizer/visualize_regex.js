@@ -1,3 +1,105 @@
+class Callable {
+    constructor(callback, inputs, outputs, runOnWorker=false) {
+        this.callback = callback;
+        this.inputs = inputs;
+        this.outputs = outputs;
+        this.time = 0;
+        this.runOnWorker = runOnWorker;
+    }
+    run(runtime_vars) {
+        function argsify2(fn) {
+            return function () {
+                let args_in = Array.prototype.slice.call(arguments)[0];
+                return fn.apply(0, args_in);
+            }
+        }
+        let input_args = []
+        for (let arg_name of this.inputs.args_names) {
+            input_args.push(runtime_vars[arg_name])
+        }
+        let outputs = argsify2(this.callback)(input_args);
+        if (this.outputs.args_names.length === 0) return runtime_vars;
+        if (this.outputs.args_names.length === 1) runtime_vars[this.outputs.args_names[0]] = outputs;
+        if (this.outputs.args_names.length > 1) {
+            for (let i = 0; i < this.outputs.args_names.length; i++) {
+                let arg_name = this.outputs.args_names[i];
+                runtime_vars[arg_name] = outputs[i];
+            }
+        }
+
+        return runtime_vars;
+    }
+}
+class ArgNames {
+    constructor(args_names) {
+        for (let arg_name of args_names) {
+            this[arg_name] = undefined;
+        }
+        this.args_names = args_names;
+    }
+}
+
+class Pipeline {
+    constructor(execution_plan, runtime_vars) {
+        this.runtime_vars = runtime_vars || {};
+        this.execution_plan = this.process_plan(execution_plan)
+    }
+
+    process_plan(execution_plan_list) {
+        let execution_plan_processed = [];
+        for (let stepParams of execution_plan_list) {
+            execution_plan_processed.push(
+                new Callable(stepParams[1], new ArgNames(stepParams[0]), new ArgNames(stepParams[2]), stepParams[3] || false)
+            );
+        }
+        return execution_plan_processed;
+    }
+
+    run() {
+        for (let callStep of this.execution_plan) {
+            this.runtime_vars = callStep.run(this.runtime_vars);
+        }
+    }
+    run_iterative() {
+        // TODO: No se puede realizar esto ya que no son tareas paralelizables una depende de la otra
+        var runtime_vars = this.runtime_vars;
+        for (let i = 0; i < this.execution_plan.length; i++) {
+            (function (_i, execution_plan) {
+                let milisDelayBetweenRenderDOM = 500;
+                let stepFactorMilis = 20;
+                let callStep = execution_plan[_i];
+                window.setTimeout(
+                    function () {
+                        runtime_vars = callStep.run(runtime_vars);
+                    },
+                    _i * stepFactorMilis + milisDelayBetweenRenderDOM
+                )
+            })(i, this.execution_plan);
+        }
+    }
+    run_recursive() {
+        var milisDelayBetweenRenderDOM = 500;
+        var stepFactorMilis = 20;
+        var that = this;
+        function recursiveBatch(batchNum) {
+            return function () {
+                let start = performance.now();
+                that.runtime_vars = that.execution_plan[batchNum].run(that.runtime_vars);
+                let end = performance.now();
+                window.times = window.times || {}
+                window.times[that.execution_plan[batchNum].callback.name] = end-start;
+                if (batchNum < that.execution_plan.length - 1) {
+                    window.setTimeout(
+                        recursiveBatch(batchNum + 1), 0  // stepFactorMilis + milisDelayBetweenRenderDOM
+                    )
+                }
+            }
+        }
+
+        window.setTimeout(recursiveBatch(0), 0)
+    }
+}
+
 function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gViewPort, $gContainer, $progress_bar, updateAddOns) {
     var _aux_Kit = Kit();
 
@@ -30,23 +132,41 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
     function paintRegexCallbacks(regexson_tree, regex_flags, canvasRaph) {
         // const callback1 = (canvasRaph, regex_flags) => {
         //     let [regexBoxRect, sizeTextItem] = _prepareCanvasRaphael(canvasRaph, regex_flags);
+        //
         //     $progress_bar.updateProgressBar(10);
-
         //     return [regexBoxRect, sizeTextItem];
         // }
-        const callback2 = (canvasRaph, regexson_tree, sizeTextItem, regexBoxRect) => {
+        const callback2 = (regexson_tree) => {
             // Generacion del grafo
-            let raphael_items = _generateGraph(canvasRaph, regexson_tree, sizeTextItem, regexBoxRect);
-            $progress_bar.updateProgressBar(40);
+            let raphael_items = _generateGraph(regexson_tree);
 
-            return [raphael_items, canvasRaph];
+            $progress_bar.updateProgressBar(40);
+            return raphael_items;
         }
-        const callback3 = () => {
+        const callback3 = (raphael_items, canvasRaph, sizeTextItem, regexBoxRect) => {
+            let max_item_height = 0;
+            let max_item_width = 0;
+            // Procesamiento y generacion del literal de la regex y ubicarlo en el grafo
+            // let regex_text_items = _generateHihglightRegexLiteral(regexson_tree, regex_flags);
+            // [max_item_width, max_item_height] = _resizeHeightWithRegexLiteral(regex_text_items, size_item_text, margin_items);
+
+            max_item_height = Math.max(raphael_items.height + 3 * ITEMS_MARGIN + sizeTextItem.height, max_item_height);
+            max_item_width = Math.max(raphael_items.width + 2 * ITEMS_MARGIN, max_item_width);
+
+            // Establece el size del canvas al maximo que hay generado por las regex
+            // TODO: Se puede cambiar y dejarlo fijo, ya que en un futuro tendra control zooming y panning.
+            canvasRaph.setSize(max_item_width, max_item_height);
+            regexBoxRect.attr("width", max_item_width);
+            regexBoxRect.attr("height", max_item_height);
+            addsOffset(raphael_items.items, ITEMS_MARGIN, 2 * ITEMS_MARGIN + sizeTextItem.height - raphael_items.y);
+
             _postCanvasRaphael();
+
             $progress_bar.updateProgressBar(60);
         }
         const callback4 = (canvasRaph, raphael_items) => {
             canvasRaph.addv2(raphael_items.items);
+
             $progress_bar.updateProgressBar(80);
             return canvasRaph;
         }
@@ -57,114 +177,18 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
                     $gContainer.appendChild(el);
                 }
             });
+
             $progress_bar.updateProgressBar(100);
         }
 
         let execution_plan = [
             // [['canvasRaph', 'regex_flags'], callback1, ['regexBoxRect', 'sizeTextItem']],
-            [['canvasRaph', 'regexson_tree', 'sizeTextItem', 'regexBoxRect'], callback2, ['raphael_items', 'canvasRaph']],
-            [[], callback3, []],
+            [['regexson_tree'], callback2, ['raphael_items'], true],
+            [['raphael_items', 'canvasRaph', 'sizeTextItem', 'regexBoxRect'], callback3, []],
             [['canvasRaph', 'raphael_items'], callback4, ['canvasRaph']],
             [['canvasRaph'], callback5, []],
             [[], updateAddOns, []]
         ]
-
-        class Callable {
-            constructor(callback, inputs, outputs) {
-                this.callback = callback;
-                this.inputs = inputs;
-                this.outputs = outputs;
-            }
-            run(runtime_vars) {
-                function argsify2(fn) {
-                    return function () {
-                        let args_in = Array.prototype.slice.call(arguments)[0];
-                        return fn.apply(0, args_in);
-                    }
-                }
-                let input_args = []
-                for (let arg_name of this.inputs.args_names) {
-                    input_args.push(runtime_vars[arg_name])
-                }
-                let outputs = argsify2(this.callback)(input_args);
-                if (this.outputs.args_names.length === 0) return runtime_vars;
-                if (this.outputs.args_names.length === 1) runtime_vars[this.outputs.args_names[0]] = outputs;
-                if (this.outputs.args_names.length > 1) {
-                    for (let i = 0; i < this.outputs.args_names.length; i++) {
-                        let arg_name = this.outputs.args_names[i];
-                        runtime_vars[arg_name] = outputs[i];
-                    }
-                }
-
-                return runtime_vars;
-            }
-        }
-        class ArgNames {
-            constructor(args_names) {
-                for (let arg_name of args_names) {
-                    this[arg_name] = undefined;
-                }
-                this.args_names = args_names;
-            }
-        }
-
-        class Pipeline {
-            constructor(execution_plan, runtime_vars) {
-                this.runtime_vars = runtime_vars || {};
-
-                this.execution_plan = this.process_plan(execution_plan)
-            }
-
-            process_plan(execution_plan_list) {
-                let execution_plan_processed = [];
-                for (let step of execution_plan_list) {
-                    execution_plan_processed.push(
-                        new Callable(step[1], new ArgNames(step[0]), new ArgNames(step[2]))
-                    );
-                }
-                return execution_plan_processed;
-            }
-
-            run() {
-                for (let callStep of this.execution_plan) {
-                    this.runtime_vars = callStep.run(this.runtime_vars);
-                }
-            }
-            run_iterative() {
-                // TODO: No se puede realizar esto ya que no son tareas paralelizables una depende de la otra
-                var runtime_vars = this.runtime_vars;
-                for (let i = 0; i < this.execution_plan.length; i++) {
-                    (function (_i, execution_plan) {
-                        let milisDelayBetweenRenderDOM = 500;
-                        let stepFactorMilis = 20;
-                        let callStep = execution_plan[_i];
-                        window.setTimeout(
-                            function () {
-                                runtime_vars = callStep.run(runtime_vars);
-                            },
-                            _i * stepFactorMilis + milisDelayBetweenRenderDOM
-                        )
-                    })(i, this.execution_plan);
-                }
-            }
-            run_recursive() {
-                var milisDelayBetweenRenderDOM = 500;
-                var stepFactorMilis = 20;
-                var that = this;
-                function recursiveBatch(batchNum) {
-                    return function () {
-                        that.runtime_vars = that.execution_plan[batchNum].run(that.runtime_vars)
-                        if (batchNum < that.execution_plan.length - 1) {
-                            window.setTimeout(
-                                recursiveBatch(batchNum + 1), 0  // stepFactorMilis + milisDelayBetweenRenderDOM
-                            )
-                        }
-                    }
-                }
-
-                window.setTimeout(recursiveBatch(0), 0)
-            }
-        }
 
         let [regexBoxRect, sizeTextItem] = _prepareCanvasRaphael(canvasRaph, regex_flags);
         let childNodes = Array.from(canvasRaph.canvas.childNodes);
@@ -176,13 +200,15 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
         $progress_bar.updateProgressBar(10);
 
         let pipeline = new Pipeline(
-            execution_plan, {
-            regexBoxRect: regexBoxRect, sizeTextItem: sizeTextItem,
-            canvasRaph: canvasRaph, regex_flags: regex_flags, regexson_tree: regexson_tree
-        }
+            execution_plan,
+            {
+                regexBoxRect: regexBoxRect, sizeTextItem: sizeTextItem,
+                canvasRaph: canvasRaph, regex_flags: regex_flags, regexson_tree: regexson_tree
+            }
         );
         // pipeline.run();
         pipeline.run_recursive();
+        console.log(pipeline.times);
 
         let raphael_items = pipeline.runtime_vars.raphael_items;
 
@@ -216,27 +242,9 @@ function RegexVisualizer(regexson_tree, regex_flags, canvas_Raphael_paper, $gVie
 
         return [regexBoxRect, sizeTextItem];
     }
-    function _generateGraph(canvasRaph, regexson_tree, sizeTextItem, regexBoxRect) {
-        let max_item_width = 0;
-        let max_item_height = 0;
-
-        // Procesamiento y generacion del literal de la regex y ubicarlo en el grafo
-        // let regex_text_items = _generateHihglightRegexLiteral(regexson_tree, regex_flags);
-        // [max_item_width, max_item_height] = _resizeHeightWithRegexLiteral(regex_text_items, size_item_text, margin_items);
-
-
+    function _generateGraph(regexson_tree) {
         // Se procesa el regexson para generar los items con formato json que despues procesara Raphael
         var raphael_items = generateRaphaelSVGItems([...regexson_tree.tree], 0, 0);
-
-        max_item_height = Math.max(raphael_items.height + 3 * ITEMS_MARGIN + sizeTextItem.height, max_item_height);
-        max_item_width = Math.max(raphael_items.width + 2 * ITEMS_MARGIN, max_item_width);
-
-        // Establece el size del canvas al maximo que hay generado por las regex
-        // TODO: Se puede cambiar y dejarlo fijo, ya que en un futuro tendra control zooming y panning.
-        canvasRaph.setSize(max_item_width, max_item_height);
-        regexBoxRect.attr("width", max_item_width);
-        regexBoxRect.attr("height", max_item_height);
-        addsOffset(raphael_items.items, ITEMS_MARGIN, 2 * ITEMS_MARGIN + sizeTextItem.height - raphael_items.y);
 
         return raphael_items;
     }
