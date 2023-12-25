@@ -1,0 +1,150 @@
+// regex.grammar
+
+// Reglas comunes para todos los dialectos
+@top {
+  regex: (disjunction)
+}
+
+disjunction {
+  alternative: (alternative ("|" alternative)*)
+}
+
+alternative {
+  term: (term term*)
+}
+
+term {
+  factor: (factor repeat?)
+}
+
+repeat {
+  '?'
+  | '*'
+  | '+'
+  | '{' number (',' (number? '}')?)?
+}
+
+factor {
+  atom
+  | atom '?'
+  | atom '*'
+  | atom '+'
+  | atom '{' number (',' (number? '}')?)?
+}
+
+atom {
+  group
+  | character
+  | class
+  | reference
+  | '.' {type: dot}
+}
+
+group {
+  '(' regex ')'
+}
+
+character {
+  <(/[^\s\\.*+?(){}\[\]$^|/]> {type: char}
+  | '\\' <(/./> {type: escape}
+}
+
+class {
+  '[' (range | character)* ']'
+}
+
+range {
+  character '-' character {type: range}
+}
+
+reference {
+  '\\' <(/[1-9]/> {type: ref}
+}
+
+number {
+  <(/[0-9]+/> {type: num}
+}
+
+// Reglas específicas para el dialecto regex-py
+@ dialect regex-py {
+  group {
+    '(?:' regex ')'
+    | '(?P<name>' regex ')'
+  }
+
+  repeat {
+    '*'
+    | '+'
+    | '?'
+    | '{' number (',' (number? '}')?)?
+  }
+
+  // Agrega más reglas específicas para regex-py si es necesario
+}
+
+// Reglas específicas para el dialecto regex-js
+@ dialect regex-js {
+  atom {
+    '?:' regex
+    | '?=' regex
+    | '?!' regex
+  }
+
+  repeat {
+    '*'
+    | '+'
+    | '?'
+    | '{' number (',' (number? '}')?)?
+    | '*?'
+    | '+?'
+    | '??'
+    | '{' number (',' (number? '}')?)? '?'
+  }
+
+  // Agrega más reglas específicas para regex-js si es necesario
+}
+
+
+
+// @{
+//   const { prec, alias } = require("@lezer/common");
+// 
+//   const flags = ["i", "m", "s"]; // Lista de flags admitidos
+// 
+//   // Define reglas de precedencia para operadores
+//   const operatorPrecedence = {
+//     // ...
+//   };
+// }
+// 
+// root {
+//   regex: _ => prec.left(
+//     choice(
+//       $.or,
+//       // ... Agrega más reglas para otros elementos de la gramática
+//     )
+//   )
+// }
+// 
+// // Regla para alternativas (|)
+// or {
+//   left: _ => prec(1, seq($.regex, "|", $.regex))
+// }
+// 
+// // ... Agrega más reglas de producción para otros elementos de la gramática
+// 
+// // Regla para grupos de captura
+// group {
+//   left: $ => seq(
+//     alias("LParen", "("),
+//     choice(
+//       seq("?", $.<name>, "="), // Lookahead
+//       seq("?", "!", $.<name>, "="), // Lookbehind
+//       // ... Agrega más reglas para otros constructos de grupos de captura
+//     ),
+//     $.regex,
+//     alias("RParen", ")")
+//   )
+// }
+// 
+// // ... Agrega más reglas de producción para otros elementos de la gramática
