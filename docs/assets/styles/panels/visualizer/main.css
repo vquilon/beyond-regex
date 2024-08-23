@@ -1,1 +1,24 @@
-#mainSVGContainer .backContainer{fill:var(--back-editor);stroke:none}.swal2-icon{border:none}#mainSVGContainer g>text.noBack{fill:var(--font-color)}#mainSVGContainer path{stroke:var(--font-color)}#mainSVGContainer path.curve.choice{stroke:var(--font-color)}
+#mainSVGContainer .backContainer {
+    fill: var(--back-editor);
+    stroke: none;
+}
+
+.swal2-icon {
+    border: none;
+}
+
+#mainSVGContainer g > text.noBack {
+    fill: var(--font-color);
+}
+
+#mainSVGContainer path {
+    stroke: var(--font-color);
+}
+
+#mainSVGContainer path ~ text {
+    fill: var(--font-color);
+}
+
+#mainSVGContainer path.curve.choice {
+    stroke: var(--font-color)
+}
