@@ -16,6 +16,10 @@
     stroke: var(--font-color);
 }
 
+#mainSVGContainer path ~ text {
+    fill: var(--font-color);
+}
+
 #mainSVGContainer path.curve.choice {
     /* stroke: var(--primary-color); */
     stroke: var(--font-color)
