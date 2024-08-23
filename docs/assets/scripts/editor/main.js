@@ -61,12 +61,6 @@ var EditorParser = (options) => {
             // $syntaxRegex: $editorRegex,
             $syntaxRegex: $input.querySelector('.syntax'),
         });
-        var editorAdvance = EditorAdvance({
-            $containerEditor: $containerEditor,
-            $inputRegex: $editorRegex,
-            $syntaxRegex: $input.querySelector('.syntax'),
-            debugInputClass: DEBUG ? '.input-debug': undefined
-        });
         var linterCalls = EditorLinter({
             $editorLinter: $input.querySelector('.linters')
         });
@@ -91,6 +85,14 @@ var EditorParser = (options) => {
         
         var raphaelJSONId = options.raphaelJSONId || "raphael-json";
         var regexSONId = options.regexSONId || "regex-json";
+
+        var editorAdvance = EditorAdvance({
+            $containerEditor: $containerEditor,
+            $inputRegex: $editorRegex,
+            $syntaxRegex: $input.querySelector('.syntax'),
+            debugInputClass: DEBUG ? '.input-debug': undefined,
+            processInput: processInput
+        });
     }
 
     // De igual forma esto debera desaparecer
@@ -145,7 +147,6 @@ var EditorParser = (options) => {
         fireError();
     }
     
-
     const getInnerText = function (ele) {
         if (!ele)
             return '';
@@ -377,11 +378,11 @@ var EditorParser = (options) => {
         location.hash = generateURL(params);
     }
 
-    const updateRegex = () => {
+    function updateRegex() {
         parseRegex(getRegex());
     }
 
-    const processInput = () => {
+    function processInput() {
         updateRegex();
         window.hasChanges = true;
         if ($visualBtn !== null) {
@@ -623,7 +624,6 @@ var EditorParser = (options) => {
 
         updateRegex();
     }
-
 
     return {
         parseRegex: parseRegex,

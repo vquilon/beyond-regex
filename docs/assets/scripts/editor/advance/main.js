@@ -16,6 +16,8 @@ function EditorAdvance(options = {}) {
     let $editorInput = $containerEditor.querySelector("#editor-input");
     let $debugCont = undefined;
 
+    let callbackProcessInput = options.processInput;
+
     if (options.debugInputClass) {
         $debugCont = document.createElement("div");
         $debugCont.classList.add(options.debugInputClass);
@@ -246,6 +248,9 @@ function EditorAdvance(options = {}) {
             offsetEnd += tNode.textContent.length;
             if (caretOffset <= offsetEnd) {
                 if (caretOffset - offsetStart > tNode.childNodes.length) {
+                    return getTextNodeRelPos(caretOffset - offsetStart, tNode);
+                }
+                if (tNode.childNodes.length > 0) {
                     return getTextNodeRelPos(caretOffset - offsetStart, tNode);
                 }
                 break
@@ -1657,19 +1662,46 @@ function EditorAdvance(options = {}) {
         $syntax.addEventListener("blur", blurredEditor);
         $input.addEventListener("focus", focussedEditor);
         $syntax.addEventListener("focus", focussedEditor);
-
-        $editor.addEventListener('change', event => { selRects = [] });
-        $input.addEventListener('keypress', event => { keydownEditor(event, event.target, { pressedEvent: true }) });
-        $input.addEventListener('keydown', event => { keydownEditor(event, event.target, {}) });
-
-        // REMOVE CTRL Z DEFAULT
-        document.addEventListener('keydown', event => {
-            if (event.ctrlKey) {
-                if (event.key.toUpperCase() === "Z" || event.key.toUpperCase() === "Y") {
-                    event.preventDefault();
-                }
+        
+        $syntax.addEventListener('keydown', event => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                execCommand($syntax.ownerDocument, "insertText", { value: "\n" });
+            }
+            if (event.key === " ") {
+                event.preventDefault();
+                execCommand($syntax.ownerDocument, "insertText", { value: " " });
             }
         });
+
+        $syntax.addEventListener('input', event => { 
+            $editor.innerText = $syntax.innerText;
+            // Almacenar la posicion del caret
+            let [offsetStart, offsetEnd] = getTextOffsetFrom($syntax);
+            callbackProcessInput();
+            // Recuperar la posicion del caret en $syntax
+            selectWith(offsetStart, offsetEnd, $syntax);
+            selRects = [];
+            calculateAllRects();
+            refreshCarets();
+        });
+        $editor.addEventListener('input', event => {
+            callbackProcessInput();
+            selRects = [];
+            calculateAllRects();
+            refreshCarets();
+        });
+        // $input.addEventListener('keypress', event => { keydownEditor(event, event.target, { pressedEvent: true }) });
+        // $input.addEventListener('keydown', event => { keydownEditor(event, event.target, {}) });
+
+        // REMOVE CTRL Z DEFAULT
+        // document.addEventListener('keydown', event => {
+        //     if (event.ctrlKey) {
+        //         if (event.key.toUpperCase() === "Z" || event.key.toUpperCase() === "Y") {
+        //             event.preventDefault();
+        //         }
+        //     }
+        // });
 
         const ro = new ResizeObserver(entries => {
             selRects = [];

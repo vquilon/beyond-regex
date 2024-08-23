@@ -189,6 +189,7 @@
 
 .tooltips {
   z-index: 7;
+  -webkit-user-select: none;
   user-select: none;
   pointer-events: none;
 }
@@ -196,6 +197,7 @@
 .linters {
   color: transparent;
   z-index: 4;
+  -webkit-user-select: none;
   user-select: none;
   pointer-events: none;
 }
@@ -266,15 +268,25 @@
   -webkit-text-fill-color: var(--color-editor); */
   color: var(--color-editor);
 }
-.input.no-highlighted .input-editor .editor::selection {
+.input.no-highlighted .input-editor .editor::selection,
+.input .input-syntax .syntax::selection,
+.input .input-syntax .syntax *::selection {
   background: var(--color-transparent-syntax);
 }
-.input.no-highlighted .input-editor .editor::-moz-selection {
+.input.no-highlighted .input-editor .editor::-moz-selection,
+.input .input-syntax .syntax::-moz-selection,
+.input .input-syntax .syntax *::-moz-selection {
   background: var(--color-transparent-syntax);
 }
-.input .input-editor .editor::selection {
+
+.input.new-advance .input-syntax .syntax::selection {
   background: transparent;
 }
+.input.new-advance .input-syntax .syntax::-moz-selection {
+  background: transparent;
+
+}
+.input .input-editor .editor::selection,
 .input .input-editor .editor::-moz-selection {
   background: transparent;
 }
