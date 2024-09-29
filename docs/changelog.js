@@ -42,6 +42,13 @@ const CHANGELOG = {
     ],
     "21":[
       "Continuous Improoves"
+    ] ,
+    "22":[
+      "New native editor",
+      "Syntax highlighting and advance editing"
+    ],
+    "23":[
+      "Bug fixed on iframe panels"
     ] 
   }
 }

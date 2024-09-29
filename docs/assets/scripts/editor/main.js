@@ -41,6 +41,8 @@ var EditorParser = (options) => {
         reLang: "",
         flags: ""
     }
+    var regexParser = RegexParser();
+
     if (NONEDITOR) {
         // ES UN SHARED
         let params = getParams();
@@ -55,7 +57,6 @@ var EditorParser = (options) => {
         var $input = $containerEditor.querySelector(`#editor-input > .${options.inputClass}`);
         var $editorRegex = $input.querySelector('.editor');
         
-        var regexParser = RegexParser();
         var syntaxHighlighter = EditorSyntaxis({
             $editorRegex: $editorRegex,
             // $syntaxRegex: $editorRegex,
@@ -319,7 +320,7 @@ var EditorParser = (options) => {
         try {
             regexson = regexParser.parse(regExpresion, DEBUG, language_selected);
         } catch (e) {
-            if (e instanceof init_parse.RegexSyntaxError) {
+            if (e instanceof regexParser.parse.RegexSyntaxError) {
                 showErrorShared(regExpresion, e);
             } else {
                 throw e;
