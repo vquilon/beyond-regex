@@ -53,6 +53,9 @@ const CHANGELOG = {
     "24": [
         "Disabled Advance editor",
         "Fix overlaping editor and syntax text"
+    ],
+    "25": [
+        "Oneko Conguito"
     ]
   }
 }
