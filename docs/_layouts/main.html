@@ -1,93 +1,63 @@
 <!DOCTYPE html>
 <html>
+<head>
+<!-- ORDEN CORRECTO DE LAS ETIQUETAS DENTRO DEL HEAD -->
+<!-- meta charset|http-equiv|viewport -->
+<!-- title -->
+<!-- preconnect -->
+<!-- scripts src="" async -->
+<!-- css with @import -->
+<!-- sync js -->
+<!-- sync css -->
+<!-- preload -->
+<!-- script src="" defer -->
+<!-- prefetch / prerender -->
+<!-- seo tags (meta, icons, Open graph, etc) -->
+<!-- noscript -->
+<!-- template -->
+{% include head/meta.html %} {% include head/base_styles.html %} {% include head/building-styles.html %}
+<!-- Estilos propios del PWA -->
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/pwa.css"><link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/install-as-app.css">
+{% include panels/visualizer/auxiliar/thumbnail-svg-control/styles.html %} {% include panels/visualizer/styles.html %} {% include editor/circle-selector/styles.html %} {% include editor/flag-selector/styles.html %} {% include editor/styles.html %} {% include mobile/styles.html %}
+<!-- DEBUG EDITOR -->
+{% if site.debug %} {% include editor/debug/styles.html %} {% include editor/debug/scripts.html %} {% endif %}
+<!-- VENDORS SCRIPTS -->
+{% include head/base_scripts.html %}
+<!-- Scripts para el control de la barra de conexion -->
+{% include offline-status/scripts.html %} {% include editor/scripts.html %}
+<!-- {% include dom-physics-engine/styles.html %} -->
+{% include panels/visualizer/scripts.html %} {% include panels/visualizer/auxiliar/thumbnail-svg-control/scripts.html %}
+<!-- {% include dom-physics-engine/scripts.html %} -->
+<!-- ON LOADERS -->
+<script defer="defer" src="{{ site.baseurl }}/assets/scripts/editor/on_load.js"></script>
+<script defer="defer" src="{{ site.baseurl }}/assets/scripts/panels/visualizer/on_load.js"></script>
+<!-- DEFINE / INITIALIZE LISTENERS -->
+<script defer="defer" src="{{ site.baseurl }}/assets/scripts/switch_theme.js"></script>
+<script defer="defer" src="{{ site.baseurl }}/assets/scripts/menu_listeners.js"></script>
+<script defer="defer" src="{{ site.baseurl }}/assets/scripts/init_listeners.js"></script>
+ 
+<!-- SEO tags -->
+{% seo %}
+<noscript>
+<h2 id="noscript">Please enable JavaScript in order to use all features</h2>
+</noscript>
+<!-- MEASURE PERFORMANCE CSS -->
+<!-- <link rel="stylesheet" href="https://csswizardry.com/ct/ct.css" class="ct" /> -->
+</head>
+<body>
+<script defer="defer">
+document.body.classList.add("js-enabled");
+</script>
+{% include pwa/register_pwa.html %} {% include pwa/install_as_app.html %} {% include svg-utils/svg-filters.html %}
 
-  <head>
-    <!-- ORDEN CORRECTO DE LAS ETIQUETAS DENTRO DEL HEAD -->
-    <!-- meta charset|http-equiv|viewport -->
-    <!-- title -->
-    <!-- preconnect -->
-    <!-- scripts src="" async -->
-    <!-- css with @import -->
-    <!-- sync js -->
-    <!-- sync css -->
-    <!-- preload -->
-    <!-- script src="" defer -->
-    <!-- prefetch / prerender -->
-    <!-- seo tags (meta, icons, Open graph, etc) -->
-    <!-- noscript -->
-    <!-- template -->
+<!-- ONEKO CAT -->
+<script data-scale="2" defer="defer" src="{{ site.baseurl }}/assets/vendor/oneko/oneko.js"></script>
+<script defer="defer" src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+<script defer="defer" src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
 
-    {% include head/meta.html %}
-
-    {% include head/base_styles.html %}
-    {% include head/building-styles.html %}
-
-    <!-- Estilos propios del PWA -->
-    <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/pwa.css"> <link rel="stylesheet" href="{{ site.baseurl }}/assets/styles/install-as-app.css">
-
-    {% include panels/visualizer/auxiliar/thumbnail-svg-control/styles.html %}
-    {% include panels/visualizer/styles.html %}
-    {% include editor/circle-selector/styles.html %}
-    {% include editor/flag-selector/styles.html %}
-    {% include editor/styles.html %}
-    {% include mobile/styles.html %}
-
-    <!-- DEBUG EDITOR -->
-    {% if site.debug %}
-      {% include editor/debug/styles.html %}
-      {% include editor/debug/scripts.html %}
-    {% endif %}
-
-    <!-- VENDORS SCRIPTS -->
-    {% include head/base_scripts.html %}
-
-    <!-- Scripts para el control de la barra de conexion -->
-    {% include offline-status/scripts.html %}
-
-    {% include editor/scripts.html %}
-
-    <!-- {% include dom-physics-engine/styles.html %} -->
-    {% include panels/visualizer/scripts.html %}
-    {% include panels/visualizer/auxiliar/thumbnail-svg-control/scripts.html %}
-    <!-- {% include dom-physics-engine/scripts.html %} -->
-
-    <!-- ON LOADERS -->
-    <script defer src="{{ site.baseurl }}/assets/scripts/editor/on_load.js"> </script>
-    <script defer src="{{ site.baseurl }}/assets/scripts/panels/visualizer/on_load.js"></script>
-
-    <!-- DEFINE / INITIALIZE LISTENERS -->
-    <script defer src="{{ site.baseurl }}/assets/scripts/switch_theme.js"></script>
-    <script defer src="{{ site.baseurl }}/assets/scripts/menu_listeners.js"></script>
-    <script defer src="{{ site.baseurl }}/assets/scripts/init_listeners.js"></script>
-
-    <!-- SEO tags -->
-    {% seo %}
-
-    <noscript>
-      <h2 id="noscript">Please enable JavaScript in order to use all features</h2>
-    </noscript>
-
-    <!-- MEASURE PERFORMANCE CSS -->
-    <!-- <link rel="stylesheet" href="https://csswizardry.com/ct/ct.css" class="ct" /> -->
-  </head>
-
-  <body>
-    <script defer>
-      document.body.classList.add("js-enabled");
-    </script>
-
-    {% include pwa/register_pwa.html %}
-    {% include pwa/install_as_app.html %}
-
-    {% include svg-utils/svg-filters.html %}
-    <div id="container-main">
-      {{ content }}
-    </div>
-
-    {% include offline-status/connection-box.html %}
-
-    {% if site.environment == "production" and site.gtag %}
-      {% include cookie-consent.html %}
-    {% endif %}
-  </body>
+<div id="container-main">
+{{ content }}
+</div>
+{% include offline-status/connection-box.html %} {% if site.environment == "production" and site.gtag %} {% include cookie-consent.html %} {% endif %}
+</body>
 </html>
