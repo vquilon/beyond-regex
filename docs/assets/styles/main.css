@@ -1492,6 +1492,13 @@ input#highlighted-editor:checked ~ label[for="highlighted-editor"] span:after {
   user-select: none;
 }
 
+.checkbox__3 input[disabled] + label {
+  box-shadow: none !important;
+  border: none !important;
+  cursor: not-allowed;
+  color: #80808096;
+}
+
 /* .checkbox__3 input:checked~label>* { */
 /* color: white;
     -webkit-text-fill-color: white;

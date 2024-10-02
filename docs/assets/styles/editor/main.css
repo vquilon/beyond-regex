@@ -311,7 +311,7 @@
 .input:not(.no-highlighted) .input-editor .editor *,
 .input:not(.no-highlighted) .input-editor .editor *:after,
 .input:not(.no-highlighted) .input-editor .editor *:before {
-  color: var(--color-syntax);
+  color: transparent;
 }
 
 .syntax, .input.new-advance .editor{

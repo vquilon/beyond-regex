@@ -579,13 +579,13 @@ var EditorParser = (options) => {
         });
 
         $new_editor.addEventListener("change", event => {
-            if ($new_editor.checked) {
-                editorAdvance.cleanEditor();
-                $input.classList.add("new-advance");
-            }
-            else {
-                $input.classList.remove("new-advance");
-            }
+            // if ($new_editor.checked) {
+            //     editorAdvance.cleanEditor();
+            //     $input.classList.add("new-advance");
+            // }
+            // else {
+            //     $input.classList.remove("new-advance");
+            // }
         });
 
         // Gestionar el uso de un escape u otro para definir la regex, o las regex quotes

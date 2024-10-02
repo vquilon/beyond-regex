@@ -49,6 +49,10 @@ const CHANGELOG = {
     ],
     "23":[
       "Bug fixed on iframe panels"
-    ] 
+    ],
+    "24": [
+        "Disabled Advance editor",
+        "Fix overlaping editor and syntax text"
+    ]
   }
 }
