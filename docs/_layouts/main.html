@@ -48,6 +48,10 @@
 document.body.classList.add("js-enabled");
 </script>
 {% include pwa/register_pwa.html %} {% include pwa/install_as_app.html %} {% include svg-utils/svg-filters.html %}
+<!-- ONEKO CAT -->
+<script data-scale="2" defer="defer" src="{{ site.baseurl }}/assets/vendor/oneko/oneko.js"></script>
+<script defer="defer" src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+<script defer="defer" src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
 <div id="container-main">
 {{ content }}
 </div>
