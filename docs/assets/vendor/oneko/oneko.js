@@ -3,9 +3,13 @@
 (async function oneko() {
     const nekoEl = document.createElement("div");
     let nekoScale = 1
+    let positionMode = "absolute" // Nuevo parámetro
     const curScript = document.currentScript
     if (curScript && curScript.dataset.scale) {
       nekoScale = curScript.dataset.scale
+    }
+    if (curScript && curScript.dataset.positionMode) {
+      positionMode = curScript.dataset.positionMode // "absolute" o "fixed"
     }
 
     let nekoPosX = 32,
@@ -220,7 +224,7 @@
       nekoEl.id = "oneko";
       nekoEl.style.width = "32px";
       nekoEl.style.height = "32px";
-      nekoEl.style.position = "fixed";
+      nekoEl.style.position = positionMode; // Usar el parámetro
       // nekoEl.style.pointerEvents = "none";
       nekoEl.style.backgroundImage = `url('/beyond-regex/assets/vendor/oneko/assets/oneko-${variant}.gif')`;
       nekoEl.style.imageRendering = "pixelated";
@@ -233,12 +237,18 @@
   
       document.body.appendChild(nekoEl);
   
-      window.addEventListener("mousemove", (e) => {
-        if (forceSleep) return;
-  
-        mousePosX = e.clientX;
-        mousePosY = e.clientY;
-      });
+    window.addEventListener("mousemove", (e) => {
+      if (forceSleep) return;
+
+      mousePosX = e.clientX;
+      mousePosY = e.clientY;
+
+      // Ajustar por scroll si usamos position: absolute
+      if (positionMode === "absolute") {
+          mousePosX += window.scrollX;
+          mousePosY += window.scrollY;
+      }
+    });
   
       window.addEventListener("resize", () => {
         if (forceSleep) {
@@ -437,8 +447,14 @@
       nekoPosX -= (diffX / distance) * nekoSpeed;
       nekoPosY -= (diffY / distance) * nekoSpeed;
   
-      nekoPosX = Math.min(Math.max(16, nekoPosX), window.innerWidth - 16);
-      nekoPosY = Math.min(Math.max(16, nekoPosY), window.innerHeight - 16);
+      // Si usamos absolute, limitar al viewport + scroll
+      if (positionMode === "absolute") {
+        nekoPosX = Math.min(Math.max(16, nekoPosX), window.innerWidth + window.scrollX - 16);
+        nekoPosY = Math.min(Math.max(16, nekoPosY), window.innerHeight + window.scrollY - 16);
+      } else {
+        nekoPosX = Math.min(Math.max(16, nekoPosX), window.innerWidth - 16);
+        nekoPosY = Math.min(Math.max(16, nekoPosY), window.innerHeight - 16);
+      }
   
       nekoEl.style.left = `${nekoPosX - 16}px`;
       nekoEl.style.top = `${nekoPosY - 16}px`;
